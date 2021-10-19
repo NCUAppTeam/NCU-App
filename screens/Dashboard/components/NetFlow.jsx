@@ -7,7 +7,7 @@ import Controller from '../../../controller/Home';
 import styles from '../Styles';
 
 function NetFlowWidget({ refresh }) {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState([0, 0]);
   const [ip, setIP] = useState('');
   const [inputVisible, setInputVisible] = useState(false);
 

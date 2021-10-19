@@ -52,10 +52,8 @@ async function setStoredIP(value) {
 
 async function getStoredIP() {
   const value = await AsyncStorage.getItem('@user_ip');
-  if (value !== null) {
-    return value;
-  }
-  return null;
+  if (value == null) throw new Error('No stored IP');
+  return value;
 }
 
 async function getNetFlowByIP(ip) {
@@ -69,7 +67,7 @@ async function getNetFlowByIP(ip) {
     netFlow.push(Number(((str.match(regex))[1]).split(' ')[0]));
     return netFlow;
   } catch (e) {
-    return ['nan', 'nan'];
+    return [0, 0];
   }
 }
 

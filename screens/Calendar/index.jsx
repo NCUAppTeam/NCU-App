@@ -1,5 +1,5 @@
 import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createStackNavigator } from '@react-navigation/native-stack';
 import AgendaScreen from './AgendaScreen';
 import DetailScreen from './DetailScreen';
 import EditScreen from './EditScreen';

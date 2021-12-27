@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import {
-  Alert, SafeAreaView, Image, View,
+  Alert, SafeAreaView, Image, View, ScrollView,
 } from 'react-native';
 import {
   Text, TextInput, Button,
 } from 'react-native-paper';
-import { ScrollView } from 'react-native-gesture-handler';
 import SalesController from '../../controller/Sales';
 
 function DetailScreen({ route }) {

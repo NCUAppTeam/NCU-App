@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Alert, SafeAreaView, View, Image,
+  Alert, SafeAreaView, View, ScrollView, Image,
 } from 'react-native';
 import {
   TextInput, Chip, Button,
 } from 'react-native-paper';
 import * as ImagePicker from 'expo-image-picker';
-import { ScrollView } from 'react-native-gesture-handler';
 import styles from './Styles';
 import SalesController from '../../controller/Sales';
 

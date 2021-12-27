@@ -1,5 +1,5 @@
 import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createStackNavigator } from '@react-navigation/native-stack';
 import BoardScreen from './BoardScreen';
 import SettingScreen from './SettingScreen';
 

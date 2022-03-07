@@ -1,18 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import {
-  SafeAreaView, ScrollView, RefreshControl,
+  SafeAreaView, ScrollView, RefreshControl, View, Text, TouchableOpacity
 } from 'react-native';
 import {
-  Card, FAB, Title, Paragraph, Chip, Searchbar,
+  Card, FAB, Title, Paragraph, Chip, Searchbar, IconButton
 } from 'react-native-paper';
 import styles from './Styles';
 import SalesController from '../../controller/Sales';
+import { LinearGradient } from 'expo-linear-gradient';
 
 function HomeScreen({ navigation }) {
   const [picked, setPicked] = useState(undefined);
   const [tags, setTags] = useState([]);
   const [searchbarText, setSearchbarText] = useState('');
   const [items, setItems] = useState([]);
+  const [pressedAcquire, setPressedAcquire] = useState(true);
+  const [pressedSell, setPressedSell] = useState(false);
+  const [pressedRent, setPressedRent] = useState(false);
+
   const handleSearch = (text) => {
     setSearchbarText(text);
     if (text !== '') {
@@ -23,6 +28,25 @@ function HomeScreen({ navigation }) {
       });
     }
   };
+
+  const AcquireStatus = () => {
+    setPressedAcquire(true);
+    setPressedSell(false);
+    setPressedRent(false);
+  };
+
+  const SellStatus = () => {
+    setPressedAcquire(false);
+    setPressedSell(true);
+    setPressedRent(false);
+  };
+
+  const RentStatus = () => {
+    setPressedAcquire(false);
+    setPressedSell(false);
+    setPressedRent(true);
+  };
+
   useEffect(() => {
     SalesController.getAllTag().then((res) => {
       setTags(res);
@@ -47,13 +71,31 @@ function HomeScreen({ navigation }) {
       setRefreshing(false);
     });
   };
+
   return (
     <SafeAreaView style={styles.container}>
-      <Searchbar
-        value={searchbarText}
-        onChangeText={(result) => handleSearch(result)}
-        placeholder="搜尋"
-      />
+      <View style={styles.searchbar}>    
+        <Searchbar
+          value={searchbarText}
+          onChangeText={(result) => handleSearch(result)}
+          placeholder="搜尋"
+          style={styles.search}
+        />
+        <IconButton
+            icon="comment"
+            style={styles.heart}
+            title=""
+            onPress={() => console.log("press")}
+            color="#28527A"
+          />
+        <IconButton
+          icon="user"
+          style={styles.heart}
+          title=""
+          onPress={() => navigation.navigate('個人管理頁面', { onGoBack: onRefresh })}
+          color="#28527A"
+        />
+      </View>
       <ScrollView
         style={styles.scrollView}
         refreshControl={(
@@ -63,6 +105,49 @@ function HomeScreen({ navigation }) {
           />
         )}
       >
+      <View style={styles.buttonTagContainer}>
+        <TouchableOpacity onPress={AcquireStatus}>
+          { pressedAcquire ? 
+            <LinearGradient
+              // Button Linear Gradient
+              colors={['#28527A', '#28527A', '#0288D1']}
+              style={styles.buttonTagPressed}>
+              <Text style={{color: "#FBEEAC", textAlign: "center", fontSize: 16, marginTop: 10,}}>收購</Text>
+            </LinearGradient> : 
+            <View style={styles.textContainer}>
+              <Text style={styles.tagText}>收購</Text>
+            </View>
+          }
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={SellStatus}>
+          { pressedSell? 
+            <LinearGradient
+              // Button Linear Gradient
+              colors={['#28527A', '#28527A', '#0288D1']}
+              style={styles.buttonTagPressed}>
+              <Text style={{color: "#FBEEAC", textAlign: "center", fontSize: 16, marginTop: 10,}}>出售</Text>
+            </LinearGradient> : 
+            <View style={styles.textContainer}>
+              <Text style={styles.tagText}>出售</Text>
+            </View>
+          }
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={RentStatus}>
+          { pressedRent ? 
+            <LinearGradient
+              // Button Linear Gradient
+              colors={['#28527A', '#28527A', '#0288D1']}
+              style={styles.buttonTagPressed}>
+              <Text style={{color: "#FBEEAC", textAlign: "center", fontSize: 16, marginTop: 10,}}>租借</Text>
+            </LinearGradient> : 
+            <View style={styles.textContainer}>
+              <Text style={styles.tagText}>租借</Text>
+            </View>
+          }
+        </TouchableOpacity>
+        </View>
         <ScrollView style={{ flexDirection: 'row', marginTop: 10 }} horizontal showsHorizontalScrollIndicator={false}>
           {
         tags.map((tag) => (

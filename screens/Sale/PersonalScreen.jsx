@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import {
-  SafeAreaView, ScrollView, RefreshControl, View,
+  SafeAreaView, ScrollView, RefreshControl, View, Text, TouchableOpacity,
 } from 'react-native';
 import {
   Provider, Button, Card, Title, Paragraph,
 } from 'react-native-paper';
+import { LinearGradient } from 'expo-linear-gradient';
 import SalesController from '../../controller/Sales';
 import styles from './Styles';
 
@@ -41,13 +42,43 @@ function PersonalScreen({ route, navigation }) {
             />
           )}
         >
-          <View>
-            <Button onPress={() => {
+          <View style={styles.personalContainer}>
+            <Text style={styles.personalText}>買家</Text>
+            <TouchableOpacity onPress={() => console.log("pressed")}>
+              <LinearGradient
+                // Button Linear Gradient
+                colors={['#1784B2', '#1B79A5', '#28527A']}
+                style={styles.personalButton}>
+                <Text style={{color: "#FBEEAC", textAlign: "center", fontSize: 24, marginTop: 35, fontWeight: "bold"}}>收購商品</Text>
+              </LinearGradient> 
+            </TouchableOpacity>
+            <Text style={styles.personalText}>賣家</Text>
+            <TouchableOpacity onPress={() => {
               navigation.navigate('新增商品', { onGoBack: onRefresh });
-            }}
-            >
-              新增商品
-            </Button>
+            }}>
+              <LinearGradient
+                // Button Linear Gradient
+                colors={['#1784B2', '#1B79A5', '#28527A']}
+                style={styles.personalButton}>
+                <Text style={{color: "#FBEEAC", textAlign: "center", fontSize: 24, marginTop: 35, fontWeight: "bold"}}>新增商品</Text>
+              </LinearGradient> 
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => console.log("pressed")}>
+              <LinearGradient
+                // Button Linear Gradient
+                colors={['#1784B2', '#1B79A5', '#28527A']}
+                style={styles.personalButton}>
+                <Text style={{color: "#FBEEAC", textAlign: "center", fontSize: 24, marginTop: 35, fontWeight: "bold"}}>管理商品</Text>
+              </LinearGradient> 
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => console.log("pressed")}>
+              <LinearGradient
+                // Button Linear Gradient
+                colors={['#1784B2', '#1B79A5', '#28527A']}
+                style={styles.personalButton}>
+                <Text style={{color: "#FBEEAC", textAlign: "center", fontSize: 24, marginTop: 35, fontWeight: "bold"}}>交易紀錄</Text>
+              </LinearGradient> 
+            </TouchableOpacity>
           </View>
           {
         item.map((element) => (

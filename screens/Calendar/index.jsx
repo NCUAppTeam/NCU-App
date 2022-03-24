@@ -1,10 +1,10 @@
 import React from 'react';
-import { createStackNavigator } from '@react-navigation/native-stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AgendaScreen from './AgendaScreen';
 import DetailScreen from './DetailScreen';
 import EditScreen from './EditScreen';
 
-const Stack = createStackNavigator();
+const Stack = createNativeStackNavigator();
 
 function CalendarStack() {
   return (

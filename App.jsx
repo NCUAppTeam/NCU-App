@@ -32,6 +32,7 @@ function MainApp() {
           name="Dashboard"
           component={DashboardScreen}
           options={{
+            headerShown: false,
             tabBarLabel: '看板',
             tabBarIcon: ({ color }) => <AwesomeIcon name="home" color={color} size={24} />,
           }}
@@ -40,6 +41,7 @@ function MainApp() {
           name="Calendar"
           component={CalendarScreen}
           options={{
+            headerShown: false,
             tabBarLabel: '行事曆',
             tabBarIcon: ({ color }) => <AwesomeIcon name="calendar" color={color} size={24} />,
           }}
@@ -48,6 +50,7 @@ function MainApp() {
           name="Event"
           component={EventScreen}
           options={{
+            headerShown: false,
             tabBarLabel: '活動',
             tabBarIcon: ({ color }) => <AwesomeIcon name="fire-alt" color={color} size={24} />,
           }}
@@ -56,6 +59,7 @@ function MainApp() {
           name="Map"
           component={MapScreen}
           options={{
+            headerShown: false,
             tabBarLabel: '地圖',
             tabBarIcon: ({ color }) => <AwesomeIcon name="map-marker-alt" color={color} size={24} />,
           }}
@@ -64,6 +68,7 @@ function MainApp() {
           name="Sales"
           component={SaleScreen}
           options={{
+            headerShown: false,
             tabBarLabel: '拍賣',
             tabBarIcon: ({ color }) => <AwesomeIcon name="shopping-bag" color={color} size={24} />,
           }}
@@ -72,6 +77,7 @@ function MainApp() {
           name="Social"
           component={SocialScreen}
           options={{
+            headerShown: false,
             tabBarLabel: '揪人',
             tabBarIcon: ({ color }) => <AwesomeIcon name="comment" color={color} size={24} />,
           }}

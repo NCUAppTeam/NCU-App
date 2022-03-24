@@ -2,16 +2,21 @@ import React, { useState, useEffect } from 'react';
 import {
   SafeAreaView, ScrollView, RefreshControl, View, Text, TouchableOpacity, TextInput
 } from 'react-native';
-import { Stack, HStack, Input, Button, IconButton, Icon, NativeBaseProvider, Center, Box, Divider, Heading, AspectRatio, Image, VStack } from "native-base";
-import { LinearGradient } from 'expo-linear-gradient';
-import { Feather, FontAwesome } from '@expo/vector-icons';
-import SalesController from '../../controller/Sales';
+import {
+  Card, FAB, Title, Paragraph, Chip, Searchbar, 
+} from 'react-native-paper';
+import { Stack, HStack, Input, Button, IconButton, Icon, NativeBaseProvider, Center, Box, Divider, Heading, AspectRatio, Image } from "native-base";
 import styles from './Styles';
+import SalesController from '../../controller/Sales';
+import { LinearGradient } from 'expo-linear-gradient';
+import { Ionicons } from '@expo/vector-icons';
+import { Feather, FontAwesome } from '@expo/vector-icons';
 
-function HomeScreen({ navigation }) {
-  const [product, setProduct] = useState([]);
-  const [refreshing, setRefreshing] = useState(false);
+function DailyProductScreen({ navigation }) {
+  const [picked, setPicked] = useState(undefined);
+  const [tags, setTags] = useState([]);
   const [searchbarText, setSearchbarText] = useState('');
+  // const [items, setItems] = useState([]);
   const [pressedAcquire, setPressedAcquire] = useState(true);
   const [pressedSell, setPressedSell] = useState(false);
   const [pressedRent, setPressedRent] = useState(false);
@@ -50,89 +55,90 @@ function HomeScreen({ navigation }) {
     setPressedRent(true);
   };
 
+  useEffect(() => {
+    SalesController.getAllTag().then((res) => {
+      setTags(res);
+    }).catch((err) => {
+      throw err;
+    });
+  }, []);
+  useEffect(() => {
+    SalesController.getHomePageItem().then((res) => {
+      setItems(res);
+    }).catch((err) => {
+      throw err;
+    });
+  }, []);
+  const [refreshing, setRefreshing] = useState(false);
   const onRefresh = () => {
     setRefreshing(true);
     SalesController.getHomePageItem().then((res) => {
-      console.log(1);
+      setItems(res);
+      setPicked({});
       setSearchbarText('');
       setRefreshing(false);
     });
   };
 
-  
-  useEffect(() => {
-    SalesController.getPurchaseItem().then((res) => {
-      console.log(1);
-      setProduct(res);
-      console.log(res);
-    }).catch((err) => {
-      throw err;
-    });
-  }, []);
+  // const [product, setProduct] = useState([]);
+  // useEffect(() => {
+  //   SalesController.getSellItem().then((res) => {
+  //     setProduct(res);
+  //   }).catch((err) => {
+  //     throw err;
+  //   });
+  // }, []);
 
-  function ProductCard() {
-    return (
-      product.map(({
-        id, productName, price, imageURL,
-      }) => (
-        <Box alignItems="center" marginTop="5">
-          <Box maxW="250" rounded="lg" overflow="hidden" borderColor="coolGray.200" borderWidth="1.5"  _dark={{
-          borderColor: "coolGray.600",
-          backgroundColor: "white"
-          }} _web={{
-            shadow: 2,
-            borderWidth: 0
-          }} _light={{
-            backgroundColor: "white"
-          }}>
-            <Box>
-              <AspectRatio w="100%" ratio={3/3}>
-                <Image source={{ uri: imageURL }} alt="image" />
-              </AspectRatio>
-            </Box>
-            <Stack p="5" space={3}>
-              <Stack space={2}>
-                <Heading size="lg" ml="-1" bold>
-                {`${productName}`}
-                </Heading>
-                <HStack justifyContent="space-between">
-                  <Text fontSize="lg" _light={{
-                  color: "#28527A"
-                }} _dark={{
-                  color: "white"
-                }} fontWeight="500" ml="-0.5" mt="-1">
-                {`${price}`}
-                  </Text>
-                  <TouchableOpacity onPress={SavedStatus}>
-                    { saved ? <FontAwesome name="bookmark" size={24} color="#0C4A6E" /> :
-                      <FontAwesome name="bookmark-o" size={24} color="#0C4A6E" />
-                    }
-                  </TouchableOpacity>
-                </HStack>
-              </Stack>
-            </Stack>
-          </Box>
-        </Box>
-      ))
-    );
-  }
+  // function ProductCard() {
+  //   return (
+  //     product.map(({
+  //       id, productName, price, status, username, imageURL,type
+  //     }) => (
+  //     <Box key={id} alignItems="center" marginTop="5">
+  //       <Box maxW="250" rounded="lg" overflow="hidden" borderColor="coolGray.200" borderWidth="1.5"  _dark={{
+  //       borderColor: "coolGray.600",
+  //       backgroundColor: "white"
+  //       }} _web={{
+  //         shadow: 2,
+  //         borderWidth: 0
+  //       }} _light={{
+  //         backgroundColor: "white"
+  //       }}>
+  //         <Box>
+  //           <AspectRatio w="100%" ratio={3/3}>
+  //             <Image source={{ uri: imageURL }} alt="image" />
+  //           </AspectRatio>
+  //         </Box>
+  //         <Stack p="5" space={3}>
+  //           <Stack space={2}>
+  //             <Heading size="lg" ml="-1" bold>
+  //             {`${productName}`}
+  //             </Heading>
+  //             <HStack justifyContent="space-between">
+  //               <Text fontSize="lg" _light={{
+  //               color: "#28527A"
+  //             }} _dark={{
+  //               color: "white"
+  //             }} fontWeight="500" ml="-0.5" mt="-1">
+  //             {`NT$${price}`}
+  //               </Text>
+  //               <TouchableOpacity onPress={SavedStatus}>
+  //                 { saved ? <FontAwesome name="bookmark" size={24} color="#0C4A6E" /> :
+  //                   <FontAwesome name="bookmark-o" size={24} color="#0C4A6E" />
+  //                 }
+  //               </TouchableOpacity>
+  //             </HStack>
+  //           </Stack>
+  //         </Stack>
+  //       </Box>
+  //     </Box>
+  //     ))
+  //   );
+  // }
 
   return (
     <NativeBaseProvider>
       <SafeAreaView style={styles.container}>
-        <HStack alignItems="center" w="95%" justifyContent="center"> 
-          <TouchableOpacity style={styles.searchContainer} onPress={() => {
-            navigation.navigate('搜尋商品', { onGoBack: onRefresh });
-          }}>
-            <Feather name="search" size={24} color="#28527A" style={styles.icon} />
-            <Text style={styles.searchtext}>搜尋
-            </Text> 
-          </TouchableOpacity>
-            <Feather name="message-circle" size={24} color="#28527A" style={styles.icon} />
-            <Feather name="user" size={24} color="#28527A" style={styles.icon} onPress={() => {
-              navigation.navigate('個人管理頁面', { onGoBack: onRefresh });
-            }} />
-        </HStack>
         <HStack justifyContent="center" alignItems="center" space={3} marginTop="5">
           <TouchableOpacity onPress={AcquireStatus}>
             { pressedAcquire ? 
@@ -185,12 +191,11 @@ function HomeScreen({ navigation }) {
           )}
         >
           <Center flex={1} px="3">
-            <ProductCard />
-         </Center>
+          </Center>
         </ScrollView>
       </SafeAreaView>
     </NativeBaseProvider>
   );
 }
 
-export default HomeScreen;
+export default DailyProductScreen;

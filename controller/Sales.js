@@ -449,6 +449,175 @@ async function getItemComment(itemId) {
   return (result);
 }
 
+// 新的 addItem
+async function newAddItem(
+  productName, price, tradeLocation, description, tag, imageUri, negotiable, type,
+) {
+  const { uid } = firebase.auth().currentUser;
+  const date = new Date();
+
+  const db = firebase.firestore();
+  const itemRef = db.collection('Sales');
+
+  const imageAddress = `sales/${getImageName(uid, date)}`;
+  const storageRef = firebase.storage().ref();
+  const imageRef = storageRef.child(imageAddress);
+
+  const item = {
+    uid,
+    description: description.trim(),
+    imageAddress,
+    launchTime: date,
+    negotiable,
+    price: price.trim(),
+    productName: productName.trim(),
+    tag: tag.trim(),
+    tradeLocation,
+    type: type.trim(),
+
+    // uid,
+    // name: name.trim(),
+    // price: price.trim(),
+    // place: place.trim(),
+    // introduction: introduction.trim(),
+    // date,
+    // dateString: toDateString(date),
+    // show: true,
+    // tagId: tagId.trim(),
+    // imageAddress,
+  };
+
+  if (!item.productName) throw new Error('名稱不得為空！');
+  if (!item.price) throw new Error('價錢不得為空！');
+  if (!item.tradeLocation) throw new Error('地點不得為空！');
+  if (!item.tag) throw new Error('你必須選擇一個標籤！');
+  if (!imageUri) throw new Error('你必須上傳一張圖片！');
+
+  item.price = Number(item.price);
+  if (Number.isNaN(item.price)) throw new Error('價格必須為數字！');
+
+  const response = await fetch(imageUri);
+  const blob = await response.blob();
+  imageRef.put(blob);
+  itemRef.add(item);
+  Alert.alert('新增成功!');
+}
+
+// 新的 updateItem
+async function newUpdateItem(
+  itemId, productName, price, tradeLocation, description, tag, imageEditted, imageUri = undefined,
+) {
+  const { uid } = firebase.auth().currentUser;
+  const date = new Date();
+
+  const db = firebase.firestore();
+  const itemRef = db.collection('Sales');
+  const itemDocRef = await itemRef.doc(itemId).get();
+
+  const imageAddress = imageEditted ? `sales/${getImageName(uid, date)}` : itemDocRef.data().imageAddress;
+  const storageRef = firebase.storage().ref();
+  const oldImageRef = storageRef.child(itemDocRef.data().imageAddress);
+  const newImageRef = storageRef.child(imageAddress);
+
+  const newItem = {
+    uid,
+    productName: productName.trim(),
+    price: price.trim(),
+    tradeLocation: tradeLocation.trim(),
+    description: description.trim(),
+    launchTime: date,
+    dateString: toDateString(date),
+    tag: tag.trim(),
+    imageAddress,
+  };
+
+  if (!newItem.productName) throw new Error('名稱不得為空！');
+  if (!newItem.price) throw new Error('價錢不得為空！');
+  if (!newItem.tradeLocation) throw new Error('地點不得為空！');
+  if (!newItem.tagId) throw new Error('你必須選擇一個標籤！');
+  if (imageEditted && !imageUri) throw new Error('你必須上傳一張圖片！');
+
+  newItem.price = Number(newItem.price);
+  if (Number.isNaN(newItem.price)) throw new Error('價格必須為數字！');
+
+  if (imageEditted) {
+    const response = await fetch(imageUri);
+    const blob = await response.blob();
+    oldImageRef.delete();
+    newImageRef.put(blob);
+  }
+  itemRef.doc(itemId).set(newItem, { merge: true });
+  Alert.alert('更新成功!');
+}
+
+// 新的 deleteItem
+async function newDeleteItem(itemId) {
+  const db = firebase.firestore();
+  const itemDocRef = db.collection('Sales').doc(itemId);
+  const itemDocData = await itemDocRef.get();
+
+  const storageRef = firebase.storage().ref();
+  const imageRef = storageRef.child(itemDocData.data().imageAddress);
+
+  imageRef.delete();
+  itemDocRef.delete();
+  Alert.alert('刪除成功');
+}
+
+// type = 收購的商品
+async function getPurchaseItem() {
+  const itemsArray = [];
+  const db = firebase.firestore();
+  const itemRef = db.collection('Sales');
+  const querySnapshot = await itemRef.where('type', '==', '收購').get();
+  querySnapshot.forEach((doc) => {
+    itemsArray.push({ launchTime: toDateString(doc.data().launchTime), ...doc.data(), id: doc.id });
+  });
+  // console.log(itemsArray);
+  console.log(itemsArray);
+  return itemsArray;
+}
+
+// type = 出售的商品
+async function getSaleItem() {
+  const itemsArray = [];
+  const db = firebase.firestore();
+  const itemRef = db.collection('Sales');
+  const querySnapshot = await itemRef.where('type', '==', '出售').get();
+  querySnapshot.forEach((doc) => {
+    itemsArray.push({ launchTime: toDateString(doc.data().launchTime), ...doc.data(), id: doc.id });
+  });
+  // console.log(itemsArray);
+  return itemsArray;
+}
+
+// type = 租借的商品
+async function getRentItem() {
+  const itemsArray = [];
+  const db = firebase.firestore();
+  const itemRef = db.collection('Sales');
+  const querySnapshot = await itemRef.where('type', '==', '租借').get();
+  querySnapshot.forEach((doc) => {
+    itemsArray.push({ launchTime: toDateString(doc.data().launchTime), ...doc.data(), id: doc.id });
+  });
+  // console.log(itemsArray);
+  return itemsArray;
+}
+
+// 根據 type 得到商品 option 0: 出售、1:收購、2:租借
+async function getItembyType(option) {
+  const itemsArray = [];
+  const type = ['出售', '收購', '租借'];
+  const db = firebase.firestore();
+  const itemRef = db.collection('Sales');
+  const querySnapshot = await itemRef.where('type', '==', type[option]).get();
+  querySnapshot.forEach((doc) => {
+    itemsArray.push({ launchTime: toDateString(doc.data().launchTime), ...doc.data(), id: doc.id });
+  });
+  // console.log(itemsArray);
+  return itemsArray;
+}
+
 export default {
   getAllTag,
   addItem,
@@ -462,4 +631,11 @@ export default {
   updateComment,
   deleteComment,
   getItemComment,
+  newAddItem,
+  newUpdateItem,
+  newDeleteItem,
+  getPurchaseItem,
+  getSaleItem,
+  getRentItem,
+  getItembyType,
 };

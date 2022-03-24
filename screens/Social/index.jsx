@@ -1,12 +1,12 @@
 import React from 'react';
-import { createStackNavigator } from '@react-navigation/native-stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from './HomeScreen';
 import PersonalScreen from './PersonalScreen';
 import AddScreen from './AddScreen';
 import DetailScreen from './DetailScreen';
 import EditScreen from './EditScreen';
 
-const Stack = createStackNavigator();
+const Stack = createNativeStackNavigator();
 
 function SocialStack() {
   return (

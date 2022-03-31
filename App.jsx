@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View } from 'react-native';
+import { View, Platform } from 'react-native';
 import firebase from 'firebase';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -40,7 +40,11 @@ function MainApp() {
         <Tab.Navigator
           initialRouteName="Dashboard"
           screenOptions={{
-            tabBarStyle: { height: '8%' },
+            tabBarStyle: { height: Platform.OS === 'ios' ? '10%' : '8%' },
+            tabBarLabelStyle: {
+              marginBottom: 5,
+              fontWeight: 'bold',
+            },
           }}
           tabBarOptions={{
             activeTintColor: '#E5EBF1',
@@ -59,6 +63,21 @@ function MainApp() {
                 <Icon
                   as={MaterialCommunityIcons}
                   name="home-outline"
+                  color={focused ? '#E5EBF1' : '#28527A'}
+                />
+              ),
+            }}
+          />
+          <Tab.Screen
+            name="Sales"
+            component={SaleScreen}
+            options={{
+              headerShown: false,
+              tabBarLabel: '拍賣',
+              tabBarIcon: ({ focused }) => (
+                <Icon
+                  as={MaterialCommunityIcons}
+                  name="cart-outline"
                   color={focused ? '#E5EBF1' : '#28527A'}
                 />
               ),
@@ -84,7 +103,7 @@ function MainApp() {
             component={EventScreen}
             options={{
               headerShown: false,
-              tabBarLabel: '活動',
+              tabBarLabel: '揪人',
               tabBarIcon: ({ focused }) => (
                 <Icon
                   as={Ionicons}
@@ -104,21 +123,6 @@ function MainApp() {
                 <Icon
                   as={MaterialCommunityIcons}
                   name="map-outline"
-                  color={focused ? '#E5EBF1' : '#28527A'}
-                />
-              ),
-            }}
-          />
-          <Tab.Screen
-            name="Sales"
-            component={SaleScreen}
-            options={{
-              headerShown: false,
-              tabBarLabel: '拍賣',
-              tabBarIcon: ({ focused }) => (
-                <Icon
-                  as={MaterialCommunityIcons}
-                  name="cart-outline"
                   color={focused ? '#E5EBF1' : '#28527A'}
                 />
               ),

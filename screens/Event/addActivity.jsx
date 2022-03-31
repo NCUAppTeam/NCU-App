@@ -12,8 +12,8 @@ import {
   NativeBaseProvider, Box, Divider, Heading,
 } from 'native-base';
 import * as ImagePicker from 'expo-image-picker';
-import ActiveController from '../../../controller/Active';
-import styles from '../Styles';
+import ActiveController from '../../controller/Active';
+import styles from './Styles';
 
 function add({ navigation }) {
   const [data, setData] = useState({});

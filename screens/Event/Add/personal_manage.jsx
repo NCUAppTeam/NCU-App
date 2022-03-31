@@ -1,83 +1,127 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
-  Text, Platform, View, SafeAreaView, TextInput,
-  ScrollView, TouchableOpacity, Alert, Dimensions, Image,
+  Text, View, SafeAreaView,
+  ScrollView, TouchableOpacity, Image,
 } from 'react-native';
-// import Icon from 'react-native-vector-icons/FontAwesome';
-import { Ionicons, FontAwesome5, AntDesign } from '@expo/vector-icons';
 import {
-  NativeBaseProvider, Box, Divider, Heading,
+  Ionicons, FontAwesome5, AntDesign, Feather,
+} from '@expo/vector-icons';
+import {
+  NativeBaseProvider, Box, Divider, Heading, ZStack, AddIcon,
 } from 'native-base';
 import styles from '../Styles';
 
 function personal({ navigation }) {
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={{ flex: 1, flexDirection: 'column', alignContent: 'center' }}>
       <NativeBaseProvider>
-        <View style={{ flex: 0.1, flexDirection: 'column' }}>
-          <View style={{ flexDirection: 'row' }}>
-            <Box style={{
-              flex: 0.8, justifyContent: 'center', alignItems: 'flex-start',
+        <ZStack>
+          <Box
+            style={{
+              width: 323,
+              height: 323,
+              borderRadius: 261,
+              alignSelf: 'center',
+              transform: [{ scaleX: 1.61 }],
+              marginTop: -172,
+              backgroundColor: '#28527A',
+            }}
+          />
+          <Box style={{ alignSelf: 'center', marginTop: 61, flexDirection: 'row' }}>
+            <Feather name="user" size={24} color="white" style={{ marginTop: 5, marginRight: 15 }} onPress={() => { navigation.navigate('list'); }} />
+            <Text style={{
+              fontWeight: 'bold', fontSize: 24, color: 'white',
             }}
             >
-              <AntDesign
-                name="arrowleft"
-                size={28}
-                color="darkblue"
-                style={{ justifyContent: 'center' }}
-                onPress={() => { navigation.navigate('list'); }}
-              />
-            </Box>
-            <View style={styles.nameheader}>
-              <Text style={styles.personalHeader}>
-                活動 - 個人頁面
-              </Text>
-            </View>
-            <View style={{
-              flex: 1, justifyContent: 'center', alignItems: 'flex-end',
-            }}
-            >
-              <FontAwesome5
-                name="comment"
-                size={25}
-                color="darkblue"
-                onPress={() => { navigation.navigate('list'); }}
-              />
-            </View>
-          </View>
-        </View>
-        <ScrollView style={{ flex: 1 }}>
-          <Box style={styles.choose}>
+              活動中心
+            </Text>
+          </Box>
+          <Box style={{ alignSelf: 'center', flexDirection: 'row' }}>
             <TouchableOpacity
-              style={styles.roundbutton}
+              style={{
+                marginTop: 118, marginRight: 10, width: 82, height: 53, borderRadius: 25, backgroundColor: '#1784B2', flexDirection: 'row', padding: 16, alignContent: 'center',
+              }}
+              onPress={() => navigation.navigate('message')}
+            >
+              <Feather name="message-circle" size={14} color="white" style={{ marginTop: 3 }} />
+              <Text style={{ color: 'white', fontSize: 14 }}>
+                &nbsp;私訊
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{
+                marginTop: 118, width: 82, height: 53, borderRadius: 25, backgroundColor: '#1784B2', flexDirection: 'row', padding: 16, alignContent: 'center',
+              }}
               onPress={() => navigation.navigate('add')}
             >
-              <Text style={styles.roundbuttonText}>
-                新增活動
+              <Ionicons name="add" size={14} color="white" style={{ marginTop: 3 }} />
+              <Text style={{ color: 'white', fontSize: 14 }}>
+                &nbsp;新增
               </Text>
             </TouchableOpacity>
           </Box>
-          <Box style={styles.choose}>
+        </ZStack>
+        <Box style={{ marginTop: 192, alignItems: 'center' }}>
+          <Box style={{ flexDirection: 'row' }}>
             <TouchableOpacity
-              style={styles.roundbutton}
-              onPress={() => navigation.navigate('list')}
+              style={{
+                width: 106,
+                height: 40,
+                borderRadius: 20,
+                backgroundColor: '#1784B2',
+                flexDirection: 'row',
+                paddingVertical: 8,
+                paddingHorizontal: 29,
+                marginRight: 20,
+                alignItems: 'center',
+              }}
+              onPress={() => navigation.navigate('add')}
             >
-              <Text style={styles.roundbuttonText}>
+              <Text style={{
+                color: 'white', fontSize: 14,
+              }}
+              >
+                參加中
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{
+                width: 106,
+                height: 40,
+                borderRadius: 20,
+                backgroundColor: '#1784B2',
+                flexDirection: 'row',
+                paddingVertical: 8,
+                paddingHorizontal: 21,
+                marginRight: 20,
+                alignItems: 'center',
+              }}
+              onPress={() => navigation.navigate('add')}
+            >
+              <Text style={{ color: 'white', fontSize: 14 }}>
                 管理活動
               </Text>
             </TouchableOpacity>
-          </Box>
-          <Box style={styles.choose}>
             <TouchableOpacity
-              style={styles.roundbutton}
-              onPress={() => navigation.navigate('list')}
+              style={{
+                width: 106,
+                height: 40,
+                borderRadius: 20,
+                backgroundColor: '#1784B2',
+                flexDirection: 'row',
+                paddingVertical: 8,
+                paddingHorizontal: 29,
+                marginRight: 20,
+                alignItems: 'center',
+              }}
+              onPress={() => navigation.navigate('add')}
             >
-              <Text style={styles.roundbuttonText}>
-                活動紀錄
+              <Text style={{ color: 'white', fontSize: 14 }}>
+                已結束
               </Text>
             </TouchableOpacity>
           </Box>
-        </ScrollView>
+        </Box>
       </NativeBaseProvider>
     </SafeAreaView>
   );

@@ -14,7 +14,7 @@ import {
   List, ListItem, NativeBaseProvider, Box, Divider, Row,
 } from 'native-base';
 import styles from './Styles';
-import ActiveController from '../controller/Active';
+import ActiveController from '../../controller/Active';
 
 function details({ route, navigation }) {
   const Cd = route.params;

@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import {
-  Alert, SafeAreaView, StyleSheet,
+  Alert, SafeAreaView, StyleSheet, Linking, View,
 } from 'react-native';
 import {
   Avatar, Button, Headline,
@@ -11,7 +11,25 @@ import * as Facebook from 'expo-facebook';
 import logo from '../assets/icon.png';
 import Controller from '../controller/Profile';
 
-const PRODUCTION = false;
+const PRODUCTION = true;
+const supportedURL = 'https://ncuappteam.github.io/PRIVACY';
+
+const OpenURLButton = ({ url, children }) => {
+  const handlePress = useCallback(async () => {
+    // Checking if the link is supported for links with custom URL scheme.
+    const supported = await Linking.canOpenURL(url);
+
+    if (supported) {
+      // Opening the link with some app, if the URL scheme is "http" the web link should be opened
+      // by some browser in the mobile
+      await Linking.openURL(url);
+    } else {
+      Alert.alert(`Don't know how to open this URL: ${url}`);
+    }
+  }, [url]);
+
+  return <Button title={children} onPress={handlePress}>隱私權政策</Button>;
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -70,6 +88,9 @@ function AuthScreen() {
           登入
         </Button>
       )}
+      <View>
+        <OpenURLButton url={supportedURL} style={styles.container} />
+      </View>
     </SafeAreaView>
   );
 }

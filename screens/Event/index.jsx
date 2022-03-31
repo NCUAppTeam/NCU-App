@@ -1,11 +1,11 @@
 import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ListScreen from './ListScreen';
 import DetailScreen from './DetailScreen';
 import EditScreen from './EditScreen';
 import MyEventScreen from './MyEventScreen';
 
-const Stack = createStackNavigator();
+const Stack = createNativeStackNavigator();
 
 function EventStack() {
   return (

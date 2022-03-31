@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, View } from 'react-native';
+import { SafeAreaView, View, ScrollView } from 'react-native';
 import {
   Text,
 } from 'react-native-paper';
-import { ScrollView } from 'react-native-gesture-handler';
 import styles from './Styles';
 import SalesController from '../../controller/Sales';
 

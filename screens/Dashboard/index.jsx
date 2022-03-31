@@ -1,11 +1,11 @@
 import React from 'react';
-import { createStackNavigator } from '@react-navigation/native-stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import BoardScreen from './BoardScreen';
 import SettingScreen from './SettingScreen';
 
-const Stack = createStackNavigator();
+const Stack = createNativeStackNavigator();
 
-function CalendarStack() {
+function DashboardStack() {
   return (
     <Stack.Navigator initialRouteName="看板">
       <Stack.Screen name="看板" component={BoardScreen} />
@@ -14,4 +14,4 @@ function CalendarStack() {
   );
 }
 
-export default CalendarStack;
+export default DashboardStack;

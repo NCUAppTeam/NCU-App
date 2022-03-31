@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import {
-  SafeAreaView, View,
+  SafeAreaView, View, ScrollView,
 } from 'react-native';
 import {
   Title, Text, Button,
 } from 'react-native-paper';
-import { ScrollView } from 'react-native-gesture-handler';
 import { getActivityInfo, createAttendance, deleteAttendance } from '../../controller/Activity';
 
 function DetailScreen({ route, navigation }) {

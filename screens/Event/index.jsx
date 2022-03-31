@@ -1,19 +1,25 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import ListScreen from './ListScreen';
-import DetailScreen from './DetailScreen';
-import EditScreen from './EditScreen';
-import MyEventScreen from './MyEventScreen';
+import firebase from 'firebase';
+import ActiveController from '../../controller/Active';
+import add from './Add/addActivity';
+import personal from './Add/personal_manage';
+import list from './activityList';
+import more from './moreEvent';
+import details from './showActivityDetails';
+import search from './search';
 
 const Stack = createNativeStackNavigator();
 
 function EventStack() {
   return (
-    <Stack.Navigator initialRouteName="活動列表">
-      <Stack.Screen name="活動列表" component={ListScreen} />
-      <Stack.Screen name="活動詳細資料" component={DetailScreen} />
-      <Stack.Screen name="編輯活動" component={EditScreen} />
-      <Stack.Screen name="我的活動" component={MyEventScreen} />
+    <Stack.Navigator initialRouteName="list">
+      <Stack.Screen name="list" component={list} />
+      <Stack.Screen name="more" component={more} />
+      <Stack.Screen name="add" component={add} />
+      <Stack.Screen name="personal" component={personal} />
+      <Stack.Screen name="details" component={details} />
+      <Stack.Screen name="search" component={search} />
     </Stack.Navigator>
   );
 }

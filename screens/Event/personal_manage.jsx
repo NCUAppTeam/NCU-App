@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   Text, View, SafeAreaView,
-  ScrollView, TouchableOpacity, Image,
+  ScrollView, TouchableOpacity, Image, RefreshControl,
 } from 'react-native';
 import {
   Title, Card, Searchbar, Chip,
@@ -16,28 +16,10 @@ import ActiveController from '../../controller/Active';
 import styles from './Styles';
 
 function personal({ navigation }) {
-  const [participate, setParticipate] = useState([]);
+  const [show, setShow] = useState([]);
   useEffect(() => {
     ActiveController.getAllActive().then((res) => {
-      setParticipate(res);
-    }).catch((err) => {
-      throw err;
-    });
-  }, []);
-
-  const [myActive, setMyActive] = useState([]);
-  useEffect(() => {
-    ActiveController.getAllActive().then((res) => {
-      setMyActive(res);
-    }).catch((err) => {
-      throw err;
-    });
-  }, []);
-
-  const [end, setEnd] = useState([]);
-  useEffect(() => {
-    ActiveController.getAllActive().then((res) => {
-      setEnd(res);
+      setShow(res);
     }).catch((err) => {
       throw err;
     });
@@ -47,12 +29,11 @@ function personal({ navigation }) {
   const onRefresh = () => {
     setRefreshing(true);
     ActiveController.getAllActive().then((res) => {
-      setParticipate(res);
+      setShow(res);
       setRefreshing(false);
     });
   };
 
-  
   return (
     <SafeAreaView style={{ flex: 1, flexDirection: 'column', alignContent: 'center' }}>
       <NativeBaseProvider>
@@ -116,13 +97,15 @@ function personal({ navigation }) {
                 marginRight: 20,
                 alignItems: 'center',
               }}
-              onPress={() => navigation.navigate('add')}
+              // onPress={() => {
+              //    ActiveController.getActiveByForm('participate')
+              //    .then(() => { onRefresh(); }); }}
             >
               <Text style={{
                 color: 'white', fontSize: 14,
               }}
               >
-                參加中
+                &nbsp;參加中
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -137,10 +120,12 @@ function personal({ navigation }) {
                 marginRight: 20,
                 alignItems: 'center',
               }}
-              onPress={() => navigation.navigate('add')}
+              // onPress={() => {
+              //    ActiveController.getActiveByForm('MyOwn')
+              //    .then(() => { onRefresh(); }); }}
             >
               <Text style={{ color: 'white', fontSize: 14 }}>
-                管理活動
+                &nbsp;管理活動
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -155,16 +140,18 @@ function personal({ navigation }) {
                 marginRight: 20,
                 alignItems: 'center',
               }}
-              onPress={() => navigation.navigate('add')}
+              // onPress={() => {
+              //    ActiveController.getActiveByForm('End')
+              //    .then(() => { onRefresh(); }); }}}
             >
               <Text style={{ color: 'white', fontSize: 14 }}>
-                已結束
+              &nbsp;已結束
               </Text>
             </TouchableOpacity>
           </Box>
-          
-          <ScrollView
-          style={{ flex: 1 }}
+        </Box>
+        <ScrollView
+          style={{ flex: 1, marginTop: 15 }}
           refreshControl={(
             <RefreshControl
               refreshing={refreshing}
@@ -173,32 +160,16 @@ function personal({ navigation }) {
       )}
         >
           <View style={{ flex: 1 }}>
-            {active.map(({
+            {show.map(({
               id, name, imageUri, startTime, startNoYr, endTime, endNoYr, place,
-              cost, limitNum, genre, link, host, details,
-              contact1, contact2, contact3,
+              cost, limitNum, genre, link, hostName, hostPhone, hostMail, details,
             }) => (
               <View style={{ flexDirection: 'row' }}>
                 <Card
                   key={id}
-                  style={styles.Card1}
+                  style={styles.Card2}
                   onPress={() => {
-                    navigation.navigate('details', {
-                      Name: name,
-                      ImageUri: imageUri,
-                      StartTime: startTime,
-                      EndTime: endTime,
-                      Place: place,
-                      Cost: cost,
-                      LimitNum: limitNum,
-                      Genre: genre,
-                      Link: link,
-                      Host: host,
-                      Details: details,
-                      Contact1: contact1,
-                      Contact2: contact2,
-                      Contact3: contact3,
-                    });
+                    navigation.navigate('details', { Cd: id });
                   }}
                 >
                   <Card.Content style={{ padding: 0 }}>
@@ -247,8 +218,6 @@ function personal({ navigation }) {
             ))}
           </View>
         </ScrollView>
-          
-        </Box>
       </NativeBaseProvider>
     </SafeAreaView>
   );

@@ -93,30 +93,14 @@ function more({ navigation }) {
           <View style={{ flex: 1 }}>
             {active.map(({
               id, name, imageUri, startTime, startNoYr, endTime, endNoYr, place,
-              cost, limitNum, genre, link, host, details,
-              contact1, contact2, contact3,
+              cost, limitNum, genre, link, hostName, hostPhone, hostMail, details,
             }) => (
               <View style={{ flexDirection: 'row' }}>
                 <Card
                   key={id}
-                  style={styles.Card1}
+                  style={styles.Card2}
                   onPress={() => {
-                    navigation.navigate('details', {
-                      Name: name,
-                      ImageUri: imageUri,
-                      StartTime: startTime,
-                      EndTime: endTime,
-                      Place: place,
-                      Cost: cost,
-                      LimitNum: limitNum,
-                      Genre: genre,
-                      Link: link,
-                      Host: host,
-                      Details: details,
-                      Contact1: contact1,
-                      Contact2: contact2,
-                      Contact3: contact3,
-                    });
+                    navigation.navigate('details', { Cd: id });
                   }}
                 >
                   <Card.Content style={{ padding: 0 }}>

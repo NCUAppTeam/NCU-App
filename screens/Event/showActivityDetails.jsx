@@ -3,7 +3,7 @@ import {
   Text, View, SafeAreaView, ScrollView, RefreshControl, Image,
 } from 'react-native';
 import {
-  Title, Card, Searchbar, Chip,
+  Title, Card,
 } from 'react-native-paper';
 import { Button } from 'react-native-elements';
 // import Icon from 'react-native-vector-icons/FontAwesome';
@@ -11,12 +11,12 @@ import {
   Ionicons, FontAwesome5, AntDesign, MaterialCommunityIcons, Feather,
 } from '@expo/vector-icons';
 import {
-  List, ListItem, NativeBaseProvider, Box, Divider, Row,
+  List, ListItem, NativeBaseProvider, Box, Divider,
 } from 'native-base';
 import styles from './Styles';
 import ActiveController from '../../controller/Active';
 
-function details({ route, navigation }) {
+function detailscreen({ route, navigation }) {
   const Cd = route.params;
   // console.log('123', JSON.stringify(Cd).slice(6, -1));
   const [active, setActive] = useState([]);
@@ -61,8 +61,8 @@ function details({ route, navigation }) {
           <View style={{ flex: 1 }}>
             <ScrollView>
               {active.map(({
-                id, name, imageUri, startTime, startNoYr, endTime, endNoYr, place,
-                cost, limitNum, genre, link, hostName, hostPhone, hostMail, details,
+                id, name, imageUri, startNoYr, endNoYr, place,
+                cost, link, hostName, hostPhone, hostMail, details,
               }) => (
                 <Card
                   key={id}
@@ -222,4 +222,4 @@ function details({ route, navigation }) {
   );
 }
 
-export default details;
+export default detailscreen;

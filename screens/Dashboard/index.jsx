@@ -8,7 +8,13 @@ const Stack = createNativeStackNavigator();
 function DashboardStack() {
   return (
     <Stack.Navigator initialRouteName="看板">
-      <Stack.Screen name="看板" component={BoardScreen} />
+      <Stack.Screen
+        name="看板"
+        component={BoardScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
       <Stack.Screen name="設定頁面" component={SettingScreen} />
     </Stack.Navigator>
   );

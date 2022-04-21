@@ -28,16 +28,19 @@ function Datewithnoyr(time) {
   return noyr;
 }
 
-const firebaseConfig = {
-  apiKey: "AIzaSyBAdIwqHbhRHs7pgEukVCc2uXUwRAmJu8w",
-  authDomain: "active-e1014.firebaseapp.com",
-  projectId: "active-e1014",
-  storageBucket: "active-e1014.appspot.com",
-  messagingSenderId: "1030625507659",
-  appId: "1:1030625507659:web:3665e92f26f92e7bc850ce",
-  measurementId: "G-YR1M91G56B"
-};
+function sentMeaasge(message) {
+  console.log(message);
+}
 
+const firebaseConfig = {
+  apiKey: 'AIzaSyBAdIwqHbhRHs7pgEukVCc2uXUwRAmJu8w',
+  authDomain: 'active-e1014.firebaseapp.com',
+  projectId: 'active-e1014',
+  storageBucket: 'active-e1014.appspot.com',
+  messagingSenderId: '1030625507659',
+  appId: '1:1030625507659:web:3665e92f26f92e7bc850ce',
+  measurementId: 'G-YR1M91G56B',
+};
 
 //   測試用 Firebase
 // const firebaseConfig = {
@@ -280,4 +283,5 @@ export default {
   deleteAllActive,
   getActiveByName,
   fuseSearchName,
+  sentMeaasge,
 };

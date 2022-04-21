@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Text, View, SafeAreaView, ScrollView, RefreshControl, Image, PixelRatio,
+  Text, View, SafeAreaView, ScrollView, RefreshControl, Image,
 } from 'react-native';
 import {
-  Title, Card, Searchbar, Chip,
+  Title, Card,
 } from 'react-native-paper';
 import { Button } from 'react-native-elements';
 // import Icon from 'react-native-vector-icons/FontAwesome';
@@ -15,9 +15,6 @@ import styles from './Styles';
 import ActiveController from '../../controller/Active';
 
 function more({ navigation }) {
-  const [searchQuery, setSearchQuery] = useState('');
-  const onChangeSearch = (query) => setSearchQuery(query);
-
   const [active, setActive] = useState([]);
   useEffect(() => {
     ActiveController.getAllActive().then((res) => {
@@ -92,8 +89,7 @@ function more({ navigation }) {
         >
           <View style={{ flex: 1 }}>
             {active.map(({
-              id, name, imageUri, startTime, startNoYr, endTime, endNoYr, place,
-              cost, limitNum, genre, link, hostName, hostPhone, hostMail, details,
+              id, name, imageUri, startNoYr, endNoYr, place,
             }) => (
               <View style={{ flexDirection: 'row' }}>
                 <Card

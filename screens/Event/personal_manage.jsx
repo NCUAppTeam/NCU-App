@@ -7,7 +7,7 @@ import {
   Title, Card, Searchbar, Chip,
 } from 'react-native-paper';
 import {
-  Ionicons, FontAwesome5, AntDesign, Feather,
+  Ionicons, FontAwesome5, AntDesign, Feather, Octicons,
 } from '@expo/vector-icons';
 import {
   NativeBaseProvider, Box, Divider, Heading, ZStack, AddIcon,
@@ -33,6 +33,9 @@ function personal({ navigation }) {
       setRefreshing(false);
     });
   };
+
+  const [isPress, setIsPress] = useState('參加中');
+  const values = ['參加中', '已結束', '管理活動'];
 
   return (
     <SafeAreaView style={{ flex: 1, flexDirection: 'column', alignContent: 'center' }}>
@@ -86,65 +89,42 @@ function personal({ navigation }) {
         <Box style={{ marginTop: 192, alignItems: 'center' }}>
           <Box style={{ flexDirection: 'row' }}>
             <TouchableOpacity
-              style={{
-                width: 106,
-                height: 40,
-                borderRadius: 20,
-                backgroundColor: '#1784B2',
-                flexDirection: 'row',
-                paddingVertical: 8,
-                paddingHorizontal: 29,
-                marginRight: 20,
-                alignItems: 'center',
-              }}
-              // onPress={() => {
+              style={isPress === '參加中' ? styles.personalbtnPress : styles.personalbtn}
+              onPress={() => {
+                setIsPress('參加中');
+                console.log(isPress);
+
               //    ActiveController.getActiveByForm('participate')
-              //    .then(() => { onRefresh(); }); }}
-            >
-              <Text style={{
-                color: 'white', fontSize: 14,
+              //    .then(() => { onRefresh(); });
               }}
-              >
+            >
+              <Text style={isPress === '參加中' ? styles.personalbtnPressText : styles.personalbtnText}>
                 &nbsp;參加中
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={{
-                width: 106,
-                height: 40,
-                borderRadius: 20,
-                backgroundColor: '#1784B2',
-                flexDirection: 'row',
-                paddingVertical: 8,
-                paddingHorizontal: 21,
-                marginRight: 20,
-                alignItems: 'center',
-              }}
-              // onPress={() => {
+              style={isPress === '管理活動' ? styles.personalbtnPress : styles.personalbtn}
+              onPress={() => {
+                setIsPress('管理活動');
+                console.log(isPress);
               //    ActiveController.getActiveByForm('MyOwn')
               //    .then(() => { onRefresh(); }); }}
+              }}
             >
-              <Text style={{ color: 'white', fontSize: 14 }}>
+              <Text style={isPress === '管理活動' ? styles.personalbtnPressText : styles.personalbtnText}>
                 &nbsp;管理活動
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={{
-                width: 106,
-                height: 40,
-                borderRadius: 20,
-                backgroundColor: '#1784B2',
-                flexDirection: 'row',
-                paddingVertical: 8,
-                paddingHorizontal: 29,
-                marginRight: 20,
-                alignItems: 'center',
+              style={isPress === '已結束' ? styles.personalbtnPress : styles.personalbtn}
+              onPress={() => {
+                setIsPress('已結束');
+                console.log(isPress);
+                // ActiveController.getActiveByForm('End')
+                //    .then(() => { onRefresh(); }); }}}
               }}
-              // onPress={() => {
-              //    ActiveController.getActiveByForm('End')
-              //    .then(() => { onRefresh(); }); }}}
             >
-              <Text style={{ color: 'white', fontSize: 14 }}>
+              <Text style={isPress === '已結束' ? styles.personalbtnPressText : styles.personalbtnText}>
               &nbsp;已結束
               </Text>
             </TouchableOpacity>
@@ -161,60 +141,127 @@ function personal({ navigation }) {
         >
           <View style={{ flex: 1 }}>
             {show.map(({
-              id, name, imageUri, startTime, startNoYr, endTime, endNoYr, place,
+              id, name, imageUri, startNoYr, endTime, endNoYr, place,
               cost, limitNum, genre, link, hostName, hostPhone, hostMail, details,
             }) => (
-              <View style={{ flexDirection: 'row' }}>
-                <Card
-                  key={id}
-                  style={styles.Card2}
-                  onPress={() => {
-                    navigation.navigate('details', { Cd: id });
-                  }}
-                >
-                  <Card.Content style={{ padding: 0 }}>
-                    <View style={{ flexDirection: 'column', margin: -15 }}>
-                      <View style={{ aspectRatio: 1 }}>
-                        <Image
-                          style={styles.pic}
-                          source={{
-                            uri: imageUri,
-                          }}
-                        />
+              isPress === '管理活動' ? (
+                <View style={{ flexDirection: 'column' }}>
+                  <Card
+                    key={id}
+                    style={styles.Card3}
+                    onPress={() => {
+                      navigation.navigate('manage', { Cd: id });
+                    }}
+                  >
+                    <Card.Content style={{ padding: 0 }}>
+                      <View style={{ flexDirection: 'row', margin: -15 }}>
+                        <View style={{ aspectRatio: 1 }}>
+                          <Image
+                            style={styles.Card3pic}
+                            source={{
+                              uri: imageUri,
+                            }}
+                          />
+                        </View>
+                        <View style={{ flexDirection: 'column' }}>
+                          <Title style={styles.Card3Title}>
+                            {name}
+                          </Title>
+                          <View style={styles.Card3Details}>
+                            <AntDesign
+                              name="clockcircleo"
+                              size={15}
+                              style={{ justifyContent: 'center' }}
+                            />
+                            <Text style={styles.Card3Text}>
+                              {'   開始 ：'}
+                              {startNoYr}
+                            </Text>
+                          </View>
+                          <View style={styles.Card3Details}>
+                            <Ionicons
+                              name="location-outline"
+                              size={17}
+                              color="black"
+                            />
+                            <Text style={styles.Card3Text}>
+                              {'  '}
+                              {place}
+                            </Text>
+                          </View>
+                          <View style={styles.Card3Details}>
+                            <Feather
+                              name="users"
+                              size={16}
+                              color="black"
+                            />
+                            <Text style={styles.Card3Text}>
+                              {'  '}
+                              100
+                              {' / '}
+                              {limitNum}
+                              人
+                            </Text>
+                          </View>
+                        </View>
+
                       </View>
-                      <Title style={styles.CardTitle}>
-                        {name}
-                      </Title>
-                      <View style={styles.CardDetails}>
-                        <AntDesign
-                          name="clockcircleo"
-                          size={12}
-                          style={{ justifyContent: 'center' }}
-                        />
-                        <Text style={styles.CardText}>
-                          {'   '}
-                          {startNoYr}
-                        </Text>
-                        <Text style={styles.CardText}>
-                          {' ~ '}
-                          {endNoYr}
-                        </Text>
+                    </Card.Content>
+                  </Card>
+                </View>
+              ) : (
+                <View style={{ flexDirection: 'row' }}>
+                  <Card
+                    key={id}
+                    style={styles.Card2}
+                    onPress={() => {
+                      navigation.navigate('details', { Cd: id });
+                    }}
+                  >
+                    <Card.Content style={{ padding: 0 }}>
+                      <View style={{ flexDirection: 'column', margin: -15 }}>
+                        <View style={{ aspectRatio: 1 }}>
+                          <Image
+                            style={styles.pic}
+                            source={{
+                              uri: imageUri,
+                            }}
+                          />
+                        </View>
+                        <Title style={styles.CardTitle}>
+                          {name}
+                        </Title>
+                        <View style={styles.CardDetails}>
+                          <AntDesign
+                            name="clockcircleo"
+                            size={12}
+                            style={{ justifyContent: 'center' }}
+                          />
+                          <Text style={styles.CardText}>
+                            {'   '}
+                            {startNoYr}
+                          </Text>
+                          <Text style={styles.CardText}>
+                            {' ~ '}
+                            {endNoYr}
+                          </Text>
+                        </View>
+                        <View style={{ marginHorizontal: 8, flexDirection: 'row' }}>
+                          <Ionicons
+                            name="location-outline"
+                            size={15}
+                            color="black"
+                          />
+                          <Text style={{ fontSize: 12 }}>
+                            {'  '}
+                            {place}
+                          </Text>
+                        </View>
                       </View>
-                      <View style={{ marginHorizontal: 8, flexDirection: 'row' }}>
-                        <Ionicons
-                          name="location-outline"
-                          size={15}
-                          color="black"
-                        />
-                        <Text style={{ fontSize: 12 }}>
-                          {'  '}
-                          {place}
-                        </Text>
-                      </View>
-                    </View>
-                  </Card.Content>
-                </Card>
-              </View>
+                    </Card.Content>
+                  </Card>
+                </View>
+              )
             ))}
           </View>
         </ScrollView>

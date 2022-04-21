@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {
   Text, Platform, View, SafeAreaView, TextInput,
-  ScrollView, TouchableOpacity, Alert, Dimensions, Image, TouchableHighlight,
+  ScrollView, TouchableOpacity, Dimensions, Image, TouchableHighlight,
 } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {
@@ -15,10 +15,25 @@ import * as ImagePicker from 'expo-image-picker';
 import ActiveController from '../../controller/Active';
 import styles from './Styles';
 
+let countPress = 0;
+
 function add({ navigation }) {
   const [data, setData] = useState({});
+  const [isCheck, setIsCheck] = useState(false);
 
-  const [image, setImage] = useState();
+  const [image1, setImage1] = useState();
+  const [image2, setImage2] = useState();
+  const [image3, setImage3] = useState();
+
+  const check = () => {
+    console.log(data);
+    if (data.genre !== undefined && data.name !== undefined && data.startTime !== undefined
+       && data.endTime !== undefined && data.place !== undefined && data.limitNum !== undefined
+       && data.details !== undefined) {
+      setIsCheck(true);
+    }
+  };
+
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -26,9 +41,19 @@ function add({ navigation }) {
       aspect: [1, 1],
       quality: 1,
     });
+    countPress += 1;
+
     if (!result.cancelled) {
-      setImage(result.uri);
-      setData({ ...data, image: result.uri });
+      if (countPress % 3 === 1) {
+        setImage1(result.uri);
+        setData({ ...data, image1: result.uri });
+      } else if (countPress % 3 === 2) {
+        setImage2(result.uri);
+        setData({ ...data, image2: result.uri });
+      } else if (countPress % 3 === 0) {
+        setImage3(result.uri);
+        setData({ ...data, image3: result.uri });
+      }
     }
   };
 
@@ -175,7 +200,7 @@ function add({ navigation }) {
     setData({ ...data, endTime: tempDate });
   };
 
-  const [isPress, setIsPress] = useState('揪人共乘');
+  const [isPress, setIsPress] = useState('');
   const values = ['揪人共乘', '揪人運動', '揪人遊戲', '校園活動', '系上活動', '社團活動'];
   return (
     <Provider>
@@ -191,7 +216,7 @@ function add({ navigation }) {
                   <AntDesign
                     name="arrowleft"
                     size={28}
-                    color="darkblue"
+                    color="#28527A"
                     style={{ justifyContent: 'center' }}
                     onPress={() => { navigation.navigate('personal'); }}
                   />
@@ -214,14 +239,17 @@ function add({ navigation }) {
                   <TouchableHighlight
                     key={value}
                     activeOpacity={0.5} // 不透明度
-                    underlayColor="white" // 切換時候的顏色
+                    underlayColor="#28527A" // 切換時候的顏色
                     onPress={() => {
                       setIsPress(value);
                       setData({ ...data, genre: value });
+                      check();
                     }}
                     style={isPress === value ? styles.btnPress : styles.btnNormal}
                   >
-                    <Text style={styles.btnText}>{value}</Text>
+                    <Text style={isPress === value ? styles.btnPText : styles.btnText}>
+                      {value}
+                    </Text>
                   </TouchableHighlight>
                 ))}
               </Box>
@@ -235,7 +263,10 @@ function add({ navigation }) {
                     maxLength={10}
                     placeholder="請輸入活動名稱(上限十字)"
                     value={data.name}
-                    onChangeText={(text) => setData({ ...data, name: text })}
+                    onChangeText={(text) => {
+                      setData({ ...data, name: text });
+                      check();
+                    }}
                     selectionColor="#ccc"
                   />
                 </Box>
@@ -247,7 +278,10 @@ function add({ navigation }) {
                 <Box style={{ flexDirection: 'row' }}>
                   {Platform.OS === 'android' && (
                   <TouchableOpacity
-                    onPress={showDialog1}
+                    onPress={() => {
+                      showDialog1();
+                      check();
+                    }}
                     style={{ width: '100%' }}
                   >
                     <TextInput
@@ -270,7 +304,10 @@ function add({ navigation }) {
 
                   {Platform.OS === 'ios' && (
                   <TouchableOpacity
-                    onPress={showDialog1}
+                    onPress={() => {
+                      showDialog1();
+                      check();
+                    }}
                     style={styles.input}
                   >
                     {startText === undefined && (
@@ -293,7 +330,10 @@ function add({ navigation }) {
                 <Box style={{ flexDirection: 'row' }}>
                   {Platform.OS === 'android' && (
                   <TouchableOpacity
-                    onPress={showDialog2}
+                    onPress={() => {
+                      showDialog2();
+                      check();
+                    }}
                     style={{ width: '100%' }}
                   >
                     <TextInput
@@ -316,7 +356,10 @@ function add({ navigation }) {
 
                   {Platform.OS === 'ios' && (
                   <TouchableOpacity
-                    onPress={showDialog2}
+                    onPress={() => {
+                      showDialog2();
+                      check();
+                    }}
                     style={styles.input}
                   >
                     {endText === undefined && (
@@ -341,7 +384,10 @@ function add({ navigation }) {
                     style={styles.input}
                     placeholder="活動地點"
                     value={data.place}
-                    onChangeText={(text) => setData({ ...data, place: text })}
+                    onChangeText={(text) => {
+                      setData({ ...data, place: text });
+                      check();
+                    }}
                     selectionColor="#ccc"
                   />
                 </Box>
@@ -378,7 +424,10 @@ function add({ navigation }) {
                     keyboardType="number-pad"
                     placeholder="不限填0"
                     value={data.limitNum}
-                    onChangeText={(text) => setData({ ...data, limitNum: text })}
+                    onChangeText={(text) => {
+                      setData({ ...data, limitNum: text });
+                      check();
+                    }}
                     selectionColor="#ccc"
                   />
                   <Text style={styles.CostAndLimitnumText}>人</Text>
@@ -410,7 +459,10 @@ function add({ navigation }) {
                     maxLength={450}
                     placeholder="請簡單描述一下你的活動內容吧!"
                     value={data.details}
-                    onChangeText={(text) => setData({ ...data, details: text })}
+                    onChangeText={(text) => {
+                      setData({ ...data, details: text });
+                      check();
+                    }}
                     selectionColor="#ccc"
                   />
                 </Box>
@@ -418,10 +470,23 @@ function add({ navigation }) {
             </Box>
             <Box style={styles.body}>
               <Heading style={styles.inputboxText}>活動照片(最多可以上傳3張, 第一章預設為縮圖照片)</Heading>
-              {image
-                && (
-                  <Image source={{ uri: image }} style={styles.image} />
-                )}
+              <Box style={{ flexDirection: 'row' }}>
+                <Box style={{ marginRight: 12 }}>
+                  {image1 && (
+                  <Image source={{ uri: image1 }} style={styles.image} />
+                  )}
+                </Box>
+                <Box style={{ marginRight: 12 }}>
+                  {image2 && (
+                  <Image source={{ uri: image2 }} style={styles.image} />
+                  )}
+                </Box>
+                <Box style={{ marginRight: 12 }}>
+                  {image3 && (
+                  <Image source={{ uri: image3 }} style={styles.image} />
+                  )}
+                </Box>
+              </Box>
               <TouchableOpacity onPress={pickImage} style={styles.imageButton}>
                 <Ionicons
                   name="cloud-upload-outline"
@@ -478,35 +543,26 @@ function add({ navigation }) {
             </Box>
             <View style={styles.footer}>
               <TouchableOpacity
-                style={styles.button}
+                style={isCheck === true ? styles.sentButton : styles.unsentButton}
                 onPress={() => {
-                  if (data.name === undefined) {
-                    Alert.alert('活動名稱不得為空');
-                  } else if (data.startTime === undefined) {
-                    Alert.alert('開始時間不得為空');
-                  } else if (data.image === undefined) {
-                    Alert.alert('照片不得為空');
-                  } else if (data.endTime === undefined) {
-                    Alert.alert('結束時間不得為空');
-                  } else if (data.place === undefined) {
-                    Alert.alert('活動地點不得為空');
+                  console.log(isCheck);
+                  if (data.image1 === undefined) {
+                    setData({ ...data, image1: '' });
+                  } else if (data.image2 === undefined) {
+                    setData({ ...data, image2: '' });
+                  } else if (data.image3 === undefined) {
+                    setData({ ...data, image3: '' });
                   } else if (data.cost === undefined) {
-                    Alert.alert('參加費用不得為空');
-                  } else if (data.limitNum === undefined) {
-                    Alert.alert('人數上限不得為空');
-                  } else if (data.genre === undefined) {
-                    Alert.alert('請選擇活動類別');
+                    setData({ ...data, cost: '' });
                   } else if (data.link === undefined) {
-                    Alert.alert('活動連結不得為空');
-                  } else if (data.details === undefined) {
-                    Alert.alert('詳細資訊不得為空');
+                    setData({ ...data, link: '' });
                   } else if (data.hostName === undefined) {
-                    Alert.alert('活動聯絡人姓名不得為空');
+                    setData({ ...data, hostName: '' });
                   } else if (data.hostPhone === undefined) {
-                    Alert.alert('聯絡電話不得為空');
+                    setData({ ...data, hostPhone: '' });
                   } else if (data.hostMail === undefined) {
-                    Alert.alert('電子郵件不得為空');
-                  } else {
+                    setData({ ...data, hostMail: '' });
+                  } else if (isCheck === true) {
                     data.uploadTime = new Date();
                     console.log(data);
                     ActiveController.addActive(data);
@@ -515,7 +571,7 @@ function add({ navigation }) {
                   }
                 }}
               >
-                <Text style={styles.buttonText}>
+                <Text style={isCheck === true ? styles.sentButtonText : styles.unsentButtonText}>
                   新增活動
                 </Text>
               </TouchableOpacity>

@@ -144,14 +144,29 @@ export default StyleSheet.create({
     alignContent: 'center',
     justifyContent: 'center',
   },
-  button: {
+  sentButton: {
+    borderRadius: 18,
+    width: 300,
+    height: 38,
+    marginVertical: Dimensions.get('window').height * 0.02,
+    backgroundColor: '#28527A',
+  },
+  unsentButton: {
     borderRadius: 18,
     width: 300,
     height: 38,
     marginVertical: Dimensions.get('window').height * 0.02,
     backgroundColor: '#bfbebe',
   },
-  buttonText: {
+  sentButtonText: {
+    fontSize: 18,
+    textAlign: 'center',
+    color: '#FBEEAC',
+    fontWeight: 'bold',
+    paddingTop: 7,
+    textAlignVertical: 'center',
+  },
+  unsentButtonText: {
     fontSize: 18,
     textAlign: 'center',
     color: 'white',
@@ -345,8 +360,7 @@ export default StyleSheet.create({
   btnPress: {
     height: 40,
     width: 90,
-    borderWidth: 1,
-    borderColor: '#191970',
+    backgroundColor: '#28527A',
     justifyContent: 'center',
     borderRadius: 5,
     margin: 10,
@@ -356,13 +370,18 @@ export default StyleSheet.create({
     width: 90,
     justifyContent: 'center',
     borderRadius: 5,
-    backgroundColor: '#add8e6',
+    backgroundColor: '#E5EBF1',
     margin: 10,
   },
   btnText: {
     textAlign: 'center',
     fontSize: 16,
-    color: '#4169e1',
+    color: '#28527A',
+  },
+  btnPText: {
+    textAlign: 'center',
+    fontSize: 16,
+    color: '#FBEEAC',
   },
   searchBtn: {
     width: 100,

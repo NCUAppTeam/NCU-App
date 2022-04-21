@@ -4,14 +4,15 @@ import {
   ScrollView, TouchableOpacity, Image, RefreshControl,
 } from 'react-native';
 import {
-  Title, Card, Searchbar, Chip,
+  Title, Card,
 } from 'react-native-paper';
 import {
   Ionicons, FontAwesome5, AntDesign, Feather, Octicons,
 } from '@expo/vector-icons';
 import {
-  NativeBaseProvider, Box, Divider, Heading, ZStack, AddIcon,
+  NativeBaseProvider, Box, ZStack, AddIcon,
 } from 'native-base';
+import { LinearGradient } from 'expo-linear-gradient';
 import ActiveController from '../../controller/Active';
 import styles from './Styles';
 
@@ -41,7 +42,9 @@ function personal({ navigation }) {
     <SafeAreaView style={{ flex: 1, flexDirection: 'column', alignContent: 'center' }}>
       <NativeBaseProvider>
         <ZStack>
-          <Box
+          <LinearGradient
+            colors={['#1784B2', '#1D74A0', '#28527A']}
+            start={[0.1203, 0.6497, 0.9972]}
             style={{
               width: 323,
               height: 323,
@@ -49,7 +52,6 @@ function personal({ navigation }) {
               alignSelf: 'center',
               transform: [{ scaleX: 1.61 }],
               marginTop: -172,
-              backgroundColor: '#28527A',
             }}
           />
           <Box style={{ alignSelf: 'center', marginTop: 61, flexDirection: 'row' }}>
@@ -62,28 +64,40 @@ function personal({ navigation }) {
             </Text>
           </Box>
           <Box style={{ alignSelf: 'center', flexDirection: 'row' }}>
-            <TouchableOpacity
+            <LinearGradient
+              colors={['#359DD9', '#1784B2']}
+              start={[0, 0.5]}
               style={{
-                marginTop: 118, marginRight: 10, width: 82, height: 53, borderRadius: 25, backgroundColor: '#1784B2', flexDirection: 'row', padding: 16, alignContent: 'center',
+                marginTop: 118, marginRight: 10, width: 82, height: 53, borderRadius: 25, backgroundColor: '#1784B2', padding: 16, alignContent: 'center',
               }}
-              onPress={() => navigation.navigate('message')}
             >
-              <Feather name="message-circle" size={14} color="white" style={{ marginTop: 3 }} />
-              <Text style={{ color: 'white', fontSize: 14 }}>
+              <TouchableOpacity
+                style={{ flexDirection: 'row' }}
+                onPress={() => navigation.navigate('message')}
+              >
+                <Feather name="message-circle" size={14} color="white" style={{ marginTop: 3 }} />
+                <Text style={{ color: 'white', fontSize: 14 }}>
                 &nbsp;私訊
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
+                </Text>
+              </TouchableOpacity>
+            </LinearGradient>
+            <LinearGradient
+              colors={['#359DD9', '#1784B2']}
+              start={[0, 1.0]}
               style={{
                 marginTop: 118, width: 82, height: 53, borderRadius: 25, backgroundColor: '#1784B2', flexDirection: 'row', padding: 16, alignContent: 'center',
               }}
-              onPress={() => navigation.navigate('add')}
             >
-              <Ionicons name="add" size={14} color="white" style={{ marginTop: 3 }} />
-              <Text style={{ color: 'white', fontSize: 14 }}>
+              <TouchableOpacity
+                style={{ flexDirection: 'row' }}
+                onPress={() => navigation.navigate('add')}
+              >
+                <Ionicons name="add" size={14} color="white" style={{ marginTop: 3 }} />
+                <Text style={{ color: 'white', fontSize: 14 }}>
                 &nbsp;新增
-              </Text>
-            </TouchableOpacity>
+                </Text>
+              </TouchableOpacity>
+            </LinearGradient>
           </Box>
         </ZStack>
         <Box style={{ marginTop: 192, alignItems: 'center' }}>

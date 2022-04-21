@@ -27,7 +27,7 @@ function add({ navigation }) {
 
   const check = () => {
     console.log(data);
-    if (data.genre !== undefined && data.name !== undefined && data.startTime !== undefined
+    if (data.name !== undefined && data.startTime !== undefined
        && data.endTime !== undefined && data.place !== undefined && data.limitNum !== undefined
        && data.details !== undefined) {
       setIsCheck(true);

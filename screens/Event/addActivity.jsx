@@ -7,32 +7,40 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import {
   Dialog, Portal, Button, Provider,
 } from 'react-native-paper';
-import { Ionicons, AntDesign } from '@expo/vector-icons';
 import {
-  NativeBaseProvider, Box, Divider, Heading,
+  MaterialCommunityIcons, AntDesign, Foundation,
+} from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import {
+  NativeBaseProvider, Box, Divider, Heading, ZStack,
 } from 'native-base';
 import * as ImagePicker from 'expo-image-picker';
 import ActiveController from '../../controller/Active';
 import styles from './Styles';
 
-let countPress = 0;
-
 function add({ navigation }) {
-  const [data, setData] = useState({});
-  const [isCheck, setIsCheck] = useState(false);
+  const [data, setData] = useState({
+    cost: '',
+    link: '',
+    image1: '',
+    image2: '',
+    image3: '',
+    hostName: '',
+    hostPhone: '',
+    hostMail: '',
+  });
+
+  const [genre, setGenre] = useState(false);
+  const [name, setName] = useState(false);
+  const [start, setStartCheck] = useState(false);
+  const [end, setEndCheck] = useState(false);
+  const [limitNum, setLimitNum] = useState(false);
+  const [place, setPlace] = useState(false);
+  const [detail, setDetail] = useState(false);
 
   const [image1, setImage1] = useState();
   const [image2, setImage2] = useState();
   const [image3, setImage3] = useState();
-
-  const check = () => {
-    console.log(data);
-    if (data.name !== undefined && data.startTime !== undefined
-       && data.endTime !== undefined && data.place !== undefined && data.limitNum !== undefined
-       && data.details !== undefined) {
-      setIsCheck(true);
-    }
-  };
 
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -41,16 +49,15 @@ function add({ navigation }) {
       aspect: [1, 1],
       quality: 1,
     });
-    countPress += 1;
 
     if (!result.cancelled) {
-      if (countPress % 3 === 1) {
+      if (image1 === undefined) {
         setImage1(result.uri);
         setData({ ...data, image1: result.uri });
-      } else if (countPress % 3 === 2) {
+      } else if (image2 === undefined) {
         setImage2(result.uri);
         setData({ ...data, image2: result.uri });
-      } else if (countPress % 3 === 0) {
+      } else if (image3 === undefined) {
         setImage3(result.uri);
         setData({ ...data, image3: result.uri });
       }
@@ -69,6 +76,7 @@ function add({ navigation }) {
   const hideDialog1 = () => {
     if (startDateText !== undefined && startTimeText !== undefined) {
       setStart(`${startDateText}  ${startTimeText}`);
+      setStartCheck(true);
     }
     setVisible1(false);
   };
@@ -140,6 +148,7 @@ function add({ navigation }) {
   const hideDialog2 = () => {
     if (endDateText !== undefined && endTimeText !== undefined) {
       setEnd(`${endDateText}  ${endTimeText}`);
+      setEndCheck(true);
     }
     setVisible2(false);
   };
@@ -204,11 +213,15 @@ function add({ navigation }) {
   const values = ['揪人共乘', '揪人運動', '揪人遊戲', '校園活動', '系上活動', '社團活動'];
   return (
     <Provider>
-      <SafeAreaView style={styles.container}>
-        <ScrollView>
+      <ScrollView>
+        <SafeAreaView style={styles.container}>
           <NativeBaseProvider>
             <View style={{ flex: 0.1, flexDirection: 'column' }}>
-              <View style={{ flexDirection: 'row' }}>
+              <View style={{
+                flexDirection: 'row',
+                marginBottom: 44,
+              }}
+              >
                 <Box style={{
                   flex: 0.8, justifyContent: 'center', alignItems: 'flex-start',
                 }}
@@ -243,7 +256,7 @@ function add({ navigation }) {
                     onPress={() => {
                       setIsPress(value);
                       setData({ ...data, genre: value });
-                      check();
+                      setGenre(true);
                     }}
                     style={isPress === value ? styles.btnPress : styles.btnNormal}
                   >
@@ -265,7 +278,10 @@ function add({ navigation }) {
                     value={data.name}
                     onChangeText={(text) => {
                       setData({ ...data, name: text });
-                      check();
+                      setName(true);
+                      if (text === '') {
+                        setName(false);
+                      }
                     }}
                     selectionColor="#ccc"
                   />
@@ -280,7 +296,6 @@ function add({ navigation }) {
                   <TouchableOpacity
                     onPress={() => {
                       showDialog1();
-                      check();
                     }}
                     style={{ width: '100%' }}
                   >
@@ -306,7 +321,6 @@ function add({ navigation }) {
                   <TouchableOpacity
                     onPress={() => {
                       showDialog1();
-                      check();
                     }}
                     style={styles.input}
                   >
@@ -332,7 +346,6 @@ function add({ navigation }) {
                   <TouchableOpacity
                     onPress={() => {
                       showDialog2();
-                      check();
                     }}
                     style={{ width: '100%' }}
                   >
@@ -358,7 +371,6 @@ function add({ navigation }) {
                   <TouchableOpacity
                     onPress={() => {
                       showDialog2();
-                      check();
                     }}
                     style={styles.input}
                   >
@@ -386,7 +398,10 @@ function add({ navigation }) {
                     value={data.place}
                     onChangeText={(text) => {
                       setData({ ...data, place: text });
-                      check();
+                      setPlace(true);
+                      if (text === '') {
+                        setPlace(false);
+                      }
                     }}
                     selectionColor="#ccc"
                   />
@@ -426,7 +441,10 @@ function add({ navigation }) {
                     value={data.limitNum}
                     onChangeText={(text) => {
                       setData({ ...data, limitNum: text });
-                      check();
+                      setLimitNum(true);
+                      if (text === '') {
+                        setLimitNum(false);
+                      }
                     }}
                     selectionColor="#ccc"
                   />
@@ -461,7 +479,10 @@ function add({ navigation }) {
                     value={data.details}
                     onChangeText={(text) => {
                       setData({ ...data, details: text });
-                      check();
+                      setDetail(true);
+                      if (text === '') {
+                        setDetail(false);
+                      }
                     }}
                     selectionColor="#ccc"
                   />
@@ -471,30 +492,76 @@ function add({ navigation }) {
             <Box style={styles.body}>
               <Heading style={styles.inputboxText}>活動照片(最多可以上傳3張, 第一章預設為縮圖照片)</Heading>
               <Box style={{ flexDirection: 'row' }}>
+                {image1 && (
                 <Box style={{ marginRight: 12 }}>
-                  {image1 && (
-                  <Image source={{ uri: image1 }} style={styles.image} />
-                  )}
+                  <ZStack style={{ marginBottom: 65 }}>
+                    <Image source={{ uri: image1 }} style={styles.image} />
+                    <Foundation
+                      name="minus-circle"
+                      size={18}
+                      color="white"
+                      style={{ marginLeft: 68, marginTop: 6 }}
+                      onPress={() => {
+                        setImage1(undefined);
+                        setData({ ...data, image1: '' });
+                        if (image2 !== undefined) {
+                          setImage1(image2);
+                          setImage2(undefined);
+                          setData({ ...data, image2: '' });
+                        }
+                        if (image3 !== undefined) {
+                          setImage2(image3);
+                          setImage3(undefined);
+                          setData({ ...data, image3: '' });
+                        }
+                      }}
+                    />
+                  </ZStack>
                 </Box>
-                <Box style={{ marginRight: 12 }}>
-                  {image2 && (
-                  <Image source={{ uri: image2 }} style={styles.image} />
-                  )}
-                </Box>
-                <Box style={{ marginRight: 12 }}>
-                  {image3 && (
-                  <Image source={{ uri: image3 }} style={styles.image} />
-                  )}
-                </Box>
+                )}
+                {image2 && (
+                  <Box style={{ marginRight: 12 }}>
+                    <ZStack style={{ marginBottom: 65 }}>
+                      <Image source={{ uri: image2 }} style={styles.image} />
+                      <Foundation
+                        name="minus-circle"
+                        size={18}
+                        color="white"
+                        style={{ marginLeft: 68, marginTop: 6 }}
+                        onPress={() => {
+                          setImage2(undefined);
+                          setData({ ...data, image2: '' });
+                          if (image3 !== undefined) {
+                            setImage2(image3);
+                            setImage3(undefined);
+                            setData({ ...data, image3: '' });
+                          }
+                        }}
+                      />
+                    </ZStack>
+                  </Box>
+                )}
+                {image3 && (
+                  <Box style={{ marginRight: 12 }}>
+                    <ZStack style={{ marginBottom: 65 }}>
+                      <Image source={{ uri: image3 }} style={styles.image} />
+                      <Foundation
+                        name="minus-circle"
+                        size={18}
+                        color="white"
+                        style={{ marginLeft: 68, marginTop: 6 }}
+                        onPress={() => {
+                          setImage3(undefined);
+                          setData({ ...data, image3: '' });
+                        }}
+                      />
+                    </ZStack>
+                  </Box>
+                )}
               </Box>
               <TouchableOpacity onPress={pickImage} style={styles.imageButton}>
-                <Ionicons
-                  name="cloud-upload-outline"
-                  color="white"
-                  style={styles.Cloudicon}
-                >
-                  <Text style={styles.Cloudicon}>上傳</Text>
-                </Ionicons>
+                <MaterialCommunityIcons name="cloud-upload-outline" size={24} color="white" style={{ marginLeft: 49 }} />
+                <Text style={styles.Cloudicon}>上傳</Text>
               </TouchableOpacity>
             </Box>
             <Divider my={2} bg="#bfbebe" /* my=margin-top and margin-bottom */ />
@@ -542,39 +609,36 @@ function add({ navigation }) {
               </Box>
             </Box>
             <View style={styles.footer}>
-              <TouchableOpacity
-                style={isCheck === true ? styles.sentButton : styles.unsentButton}
-                onPress={() => {
-                  console.log(isCheck);
-                  if (data.image1 === undefined) {
-                    setData({ ...data, image1: '' });
-                  } else if (data.image2 === undefined) {
-                    setData({ ...data, image2: '' });
-                  } else if (data.image3 === undefined) {
-                    setData({ ...data, image3: '' });
-                  } else if (data.cost === undefined) {
-                    setData({ ...data, cost: '' });
-                  } else if (data.link === undefined) {
-                    setData({ ...data, link: '' });
-                  } else if (data.hostName === undefined) {
-                    setData({ ...data, hostName: '' });
-                  } else if (data.hostPhone === undefined) {
-                    setData({ ...data, hostPhone: '' });
-                  } else if (data.hostMail === undefined) {
-                    setData({ ...data, hostMail: '' });
-                  } else if (isCheck === true) {
-                    data.uploadTime = new Date();
-                    console.log(data);
-                    ActiveController.addActive(data);
-                    console.log('successful');
-                    navigation.navigate('list');
-                  }
-                }}
-              >
-                <Text style={isCheck === true ? styles.sentButtonText : styles.unsentButtonText}>
-                  新增活動
-                </Text>
-              </TouchableOpacity>
+              {(genre === true && name === true && start === true && end === true
+                  && limitNum === true && place === true && detail === true) ? (
+                    <LinearGradient
+                      colors={['#28527A', '#1784B2']}
+                      start={[0, 0]}
+                      end={[1, 0]}
+                      style={styles.sentButton}
+                    >
+                      <TouchableOpacity
+                        onPress={() => {
+                          data.uploadTime = new Date();
+                          console.log(data);
+                          ActiveController.addActive(data);
+                          console.log('successful');
+                          navigation.navigate('list');
+                        }}
+                      >
+                        <Text style={styles.sentButtonText}>
+                          確認新增
+                        </Text>
+                      </TouchableOpacity>
+                    </LinearGradient>
+                ) : (
+                  <TouchableOpacity style={styles.unsentButton}>
+                    <Text style={styles.unsentButtonText}>
+                      確認新增
+                    </Text>
+                  </TouchableOpacity>
+                )}
+
             </View>
             {Platform.OS === 'ios' && (
             <Portal>
@@ -602,7 +666,6 @@ function add({ navigation }) {
                   <Button onPress={hideDialogi1}>Done</Button>
                 </Dialog.Actions>
               </Dialog>
-
               <Dialog visible={visible2} onDismiss={hideDialogi2}>
                 <Dialog.Title>選擇結束時間</Dialog.Title>
                 <Dialog.Content>
@@ -679,8 +742,8 @@ function add({ navigation }) {
             </Portal>
             )}
           </NativeBaseProvider>
-        </ScrollView>
-      </SafeAreaView>
+        </SafeAreaView>
+      </ScrollView>
     </Provider>
   );
 }

@@ -7,10 +7,10 @@ import {
   Title, Card,
 } from 'react-native-paper';
 import {
-  Ionicons, FontAwesome5, AntDesign, Feather, Octicons,
+  Ionicons, AntDesign, Feather,
 } from '@expo/vector-icons';
 import {
-  NativeBaseProvider, Box, ZStack, AddIcon,
+  NativeBaseProvider, Box, ZStack,
 } from 'native-base';
 import { LinearGradient } from 'expo-linear-gradient';
 import ActiveController from '../../controller/Active';
@@ -36,7 +36,6 @@ function personal({ navigation }) {
   };
 
   const [isPress, setIsPress] = useState('參加中');
-  const values = ['參加中', '已結束', '管理活動'];
 
   return (
     <SafeAreaView style={{ flex: 1, flexDirection: 'column', alignContent: 'center' }}>
@@ -68,7 +67,17 @@ function personal({ navigation }) {
               colors={['#359DD9', '#1784B2']}
               start={[0, 0.5]}
               style={{
-                marginTop: 118, marginRight: 10, width: 82, height: 53, borderRadius: 25, backgroundColor: '#1784B2', padding: 16, alignContent: 'center',
+                marginTop: 118,
+                width: 82,
+                height: 53,
+                borderRadius: 25,
+                backgroundColor: '#1784B2',
+                flexDirection: 'row',
+                padding: 16,
+                alignContent: 'center',
+                elevation: 10,
+                shadowColor: '#000',
+                marginRight: 10,
               }}
             >
               <TouchableOpacity
@@ -76,16 +85,25 @@ function personal({ navigation }) {
                 onPress={() => navigation.navigate('message')}
               >
                 <Feather name="message-circle" size={14} color="white" style={{ marginTop: 3 }} />
-                <Text style={{ color: 'white', fontSize: 14 }}>
+                <Text style={{ color: 'white', fontSize: 14, fontWeight: 'bold' }}>
                 &nbsp;私訊
                 </Text>
               </TouchableOpacity>
             </LinearGradient>
             <LinearGradient
               colors={['#359DD9', '#1784B2']}
-              start={[0, 1.0]}
+              start={[0, 0.5]}
               style={{
-                marginTop: 118, width: 82, height: 53, borderRadius: 25, backgroundColor: '#1784B2', flexDirection: 'row', padding: 16, alignContent: 'center',
+                marginTop: 118,
+                width: 82,
+                height: 53,
+                borderRadius: 25,
+                backgroundColor: '#1784B2',
+                flexDirection: 'row',
+                padding: 16,
+                alignContent: 'center',
+                elevation: 10,
+                shadowColor: '#000',
               }}
             >
               <TouchableOpacity
@@ -93,14 +111,14 @@ function personal({ navigation }) {
                 onPress={() => navigation.navigate('add')}
               >
                 <Ionicons name="add" size={14} color="white" style={{ marginTop: 3 }} />
-                <Text style={{ color: 'white', fontSize: 14 }}>
+                <Text style={{ color: 'white', fontSize: 14, fontWeight: 'bold' }}>
                 &nbsp;新增
                 </Text>
               </TouchableOpacity>
             </LinearGradient>
           </Box>
         </ZStack>
-        <Box style={{ marginTop: 192, alignItems: 'center' }}>
+        <Box style={{ marginTop: 192, alignItems: 'flex-start' }}>
           <Box style={{ flexDirection: 'row' }}>
             <TouchableOpacity
               style={isPress === '參加中' ? styles.personalbtnPress : styles.personalbtn}
@@ -155,8 +173,7 @@ function personal({ navigation }) {
         >
           <View style={{ flex: 1 }}>
             {show.map(({
-              id, name, imageUri, startNoYr, endTime, endNoYr, place,
-              cost, limitNum, genre, link, hostName, hostPhone, hostMail, details,
+              id, name, imageUri, startNoYr, endNoYr, place, limitNum,
             }) => (
               isPress === '管理活動' ? (
                 <View style={{ flexDirection: 'column' }}>

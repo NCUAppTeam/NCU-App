@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   Text, View, SafeAreaView,
-  ScrollView, TouchableOpacity, Image, RefreshControl,
+  TouchableOpacity, Image, RefreshControl,
 } from 'react-native';
 import {
   Title, Card,
@@ -10,32 +10,60 @@ import {
   Ionicons, AntDesign, Feather,
 } from '@expo/vector-icons';
 import {
-  NativeBaseProvider, Box, ZStack,
+  NativeBaseProvider, Box, ZStack, HStack, VStack, FlatList,
 } from 'native-base';
 import { LinearGradient } from 'expo-linear-gradient';
 import ActiveController from '../../controller/Active';
 import styles from './Styles';
 
 function personal({ navigation }) {
-  const [show, setShow] = useState([]);
+  const [showNow, setShowNow] = useState([]);
   useEffect(() => {
     ActiveController.getAllActive().then((res) => {
-      setShow(res);
+      setShowNow(res);
+    }).catch((err) => {
+      throw err;
+    });
+  }, []);
+  const [showManage, setShowManage] = useState([]);
+  useEffect(() => {
+    ActiveController.getAllActive().then((res) => {
+      setShowManage(res);
+    }).catch((err) => {
+      throw err;
+    });
+  }, []);
+  const [showEnd, setShowEnd] = useState([]);
+  useEffect(() => {
+    ActiveController.getAllActive().then((res) => {
+      setShowEnd(res);
     }).catch((err) => {
       throw err;
     });
   }, []);
 
+  const [isPress, setIsPress] = useState('參加中');
+
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = () => {
     setRefreshing(true);
-    ActiveController.getAllActive().then((res) => {
-      setShow(res);
-      setRefreshing(false);
-    });
+    if (isPress === '管理活動') {
+      ActiveController.getAllActive().then((res) => {
+        setShowManage(res);
+        setRefreshing(false);
+      });
+    } else if (isPress === '參加中') {
+      ActiveController.getAllActive().then((res) => {
+        setShowNow(res);
+        setRefreshing(false);
+      });
+    } else {
+      ActiveController.getAllActive().then((res) => {
+        setShowEnd(res);
+        setRefreshing(false);
+      });
+    }
   };
-
-  const [isPress, setIsPress] = useState('參加中');
 
   return (
     <SafeAreaView style={{ flex: 1, flexDirection: 'column', alignContent: 'center' }}>
@@ -118,14 +146,13 @@ function personal({ navigation }) {
             </LinearGradient>
           </Box>
         </ZStack>
-        <Box style={{ marginTop: 192, alignItems: 'flex-start' }}>
+        <Box style={{ marginTop: 192, alignItems: 'center', marginBottom: 10 }}>
           <Box style={{ flexDirection: 'row' }}>
             <TouchableOpacity
               style={isPress === '參加中' ? styles.personalbtnPress : styles.personalbtn}
               onPress={() => {
                 setIsPress('參加中');
                 console.log(isPress);
-
               //    ActiveController.getActiveByForm('participate')
               //    .then(() => { onRefresh(); });
               }}
@@ -143,7 +170,7 @@ function personal({ navigation }) {
               //    .then(() => { onRefresh(); }); }}
               }}
             >
-              <Text style={isPress === '管理活動' ? styles.personalbtnPressText : styles.personalbtnText}>
+              <Text style={isPress === '管理活動' ? styles.personalmanagebtnPressText : styles.personalmanagebtnText}>
                 &nbsp;管理活動
               </Text>
             </TouchableOpacity>
@@ -162,26 +189,24 @@ function personal({ navigation }) {
             </TouchableOpacity>
           </Box>
         </Box>
-        <ScrollView
-          style={{ flex: 1, marginTop: 15 }}
-          refreshControl={(
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={onRefresh}
-            />
-      )}
-        >
-          <View style={{ flex: 1 }}>
-            {show.map(({
-              id, name, imageUri, startNoYr, endNoYr, place, limitNum,
-            }) => (
-              isPress === '管理活動' ? (
+        <View style={{ flex: 1, justifyContent: 'space-evenly' }}>
+          {isPress === '管理活動' && (
+            <FlatList
+              data={showManage}
+              keyExtractor={(item) => item.id}
+              refreshControl={(
+                <RefreshControl
+                  refreshing={refreshing}
+                  onRefresh={onRefresh}
+                />
+                )}
+              renderItem={({ item }) => (
                 <View style={{ flexDirection: 'column' }}>
                   <Card
-                    key={id}
+                    key={item.id}
                     style={styles.Card3}
                     onPress={() => {
-                      navigation.navigate('manage', { Cd: id });
+                      navigation.navigate('manage', { Cd: item.id });
                     }}
                   >
                     <Card.Content style={{ padding: 0 }}>
@@ -190,13 +215,13 @@ function personal({ navigation }) {
                           <Image
                             style={styles.Card3pic}
                             source={{
-                              uri: imageUri,
+                              uri: item.imageUri,
                             }}
                           />
                         </View>
                         <View style={{ flexDirection: 'column' }}>
                           <Title style={styles.Card3Title}>
-                            {name}
+                            {item.name}
                           </Title>
                           <View style={styles.Card3Details}>
                             <AntDesign
@@ -206,7 +231,7 @@ function personal({ navigation }) {
                             />
                             <Text style={styles.Card3Text}>
                               {'   開始 ：'}
-                              {startNoYr}
+                              {item.startNoYr}
                             </Text>
                           </View>
                           <View style={styles.Card3Details}>
@@ -217,7 +242,7 @@ function personal({ navigation }) {
                             />
                             <Text style={styles.Card3Text}>
                               {'  '}
-                              {place}
+                              {item.place}
                             </Text>
                           </View>
                           <View style={styles.Card3Details}>
@@ -230,7 +255,7 @@ function personal({ navigation }) {
                               {'  '}
                               100
                               {' / '}
-                              {limitNum}
+                              {item.limitNum}
                               人
                             </Text>
                           </View>
@@ -240,62 +265,118 @@ function personal({ navigation }) {
                     </Card.Content>
                   </Card>
                 </View>
-              ) : (
-                <View style={{ flexDirection: 'row' }}>
-                  <Card
-                    key={id}
-                    style={styles.Card2}
-                    onPress={() => {
-                      navigation.navigate('details', { Cd: id });
-                    }}
-                  >
-                    <Card.Content style={{ padding: 0 }}>
-                      <View style={{ flexDirection: 'column', margin: -15 }}>
-                        <View style={{ aspectRatio: 1 }}>
-                          <Image
-                            style={styles.pic}
-                            source={{
-                              uri: imageUri,
-                            }}
-                          />
-                        </View>
-                        <Title style={styles.CardTitle}>
-                          {name}
-                        </Title>
-                        <View style={styles.CardDetails}>
-                          <AntDesign
-                            name="clockcircleo"
-                            size={12}
-                            style={{ justifyContent: 'center' }}
-                          />
-                          <Text style={styles.CardText}>
-                            {'   '}
-                            {startNoYr}
-                          </Text>
-                          <Text style={styles.CardText}>
-                            {' ~ '}
-                            {endNoYr}
-                          </Text>
-                        </View>
-                        <View style={{ marginHorizontal: 8, flexDirection: 'row' }}>
-                          <Ionicons
-                            name="location-outline"
-                            size={15}
-                            color="black"
-                          />
-                          <Text style={{ fontSize: 12 }}>
-                            {'  '}
-                            {place}
-                          </Text>
-                        </View>
-                      </View>
-                    </Card.Content>
-                  </Card>
-                </View>
-              )
-            ))}
-          </View>
-        </ScrollView>
+              )}
+            />
+          )}
+          {isPress === '參加中' && (
+            <FlatList
+              numColumns={2}
+              data={showNow}
+              keyExtractor={(item) => item.id}
+              refreshControl={(
+                <RefreshControl
+                  refreshing={refreshing}
+                  onRefresh={onRefresh}
+                />
+              )}
+              renderItem={({ item }) => (
+                <HStack space={2}>
+                  <VStack style={styles.CardInPersonal}>
+                    <Image
+                      style={styles.pic}
+                      source={{
+                        uri: item.imageUri,
+                      }}
+                    />
+                    <Title style={styles.CardTitle}>
+                      {item.name}
+                    </Title>
+                    <Box style={styles.CardDetails}>
+                      <AntDesign
+                        name="clockcircleo"
+                        size={12}
+                        style={{ justifyContent: 'center' }}
+                      />
+                      <Text style={styles.CardText}>
+                        {'   '}
+                        {item.startNoYr}
+                      </Text>
+                      <Text style={styles.CardText}>
+                        {' ~ '}
+                        {item.endNoYr}
+                      </Text>
+                    </Box>
+                    <Box style={{ marginHorizontal: 8, flexDirection: 'row' }}>
+                      <Ionicons
+                        name="location-outline"
+                        size={15}
+                        color="black"
+                      />
+                      <Text style={{ fontSize: 12 }}>
+                        {'  '}
+                        {item.place}
+                      </Text>
+                    </Box>
+                  </VStack>
+                </HStack>
+              )}
+            />
+          )}
+          {isPress === '已結束' && (
+            <FlatList
+              numColumns={2}
+              data={showEnd}
+              keyExtractor={(item) => item.id}
+              refreshControl={(
+                <RefreshControl
+                  refreshing={refreshing}
+                  onRefresh={onRefresh}
+                />
+              )}
+              renderItem={({ item }) => (
+                <HStack space={2}>
+                  <VStack style={styles.CardInPersonal}>
+                    <Image
+                      style={styles.pic}
+                      source={{
+                        uri: item.imageUri,
+                      }}
+                    />
+                    <Title style={styles.CardTitle}>
+                      {item.name}
+                    </Title>
+                    <Box style={styles.CardDetails}>
+                      <AntDesign
+                        name="clockcircleo"
+                        size={12}
+                        style={{ justifyContent: 'center' }}
+                      />
+                      <Text style={styles.CardText}>
+                        {'   '}
+                        {item.startNoYr}
+                      </Text>
+                      <Text style={styles.CardText}>
+                        {' ~ '}
+                        {item.endNoYr}
+                      </Text>
+                    </Box>
+                    <Box style={{ marginHorizontal: 8, flexDirection: 'row' }}>
+                      <Ionicons
+                        name="location-outline"
+                        size={15}
+                        color="black"
+                      />
+                      <Text style={{ fontSize: 12 }}>
+                        {'  '}
+                        {item.place}
+                      </Text>
+                    </Box>
+                  </VStack>
+                </HStack>
+              )}
+            />
+          )}
+        </View>
       </NativeBaseProvider>
     </SafeAreaView>
   );

@@ -3,13 +3,13 @@ import {
   Text, View, SafeAreaView, ScrollView, RefreshControl, Image,
 } from 'react-native';
 import {
-  Title, Card, Searchbar, Chip,
+  Title, Card, Searchbar,
 } from 'react-native-paper';
 import { Button } from 'react-native-elements';
 // import Icon from 'react-native-vector-icons/FontAwesome';
 import { Ionicons, FontAwesome5, AntDesign } from '@expo/vector-icons';
 import {
-  List, ListItem, NativeBaseProvider, Box, Divider,
+  NativeBaseProvider, Box, Divider,
 } from 'native-base';
 import styles from './Styles';
 import ActiveController from '../../controller/Active';
@@ -86,8 +86,7 @@ function list({ navigation }) {
           <View style={{ flex: 1 }}>
             <ScrollView horizontal>
               {active.map(({
-                id, name, imageUri, startTime, startNoYr, endTime, endNoYr, place,
-                cost, limitNum, genre, link, hostName, hostPhone, hostMail, details,
+                id, name, imageUri, startNoYr, endNoYr, place,
               }) => (
                 <Card
                   key={id}
@@ -146,8 +145,7 @@ function list({ navigation }) {
           <View style={{ flex: 1 }}>
             <ScrollView horizontal>
               {active.map(({
-                id, name, imageUri, startTime, startNoYr, endTime, endNoYr, place,
-                cost, limitNum, genre, link, hostName, hostPhone, hostMail, details,
+                id, name, imageUri, startNoYr, endNoYr, place,
               }) => (
                 <Card
                   key={id}
@@ -206,8 +204,7 @@ function list({ navigation }) {
           <View style={{ flex: 1 }}>
             <ScrollView horizontal>
               {active.map(({
-                id, name, imageUri, startTime, startNoYr, endTime, endNoYr, place,
-                cost, limitNum, genre, link, hostName, hostPhone, hostMail, details,
+                id, name, imageUri, startNoYr, endNoYr, place,
               }) => (
                 <Card
                   key={id}

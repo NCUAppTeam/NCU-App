@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Text, View, SafeAreaView, ScrollView, RefreshControl, Image,
+  Text, View, SafeAreaView, RefreshControl, Image,
 } from 'react-native';
 import {
   Title, Card,
@@ -9,7 +9,7 @@ import { Button } from 'react-native-elements';
 // import Icon from 'react-native-vector-icons/FontAwesome';
 import { Ionicons, FontAwesome5, AntDesign } from '@expo/vector-icons';
 import {
-  List, ListItem, NativeBaseProvider, Box, Divider,
+  NativeBaseProvider, Box, HStack, FlatList, VStack,
 } from 'native-base';
 import styles from './Styles';
 import ActiveController from '../../controller/Active';
@@ -78,73 +78,58 @@ function more({ navigation }) {
             </View>
           </View>
         </View>
-        <ScrollView
-          style={{ flex: 1 }}
-          refreshControl={(
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={onRefresh}
-            />
-      )}
-        >
-          <View style={{ flex: 1 }}>
-            {active.map(({
-              id, name, imageUri, startNoYr, endNoYr, place,
-            }) => (
-              <View style={{ flexDirection: 'row' }}>
-                <Card
-                  key={id}
-                  style={styles.Card2}
-                  onPress={() => {
-                    navigation.navigate('details', { Cd: id });
+        <View style={{ flex: 1, justifyContent: 'space-evenly', alignItems: 'flex-start' }}>
+          <FlatList
+            numColumns={2}
+            data={active}
+            keyExtractor={(item) => item.id}
+            refreshControl={(
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+              />
+              )}
+            renderItem={({ item }) => (
+              <VStack style={styles.CardInMore}>
+                <Image
+                  style={styles.pic}
+                  source={{
+                    uri: item.imageUri,
                   }}
-                >
-                  <Card.Content style={{ padding: 0 }}>
-                    <View style={{ flexDirection: 'column', margin: -15 }}>
-                      <View style={{ aspectRatio: 1 }}>
-                        <Image
-                          style={styles.pic}
-                          source={{
-                            uri: imageUri,
-                          }}
-                        />
-                      </View>
-                      <Title style={styles.CardTitle}>
-                        {name}
-                      </Title>
-                      <View style={styles.CardDetails}>
-                        <AntDesign
-                          name="clockcircleo"
-                          size={12}
-                          style={{ justifyContent: 'center' }}
-                        />
-                        <Text style={styles.CardText}>
-                          {'   '}
-                          {startNoYr}
-                        </Text>
-                        <Text style={styles.CardText}>
-                          {' ~ '}
-                          {endNoYr}
-                        </Text>
-                      </View>
-                      <View style={{ marginHorizontal: 8, flexDirection: 'row' }}>
-                        <Ionicons
-                          name="location-outline"
-                          size={15}
-                          color="black"
-                        />
-                        <Text style={{ fontSize: 12 }}>
-                          {'  '}
-                          {place}
-                        </Text>
-                      </View>
-                    </View>
-                  </Card.Content>
-                </Card>
-              </View>
-            ))}
-          </View>
-        </ScrollView>
+                />
+                <Title style={styles.CardTitle}>
+                  {item.name}
+                </Title>
+                <Box style={styles.CardDetails}>
+                  <AntDesign
+                    name="clockcircleo"
+                    size={12}
+                    style={{ justifyContent: 'center' }}
+                  />
+                  <Text style={styles.CardText}>
+                    {'   '}
+                    {item.startNoYr}
+                  </Text>
+                  <Text style={styles.CardText}>
+                    {' ~ '}
+                    {item.endNoYr}
+                  </Text>
+                </Box>
+                <Box style={{ marginHorizontal: 8, flexDirection: 'row' }}>
+                  <Ionicons
+                    name="location-outline"
+                    size={15}
+                    color="black"
+                  />
+                  <Text style={{ fontSize: 12 }}>
+                    {'  '}
+                    {item.place}
+                  </Text>
+                </Box>
+              </VStack>
+            )}
+          />
+        </View>
       </NativeBaseProvider>
     </SafeAreaView>
   );

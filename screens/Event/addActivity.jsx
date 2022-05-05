@@ -620,9 +620,8 @@ function add({ navigation }) {
                       <TouchableOpacity
                         onPress={() => {
                           data.uploadTime = new Date();
-                          console.log(data);
+                          // console.log(data);
                           ActiveController.addActive(data);
-                          console.log('successful');
                           navigation.navigate('list');
                         }}
                       >

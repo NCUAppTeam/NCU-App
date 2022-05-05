@@ -74,23 +74,43 @@ function imagePos(imageUri) {
  * @param {*} active
  */
 async function addActive(active) {
-  const db = firebase.firestore();
-  const activesRef = db.collection('actives');
+  let url1;
+  let url2;
+  let url3;
 
-  const imageAddress = `actives/${imagePos(active.image)}`;
-  const storageRef = firebase.storage().ref().child(imageAddress);
-  const response = await fetch(active.image);
-  const blob = await response.blob();
-  const st = storageRef.put(blob);
-  await st;
-
-  const url = await storageRef.getDownloadURL();
+  if (active.image1 !== '') {
+    const imageAddress = `actives/${imagePos(active.image1)}`;
+    const storageRef = firebase.storage().ref().child(imageAddress);
+    const response = await fetch(active.image1);
+    const blob = await response.blob();
+    const st1 = storageRef.put(blob);
+    await st1;
+    url1 = await storageRef.getDownloadURL();
+  }
+  if (active.image2 !== '') {
+    const imageAddress = `actives/${imagePos(active.image2)}`;
+    const storageRef = firebase.storage().ref().child(imageAddress);
+    const response = await fetch(active.image1);
+    const blob = await response.blob();
+    const st2 = storageRef.put(blob);
+    await st2;
+    url2 = await storageRef.getDownloadURL();
+  }
+  if (active.image3 !== '') {
+    const imageAddress = `actives/${imagePos(active.image3)}`;
+    const storageRef = firebase.storage().ref().child(imageAddress);
+    const response = await fetch(active.image1);
+    const blob = await response.blob();
+    const st3 = storageRef.put(blob);
+    await st3;
+    url3 = await storageRef.getDownloadURL();
+  }
 
   const item = {
     name: active.name,
-    imageUri: url,
-    image: active.image,
-    imageAddress,
+    imageUri1: url1,
+    imageUri2: url2,
+    imageUri3: url3,
     startTime: active.startTime,
     endTime: active.endTime,
     uploadTime: active.uploadTime,
@@ -104,6 +124,9 @@ async function addActive(active) {
     hostMail: active.hostMail.trim(),
     details: active.details.trim(),
   };
+  const db = firebase.firestore();
+  const activesRef = db.collection('actives');
+  console.log(item);
   activesRef.add(item);
   console.log('addActive Successful');
 }

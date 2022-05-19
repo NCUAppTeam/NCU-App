@@ -502,16 +502,16 @@ function add({ navigation }) {
                       color="white"
                       style={{ marginLeft: 68, marginTop: 6 }}
                       onPress={() => {
-                        setImage1(undefined);
+                        setImage1(null);
                         setData({ ...data, image1: '' });
                         if (image2 !== undefined) {
                           setImage1(image2);
-                          setImage2(undefined);
+                          setImage2(null);
                           setData({ ...data, image2: '' });
                         }
                         if (image3 !== undefined) {
                           setImage2(image3);
-                          setImage3(undefined);
+                          setImage3(null);
                           setData({ ...data, image3: '' });
                         }
                       }}

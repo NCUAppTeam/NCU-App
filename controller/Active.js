@@ -78,7 +78,7 @@ async function addActive(active) {
   let url2;
   let url3;
 
-  if (active.image1 !== '') {
+  if (active.image1 !== null) {
     const imageAddress = `actives/${imagePos(active.image1)}`;
     const storageRef = firebase.storage().ref().child(imageAddress);
     const response = await fetch(active.image1);
@@ -87,7 +87,7 @@ async function addActive(active) {
     await st1;
     url1 = await storageRef.getDownloadURL();
   }
-  if (active.image2 !== '') {
+  if (active.image2 !== null) {
     const imageAddress = `actives/${imagePos(active.image2)}`;
     const storageRef = firebase.storage().ref().child(imageAddress);
     const response = await fetch(active.image1);
@@ -96,7 +96,7 @@ async function addActive(active) {
     await st2;
     url2 = await storageRef.getDownloadURL();
   }
-  if (active.image3 !== '') {
+  if (active.image3 !== null) {
     const imageAddress = `actives/${imagePos(active.image3)}`;
     const storageRef = firebase.storage().ref().child(imageAddress);
     const response = await fetch(active.image1);

@@ -86,7 +86,7 @@ function list({ navigation }) {
           <View style={{ flex: 1 }}>
             <ScrollView horizontal>
               {active.map(({
-                id, name, imageUri, startNoYr, endNoYr, place,
+                id, name, imageUri1, startNoYr, endNoYr, place,
               }) => (
                 <Card
                   key={id}
@@ -101,7 +101,7 @@ function list({ navigation }) {
                         <Image
                           style={styles.pic}
                           source={{
-                            uri: imageUri,
+                            uri: imageUri1,
                           }}
                         />
                       </View>
@@ -145,7 +145,7 @@ function list({ navigation }) {
           <View style={{ flex: 1 }}>
             <ScrollView horizontal>
               {active.map(({
-                id, name, imageUri, startNoYr, endNoYr, place,
+                id, name, imageUri1, startNoYr, endNoYr, place,
               }) => (
                 <Card
                   key={id}
@@ -160,7 +160,7 @@ function list({ navigation }) {
                         <Image
                           style={styles.pic}
                           source={{
-                            uri: imageUri,
+                            uri: imageUri1,
                           }}
                         />
                       </View>
@@ -204,7 +204,7 @@ function list({ navigation }) {
           <View style={{ flex: 1 }}>
             <ScrollView horizontal>
               {active.map(({
-                id, name, imageUri, startNoYr, endNoYr, place,
+                id, name, imageUri1, startNoYr, endNoYr, place,
               }) => (
                 <Card
                   key={id}
@@ -219,7 +219,7 @@ function list({ navigation }) {
                         <Image
                           style={styles.pic}
                           source={{
-                            uri: imageUri,
+                            uri: imageUri1,
                           }}
                         />
                       </View>

@@ -74,46 +74,12 @@ function imagePos(imageUri) {
  * @param {*} active
  */
 async function addActive(active) {
-  let url1 = null;
-  let url2 = null;
-  let url3 = null;
-
-  if (active.image1 !== null) {
-    const imageAddress = `actives/${imagePos(active.image1)}`;
-    const storageRef = firebase.storage().ref().child(imageAddress);
-    const response = await fetch(active.image1);
-    const blob = await response.blob();
-    const st1 = storageRef.put(blob);
-    await st1;
-    url1 = await storageRef.getDownloadURL();
-    if (url1 === undefined) url3 = null;
-  }
-  if (active.image2 !== null) {
-    const imageAddress = `actives/${imagePos(active.image2)}`;
-    const storageRef = firebase.storage().ref().child(imageAddress);
-    const response = await fetch(active.image1);
-    const blob = await response.blob();
-    const st2 = storageRef.put(blob);
-    await st2;
-    url2 = await storageRef.getDownloadURL();
-    if (url2 === undefined) url3 = null;
-  }
-  if (active.image3 !== null) {
-    const imageAddress = `actives/${imagePos(active.image3)}`;
-    const storageRef = firebase.storage().ref().child(imageAddress);
-    const response = await fetch(active.image1);
-    const blob = await response.blob();
-    const st3 = storageRef.put(blob);
-    await st3;
-    url3 = await storageRef.getDownloadURL();
-    if (url3 === undefined) url3 = null; 
-  }
+  let url1;
+  let url2;
+  let url3;
 
   const item = {
     name: active.name,
-    imageUri1: url1,
-    imageUri2: url2,
-    imageUri3: url3,
     startTime: active.startTime,
     endTime: active.endTime,
     uploadTime: active.uploadTime,
@@ -127,6 +93,44 @@ async function addActive(active) {
     hostMail: active.hostMail.trim(),
     details: active.details.trim(),
   };
+
+  if (active.image1) {
+    const imageAddress = `actives/${imagePos(active.image1)}`;
+    const storageRef = firebase.storage().ref().child(imageAddress);
+    const response = await fetch(active.image1);
+    const blob = await response.blob();
+    const st1 = storageRef.put(blob);
+    await st1;
+    url1 = await storageRef.getDownloadURL();
+    if (url1 !== undefined) {
+      item.imageUri1 = url1;
+    }
+  }
+  if (active.image2) {
+    const imageAddress = `actives/${imagePos(active.image2)}`;
+    const storageRef = firebase.storage().ref().child(imageAddress);
+    const response = await fetch(active.image1);
+    const blob = await response.blob();
+    const st2 = storageRef.put(blob);
+    await st2;
+    url2 = await storageRef.getDownloadURL();
+    if (url2 !== undefined) {
+      item.imageUri2 = url2;
+    }
+  }
+  if (active.image3) {
+    const imageAddress = `actives/${imagePos(active.image3)}`;
+    const storageRef = firebase.storage().ref().child(imageAddress);
+    const response = await fetch(active.image1);
+    const blob = await response.blob();
+    const st3 = storageRef.put(blob);
+    await st3;
+    url3 = await storageRef.getDownloadURL();
+    if (url3 === undefined) {
+      item.imageUri3 = url3;
+    }
+  }
+
   const db = firebase.firestore();
   const activesRef = db.collection('actives');
   console.log(item);
@@ -143,7 +147,9 @@ async function getAllActive() {
     activeArray.push({
       id: doc.id,
       name: doc.data().name,
-      imageUri: doc.data().imageUri,
+      imageUri1: doc.data().imageUri1,
+      imageUri2: doc.data().imageUri2,
+      imageUri3: doc.data().imageUri3,
       startTime: toDateString(doc.data().startTime),
       startNoYr: Datewithnoyr(doc.data().startTime),
       endTime: toDateString(doc.data().endTime),
@@ -173,7 +179,9 @@ async function getOneActive(id) {
   const oneactive = [{
     id: querySnapshot.id,
     name: querySnapshot.data().name,
-    imageUri: querySnapshot.data().imageUri,
+    imageUri1: querySnapshot.data().imageUri1,
+    imageUri2: querySnapshot.data().imageUri2,
+    imageUri3: querySnapshot.data().imageUri3,
     startTime: toDateString(querySnapshot.data().startTime),
     startNoYr: Datewithnoyr(querySnapshot.data().startTime),
     endTime: toDateString(querySnapshot.data().endTime),
@@ -211,7 +219,9 @@ async function getGenreActive(genre) {
     GenreArray.push({
       id: doc.id,
       name: doc.data().name,
-      imageUri: doc.data().imageUri,
+      imageUri1: doc.data().imageUri1,
+      imageUri2: doc.data().imageUri2,
+      imageUri3: doc.data().imageUri3,
       startTime: toDateString(doc.data().startTime),
       startNoYr: Datewithnoyr(doc.data().startTime),
       endTime: toDateString(doc.data().endTime),

@@ -94,7 +94,7 @@ function more({ navigation }) {
                 <Image
                   style={styles.pic}
                   source={{
-                    uri: item.imageUri,
+                    uri: item.imageUri1,
                   }}
                 />
                 <Title style={styles.CardTitle}>

@@ -131,6 +131,9 @@ async function addActive(active) {
     }
   }
 
+  if (active.cost === 0 || active.cost === '') {
+    item.cost = '免費free';
+  }
   const db = firebase.firestore();
   const activesRef = db.collection('actives');
   console.log(item);

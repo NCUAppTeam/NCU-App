@@ -61,7 +61,7 @@ function detailscreen({ route, navigation }) {
           <View style={{ flex: 1 }}>
             <ScrollView>
               {active.map(({
-                id, name, imageUri, startNoYr, endNoYr, place,
+                id, name, imageUri1, startNoYr, endNoYr, place, limitNum,
                 cost, link, hostName, hostPhone, hostMail, details,
               }) => (
                 <Card
@@ -74,7 +74,7 @@ function detailscreen({ route, navigation }) {
                         <Image
                           style={styles.bigpic}
                           source={{
-                            uri: imageUri,
+                            uri: imageUri1,
                           }}
                         />
                       </View>
@@ -152,8 +152,7 @@ function detailscreen({ route, navigation }) {
                           >
                             <Text style={{ fontSize: 18, marginTop: 10 }}>
                               {'        '}
-
-                              {cost}
+                              {limitNum}
                             </Text>
                           </Feather>
                         </View>
@@ -180,7 +179,9 @@ function detailscreen({ route, navigation }) {
                             style={{ marginTop: 10 }}
                           >
                             <Text style={{ fontSize: 12, marginTop: 10 }}>
-                              {'  聯絡人       | '}
+                              {'  聯絡人     '}
+&ensp;&ensp;|&ensp;
+
                               {hostName}
                             </Text>
                           </Feather>

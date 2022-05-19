@@ -74,9 +74,9 @@ function imagePos(imageUri) {
  * @param {*} active
  */
 async function addActive(active) {
-  let url1;
-  let url2;
-  let url3;
+  let url1 = null;
+  let url2 = null;
+  let url3 = null;
 
   if (active.image1 !== null) {
     const imageAddress = `actives/${imagePos(active.image1)}`;
@@ -86,6 +86,7 @@ async function addActive(active) {
     const st1 = storageRef.put(blob);
     await st1;
     url1 = await storageRef.getDownloadURL();
+    if (url1 === undefined) url3 = null;
   }
   if (active.image2 !== null) {
     const imageAddress = `actives/${imagePos(active.image2)}`;
@@ -95,6 +96,7 @@ async function addActive(active) {
     const st2 = storageRef.put(blob);
     await st2;
     url2 = await storageRef.getDownloadURL();
+    if (url2 === undefined) url3 = null;
   }
   if (active.image3 !== null) {
     const imageAddress = `actives/${imagePos(active.image3)}`;
@@ -104,6 +106,7 @@ async function addActive(active) {
     const st3 = storageRef.put(blob);
     await st3;
     url3 = await storageRef.getDownloadURL();
+    if (url3 === undefined) url3 = null; 
   }
 
   const item = {

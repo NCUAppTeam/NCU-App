@@ -2,14 +2,10 @@ import React, { useState, useEffect } from 'react';
 import {
   Text, View, SafeAreaView, RefreshControl, Image,
 } from 'react-native';
-import {
-  Title, Card,
-} from 'react-native-paper';
-import { Button } from 'react-native-elements';
-// import Icon from 'react-native-vector-icons/FontAwesome';
+import { Title } from 'react-native-paper';
 import { Ionicons, FontAwesome5, AntDesign } from '@expo/vector-icons';
 import {
-  NativeBaseProvider, Box, HStack, FlatList, VStack,
+  NativeBaseProvider, Box, FlatList, VStack,
 } from 'native-base';
 import styles from './Styles';
 import ActiveController from '../../controller/Active';

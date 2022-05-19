@@ -28,7 +28,7 @@ function Datewithnoyr(time) {
   return noyr;
 }
 
-function sentMeaasge(message) {
+function sentMessage(message) {
   console.log(message);
 }
 
@@ -322,5 +322,5 @@ export default {
   deleteAllActive,
   getActiveByName,
   fuseSearchName,
-  sentMeaasge,
+  sentMessage,
 };

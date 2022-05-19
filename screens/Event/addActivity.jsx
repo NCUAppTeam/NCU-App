@@ -42,6 +42,7 @@ function add({ navigation }) {
   const [image2, setImage2] = useState();
   const [image3, setImage3] = useState();
 
+  let NoPicLink;
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -50,6 +51,7 @@ function add({ navigation }) {
       quality: 1,
     });
 
+    NoPicLink = result.uri;
     if (!result.cancelled) {
       if (image1 === undefined) {
         setImage1(result.uri);
@@ -502,17 +504,17 @@ function add({ navigation }) {
                       color="white"
                       style={{ marginLeft: 68, marginTop: 6 }}
                       onPress={() => {
-                        setImage1(null);
-                        setData({ ...data, image1: '' });
-                        if (image2 !== undefined) {
+                        setImage1(NoPicLink);
+                        setData({ ...data, image1: NoPicLink });
+                        if (image2) {
                           setImage1(image2);
-                          setImage2(null);
-                          setData({ ...data, image2: '' });
+                          setImage2(NoPicLink);
+                          setData({ ...data, image2: NoPicLink });
                         }
-                        if (image3 !== undefined) {
+                        if (image3) {
                           setImage2(image3);
-                          setImage3(null);
-                          setData({ ...data, image3: '' });
+                          setImage3(NoPicLink);
+                          setData({ ...data, image3: NoPicLink });
                         }
                       }}
                     />
@@ -529,12 +531,12 @@ function add({ navigation }) {
                         color="white"
                         style={{ marginLeft: 68, marginTop: 6 }}
                         onPress={() => {
-                          setImage2(undefined);
-                          setData({ ...data, image2: '' });
-                          if (image3 !== undefined) {
+                          setImage2(NoPicLink);
+                          setData({ ...data, image2: NoPicLink });
+                          if (image3) {
                             setImage2(image3);
-                            setImage3(undefined);
-                            setData({ ...data, image3: '' });
+                            setImage3(NoPicLink);
+                            setData({ ...data, image3: NoPicLink });
                           }
                         }}
                       />
@@ -551,8 +553,8 @@ function add({ navigation }) {
                         color="white"
                         style={{ marginLeft: 68, marginTop: 6 }}
                         onPress={() => {
-                          setImage3(undefined);
-                          setData({ ...data, image3: '' });
+                          setImage3(NoPicLink);
+                          setData({ ...data, image3: NoPicLink });
                         }}
                       />
                     </ZStack>

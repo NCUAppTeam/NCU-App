@@ -152,7 +152,7 @@ function personal({ navigation }) {
               style={isPress === '參加中' ? styles.personalbtnPress : styles.personalbtn}
               onPress={() => {
                 setIsPress('參加中');
-                console.log(isPress);
+              //  console.log(isPress);
               //    ActiveController.getActiveByForm('participate')
               //    .then(() => { onRefresh(); });
               }}
@@ -165,7 +165,7 @@ function personal({ navigation }) {
               style={isPress === '管理活動' ? styles.personalbtnPress : styles.personalbtn}
               onPress={() => {
                 setIsPress('管理活動');
-                console.log(isPress);
+                // console.log(isPress);
               //    ActiveController.getActiveByForm('MyOwn')
               //    .then(() => { onRefresh(); }); }}
               }}
@@ -178,7 +178,7 @@ function personal({ navigation }) {
               style={isPress === '已結束' ? styles.personalbtnPress : styles.personalbtn}
               onPress={() => {
                 setIsPress('已結束');
-                console.log(isPress);
+                // console.log(isPress);
                 // ActiveController.getActiveByForm('End')
                 //    .then(() => { onRefresh(); }); }}}
               }}
@@ -215,7 +215,7 @@ function personal({ navigation }) {
                           <Image
                             style={styles.Card3pic}
                             source={{
-                              uri: item.imageUri,
+                              uri: item.imageUri1,
                             }}
                           />
                         </View>
@@ -285,7 +285,7 @@ function personal({ navigation }) {
                     <Image
                       style={styles.pic}
                       source={{
-                        uri: item.imageUri,
+                        uri: item.imageUri1,
                       }}
                     />
                     <Title style={styles.CardTitle}>
@@ -339,7 +339,7 @@ function personal({ navigation }) {
                     <Image
                       style={styles.pic}
                       source={{
-                        uri: item.imageUri,
+                        uri: item.imageUri1,
                       }}
                     />
                     <Title style={styles.CardTitle}>

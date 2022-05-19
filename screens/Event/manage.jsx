@@ -81,7 +81,7 @@ function manage({ route, navigation }) {
             <View style={{ flex: 1 }}>
               <ScrollView>
                 {active.map(({
-                  id, name, limitNum, imageUri, startNoYr, endNoYr, place,
+                  id, name, limitNum, imageUri1, startNoYr, endNoYr, place,
                   cost, link, hostName, hostPhone, hostMail, details,
                 }) => (
                   <Card

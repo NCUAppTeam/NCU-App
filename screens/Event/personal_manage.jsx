@@ -10,7 +10,7 @@ import {
   Ionicons, AntDesign, Feather,
 } from '@expo/vector-icons';
 import {
-  NativeBaseProvider, Box, ZStack, HStack, VStack, FlatList,
+  NativeBaseProvider, Box, ZStack, HStack, VStack, FlatList, Pressable,
 } from 'native-base';
 import { LinearGradient } from 'expo-linear-gradient';
 import ActiveController from '../../controller/Active';
@@ -280,45 +280,47 @@ function personal({ navigation }) {
                 />
               )}
               renderItem={({ item }) => (
-                <HStack space={2}>
-                  <VStack style={styles.CardInPersonal}>
-                    <Image
-                      style={styles.pic}
-                      source={{
-                        uri: item.imageUri1,
-                      }}
-                    />
-                    <Title style={styles.CardTitle}>
-                      {item.name}
-                    </Title>
-                    <Box style={styles.CardDetails}>
-                      <AntDesign
-                        name="clockcircleo"
-                        size={12}
-                        style={{ justifyContent: 'center' }}
+                <Pressable onPress={() => { navigation.navigate('details', { Cd: item.id }); }}>
+                  <HStack space={2}>
+                    <VStack style={styles.CardInPersonal}>
+                      <Image
+                        style={styles.pic}
+                        source={{
+                          uri: item.imageUri1,
+                        }}
                       />
-                      <Text style={styles.CardText}>
-                        {'   '}
-                        {item.startNoYr}
-                      </Text>
-                      <Text style={styles.CardText}>
-                        {' ~ '}
-                        {item.endNoYr}
-                      </Text>
-                    </Box>
-                    <Box style={{ marginHorizontal: 8, flexDirection: 'row' }}>
-                      <Ionicons
-                        name="location-outline"
-                        size={15}
-                        color="black"
-                      />
-                      <Text style={{ fontSize: 12 }}>
-                        {'  '}
-                        {item.place}
-                      </Text>
-                    </Box>
-                  </VStack>
-                </HStack>
+                      <Title style={styles.CardTitle}>
+                        {item.name}
+                      </Title>
+                      <Box style={styles.CardDetails}>
+                        <AntDesign
+                          name="clockcircleo"
+                          size={12}
+                          style={{ justifyContent: 'center' }}
+                        />
+                        <Text style={styles.CardText}>
+                          {'   '}
+                          {item.startNoYr}
+                        </Text>
+                        <Text style={styles.CardText}>
+                          {' ~ '}
+                          {item.endNoYr}
+                        </Text>
+                      </Box>
+                      <Box style={{ marginHorizontal: 8, flexDirection: 'row' }}>
+                        <Ionicons
+                          name="location-outline"
+                          size={15}
+                          color="black"
+                        />
+                        <Text style={{ fontSize: 12 }}>
+                          {'  '}
+                          {item.place}
+                        </Text>
+                      </Box>
+                    </VStack>
+                  </HStack>
+                </Pressable>
               )}
             />
           )}
@@ -334,45 +336,47 @@ function personal({ navigation }) {
                 />
               )}
               renderItem={({ item }) => (
-                <HStack space={2}>
-                  <VStack style={styles.CardInPersonal}>
-                    <Image
-                      style={styles.pic}
-                      source={{
-                        uri: item.imageUri1,
-                      }}
-                    />
-                    <Title style={styles.CardTitle}>
-                      {item.name}
-                    </Title>
-                    <Box style={styles.CardDetails}>
-                      <AntDesign
-                        name="clockcircleo"
-                        size={12}
-                        style={{ justifyContent: 'center' }}
+                <Pressable onPress={() => { navigation.navigate('details', { Cd: item.id }); }}>
+                  <HStack space={2}>
+                    <VStack style={styles.CardInPersonal}>
+                      <Image
+                        style={styles.pic}
+                        source={{
+                          uri: item.imageUri1,
+                        }}
                       />
-                      <Text style={styles.CardText}>
-                        {'   '}
-                        {item.startNoYr}
-                      </Text>
-                      <Text style={styles.CardText}>
-                        {' ~ '}
-                        {item.endNoYr}
-                      </Text>
-                    </Box>
-                    <Box style={{ marginHorizontal: 8, flexDirection: 'row' }}>
-                      <Ionicons
-                        name="location-outline"
-                        size={15}
-                        color="black"
-                      />
-                      <Text style={{ fontSize: 12 }}>
-                        {'  '}
-                        {item.place}
-                      </Text>
-                    </Box>
-                  </VStack>
-                </HStack>
+                      <Title style={styles.CardTitle}>
+                        {item.name}
+                      </Title>
+                      <Box style={styles.CardDetails}>
+                        <AntDesign
+                          name="clockcircleo"
+                          size={12}
+                          style={{ justifyContent: 'center' }}
+                        />
+                        <Text style={styles.CardText}>
+                          {'   '}
+                          {item.startNoYr}
+                        </Text>
+                        <Text style={styles.CardText}>
+                          {' ~ '}
+                          {item.endNoYr}
+                        </Text>
+                      </Box>
+                      <Box style={{ marginHorizontal: 8, flexDirection: 'row' }}>
+                        <Ionicons
+                          name="location-outline"
+                          size={15}
+                          color="black"
+                        />
+                        <Text style={{ fontSize: 12 }}>
+                          {'  '}
+                          {item.place}
+                        </Text>
+                      </Box>
+                    </VStack>
+                  </HStack>
+                </Pressable>
               )}
             />
           )}

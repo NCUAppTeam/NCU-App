@@ -23,6 +23,7 @@ function manage({ route, navigation }) {
   useEffect(() => {
     ActiveController.getOneActive(JSON.stringify(Cd).slice(7, -2)).then((res) => {
       setActive(res);
+      console.log(active);
     }).catch((err) => {
       throw err;
     });
@@ -116,8 +117,7 @@ function manage({ route, navigation }) {
                   size={24}
                   color="darkblue"
                   onPress={() => {
-                    console.log('edit');
-                    navigation.navigate('edit');
+                    navigation.navigate('edit', { Cd: active.id });
                   }}
                 />
               </View>

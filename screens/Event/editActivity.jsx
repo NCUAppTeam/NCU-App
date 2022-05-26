@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Text, Platform, View, SafeAreaView, TextInput,
   ScrollView, TouchableOpacity, Dimensions, Image, TouchableHighlight,
@@ -7,32 +7,42 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import {
   Dialog, Portal, Button, Provider,
 } from 'react-native-paper';
-import { Ionicons, AntDesign } from '@expo/vector-icons';
 import {
-  NativeBaseProvider, Box, Divider, Heading,
+  Ionicons, AntDesign, MaterialCommunityIcons, Foundation,
+} from '@expo/vector-icons';
+import {
+  NativeBaseProvider, Box, Divider, Heading, ZStack,
 } from 'native-base';
+import { LinearGradient } from 'expo-linear-gradient';
 import * as ImagePicker from 'expo-image-picker';
 import ActiveController from '../../controller/Active';
 import styles from './Styles';
 
-let countPress = 0;
-
-function edit({ navigation }) {
+function edit({ route, navigation }) {
+  const Cd = route.params;
+  console.log('123', JSON.stringify(Cd).slice(6, -1));
   const [data, setData] = useState({});
-  const [isCheck, setIsCheck] = useState(false);
+  useEffect(() => {
+    ActiveController.getOneActive(JSON.stringify(Cd).slice(7, -2)).then((res) => {
+      setData(res);
+      console.log(data);
+    }).catch((err) => {
+      throw err;
+    });
+  }, []);
+  const [image1, setImage1] = useState(data.image1);
+  const [image2, setImage2] = useState(data.image2);
+  const [image3, setImage3] = useState(data.image3);
 
-  const [image1, setImage1] = useState();
-  const [image2, setImage2] = useState();
-  const [image3, setImage3] = useState();
+  const [genre, setGenre] = useState(false);
+  const [name, setName] = useState(false);
+  const [start, setStartCheck] = useState(false);
+  const [end, setEndCheck] = useState(false);
+  const [limitNum, setLimitNum] = useState(false);
+  const [place, setPlace] = useState(false);
+  const [detail, setDetail] = useState(false);
 
-  const check = () => {
-    if (data.genre !== undefined && data.name !== undefined && data.startTime !== undefined
-       && data.endTime !== undefined && data.place !== undefined && data.limitNum !== undefined
-       && data.details !== undefined) {
-      setIsCheck(true);
-    }
-  };
-
+  let NoPicLink;
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -40,16 +50,16 @@ function edit({ navigation }) {
       aspect: [1, 1],
       quality: 1,
     });
-    countPress += 1;
 
+    NoPicLink = result.uri;
     if (!result.cancelled) {
-      if (countPress % 3 === 1) {
+      if (image1 === undefined) {
         setImage1(result.uri);
         setData({ ...data, image1: result.uri });
-      } else if (countPress % 3 === 2) {
+      } else if (image2 === undefined) {
         setImage2(result.uri);
         setData({ ...data, image2: result.uri });
-      } else if (countPress % 3 === 0) {
+      } else if (image3 === undefined) {
         setImage3(result.uri);
         setData({ ...data, image3: result.uri });
       }
@@ -68,6 +78,7 @@ function edit({ navigation }) {
   const hideDialog1 = () => {
     if (startDateText !== undefined && startTimeText !== undefined) {
       setStart(`${startDateText}  ${startTimeText}`);
+      setStartCheck(true);
     }
     setVisible1(false);
   };
@@ -139,6 +150,7 @@ function edit({ navigation }) {
   const hideDialog2 = () => {
     if (endDateText !== undefined && endTimeText !== undefined) {
       setEnd(`${endDateText}  ${endTimeText}`);
+      setEndCheck(true);
     }
     setVisible2(false);
   };
@@ -199,12 +211,12 @@ function edit({ navigation }) {
     setData({ ...data, endTime: tempDate });
   };
 
-  const [isPress, setIsPress] = useState();
+  const [isPress, setIsPress] = useState('');
   const values = ['揪人共乘', '揪人運動', '揪人遊戲', '校園活動', '系上活動', '社團活動'];
   return (
     <Provider>
-      <SafeAreaView style={styles.container}>
-        <ScrollView>
+      <ScrollView>
+        <SafeAreaView style={styles.container}>
           <NativeBaseProvider>
             <View style={{ flex: 0.1, flexDirection: 'column' }}>
               <View style={{ flexDirection: 'row' }}>
@@ -217,12 +229,12 @@ function edit({ navigation }) {
                     size={28}
                     color="#28527A"
                     style={{ justifyContent: 'center' }}
-                    onPress={() => { navigation.navigate('personal'); }}
+                    onPress={() => { navigation.navigate('manage', { Cd: data.id }); }}
                   />
                 </Box>
                 <View style={styles.nameheader}>
                   <Text style={styles.name}>
-                    新增活動
+                    編輯活動
                   </Text>
                 </View>
                 <View style={{
@@ -242,7 +254,7 @@ function edit({ navigation }) {
                     onPress={() => {
                       setIsPress(value);
                       setData({ ...data, genre: value });
-                      check();
+                      setGenre(true);
                     }}
                     style={isPress === value ? styles.btnPress : styles.btnNormal}
                   >
@@ -264,7 +276,10 @@ function edit({ navigation }) {
                     value={data.name}
                     onChangeText={(text) => {
                       setData({ ...data, name: text });
-                      check();
+                      setName(true);
+                      if (text === '') {
+                        setName(false);
+                      }
                     }}
                     selectionColor="#ccc"
                   />
@@ -279,7 +294,6 @@ function edit({ navigation }) {
                   <TouchableOpacity
                     onPress={() => {
                       showDialog1();
-                      check();
                     }}
                     style={{ width: '100%' }}
                   >
@@ -305,7 +319,6 @@ function edit({ navigation }) {
                   <TouchableOpacity
                     onPress={() => {
                       showDialog1();
-                      check();
                     }}
                     style={styles.input}
                   >
@@ -331,7 +344,6 @@ function edit({ navigation }) {
                   <TouchableOpacity
                     onPress={() => {
                       showDialog2();
-                      check();
                     }}
                     style={{ width: '100%' }}
                   >
@@ -357,7 +369,6 @@ function edit({ navigation }) {
                   <TouchableOpacity
                     onPress={() => {
                       showDialog2();
-                      check();
                     }}
                     style={styles.input}
                   >
@@ -385,7 +396,10 @@ function edit({ navigation }) {
                     value={data.place}
                     onChangeText={(text) => {
                       setData({ ...data, place: text });
-                      check();
+                      setPlace(true);
+                      if (text === '') {
+                        setPlace(false);
+                      }
                     }}
                     selectionColor="#ccc"
                   />
@@ -425,7 +439,10 @@ function edit({ navigation }) {
                     value={data.limitNum}
                     onChangeText={(text) => {
                       setData({ ...data, limitNum: text });
-                      check();
+                      setLimitNum(true);
+                      if (text === '') {
+                        setLimitNum(false);
+                      }
                     }}
                     selectionColor="#ccc"
                   />
@@ -460,7 +477,10 @@ function edit({ navigation }) {
                     value={data.details}
                     onChangeText={(text) => {
                       setData({ ...data, details: text });
-                      check();
+                      setDetail(true);
+                      if (text === '') {
+                        setDetail(false);
+                      }
                     }}
                     selectionColor="#ccc"
                   />
@@ -470,30 +490,76 @@ function edit({ navigation }) {
             <Box style={styles.body}>
               <Heading style={styles.inputboxText}>活動照片(最多可以上傳3張, 第一章預設為縮圖照片)</Heading>
               <Box style={{ flexDirection: 'row' }}>
+                {image1 && (
                 <Box style={{ marginRight: 12 }}>
-                  {image1 && (
-                  <Image source={{ uri: image1 }} style={styles.image} />
-                  )}
+                  <ZStack style={{ marginBottom: 65 }}>
+                    <Image source={{ uri: image1 }} style={styles.image} />
+                    <Foundation
+                      name="minus-circle"
+                      size={18}
+                      color="white"
+                      style={{ marginLeft: 68, marginTop: 6 }}
+                      onPress={() => {
+                        setImage1(NoPicLink);
+                        setData({ ...data, image1: NoPicLink });
+                        if (image2) {
+                          setImage1(image2);
+                          setImage2(NoPicLink);
+                          setData({ ...data, image2: NoPicLink });
+                        }
+                        if (image3) {
+                          setImage2(image3);
+                          setImage3(NoPicLink);
+                          setData({ ...data, image3: NoPicLink });
+                        }
+                      }}
+                    />
+                  </ZStack>
                 </Box>
+                )}
+                {image2 && (
                 <Box style={{ marginRight: 12 }}>
-                  {image2 && (
-                  <Image source={{ uri: image2 }} style={styles.image} />
-                  )}
+                  <ZStack style={{ marginBottom: 65 }}>
+                    <Image source={{ uri: image2 }} style={styles.image} />
+                    <Foundation
+                      name="minus-circle"
+                      size={18}
+                      color="white"
+                      style={{ marginLeft: 68, marginTop: 6 }}
+                      onPress={() => {
+                        setImage2(NoPicLink);
+                        setData({ ...data, image2: NoPicLink });
+                        if (image3) {
+                          setImage2(image3);
+                          setImage3(NoPicLink);
+                          setData({ ...data, image3: NoPicLink });
+                        }
+                      }}
+                    />
+                  </ZStack>
                 </Box>
+                )}
+                {image3 && (
                 <Box style={{ marginRight: 12 }}>
-                  {image3 && (
-                  <Image source={{ uri: image3 }} style={styles.image} />
-                  )}
+                  <ZStack style={{ marginBottom: 65 }}>
+                    <Image source={{ uri: image3 }} style={styles.image} />
+                    <Foundation
+                      name="minus-circle"
+                      size={18}
+                      color="white"
+                      style={{ marginLeft: 68, marginTop: 6 }}
+                      onPress={() => {
+                        setImage3(NoPicLink);
+                        setData({ ...data, image3: NoPicLink });
+                      }}
+                    />
+                  </ZStack>
                 </Box>
+                )}
               </Box>
               <TouchableOpacity onPress={pickImage} style={styles.imageButton}>
-                <Ionicons
-                  name="cloud-upload-outline"
-                  color="white"
-                  style={styles.Cloudicon}
-                >
-                  <Text style={styles.Cloudicon}>上傳</Text>
-                </Ionicons>
+                <MaterialCommunityIcons name="cloud-upload-outline" size={24} color="white" style={{ marginLeft: 49 }} />
+                <Text style={styles.Cloudicon}>上傳</Text>
               </TouchableOpacity>
             </Box>
             <Divider my={2} bg="#bfbebe" /* my=margin-top and margin-bottom */ />
@@ -541,38 +607,35 @@ function edit({ navigation }) {
               </Box>
             </Box>
             <View style={styles.footer}>
-              <TouchableOpacity
-                style={isCheck === true ? styles.sentButton : styles.unsentButton}
-                onPress={() => {
-                  if (data.image1 === undefined) {
-                    setData({ ...data, image1: '' });
-                  } else if (data.image2 === undefined) {
-                    setData({ ...data, image2: '' });
-                  } else if (data.image3 === undefined) {
-                    setData({ ...data, image3: '' });
-                  } else if (data.cost === undefined) {
-                    setData({ ...data, cost: '' });
-                  } else if (data.link === undefined) {
-                    setData({ ...data, link: '' });
-                  } else if (data.hostName === undefined) {
-                    setData({ ...data, hostName: '' });
-                  } else if (data.hostPhone === undefined) {
-                    setData({ ...data, hostPhone: '' });
-                  } else if (data.hostMail === undefined) {
-                    setData({ ...data, hostMail: '' });
-                  } else if (isCheck === true) {
-                    data.uploadTime = new Date();
-                    console.log(data);
-                    ActiveController.addActive(data);
-                    console.log('successful');
-                    navigation.navigate('list');
-                  }
-                }}
-              >
-                <Text style={isCheck === true ? styles.sentButtonText : styles.unsentButtonText}>
-                  新增活動
-                </Text>
-              </TouchableOpacity>
+              {(genre === true && name === true && start === true && end === true
+                  && limitNum === true && place === true && detail === true) ? (
+                    <LinearGradient
+                      colors={['#28527A', '#1784B2']}
+                      start={[0, 0]}
+                      end={[1, 0]}
+                      style={styles.sentButton}
+                    >
+                      <TouchableOpacity
+                        onPress={() => {
+                          data.uploadTime = new Date();
+                          // console.log(data);
+                          ActiveController.addActive(data);
+                          navigation.navigate('list');
+                        }}
+                      >
+                        <Text style={styles.sentButtonText}>
+                          確認新增
+                        </Text>
+                      </TouchableOpacity>
+                    </LinearGradient>
+                ) : (
+                  <TouchableOpacity style={styles.unsentButton}>
+                    <Text style={styles.unsentButtonText}>
+                      確認新增
+                    </Text>
+                  </TouchableOpacity>
+                )}
+
             </View>
             {Platform.OS === 'ios' && (
             <Portal>
@@ -600,7 +663,6 @@ function edit({ navigation }) {
                   <Button onPress={hideDialogi1}>Done</Button>
                 </Dialog.Actions>
               </Dialog>
-
               <Dialog visible={visible2} onDismiss={hideDialogi2}>
                 <Dialog.Title>選擇結束時間</Dialog.Title>
                 <Dialog.Content>
@@ -677,8 +739,8 @@ function edit({ navigation }) {
             </Portal>
             )}
           </NativeBaseProvider>
-        </ScrollView>
-      </SafeAreaView>
+        </SafeAreaView>
+      </ScrollView>
     </Provider>
   );
 }

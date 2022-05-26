@@ -5,7 +5,7 @@ import {
 import { Title } from 'react-native-paper';
 import { Ionicons, FontAwesome5, AntDesign } from '@expo/vector-icons';
 import {
-  NativeBaseProvider, Box, FlatList, VStack,
+  NativeBaseProvider, Box, FlatList, VStack, Pressable,
 } from 'native-base';
 import styles from './Styles';
 import ActiveController from '../../controller/Active';
@@ -86,43 +86,45 @@ function more({ navigation }) {
               />
               )}
             renderItem={({ item }) => (
-              <VStack style={styles.CardInMore}>
-                <Image
-                  style={styles.pic}
-                  source={{
-                    uri: item.imageUri1,
-                  }}
-                />
-                <Title style={styles.CardTitle}>
-                  {item.name}
-                </Title>
-                <Box style={styles.CardDetails}>
-                  <AntDesign
-                    name="clockcircleo"
-                    size={12}
-                    style={{ justifyContent: 'center' }}
+              <Pressable onPress={() => { navigation.navigate('details', { Cd: item.id }); }}>
+                <VStack style={styles.CardInMore}>
+                  <Image
+                    style={styles.pic}
+                    source={{
+                      uri: item.imageUri1,
+                    }}
                   />
-                  <Text style={styles.CardText}>
-                    {'   '}
-                    {item.startNoYr}
-                  </Text>
-                  <Text style={styles.CardText}>
-                    {' ~ '}
-                    {item.endNoYr}
-                  </Text>
-                </Box>
-                <Box style={{ marginHorizontal: 8, flexDirection: 'row' }}>
-                  <Ionicons
-                    name="location-outline"
-                    size={15}
-                    color="black"
-                  />
-                  <Text style={{ fontSize: 12 }}>
-                    {'  '}
-                    {item.place}
-                  </Text>
-                </Box>
-              </VStack>
+                  <Title style={styles.CardTitle}>
+                    {item.name}
+                  </Title>
+                  <Box style={styles.CardDetails}>
+                    <AntDesign
+                      name="clockcircleo"
+                      size={12}
+                      style={{ justifyContent: 'center' }}
+                    />
+                    <Text style={styles.CardText}>
+                      {'   '}
+                      {item.startNoYr}
+                    </Text>
+                    <Text style={styles.CardText}>
+                      {' ~ '}
+                      {item.endNoYr}
+                    </Text>
+                  </Box>
+                  <Box style={{ marginHorizontal: 8, flexDirection: 'row' }}>
+                    <Ionicons
+                      name="location-outline"
+                      size={15}
+                      color="black"
+                    />
+                    <Text style={{ fontSize: 12 }}>
+                      {'  '}
+                      {item.place}
+                    </Text>
+                  </Box>
+                </VStack>
+              </Pressable>
             )}
           />
         </View>

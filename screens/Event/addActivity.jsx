@@ -117,8 +117,10 @@ function add({ navigation }) {
       const fTime = `${tempDate.getHours() < 10 ? `0${tempDate.getHours()}` : tempDate.getHours()} : ${tempDate.getMinutes() < 10 ? `0${tempDate.getMinutes()}` : tempDate.getMinutes()}`;
       setData({ ...data, startTime: tempDate });
       setStart(`${fDate}  ${fTime}`);
+      setStartCheck(true);
     } else {
       setStart(`${startDateText}  ${startTimeText}`);
+      setStartCheck(true);
     }
     setVisible1(false);
   };
@@ -189,8 +191,10 @@ function add({ navigation }) {
       const fTime = `${tempDate.getHours() < 10 ? `0${tempDate.getHours()}` : tempDate.getHours()} : ${tempDate.getMinutes() < 10 ? `0${tempDate.getMinutes()}` : tempDate.getMinutes()}`;
       setData({ ...data, endTime: tempDate });
       setEnd(`${fDate}  ${fTime}`);
+      setEndCheck(true);
     } else {
       setEnd(`${endDateText}  ${endTimeText}`);
+      setEndCheck(true);
     }
     setVisible2(false);
   };
@@ -328,7 +332,7 @@ function add({ navigation }) {
                   >
                     {startText === undefined && (
                     <Text style={[styles.text, {
-                      fontWeight: 'normal', color: '#ADADAD', textAlign: 'center', paddingTop: Dimensions.get('window').height * 0.1,
+                      fontWeight: 'normal', color: '#BEBEBE', textAlign: 'center', paddingTop: Dimensions.get('window').height * 0.01, fontSize: 16,
                     }]}
                     >
                       開始時間
@@ -378,7 +382,7 @@ function add({ navigation }) {
                   >
                     {endText === undefined && (
                     <Text style={[styles.text, {
-                      fontWeight: 'normal', color: '#ADADAD', textAlign: 'center', paddingTop: Dimensions.get('window').height * 0.005,
+                      fontWeight: 'normal', color: '#BEBEBE', textAlign: 'center', paddingTop: Dimensions.get('window').height * 0.01, fontSize: 16,
                     }]}
                     >
                       結束時間
@@ -622,7 +626,7 @@ function add({ navigation }) {
                       <TouchableOpacity
                         onPress={() => {
                           data.uploadTime = new Date();
-                          // console.log(data);
+                          console.log(data);
                           ActiveController.addActive(data);
                           navigation.navigate('list');
                         }}
@@ -633,14 +637,16 @@ function add({ navigation }) {
                       </TouchableOpacity>
                     </LinearGradient>
                 ) : (
-                  <TouchableOpacity style={styles.unsentButton}>
+                  <TouchableOpacity
+                    style={styles.unsentButton}
+                  >
                     <Text style={styles.unsentButtonText}>
                       確認新增
                     </Text>
                   </TouchableOpacity>
                 )}
-
             </View>
+
             {Platform.OS === 'ios' && (
             <Portal>
               <Dialog visible={visible1} onDismiss={hideDialogi1}>

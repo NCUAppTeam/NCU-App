@@ -6,7 +6,9 @@ import {
   Title, Card, Searchbar,
 } from 'react-native-paper';
 import { Button } from 'react-native-elements';
-import { Ionicons, FontAwesome5, AntDesign } from '@expo/vector-icons';
+import {
+  Ionicons, FontAwesome5, AntDesign, Feather,
+} from '@expo/vector-icons';
 import {
   NativeBaseProvider, Box, Divider,
 } from 'native-base';
@@ -54,18 +56,17 @@ function list({ navigation }) {
               <FontAwesome5
                 name="comment"
                 size={25}
-                color="darkblue"
-                onPress={() => { navigation.navigate('list'); }}
+                color="#28527A"
               />
             </View>
             <View style={{
-              flex: 1, justifyContent: 'center', alignItems: 'flex-end',
+              flex: 1, justifyContent: 'center', alignItems: 'flex-end', marginLeft: 10,
             }}
             >
-              <FontAwesome5
+              <Feather
                 name="user"
-                size={24}
-                color="darkblue"
+                size={26}
+                color="#28527A"
                 onPress={() => { navigation.navigate('personal'); }}
               />
             </View>
@@ -111,6 +112,7 @@ function list({ navigation }) {
                         <AntDesign
                           name="clockcircleo"
                           size={12}
+                          color="rgba(40, 82, 122, 0.65)"
                           style={{ justifyContent: 'center' }}
                         />
                         <Text style={styles.CardText}>
@@ -126,7 +128,7 @@ function list({ navigation }) {
                         <Ionicons
                           name="location-outline"
                           size={15}
-                          color="black"
+                          color="rgba(40, 82, 122, 0.65)"
                         />
                         <Text style={{ fontSize: 12 }}>
                           {'  '}

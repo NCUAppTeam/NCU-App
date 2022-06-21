@@ -1,7 +1,5 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import firebase from 'firebase';
-import ActiveController from '../../controller/Active';
 import add from './addActivity';
 import edit from './editActivity';
 import personal from './personal_manage';
@@ -15,7 +13,12 @@ const Stack = createNativeStackNavigator();
 
 function EventStack() {
   return (
-    <Stack.Navigator initialRouteName="list">
+    <Stack.Navigator
+      initialRouteName="list"
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
       <Stack.Screen name="list" component={list} />
       <Stack.Screen name="more" component={more} />
       <Stack.Screen name="add" component={add} />

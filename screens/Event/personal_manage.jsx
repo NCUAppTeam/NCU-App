@@ -66,7 +66,10 @@ function personal({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, flexDirection: 'column', alignContent: 'center' }}>
+    <SafeAreaView style={{
+      flex: 1, flexDirection: 'column', alignContent: 'center',
+    }}
+    >
       <NativeBaseProvider>
         <ZStack>
           <LinearGradient
@@ -260,7 +263,6 @@ function personal({ navigation }) {
                             </Text>
                           </View>
                         </View>
-
                       </View>
                     </Card.Content>
                   </Card>

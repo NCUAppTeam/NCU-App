@@ -66,6 +66,14 @@ function add({ navigation }) {
     }
   };
 
+  const setImageFromGenre = () => {
+    if (data.image1 === '') {
+      if (data.genre === '揪人共乘') {
+        data.image1 = 'https://shop.line-scdn.net/themeshop/v1/products/65/db/d5/65dbd5f2-a879-458b-ae34-a7cb27c1f544/186/WEBSTORE/icon_198x278.png';
+      }
+    }
+  };
+
   const [visible1, setVisible1] = React.useState(false);
   const [date1, setDate1] = useState(new Date());
   const [mode1, setMode1] = useState('date');
@@ -626,6 +634,7 @@ function add({ navigation }) {
                       <TouchableOpacity
                         onPress={() => {
                           data.uploadTime = new Date();
+                          setImageFromGenre();
                           console.log(data);
                           ActiveController.addActive(data);
                           navigation.navigate('list');

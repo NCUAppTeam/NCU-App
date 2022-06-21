@@ -30,7 +30,7 @@ function detailscreen({ route, navigation }) {
   console.log('json', JSON.stringify(Cd).slice(7, -2));
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.showActivityDetails_container}>
       <NativeBaseProvider>
         <ScrollView>
           <View style={{ flex: 0.1, flexDirection: 'column' }}>
@@ -59,163 +59,163 @@ function detailscreen({ route, navigation }) {
             </View>
           </View>
           <View style={{ flex: 1 }}>
-            <ScrollView>
-              {active.map(({
-                id, name, imageUri1, startNoYr, endNoYr, place, limitNum,
-                cost, link, hostName, hostPhone, hostMail, details,
-              }) => (
-                <Card
-                  key={id}
-                  style={styles.CardDetail}
-                >
-                  <Card.Content style={{ padding: 0 }}>
-                    <View style={{ flexDirection: 'column', margin: 2 }}>
-                      <View style={{ aspectRatio: 1 }}>
-                        <Image
-                          style={styles.bigpic}
-                          source={{
-                            uri: imageUri1,
-                          }}
-                        />
-                      </View>
-                      <Title style={styles.DetailTitle}>
-                        {name}
-                      </Title>
-                      <View style={styles.CardDetails}>
-                        <AntDesign
-                          name="clockcircleo"
-                          size={18}
-                          style={{ justifyContent: 'center' }}
-                        />
-                        <Text style={styles.CardText}>
-                          {'   時間 | '}
-                          {startNoYr}
-                        </Text>
-                        <Text style={styles.CardText}>
-                          {' ~ '}
-                          {endNoYr}
-                        </Text>
-                      </View>
-                      <View style={{ marginHorizontal: 8, flexDirection: 'row', marginTop: 10 }}>
-                        <Ionicons
-                          name="location-outline"
-                          size={20}
-                          color="black"
-                        />
-                        <Text style={{ fontSize: 12 }}>
-                          {'  地點 | '}
-                          {place}
-                        </Text>
-                      </View>
-                      <View style={{ marginHorizontal: 8, flexDirection: 'row', marginTop: 10 }}>
-                        <MaterialCommunityIcons
-                          name="web"
-                          size={20}
-                          color="black"
-                        />
-                        <Text style={{ fontSize: 12 }}>
-                          {'  連結 | '}
-                          {link}
-                        </Text>
-                      </View>
+            {/* <ScrollView> */}
+            {active.map(({
+              id, name, imageUri1, startNoYr, endNoYr, place, limitNum,
+              cost, link, hostName, hostPhone, hostMail, details,
+            }) => (
+              <Card
+                key={id}
+                style={styles.CardDetail}
+              >
+                <Card.Content style={{ padding: 0 }}>
+                  <View style={{ flexDirection: 'column', margin: 2 }}>
+                    <View style={{ aspectRatio: 1 }}>
+                      <Image
+                        style={styles.bigpic}
+                        source={{
+                          uri: imageUri1,
+                        }}
+                      />
+                    </View>
+                    <Title style={styles.DetailTitle}>
+                      {name}
+                    </Title>
+                    <View style={styles.CardDetails}>
+                      <AntDesign
+                        name="clockcircleo"
+                        size={18}
+                        style={{ justifyContent: 'center' }}
+                      />
+                      <Text style={styles.CardText}>
+                        {'   時間 | '}
+                        {startNoYr}
+                      </Text>
+                      <Text style={styles.CardText}>
+                        {' ~ '}
+                        {endNoYr}
+                      </Text>
+                    </View>
+                    <View style={{ marginHorizontal: 8, flexDirection: 'row', marginTop: 10 }}>
+                      <Ionicons
+                        name="location-outline"
+                        size={20}
+                        color="black"
+                      />
+                      <Text style={{ fontSize: 12 }}>
+                        {'  地點 | '}
+                        {place}
+                      </Text>
+                    </View>
+                    <View style={{ marginHorizontal: 8, flexDirection: 'row', marginTop: 10 }}>
+                      <MaterialCommunityIcons
+                        name="web"
+                        size={20}
+                        color="black"
+                      />
+                      <Text style={{ fontSize: 12 }}>
+                        {'  連結 | '}
+                        {link}
+                      </Text>
+                    </View>
 
+                    <View>
+                      <Divider marginTop={7} bg="#bfbebe" /* my=margin-top and margin-bottom */ />
+                    </View>
+                    <View style={{ flexDirection: 'row' }}>
                       <View>
-                        <Divider marginTop={7} bg="#bfbebe" /* my=margin-top and margin-bottom */ />
-                      </View>
-                      <View style={{ flexDirection: 'row' }}>
-                        <View>
-                          <Text style={{ fontSize: 18, marginTop: 10 }}>
+                        <Text style={{ fontSize: 18, marginTop: 10 }}>
                         &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;參加費用
-                          </Text>
-                          <Ionicons
-                            name="logo-usd"
-                            size={25}
-                            color="black"
-                            style={{ marginTop: 10 }}
-                          >
-                            <Text style={{ fontSize: 18, marginTop: 10 }}>
-                              {'        '}
-                              {cost}
-                            </Text>
-                          </Ionicons>
-                        </View>
-                        <Divider marginTop={5} mx={10} orientation="vertical" bg="#bfbebe" /* my=margin-top and margin-bottom */ />
-                        <View>
+                        </Text>
+                        <Ionicons
+                          name="logo-usd"
+                          size={25}
+                          color="black"
+                          style={{ marginTop: 10 }}
+                        >
                           <Text style={{ fontSize: 18, marginTop: 10 }}>
-                        &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;人數上限
+                            {'        '}
+                            {cost}
                           </Text>
-                          <Feather
-                            name="users"
-                            size={25}
-                            color="black"
-                            style={{ marginTop: 10 }}
-                          >
-                            <Text style={{ fontSize: 18, marginTop: 10 }}>
-                              {'        '}
-                              {limitNum}
-                            </Text>
-                          </Feather>
-                        </View>
+                        </Ionicons>
                       </View>
-                      <Divider marginTop={7} bg="#bfbebe" /* my=margin-top and margin-bottom */ />
+                      <Divider marginTop={5} mx={10} orientation="vertical" bg="#bfbebe" /* my=margin-top and margin-bottom */ />
                       <View>
-                        <Text style={{ fontSize: 12, marginTop: 10 }}>
-                          詳細資訊 |
+                        <Text style={{ fontSize: 18, marginTop: 10 }}>
+                        &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;人數上限
                         </Text>
-                        <Text>
-                          {details}
-                        </Text>
-                      </View>
-                      <Divider marginTop={7} bg="#bfbebe" /* my=margin-top and margin-bottom */ />
-                      <View>
-                        <Text style={{ fontSize: 12, marginTop: 10 }}>
-                          更多聯絡資訊 |
-                        </Text>
-                        <Text>
-                          <Feather
-                            name="user"
-                            size={18}
-                            color="black"
-                            style={{ marginTop: 10 }}
-                          >
-                            <Text style={{ fontSize: 12, marginTop: 10 }}>
-                              {'  聯絡人     '}
-&ensp;&ensp;|&ensp;
-
-                              {hostName}
-                            </Text>
-                          </Feather>
-                          {'\n'}
-                          <Feather
-                            name="phone"
-                            size={18}
-                            color="black"
-                            style={{ marginTop: 10 }}
-                          >
-                            <Text style={{ fontSize: 12, marginTop: 10 }}>
-                              {'  電話          | '}
-                              {hostPhone}
-                            </Text>
-                          </Feather>
-                          {'\n'}
-                          <Feather
-                            name="mail"
-                            size={18}
-                            color="black"
-                            style={{ marginTop: 10 }}
-                          >
-                            <Text style={{ fontSize: 12, marginTop: 10 }}>
-                              {'  電子郵件     | '}
-                              {hostMail}
-                            </Text>
-                          </Feather>
-                        </Text>
+                        <Feather
+                          name="users"
+                          size={25}
+                          color="black"
+                          style={{ marginTop: 10 }}
+                        >
+                          <Text style={{ fontSize: 18, marginTop: 10 }}>
+                            {'        '}
+                            {limitNum}
+                          </Text>
+                        </Feather>
                       </View>
                     </View>
-                  </Card.Content>
-                </Card>
-              ))}
-            </ScrollView>
+                    <Divider marginTop={7} bg="#bfbebe" /* my=margin-top and margin-bottom */ />
+                    <View>
+                      <Text style={{ fontSize: 12, marginTop: 10 }}>
+                        詳細資訊 |
+                      </Text>
+                      <Text>
+                        {details}
+                      </Text>
+                    </View>
+                    <Divider marginTop={7} bg="#bfbebe" /* my=margin-top and margin-bottom */ />
+                    <View>
+                      <Text style={{ fontSize: 12, marginTop: 10 }}>
+                        更多聯絡資訊 |
+                      </Text>
+                      <Text>
+                        <Feather
+                          name="user"
+                          size={18}
+                          color="black"
+                          style={{ marginTop: 10 }}
+                        >
+                          <Text style={{ fontSize: 12, marginTop: 10 }}>
+                            {'  聯絡人     '}
+&ensp;&ensp;|&ensp;
+
+                            {hostName}
+                          </Text>
+                        </Feather>
+                        {'\n'}
+                        <Feather
+                          name="phone"
+                          size={18}
+                          color="black"
+                          style={{ marginTop: 10 }}
+                        >
+                          <Text style={{ fontSize: 12, marginTop: 10 }}>
+                            {'  電話          | '}
+                            {hostPhone}
+                          </Text>
+                        </Feather>
+                        {'\n'}
+                        <Feather
+                          name="mail"
+                          size={18}
+                          color="black"
+                          style={{ marginTop: 10 }}
+                        >
+                          <Text style={{ fontSize: 12, marginTop: 10 }}>
+                            {'  電子郵件     | '}
+                            {hostMail}
+                          </Text>
+                        </Feather>
+                      </Text>
+                    </View>
+                  </View>
+                </Card.Content>
+              </Card>
+            ))}
+            {/* </ScrollView> */}
           </View>
         </ScrollView>
       </NativeBaseProvider>

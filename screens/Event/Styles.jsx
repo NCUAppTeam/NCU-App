@@ -7,6 +7,7 @@ export default StyleSheet.create({
     alignContent: 'center',
     marginTop: 50,
     marginHorizontal: 15,
+    // marginHorizontal: Dimensions.get('window').width * 0.07,
   },
   header: {
     height: 60,
@@ -17,7 +18,7 @@ export default StyleSheet.create({
     marginLeft: 45,
     fontSize: 24,
     // fontWeight: 'bold',
-    color: 'darkblue',
+    color: '#28527A',
   },
   personalHeader: {
     marginLeft: 9,
@@ -334,16 +335,18 @@ export default StyleSheet.create({
     // backgroundColor: '#bfbebe',
   },
   CardInMore: {
-    height: 270,
-    width: 190,
-    borderWidth: 1,
-    borderColor: '#bfbebe',
+    height: 225,
+    width: Dimensions.get('window').width * 0.4,
     borderRadius: 10,
-    shadowColor: '#bfbebe',
-    marginTop: 15,
-    marginBottom: 30,
-    marginHorizontal: 2.5,
-    // backgroundColor: '#bfbebe',
+    shadowColor: 'black',
+    shadowOffset: {
+      width: 0,
+      height: -4,
+    },
+    elevation: 4,
+    marginTop: 14,
+    backgroundColor: 'white',
+    marginRight: Dimensions.get('window').width * 0.06,
   },
   CardInPersonal: {
     height: 270,
@@ -362,13 +365,17 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignContent: 'center',
     alignItems: 'center',
+    color: '#28527A',
+    fontSize: 14,
   },
   CardDetails: {
-    marginHorizontal: 9,
+    marginLeft: 7,
     flexDirection: 'row',
   },
   CardText: {
     fontSize: 12,
+    color: 'rgba(40, 82, 122, 0.65)',
+    marginTop: -3,
   },
   CardIcon: {
     alignContent: 'flex-start',
@@ -376,9 +383,10 @@ export default StyleSheet.create({
   pic: {
     // width: PixelRatio.getPixelSizeForLayoutSize(76),
     // height: PixelRatio.getPixelSizeForLayoutSize(76),
-    borderRadius: 10,
     backgroundColor: '#E0E0E0',
     aspectRatio: 1,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
   },
   more: {
     textAlign: 'right',
@@ -423,12 +431,11 @@ export default StyleSheet.create({
     marginBottom: 65,
   },
   bigpic: {
-    width: 350,
-    height: 350,
+    width: 300,
+    height: 300,
     alignContent: 'center',
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 10,
     backgroundColor: '#E0E0E0',
   },
   DetailTitle: {
@@ -630,5 +637,12 @@ export default StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     paddingTop: 10,
+  },
+  showActivityDetails_container: {
+    flex: 1,
+    flexDirection: 'column',
+    alignContent: 'center',
+    marginTop: 52.5,
+    marginHorizontal: Dimensions.get('window').width * 0.07,
   },
 });

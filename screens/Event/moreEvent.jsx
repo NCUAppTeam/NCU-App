@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Text, View, SafeAreaView, RefreshControl, Image,
+  Text, View, SafeAreaView, RefreshControl, Image, Dimensions,
 } from 'react-native';
 import { Title } from 'react-native-paper';
-import { Ionicons, FontAwesome5, AntDesign } from '@expo/vector-icons';
+import {
+  Ionicons, FontAwesome5, AntDesign, Feather,
+} from '@expo/vector-icons';
 import {
   NativeBaseProvider, Box, FlatList, VStack, Pressable,
 } from 'native-base';
@@ -30,9 +32,9 @@ function more({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, { marginHorizontal: Dimensions.get('window').width * 0.07 }]}>
       <NativeBaseProvider>
-        <View style={{ flex: 0.1, flexDirection: 'column' }}>
+        <View style={{ flexDirection: 'column' }}>
           <View style={{ flexDirection: 'row' }}>
             <Box style={{
               flex: 0.8, justifyContent: 'center', alignItems: 'flex-start',
@@ -41,7 +43,7 @@ function more({ navigation }) {
               <AntDesign
                 name="arrowleft"
                 size={28}
-                color="darkblue"
+                color="#28527A"
                 style={{ justifyContent: 'center' }}
                 onPress={() => { navigation.navigate('list'); }}
               />
@@ -58,17 +60,17 @@ function more({ navigation }) {
               <FontAwesome5
                 name="comment"
                 size={25}
-                color="darkblue"
+                color="#28527A"
               />
             </View>
             <View style={{
-              flex: 1, justifyContent: 'center', alignItems: 'flex-end',
+              flex: 1, justifyContent: 'center', alignItems: 'flex-end', marginLeft: 10,
             }}
             >
-              <FontAwesome5
+              <Feather
                 name="user"
-                size={24}
-                color="darkblue"
+                size={26}
+                color="#28527A"
                 onPress={() => { navigation.navigate('personal'); }}
               />
             </View>
@@ -101,24 +103,24 @@ function more({ navigation }) {
                     <AntDesign
                       name="clockcircleo"
                       size={12}
-                      style={{ justifyContent: 'center' }}
+                      style={{ justifyContent: 'center', color: 'rgba(40, 82, 122, 0.65)' }}
                     />
                     <Text style={styles.CardText}>
                       {'   '}
                       {item.startNoYr}
                     </Text>
-                    <Text style={styles.CardText}>
+                    {/* <Text style={styles.CardText}>
                       {' ~ '}
                       {item.endNoYr}
-                    </Text>
+                    </Text> */}
                   </Box>
-                  <Box style={{ marginHorizontal: 8, flexDirection: 'row' }}>
+                  <Box style={{ marginLeft: 6, flexDirection: 'row' }}>
                     <Ionicons
                       name="location-outline"
                       size={15}
-                      color="black"
+                      color="rgba(40, 82, 122, 0.65)"
                     />
-                    <Text style={{ fontSize: 12 }}>
+                    <Text style={{ fontSize: 12, color: 'rgba(40, 82, 122, 0.65)' }}>
                       {'  '}
                       {item.place}
                     </Text>

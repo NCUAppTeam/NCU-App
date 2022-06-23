@@ -18,11 +18,8 @@ export default function SearchResults({
   changeCenter,
   setBottomDrawerShow,
   setTextInputValue,
-  estimateDistance,
-  setEstimateDistance,
+  handleSnapPress,
   getTwoPointsDistance,
-  userLocation,
-  selectedMarker,
 }) {
   return (
     <Animated.ScrollView
@@ -57,6 +54,7 @@ export default function SearchResults({
               });
               setTextInputValue(val.name);
               changeCenter(val.latitude - 0.0006, val.longitude);
+              handleSnapPress(1);
               setBottomDrawerShow(true);
               Animated.timing(searchResultsViewFadeAnim, {
                 toValue: 0,

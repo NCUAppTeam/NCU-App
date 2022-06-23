@@ -37,7 +37,7 @@ export default function CategorySlider(props) {
           {MarkersCategories.map((type, index) => (
             <TouchableOpacity
               activeOpacity={1}
-              style={{ alignItems: 'center', width: 90 }}
+              style={{ alignItems: 'center', width: 80 }}
               key={index}
               onPress={() => {
                 setSelectedBtn(type.title);

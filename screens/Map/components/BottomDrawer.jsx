@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 import React, { useMemo } from 'react';
 import {
   View, Text, TouchableOpacity,
@@ -6,6 +7,7 @@ import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { Icon } from 'native-base';
 import { Entypo } from '@expo/vector-icons';
 import getDirections from 'react-native-google-maps-directions';
+import BuildingsInfo from '../assets/BuildingsInfo';
 
 export default function BottomDrawer({
   snapPoints,
@@ -104,18 +106,14 @@ export default function BottomDrawer({
         </View>
 
         <BottomSheetScrollView>
-          {dummyData.map((item) => (
-            <View
-              key={item}
-              style={{
-                padding: 6,
-                margin: 6,
-                backgroundColor: '#eee',
-              }}
-            >
-              <Text>{item}</Text>
-            </View>
-          ))}
+          <View style={{ paddingHorizontal: 25, paddingVertical: 20 }}>
+            <Text style={{ fontWeight: 'bold', fontSize: 15, marginBottom: 10 }}>開放時間</Text>
+            {BuildingsInfo.filter((val) => val.name === selectedMarker.name).map((element) => (
+              element.opentime.map((time, index) => (
+                <Text key={index} style={{ fontSize: 15, marginBottom: 10 }}>{time}</Text>
+              ))
+            ))}
+          </View>
         </BottomSheetScrollView>
       </BottomSheet>
     </>

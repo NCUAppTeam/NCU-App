@@ -14,7 +14,7 @@ export default function CustomMarkerView(props) {
             <View
               key={index}
               style={{
-                backgroundColor: props.name === props.selectedMarker || props.selectedMarker === '' ? val.color : 'gray',
+                backgroundColor: props.name === props.selectedMarker || props.selectedMarker === '' ? val.color : 'rgba(0, 0, 0, 0.4)',
                 width: 27,
                 height: 27,
                 justifyContent: 'center',

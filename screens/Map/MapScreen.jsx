@@ -65,10 +65,10 @@ export default function MapScreen({ navigation }) {
   const mapView = useRef(null);
   const changeCenter = (newCenterLatitude, newCenterLongitude) => {
     mapView.current.animateToRegion({
-      latitude: newCenterLatitude,
+      latitude: newCenterLatitude + 0.00045,
       longitude: newCenterLongitude,
-      latitudeDelta: 0.004,
-      longitudeDelta: 0.004,
+      latitudeDelta: 0.001,
+      longitudeDelta: 0.001,
     }, 200);
   };
 
@@ -224,14 +224,11 @@ export default function MapScreen({ navigation }) {
           cancelBtnFadeAnim={cancelBtnFadeAnim}
           textInputValue={textInputValue}
           setTextInputValue={setTextInputValue}
-          selectedMarker={selectedMarker}
           setSelectedMarker={setSelectedMarker}
           changeCenter={changeCenter}
           setBottomDrawerShow={setBottomDrawerShow}
-          estimateDistance={estimateDistance}
-          setEstimateDistance={setEstimateDistance}
           getTwoPointsDistance={getTwoPointsDistance}
-          userLocation={userLocation}
+          handleSnapPress={handleSnapPress}
         />
       </View>
       <StatusBar backgroundColor="white" />

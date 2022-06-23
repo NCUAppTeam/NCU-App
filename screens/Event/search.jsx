@@ -11,7 +11,7 @@ import { Ionicons, FontAwesome5, AntDesign } from '@expo/vector-icons';
 import {
   NativeBaseProvider, Box, Divider, Heading,
 } from 'native-base';
-import styles from './Styles';
+import styles from './style_folder/Styles_search';
 
 function search({ navigation }) {
   const [searchQuery, setSearchQuery] = useState('');

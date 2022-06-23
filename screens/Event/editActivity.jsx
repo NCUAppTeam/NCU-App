@@ -16,7 +16,7 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import * as ImagePicker from 'expo-image-picker';
 import ActiveController from '../../controller/Active';
-import styles from './Styles';
+import styles from './style_folder/Styles_editActivity';
 
 function edit({ route, navigation }) {
   const Cd = route.params;

@@ -12,7 +12,7 @@ import {
 import {
   NativeBaseProvider, Box, Divider,
 } from 'native-base';
-import styles from './Styles';
+import styles from './style_folder/Styles_activityList';
 import ActiveController from '../../controller/Active';
 
 function list({ navigation }) {

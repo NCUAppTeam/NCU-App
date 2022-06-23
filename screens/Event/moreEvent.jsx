@@ -9,7 +9,7 @@ import {
 import {
   NativeBaseProvider, Box, FlatList, VStack, Pressable,
 } from 'native-base';
-import styles from './Styles';
+import styles from './style_folder/Styles_moreEvent';
 import ActiveController from '../../controller/Active';
 
 function more({ navigation }) {

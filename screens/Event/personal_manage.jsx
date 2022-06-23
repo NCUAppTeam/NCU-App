@@ -14,7 +14,7 @@ import {
 } from 'native-base';
 import { LinearGradient } from 'expo-linear-gradient';
 import ActiveController from '../../controller/Active';
-import styles from './Styles';
+import styles from './style_folder/Styles_personal_manage';
 
 function personal({ navigation }) {
   const [showNow, setShowNow] = useState([]);

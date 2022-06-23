@@ -6,10 +6,11 @@ import {
 import {
   Ionicons, FontAwesome5, AntDesign, Feather,
 } from '@expo/vector-icons';
+import styles from './style_folder/Styles_manage';
 
 function message({ navigation }) {
   return (
-    <SafeAreaView style={{ flex: 1, flexDirection: 'column', alignContent: 'center' }}>
+    <SafeAreaView style={styles.container}>
       <View style={{ width: 100, height: 100, margin: 50 }}>
         <Text>私訊頁面</Text>
       </View>

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { View, SafeAreaView } from 'react-native';
 import { Searchbar } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import styles from './Styles';
+import styles from './style_folder/Styles_search';
 
 const bar = () => {
   const [searchQuery, setSearchQuery] = React.useState('');

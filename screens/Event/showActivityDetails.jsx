@@ -13,7 +13,7 @@ import {
 import {
   List, ListItem, NativeBaseProvider, Box, Divider,
 } from 'native-base';
-import styles from './Styles';
+import styles from './style_folder/Styles_showActivityDetails';
 import ActiveController from '../../controller/Active';
 
 function detailscreen({ route, navigation }) {

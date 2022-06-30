@@ -71,33 +71,12 @@ function MapScreen({ navigation }) {
         onDismiss={() => setModalVisible(false)}
         contentContainerStyle={styles.modalView}
       >
-        <Text>請選擇欲查詢的公車</Text>
-        {
-            BusNumbers.map((busId) => (
-              <Button
-                key={busId}
-                icon="bus"
-                mode="contained"
-                onPress={() => navigation.navigate('公車時刻表', { busId })}
-                style={styles.openButton}
-              >
-                {busId}
-              </Button>
-            ))
-          }
       </Modal>
-      <FAB
+      <Button
         style={styles.fab1}
         open={openFAB}
         icon="bus"
-        onPress={() => setBusVisible(!busVisible)}
-        onStateChange={onStateChange}
-      />
-      <FAB
-        style={styles.fab2}
-        open={openFAB}
-        icon="clock"
-        onPress={() => setModalVisible(true)}
+        onPress={() => navigation.navigate('依班次')}
         onStateChange={onStateChange}
       />
     </View>

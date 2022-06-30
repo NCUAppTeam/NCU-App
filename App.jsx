@@ -127,20 +127,6 @@ function MainApp() {
 }
 
 export default function App() {
-  if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
-  } else {
-    firebase.app();
-  }
-
-  const [auth, setAuth] = useState();
-  firebase.auth().onAuthStateChanged((user) => {
-    setAuth(user);
-  });
-
-  if (auth === undefined) {
-    return (<View />);
-  }
 
   return (
     <PaperProvider
@@ -148,7 +134,7 @@ export default function App() {
         icon: (props) => <AwesomeIcon {...props} />,
       }}
     >
-      { auth ? <MainApp /> : <AuthScreen />}
+      { <MainApp /> }
     </PaperProvider>
   );
 }

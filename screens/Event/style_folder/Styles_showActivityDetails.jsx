@@ -8,15 +8,11 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#E0E0E0',
+    aspectRatio: 1,
   },
-  CardDetails: {
-    marginLeft: 7,
-    flexDirection: 'row',
-  },
-  CardText: {
+  CardTimeText: {
     fontSize: 12,
-    color: 'rgba(40, 82, 122, 0.65)',
-    marginTop: -3,
+    color: 'black',
   },
   CardDetail: {
     height: '100%',
@@ -49,7 +45,15 @@ export default StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     alignContent: 'center',
-    marginTop: 52.5,
-    marginHorizontal: Dimensions.get('window').width * 0.07,
+    paddingTop: 52.5,
+    backgroundColor: 'white',
+  },
+  imageDotNoHere: {
+    color: '#C4C4C4',
+    marginHorizontal: 2.5,
+  },
+  imageDotIsHere: {
+    color: '#F4D160',
+    marginHorizontal: 2.5,
   },
 });

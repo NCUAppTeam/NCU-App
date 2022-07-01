@@ -28,6 +28,29 @@ function Datewithnoyr(time) {
   return noyr;
 }
 
+function dateToWeekday(t) {
+  const time = new Date(t * 1000);
+  const y = (time.getFullYear().toString() - 1969) % 100;
+  const c = ((time.getFullYear().toString() - 1969) % 100 === 0)
+    ? ((time.getFullYear().toString() - 1969).toString().substring(0, 2) - 1)
+    : (time.getFullYear().toString() - 1969).toString().substring(0, 2);
+  let m = 0;
+  if ((time.getMonth() + 1).toString() === 1) {
+    m = 13;
+  } else if ((time.getMonth() + 1).toString() === 2) {
+    m = 14;
+  } else {
+    m = (time.getMonth() + 1).toString();
+  }
+  const d = time.getDate().toString();
+  const day = (y + Math.floor((y / 4)) + Math.floor((c / 4)) - 2 * c
+  + Math.floor(2.6 * m + 2.6) + d * 1 - 1) % 7;
+  let weekday = '';
+  if (day === 0) { weekday = '星期日'; } else if (day === 1) { weekday = '星期一'; } else if (day === 2) { weekday = '星期二'; } else if (day === 3) { weekday = '星期三'; } else if (day === 4) { weekday = '星期四'; } else if (day === 5) { weekday = '星期五'; } else if (day === 6) { weekday = '星期六'; }
+  const check = `${(time.getMonth() + 1).toString()}月${time.getDate().toString()}日 ${weekday} ${time.getHours().toString().padStart(2, '0')}:${time.getMinutes().toString().padStart(2, '0')}`;
+  return check;
+}
+
 function sentMessage(message) {
   console.log(message);
 }
@@ -42,7 +65,7 @@ const firebaseConfig = {
   measurementId: 'G-YR1M91G56B',
 };
 
-//   測試用 Firebase
+//   測試用 Firebase//劭劭的
 // const firebaseConfig = {
 //   apiKey: 'AIzaSyBm2ChoLgXWTpgqEY-ZcANn2Uymmop0hPM',
 //   authDomain: 'test-85cdf.firebaseapp.com',
@@ -95,6 +118,7 @@ async function addActive(active) {
   };
 
   if (active.image1) {
+    console.log('=======================================img1');
     const imageAddress = `actives/${imagePos(active.image1)}`;
     const storageRef = firebase.storage().ref().child(imageAddress);
     const response = await fetch(active.image1);
@@ -104,30 +128,38 @@ async function addActive(active) {
     url1 = await storageRef.getDownloadURL();
     if (url1 !== undefined) {
       item.imageUri1 = url1;
+    } else {
+      item.imageUri1 = '';
     }
   }
   if (active.image2) {
+    console.log('=======================================img2');
     const imageAddress = `actives/${imagePos(active.image2)}`;
     const storageRef = firebase.storage().ref().child(imageAddress);
-    const response = await fetch(active.image1);
+    const response = await fetch(active.image2);
     const blob = await response.blob();
     const st2 = storageRef.put(blob);
     await st2;
     url2 = await storageRef.getDownloadURL();
     if (url2 !== undefined) {
       item.imageUri2 = url2;
+    } else {
+      item.imageUri2 = '';
     }
   }
   if (active.image3) {
+    console.log('=======================================img3');
     const imageAddress = `actives/${imagePos(active.image3)}`;
     const storageRef = firebase.storage().ref().child(imageAddress);
-    const response = await fetch(active.image1);
+    const response = await fetch(active.image3);
     const blob = await response.blob();
     const st3 = storageRef.put(blob);
     await st3;
     url3 = await storageRef.getDownloadURL();
-    if (url3 === undefined) {
+    if (url3 !== undefined) {
       item.imageUri3 = url3;
+    } else {
+      item.imageUri3 = '';
     }
   }
 
@@ -136,6 +168,7 @@ async function addActive(active) {
   }
   const db = firebase.firestore();
   const activesRef = db.collection('actives');
+  console.log('active');
   console.log(item);
   activesRef.add(item);
   console.log('addActive Successful');
@@ -153,10 +186,7 @@ async function getAllActive() {
       imageUri1: doc.data().imageUri1,
       imageUri2: doc.data().imageUri2,
       imageUri3: doc.data().imageUri3,
-      startTime: toDateString(doc.data().startTime),
-      startNoYr: Datewithnoyr(doc.data().startTime),
-      endTime: toDateString(doc.data().endTime),
-      endNoYr: Datewithnoyr(doc.data().endTime),
+      startTimeWeekday: dateToWeekday(doc.data().startTime),
       place: doc.data().place,
       cost: doc.data().cost,
       limitNum: doc.data().limitNum,
@@ -185,10 +215,8 @@ async function getOneActive(id) {
     imageUri1: querySnapshot.data().imageUri1,
     imageUri2: querySnapshot.data().imageUri2,
     imageUri3: querySnapshot.data().imageUri3,
-    startTime: toDateString(querySnapshot.data().startTime),
-    startNoYr: Datewithnoyr(querySnapshot.data().startTime),
-    endTime: toDateString(querySnapshot.data().endTime),
-    endNoYr: Datewithnoyr(querySnapshot.data().endTime),
+    startTimeWeekday: dateToWeekday(querySnapshot.data().startTime),
+    endTimeWeekday: dateToWeekday(querySnapshot.data().endTime),
     place: querySnapshot.data().place,
     cost: querySnapshot.data().cost,
     limitNum: querySnapshot.data().limitNum,

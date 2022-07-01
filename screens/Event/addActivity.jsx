@@ -69,7 +69,22 @@ function add({ navigation }) {
   const setImageFromGenre = () => {
     if (data.image1 === '') {
       if (data.genre === '揪人共乘') {
-        data.image1 = 'https://shop.line-scdn.net/themeshop/v1/products/65/db/d5/65dbd5f2-a879-458b-ae34-a7cb27c1f544/186/WEBSTORE/icon_198x278.png';
+        data.image1 = 'https://lh3.googleusercontent.com/cLrc_IU_8wcqIeOgpUIgLz2EbBD6z6PrQLp5l0dtTsvPzsAZFxitJ5gzZ2VGz7Y4bIFrG8hQcTuYXzMHMvj-JN0=w1280';
+      }
+      if (data.genre === '揪人運動') {
+        data.image1 = 'https://lh3.googleusercontent.com/13WRw2-wmjCVD1QuSUjUjeJVOKnamdacrG9rYAu-6TEjxao7qkq4SaaL6I--LsqFdPiDto2MripJ0AeqX1jpLkw=w1280';
+      }
+      if (data.genre === '揪人遊戲') {
+        data.image1 = 'https://lh3.googleusercontent.com/9-KpYqgT7JpVxN9YJdyZK6cs1KkjkW3FvJfNN_MKIWC0TJsF23naOw4xeELUkmKGpK0Ql-YwOYAV6Nm7a10aHBs=w1280';
+      }
+      if (data.genre === '校園活動') {
+        data.image1 = 'https://lh6.googleusercontent.com/VhFxnnfJno8OaJEejdzQUfTkOPBXH0EkDpp_fZU1lAqe8mxsqUryurnBGu88QwWx1ZuW5dOMUwQdOOIlVHXZVdo=w1280';
+      }
+      if (data.genre === '系上活動') {
+        data.image1 = 'https://lh4.googleusercontent.com/MI5GYVApUBawNSN07_TzzpjRT4Kso7Lr2xa0ryVIiRM6dvFQBsgr568WEfLCLtl1NeUia0wZQB8ZBrvATX7dvKo=w1280';
+      }
+      if (data.genre === '社團活動') {
+        data.image1 = 'https://lh6.googleusercontent.com/_4pimcui3FxablQrSCnQcZYCRBw8GHl-P604nwcGPnniiMrAoE23lCkWaaEgJ2flQbqcxTrn7PEp6GnehqFeruE=w1280';
       }
     }
   };
@@ -635,6 +650,7 @@ function add({ navigation }) {
                         onPress={() => {
                           data.uploadTime = new Date();
                           setImageFromGenre();
+                          console.log('addActivity');
                           console.log(data);
                           ActiveController.addActive(data);
                           navigation.navigate('list');

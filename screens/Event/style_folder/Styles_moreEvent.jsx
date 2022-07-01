@@ -5,26 +5,38 @@ export default StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     alignContent: 'center',
-    marginTop: 50,
-    marginHorizontal: 15,
-    // marginHorizontal: Dimensions.get('window').width * 0.07,
+    paddingTop: 50,
+    backgroundColor: 'white',
+    // borderWidth: 1,
   },
-  CardTitle: {
-    textAlign: 'center',
-    justifyContent: 'center',
-    alignContent: 'center',
-    alignItems: 'center',
-    color: '#28527A',
-    fontSize: 14,
-  },
-  CardDetails: {
-    marginLeft: 7,
+  headerContainer: {
+    marginHorizontal: Dimensions.get('window').width * 0.07,
     flexDirection: 'row',
   },
-  CardText: {
-    fontSize: 12,
-    color: 'rgba(40, 82, 122, 0.65)',
-    marginTop: -3,
+  headerArrowBox: {
+    justifyContent: 'center', alignItems: 'flex-start',
+  },
+  nameheader: {
+    alignItems: 'center',
+    width: 'auto',
+    flex: 1,
+    justifyContent: 'center',
+  },
+  name: {
+    marginLeft: 45,
+    fontSize: 24,
+    color: '#28527A',
+  },
+  headerCommentView: {
+    justifyContent: 'center', alignItems: 'flex-end',
+  },
+  headerPersonalView: {
+    justifyContent: 'center', alignItems: 'flex-end', marginLeft: 10,
+  },
+  bodyContainer: {
+    flex: 1,
+    alignItems: 'center',
+    marginTop: 7,
   },
   CardInMore: {
     height: 225,
@@ -36,29 +48,39 @@ export default StyleSheet.create({
       height: -4,
     },
     elevation: 4,
-    marginTop: 14,
+    marginVertical: 7,
     backgroundColor: 'white',
-    marginRight: Dimensions.get('window').width * 0.06,
-  },
-  nameheader: {
-    flex: 9,
-    alignItems: 'center',
-    width: 'auto',
-    borderRadius: 50,
-    justifyContent: 'center',
-  },
-  name: {
-    marginLeft: 45,
-    fontSize: 24,
-    // fontWeight: 'bold',
-    color: '#28527A',
+    marginHorizontal: Dimensions.get('window').width * 0.03,
   },
   pic: {
-    // width: PixelRatio.getPixelSizeForLayoutSize(76),
-    // height: PixelRatio.getPixelSizeForLayoutSize(76),
     backgroundColor: '#E0E0E0',
     aspectRatio: 1,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
+  },
+  CardTitle: {
+    textAlign: 'center',
+    justifyContent: 'center',
+    alignContent: 'center',
+    alignItems: 'center',
+    color: '#28527A',
+    fontSize: 14,
+  },
+  CardStartTime: {
+    marginLeft: 7,
+    flexDirection: 'row',
+  },
+  CardTimeText: {
+    fontSize: 12,
+    color: 'rgba(40, 82, 122, 0.65)',
+    marginTop: -3,
+  },
+  CardPlace: {
+    marginLeft: 5,
+    flexDirection: 'row',
+  },
+  cardPlaceText: {
+    fontSize: 12,
+    color: 'rgba(40, 82, 122, 0.65)',
   },
 });

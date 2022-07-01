@@ -5,21 +5,31 @@ export default StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     alignContent: 'center',
-    marginTop: 50,
-    marginHorizontal: 15,
-    // marginHorizontal: Dimensions.get('window').width * 0.07,
+    paddingTop: 53,
+    backgroundColor: 'white',
+  },
+  horizontalArea: {
+    borderWidth: 1,
+    backgroundColor: 'black',
+  },
+  horizontal: {
+    flex: 1,
+    height: 246,
   },
   Card2: {
-    height: 270,
-    width: 190,
-    borderWidth: 1,
-    borderColor: '#bfbebe',
+    marginTop: 10,
+    height: 225,
+    width: Dimensions.get('window').width * 0.4,
     borderRadius: 10,
-    shadowColor: '#bfbebe',
-    marginTop: 15,
-    marginBottom: 30,
-    marginHorizontal: 2,
-    // backgroundColor: '#bfbebe',
+    shadowColor: 'black',
+    shadowOffset: {
+      width: 0,
+      height: -4,
+    },
+    elevation: 4,
+    backgroundColor: 'white',
+    marginLeft: Dimensions.get('window').width * 0.06,
+    marginRight: -Dimensions.get('window').width * 0.0094,
   },
   CardTitle: {
     textAlign: 'center',
@@ -32,6 +42,7 @@ export default StyleSheet.create({
   CardDetails: {
     marginLeft: 7,
     flexDirection: 'row',
+    marginBottom: 2,
   },
   CardText: {
     fontSize: 12,
@@ -42,6 +53,8 @@ export default StyleSheet.create({
     textAlign: 'right',
     justifyContent: 'flex-end',
     textDecorationLine: 'underline',
+    height: 27,
+    paddingTop: 10,
   },
   pic: {
     // width: PixelRatio.getPixelSizeForLayoutSize(76),
@@ -51,12 +64,14 @@ export default StyleSheet.create({
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
   },
-  SearchBar: {
+  SearchBarStyle: {
     flex: 9,
-    paddingTop: 5,
-    paddingLeft: 4,
-    paddingRight: 0,
-    marginBottom: 10,
     justifyContent: 'center',
+  },
+  SearchBar: {
+    backgroundColor: '#E5EBF1',
+    borderRadius: 18,
+    height: 36,
+    elevation: 0,
   },
 });

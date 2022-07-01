@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Text, View, SafeAreaView, RefreshControl, Image, Dimensions,
+  Text, View, SafeAreaView, RefreshControl, Image,
 } from 'react-native';
 import { Title } from 'react-native-paper';
 import {
@@ -32,51 +32,40 @@ function more({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={[styles.container, { marginHorizontal: Dimensions.get('window').width * 0.07 }]}>
+    <SafeAreaView style={styles.container}>
       <NativeBaseProvider>
-        <View style={{ flexDirection: 'column' }}>
-          <View style={{ flexDirection: 'row' }}>
-            <Box style={{
-              flex: 0.8, justifyContent: 'center', alignItems: 'flex-start',
-            }}
-            >
-              <AntDesign
-                name="arrowleft"
-                size={28}
-                color="#28527A"
-                style={{ justifyContent: 'center' }}
-                onPress={() => { navigation.navigate('list'); }}
-              />
-            </Box>
-            <View style={styles.nameheader}>
-              <Text style={styles.name}>
-                近期揪人
-              </Text>
-            </View>
-            <View style={{
-              flex: 1, justifyContent: 'center', alignItems: 'flex-end',
-            }}
-            >
-              <FontAwesome5
-                name="comment"
-                size={25}
-                color="#28527A"
-              />
-            </View>
-            <View style={{
-              flex: 1, justifyContent: 'center', alignItems: 'flex-end', marginLeft: 10,
-            }}
-            >
-              <Feather
-                name="user"
-                size={26}
-                color="#28527A"
-                onPress={() => { navigation.navigate('personal'); }}
-              />
-            </View>
+        <View style={styles.headerContainer}>
+          <Box style={styles.headerArrowBox}>
+            <AntDesign
+              name="arrowleft"
+              size={28}
+              color="#28527A"
+              onPress={() => { navigation.navigate('list'); }}
+            />
+          </Box>
+          <View style={styles.nameheader}>
+            <Text style={styles.name}>
+              近期揪人
+            </Text>
+          </View>
+          <View style={styles.headerCommentView}>
+            <FontAwesome5
+              name="comment"
+              size={25}
+              color="#28527A"
+              onPress={() => { navigation.navigate('message'); }}
+            />
+          </View>
+          <View style={styles.headerPersonalView}>
+            <Feather
+              name="user"
+              size={26}
+              color="#28527A"
+              onPress={() => { navigation.navigate('personal'); }}
+            />
           </View>
         </View>
-        <View style={{ flex: 1, justifyContent: 'space-evenly', alignItems: 'flex-start' }}>
+        <View style={styles.bodyContainer}>
           <FlatList
             numColumns={2}
             data={active}
@@ -88,7 +77,11 @@ function more({ navigation }) {
               />
               )}
             renderItem={({ item }) => (
-              <Pressable onPress={() => { navigation.navigate('details', { Cd: item.id }); }}>
+              <Pressable
+                onPress={() => {
+                  navigation.navigate('details', { Cd: item.id });
+                }}
+              >
                 <VStack style={styles.CardInMore}>
                   <Image
                     style={styles.pic}
@@ -99,28 +92,24 @@ function more({ navigation }) {
                   <Title style={styles.CardTitle}>
                     {item.name}
                   </Title>
-                  <Box style={styles.CardDetails}>
+                  <Box style={styles.CardStartTime}>
                     <AntDesign
                       name="clockcircleo"
                       size={12}
-                      style={{ justifyContent: 'center', color: 'rgba(40, 82, 122, 0.65)' }}
+                      color="rgba(40, 82, 122, 0.65)"
                     />
-                    <Text style={styles.CardText}>
+                    <Text style={styles.CardTimeText}>
                       {'   '}
-                      {item.startNoYr}
+                      {item.startTimeWeekday}
                     </Text>
-                    {/* <Text style={styles.CardText}>
-                      {' ~ '}
-                      {item.endNoYr}
-                    </Text> */}
                   </Box>
-                  <Box style={{ marginLeft: 6, flexDirection: 'row' }}>
+                  <Box style={styles.CardPlace}>
                     <Ionicons
                       name="location-outline"
                       size={15}
                       color="rgba(40, 82, 122, 0.65)"
                     />
-                    <Text style={{ fontSize: 12, color: 'rgba(40, 82, 122, 0.65)' }}>
+                    <Text style={styles.cardPlaceText}>
                       {'  '}
                       {item.place}
                     </Text>

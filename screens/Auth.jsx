@@ -11,7 +11,7 @@ import * as Facebook from 'expo-facebook';
 import logo from '../assets/icon.png';
 import Controller from '../controller/Profile';
 
-const PRODUCTION = true;
+const PRODUCTION = false;
 const supportedURL = 'https://ncuappteam.github.io/PRIVACY';
 
 const OpenURLButton = ({ url, children }) => {

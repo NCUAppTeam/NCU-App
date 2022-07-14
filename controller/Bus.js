@@ -1,16 +1,16 @@
 import axios from 'axios';
 import jsSHA from 'jssha';
-import url from'url';
+import url from 'url';
 
-const getAuthorizationHeader = function() {
-	var AppID = 'e05be185a29147f7b37c4343bedae576';
-	var AppKey = '1BySzX0HVXNpZgE-4znpiKBW8TE';
-	var GMTString = new Date().toGMTString();
-	var ShaObj = new jsSHA('SHA-1', 'TEXT');
+const getAuthorizationHeader = function () {
+  const AppID = 'e05be185a29147f7b37c4343bedae576';
+  const AppKey = '1BySzX0HVXNpZgE-4znpiKBW8TE';
+  let GMTString = new Date().toGMTString();
+	let ShaObj = new jsSHA('SHA-1', 'TEXT');
 	ShaObj.setHMACKey(AppKey, 'TEXT');
 	ShaObj.update('x-date: ' + GMTString);
-	var HMAC = ShaObj.getHMAC('B64');
-	var Authorization = 'hmac username=\"' + AppID + '\", algorithm=\"hmac-sha1\", headers=\"x-date\", signature=\"' + HMAC + '\"';
+	let HMAC = ShaObj.getHMAC('B64');
+	let Authorization = 'hmac username=\"' + AppID + '\", algorithm=\"hmac-sha1\", headers=\"x-date\", signature=\"' + HMAC + '\"';
 	return { 'Authorization': Authorization, 'X-Date': GMTString};
 }
 
@@ -45,12 +45,12 @@ async function state(parame)
 	let URL = url.parse( `${APIBASE}/${parame.id}`, true );
 	URL.query = data;
 	let Url=url.format(URL);
-	console.log(Url);
+	//console.log(Url);
 	const output=[];
 	const response = await axios.get(Url, { 
 		headers: getAuthorizationHeader(),
 	})
-	console.log(response.data);
+	//console.log(response.data);
 	response.data.forEach((doc)=>{
 		let busTime=get_busTime(doc);
 		let way;
@@ -63,7 +63,7 @@ async function state(parame)
 			to : way,
 		});
 	})
-	console.log(output);
+	//console.log(output);
 	return output;
 }
 
@@ -79,13 +79,13 @@ async function route(parame){
 	let URL = url.parse( `${APIBASE}/${parame.id}`, true );
 	URL.query = data;
 	let Url=url.format(URL);
-	console.log(Url);
+	//console.log(Url);
 
 	const output=[];
 	const response = await axios.get(Url, { 
 		headers: getAuthorizationHeader(),
 	})
-	console.log(response.data);
+	//console.log(response.data);
 	response.data.forEach((doc)=>{
 		let busTime=get_busTime(doc);
 		output.push({
@@ -93,7 +93,7 @@ async function route(parame){
 	  		time : busTime,
 		});
 	})
-	console.log(output);
+	//console.log(output);
 	return output;
 }
 
@@ -112,11 +112,11 @@ async function second(){
 		let URL = url.parse( `${APIBASE}/${station_id[i]}`, true );
 		URL.query = data;
 		let Url=url.format(URL);
-		console.log(Url);
+		//console.log(Url);
 		const response = await axios.get(Url, { 
 			headers: getAuthorizationHeader(),
 		})
-		console.log(response.data);
+		//console.log(response.data);
 		let busTime1=get_busTime(response.data[0]);
 		let busTime2=get_busTime(response.data[1]);
 		output.push({
@@ -127,7 +127,7 @@ async function second(){
 			time2 : busTime2
 		});
 	}
-	console.log(output);
+	//console.log(output);
 	return output;
 }
 

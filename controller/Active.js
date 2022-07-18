@@ -52,6 +52,7 @@ function dateToWeekday(t) {
 }
 
 function sentMessage(message) {
+  // TODO
   console.log(message);
 }
 
@@ -118,7 +119,6 @@ async function addActive(active) {
   };
 
   if (active.image1) {
-    console.log('=======================================img1');
     const imageAddress = `actives/${imagePos(active.image1)}`;
     const storageRef = firebase.storage().ref().child(imageAddress);
     const response = await fetch(active.image1);
@@ -133,7 +133,6 @@ async function addActive(active) {
     }
   }
   if (active.image2) {
-    console.log('=======================================img2');
     const imageAddress = `actives/${imagePos(active.image2)}`;
     const storageRef = firebase.storage().ref().child(imageAddress);
     const response = await fetch(active.image2);
@@ -148,7 +147,6 @@ async function addActive(active) {
     }
   }
   if (active.image3) {
-    console.log('=======================================img3');
     const imageAddress = `actives/${imagePos(active.image3)}`;
     const storageRef = firebase.storage().ref().child(imageAddress);
     const response = await fetch(active.image3);
@@ -168,10 +166,7 @@ async function addActive(active) {
   }
   const db = firebase.firestore();
   const activesRef = db.collection('actives');
-  console.log('active');
-  console.log(item);
   activesRef.add(item);
-  console.log('addActive Successful');
 }
 
 async function getAllActive() {
@@ -198,13 +193,10 @@ async function getAllActive() {
       details: doc.data().details,
     });
   });
-  console.log(activeArray);
-  console.log('getAllActive Successful');
   return activeArray;
 }
 
 async function getOneActive(id) {
-  console.log('testnew', id);
   const db = firebase.firestore();
   const activesRef = db.collection('actives').doc(id);
 
@@ -227,11 +219,6 @@ async function getOneActive(id) {
     hostMail: querySnapshot.data().hostMail,
     details: querySnapshot.data().details,
   }];
-
-  console.log(querySnapshot.data());
-
-  console.log('getOneActive Successful');
-
   return oneactive;
 }
 
@@ -268,7 +255,6 @@ async function getGenreActive(genre) {
       details: doc.data().details,
     });
   });
-  console.log('getGnereActive Successful');
   return GenreArray;
 }
 
@@ -288,7 +274,6 @@ async function getActiveByName(name) {
       ...doc.data(),
     });
   });
-  console.log('getActiveByName Successful');
   return GenreArray;
 }
 
@@ -299,7 +284,6 @@ async function deleteOneActive() {
   querySnapshot.forEach((doc) => {
     db.collection('actives').doc(doc.id).delete();
   });
-  console.log('deleteOneActive Successful');
 }
 
 async function deleteAllActive() {
@@ -311,8 +295,6 @@ async function deleteAllActive() {
     firebase.storage().ref().child(doc.data().imageAddress).delete();
     db.collection('actives').doc(doc.id).delete();
   });
-
-  console.log('deleteAllActive Successful');
 }
 
 async function fuseSearchName(searchString) {
@@ -335,8 +317,6 @@ async function fuseSearchName(searchString) {
 
   const fuse = new Fuse(activeArray, options);
   const result = fuse.search(searchString);
-  console.log(result);
-  console.log('Search Successful');
   return result;
 }
 

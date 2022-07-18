@@ -5,12 +5,11 @@ import {
 import {
   Title, Card, Searchbar,
 } from 'react-native-paper';
-import { Button } from 'react-native-elements';
 import {
   Ionicons, FontAwesome5, AntDesign, Feather,
 } from '@expo/vector-icons';
 import {
-  NativeBaseProvider, Box, Divider, ZStack,
+  NativeBaseProvider, Box, Divider,
 } from 'native-base';
 import styles from './style_folder/Styles_activityList';
 import ActiveController from '../../controller/Active';

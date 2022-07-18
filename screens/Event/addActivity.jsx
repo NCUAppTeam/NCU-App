@@ -650,8 +650,6 @@ function add({ navigation }) {
                         onPress={() => {
                           data.uploadTime = new Date();
                           setImageFromGenre();
-                          console.log('addActivity');
-                          console.log(data);
                           ActiveController.addActive(data);
                           navigation.navigate('list');
                         }}

@@ -155,9 +155,6 @@ function personal({ navigation }) {
               style={isPress === '參加中' ? styles.personalbtnPress : styles.personalbtn}
               onPress={() => {
                 setIsPress('參加中');
-              //  console.log(isPress);
-              //    ActiveController.getActiveByForm('participate')
-              //    .then(() => { onRefresh(); });
               }}
             >
               <Text style={isPress === '參加中' ? styles.personalbtnPressText : styles.personalbtnText}>
@@ -168,9 +165,6 @@ function personal({ navigation }) {
               style={isPress === '管理活動' ? styles.personalbtnPress : styles.personalbtn}
               onPress={() => {
                 setIsPress('管理活動');
-                // console.log(isPress);
-              //    ActiveController.getActiveByForm('MyOwn')
-              //    .then(() => { onRefresh(); }); }}
               }}
             >
               <Text style={isPress === '管理活動' ? styles.personalmanagebtnPressText : styles.personalmanagebtnText}>
@@ -181,9 +175,6 @@ function personal({ navigation }) {
               style={isPress === '已結束' ? styles.personalbtnPress : styles.personalbtn}
               onPress={() => {
                 setIsPress('已結束');
-                // console.log(isPress);
-                // ActiveController.getActiveByForm('End')
-                //    .then(() => { onRefresh(); }); }}}
               }}
             >
               <Text style={isPress === '已結束' ? styles.personalbtnPressText : styles.personalbtnText}>

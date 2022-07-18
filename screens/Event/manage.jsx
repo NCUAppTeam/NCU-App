@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import {
   Text, View, SafeAreaView, TextInput, RefreshControl,
-  ScrollView, TouchableOpacity, Alert, Image, TouchableHighlight,
+  ScrollView, TouchableOpacity, Image, TouchableHighlight,
 } from 'react-native';
 import {
-  Button, Provider, Card, Title,
+  Provider, Title,
 } from 'react-native-paper';
 import {
-  Ionicons, AntDesign, MaterialCommunityIcons, Feather, FontAwesome5,
+  AntDesign, Feather,
 } from '@expo/vector-icons';
 import {
   NativeBaseProvider, Box, Divider, Heading, VStack, HStack, FlatList,
@@ -18,12 +18,10 @@ import styles from './style_folder/Styles_manage';
 
 function manage({ route, navigation }) {
   const Cd = route.params;
-  // console.log('123', JSON.stringify(Cd).slice(6, -1));
   const [active, setActive] = useState([]);
   useEffect(() => {
     ActiveController.getOneActive(JSON.stringify(Cd).slice(7, -2)).then((res) => {
       setActive(res);
-      console.log(active);
     }).catch((err) => {
       throw err;
     });

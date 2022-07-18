@@ -1,20 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Text, View, SafeAreaView, ScrollView, RefreshControl, Image, Dimensions,
+  Text, View, SafeAreaView, ScrollView, Image, Dimensions,
 } from 'react-native';
-import { Button } from 'react-native-elements';
 import {
-  Ionicons, FontAwesome5, AntDesign, MaterialCommunityIcons, Feather,
+  Ionicons, AntDesign, MaterialCommunityIcons, Feather,
 } from '@expo/vector-icons';
 import {
-  List, ListItem, NativeBaseProvider, Box, Divider, ZStack,
+  NativeBaseProvider, Divider,
 } from 'native-base';
 import styles from './style_folder/Styles_showActivityDetails';
 import ActiveController from '../../controller/Active';
 
 function detailscreen({ route, navigation }) {
   const Cd = route.params;
-  // console.log('123', JSON.stringify(Cd).slice(6, -1));
   const [active, setActive] = useState([]);
   useEffect(() => {
     ActiveController.getOneActive(JSON.stringify(Cd).slice(7, -2)).then((res) => {

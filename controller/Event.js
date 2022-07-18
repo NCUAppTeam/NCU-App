@@ -140,17 +140,16 @@ async function unsubscribe(eventId) {
 async function createEvent(eventInfo) {
   try {
     const db = firebase.firestore();
-    const ref = await db.collection('Events')
-      .add({
-        uid: firebase.auth().currentUser.uid,
-        name: eventInfo.name,
-        location: eventInfo.location,
-        startTime: eventInfo.startTime,
-        endTime: eventInfo.endTime,
-        link: eventInfo.link,
-        content: eventInfo.content,
-        qualification: eventInfo.qualification,
-      });
+    const ref = await db.collection('Events').add({
+      uid: firebase.auth().currentUser.uid,
+      name: eventInfo.name,
+      location: eventInfo.location,
+      startTime: eventInfo.startTime,
+      endTime: eventInfo.endTime,
+      link: eventInfo.link,
+      content: eventInfo.content,
+      qualification: eventInfo.qualification,
+    });
     await subscribe(ref.id);
     return ref.id;
   } catch (err) {
@@ -177,18 +176,16 @@ async function createEvent(eventInfo) {
 async function updateEvent(id, eventInfo) {
   try {
     const db = firebase.firestore();
-    db.collection('Events')
-      .doc(id)
-      .set({
-        uid: firebase.auth().currentUser.uid,
-        name: eventInfo.name,
-        location: eventInfo.location,
-        startTime: eventInfo.startTime,
-        endTime: eventInfo.endTime,
-        link: eventInfo.link,
-        content: eventInfo.content,
-        qualification: eventInfo.qualification,
-      });
+    db.collection('Events').doc(id).set({
+      uid: firebase.auth().currentUser.uid,
+      name: eventInfo.name,
+      location: eventInfo.location,
+      startTime: eventInfo.startTime,
+      endTime: eventInfo.endTime,
+      link: eventInfo.link,
+      content: eventInfo.content,
+      qualification: eventInfo.qualification,
+    });
   } catch (err) {
     await Alert.alert('There is something wrong!!!!', err.message);
   }
@@ -231,9 +228,7 @@ async function getSubscribedEvents() {
     eventIds.push(doc.data().eventID);
   });
   const eventData = await Promise.all(
-    eventIds.docs.map(
-      (eventId) => getEventInfo(eventId),
-    ),
+    eventIds.docs.map((eventId) => getEventInfo(eventId)),
   );
   return eventData;
 }

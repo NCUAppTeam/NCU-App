@@ -35,7 +35,6 @@ export default function MapScreen({ navigation }) {
   const snapPoints = useMemo(() => ['15%', '40%', '95%'], []);
 
   const handleSheetChanges = useCallback((index) => {
-    console.log('handleSheetChanges', index);
     setBottomDrawerState(index);
   }, []);
 
@@ -59,8 +58,6 @@ export default function MapScreen({ navigation }) {
   const [screenHeight, setScreenHeight] = useState(0);
   const [searchBarHeight, setSearchBarHeight] = useState(0);
   const [textInputValue, setTextInputValue] = useState('');
-
-  const [estimateDistance, setEstimateDistance] = useState(null);
 
   const mapView = useRef(null);
   const changeCenter = (newCenterLatitude, newCenterLongitude) => {
@@ -108,7 +105,6 @@ export default function MapScreen({ navigation }) {
             latitude: currentLocation.coords.latitude,
             longitude: currentLocation.coords.longitude,
           });
-          console.log(currentLocation.coords.latitude, ', ', currentLocation.coords.longitude);
         },
       );
     })();
@@ -165,7 +161,6 @@ export default function MapScreen({ navigation }) {
                 setTextInputValue(marker.name);
                 handleSnapPress(1);
                 changeCenter(marker.latitude - 0.0006, marker.longitude);
-                setEstimateDistance(getTwoPointsDistance(marker.latitude, marker.longitude));
               }}
             >
               <CustomMarkerView

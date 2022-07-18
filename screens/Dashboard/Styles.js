@@ -15,5 +15,6 @@ export default StyleSheet.create({
   container: {
     padding: 8,
     flex: 1,
+    marginTop: '10%',
   },
 });

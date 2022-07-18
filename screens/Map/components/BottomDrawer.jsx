@@ -1,5 +1,5 @@
 /* eslint-disable react/no-array-index-key */
-import React, { useMemo } from 'react';
+import React from 'react';
 import {
   View, Text, TouchableOpacity,
 } from 'react-native';
@@ -42,12 +42,6 @@ export default function BottomDrawer({
     getDirections(data);
   };
 
-  const dummyData = useMemo(
-    () => Array(50)
-      .fill(0)
-      .map((_, index) => `index-${index}`),
-    [],
-  );
   return (
     <>
       <BottomSheet

@@ -15,12 +15,13 @@ import SaleScreen from './screens/Sale';
 import EventScreen from './screens/Event';
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyA8GH6yj1i4gJM0H_ZTsurYG3Dqn4-nIS8',
-  authDomain: 'ncu-app-test.firebaseapp.com',
-  projectId: 'ncu-app-test',
-  storageBucket: 'ncu-app-test.appspot.com',
-  messagingSenderId: '739839700130',
-  appId: '1:739839700130:web:37591d0118a440488cfbfb',
+  apiKey: 'AIzaSyBgSczWWYWCnz97owGdgCTllKXg5C_Vzew',
+  authDomain: 'ncuapp-sale.firebaseapp.com',
+  projectId: 'ncuapp-sale',
+  storageBucket: 'ncuapp-sale.appspot.com',
+  messagingSenderId: '391949890842',
+  appId: '1:391949890842:web:6a6d74d375d6911f0a68a3',
+  measurementId: 'G-CJLJGYZLHC',
 };
 
 const Tab = createBottomTabNavigator();

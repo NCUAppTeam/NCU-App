@@ -2,6 +2,42 @@ import firebase from 'firebase';
 import Fuse from 'fuse.js';
 // import storage from '@react-native-firebase/storage';
 
+const values = ['揪人共乘', '揪人運動', '揪人遊戲', '校園活動', '系上活動', '社團活動'];
+const defaultLinks = {
+  0:
+    {
+      id: '0',
+      type: 'carpool',
+      link: 'https://lh3.googleusercontent.com/cLrc_IU_8wcqIeOgpUIgLz2EbBD6z6PrQLp5l0dtTsvPzsAZFxitJ5gzZ2VGz7Y4bIFrG8hQcTuYXzMHMvj-JN0=w1280',
+    },
+  1:
+    {
+      id: '1',
+      type: 'exercising',
+      link: 'https://lh3.googleusercontent.com/13WRw2-wmjCVD1QuSUjUjeJVOKnamdacrG9rYAu-6TEjxao7qkq4SaaL6I--LsqFdPiDto2MripJ0AeqX1jpLkw=w1280',
+    },
+  2: {
+    id: '2',
+    type: 'HangOut',
+    link: 'https://lh3.googleusercontent.com/9-KpYqgT7JpVxN9YJdyZK6cs1KkjkW3FvJfNN_MKIWC0TJsF23naOw4xeELUkmKGpK0Ql-YwOYAV6Nm7a10aHBs=w1280',
+  },
+  3: {
+    id: '3',
+    type: 'schoolEvent',
+    link: 'https://lh6.googleusercontent.com/VhFxnnfJno8OaJEejdzQUfTkOPBXH0EkDpp_fZU1lAqe8mxsqUryurnBGu88QwWx1ZuW5dOMUwQdOOIlVHXZVdo=w1280',
+  },
+  4: {
+    id: '4',
+    type: 'tiedEvent',
+    link: 'https://lh4.googleusercontent.com/MI5GYVApUBawNSN07_TzzpjRT4Kso7Lr2xa0ryVIiRM6dvFQBsgr568WEfLCLtl1NeUia0wZQB8ZBrvATX7dvKo=w1280',
+  },
+  5: {
+    id: '5',
+    type: 'clubEvent',
+    link: 'https://lh6.googleusercontent.com/_4pimcui3FxablQrSCnQcZYCRBw8GHl-P604nwcGPnniiMrAoE23lCkWaaEgJ2flQbqcxTrn7PEp6GnehqFeruE=w1280',
+  },
+};
+
 /**
  *
  * @param {*} time
@@ -97,9 +133,9 @@ function imagePos(imageUri) {
  * @param {*} active
  */
 async function addActive(active) {
-  let url1;
-  let url2;
-  let url3;
+  let uri1;
+  let uri2;
+  let uri3;
 
   const item = {
     name: active.name,
@@ -118,48 +154,42 @@ async function addActive(active) {
   };
 
   if (active.image1) {
-    console.log('=======================================img1');
     const imageAddress = `actives/${imagePos(active.image1)}`;
     const storageRef = firebase.storage().ref().child(imageAddress);
     const response = await fetch(active.image1);
     const blob = await response.blob();
     const st1 = storageRef.put(blob);
     await st1;
-    url1 = await storageRef.getDownloadURL();
-    if (url1 !== undefined) {
-      item.imageUri1 = url1;
-    } else {
-      item.imageUri1 = '';
+    uri1 = await storageRef.getDownloadURL();
+    if (uri1 !== undefined) {
+      item.imageUri1 = uri1;
     }
+  } else {
+    item.imageUri1 = defaultLinks[values.indexOf(active.genre)].link;
   }
+
   if (active.image2) {
-    console.log('=======================================img2');
     const imageAddress = `actives/${imagePos(active.image2)}`;
     const storageRef = firebase.storage().ref().child(imageAddress);
     const response = await fetch(active.image2);
     const blob = await response.blob();
     const st2 = storageRef.put(blob);
     await st2;
-    url2 = await storageRef.getDownloadURL();
-    if (url2 !== undefined) {
-      item.imageUri2 = url2;
-    } else {
-      item.imageUri2 = '';
+    uri2 = await storageRef.getDownloadURL();
+    if (uri2 !== undefined) {
+      item.imageUri2 = uri2;
     }
   }
   if (active.image3) {
-    console.log('=======================================img3');
     const imageAddress = `actives/${imagePos(active.image3)}`;
     const storageRef = firebase.storage().ref().child(imageAddress);
     const response = await fetch(active.image3);
     const blob = await response.blob();
     const st3 = storageRef.put(blob);
     await st3;
-    url3 = await storageRef.getDownloadURL();
-    if (url3 !== undefined) {
-      item.imageUri3 = url3;
-    } else {
-      item.imageUri3 = '';
+    uri3 = await storageRef.getDownloadURL();
+    if (uri3 !== undefined) {
+      item.imageUri3 = uri3;
     }
   }
 
@@ -180,55 +210,49 @@ async function addActive(active) {
  * @param {*} NEWactive
  */
 async function updateActive(oldID, NEWactive) {
-  let url1;
-  let url2;
-  let url3;
+  let uri1;
+  let uri2;
+  let uri3;
 
   const NEWitem = NEWactive;
+  const db = firebase.firestore();
+  const activesRef = db.collection('actives');
 
   if (NEWactive.image1) {
-    console.log('=======================================img1');
     const imageAddress = `actives/${imagePos(NEWactive.image1)}`;
     const storageRef = firebase.storage().ref().child(imageAddress);
     const response = await fetch(NEWactive.image1);
     const blob = await response.blob();
     const st1 = storageRef.put(blob);
     await st1;
-    url1 = await storageRef.getDownloadURL();
-    if (url1 !== undefined) {
-      NEWitem.imageUri1 = url1;
-    } else {
-      NEWitem.imageUri1 = '';
+    uri1 = await storageRef.getDownloadURL();
+    if (uri1 !== undefined) {
+      NEWitem.imageUri1 = uri1;
     }
   }
+
   if (NEWactive.image2) {
-    console.log('=======================================img2');
     const imageAddress = `actives/${imagePos(NEWactive.image2)}`;
     const storageRef = firebase.storage().ref().child(imageAddress);
     const response = await fetch(NEWactive.image2);
     const blob = await response.blob();
     const st2 = storageRef.put(blob);
     await st2;
-    url2 = await storageRef.getDownloadURL();
-    if (url2 !== undefined) {
-      NEWitem.imageUri2 = url2;
-    } else {
-      NEWitem.imageUri2 = '';
+    uri2 = await storageRef.getDownloadURL();
+    if (uri2 !== undefined) {
+      NEWitem.imageUri2 = uri2;
     }
   }
   if (NEWactive.image3) {
-    console.log('=======================================img3');
     const imageAddress = `actives/${imagePos(NEWactive.image3)}`;
     const storageRef = firebase.storage().ref().child(imageAddress);
     const response = await fetch(NEWactive.image3);
     const blob = await response.blob();
     const st3 = storageRef.put(blob);
     await st3;
-    url3 = await storageRef.getDownloadURL();
-    if (url3 !== undefined) {
-      NEWitem.imageUri3 = url3;
-    } else {
-      NEWitem.imageUri3 = '';
+    uri3 = await storageRef.getDownloadURL();
+    if (uri3 !== undefined) {
+      NEWitem.imageUri3 = uri3;
     }
   }
 
@@ -238,11 +262,9 @@ async function updateActive(oldID, NEWactive) {
     }
   }
 
-  const db = firebase.firestore();
   console.log(NEWitem);
-  const activesRef = db.collection('actives').doc(oldID);
-  const doc = await activesRef.get();
-  await doc.set(NEWitem).then(() => { console.log('updateActive Successful'); });
+  activesRef.doc(oldID).set(NEWitem)
+    .then(() => { console.log('updateActive Successful'); });
 }
 
 async function getAllActive() {
@@ -293,6 +315,7 @@ async function getOneActive(id) {
     cost: querySnapshot.data().cost,
     limitNum: querySnapshot.data().limitNum,
     genre: querySnapshot.data().genre,
+    genreIndex: querySnapshot.data().genreIndex,
     link: querySnapshot.data().link,
     hostName: querySnapshot.data().hostName,
     hostPhone: querySnapshot.data().hostPhone,
@@ -340,7 +363,7 @@ async function getGenreActive(genre) {
       details: doc.data().details,
     });
   });
-  console.log('getGnereActive Successful');
+  console.log('getGenreActive Successful');
   return GenreArray;
 }
 
@@ -364,13 +387,10 @@ async function getActiveByName(name) {
   return GenreArray;
 }
 
-async function deleteOneActive() {
+async function deleteOneActive(deleteDocId) {
   const db = firebase.firestore();
   const activesRef = db.collection('actives');
-  const querySnapshot = await activesRef.where('name', '===', 'undefined').get();
-  querySnapshot.forEach((doc) => {
-    db.collection('actives').doc(doc.id).delete();
-  });
+  activesRef.doc(deleteDocId).delete();
   console.log('deleteOneActive Successful');
 }
 

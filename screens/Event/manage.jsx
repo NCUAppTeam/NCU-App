@@ -18,10 +18,12 @@ import styles from './style_folder/Styles_manage';
 
 function manage({ route, navigation }) {
   const Cd = route.params;
-  // console.log('123', JSON.stringify(Cd).slice(6, -1));
+  const passedID = JSON.stringify(Cd).slice(7, -2);
+
   const [active, setActive] = useState([]);
   useEffect(() => {
-    ActiveController.getOneActive(JSON.stringify(Cd).slice(7, -2)).then((res) => {
+    console.log('get id from personal_manage: ', passedID);
+    ActiveController.getOneActive(passedID).then((res) => {
       setActive(res);
       console.log(active);
     }).catch((err) => {
@@ -117,7 +119,7 @@ function manage({ route, navigation }) {
                   size={24}
                   color="darkblue"
                   onPress={() => {
-                    navigation.navigate('edit', { Cd: active.id });
+                    navigation.navigate('edit', { Cd: passedID });
                   }}
                 />
               </View>

@@ -174,6 +174,77 @@ async function addActive(active) {
   console.log('addActive Successful');
 }
 
+/**
+ *
+ * @param {*} oldID
+ * @param {*} NEWactive
+ */
+async function updateActive(oldID, NEWactive) {
+  let url1;
+  let url2;
+  let url3;
+
+  const NEWitem = NEWactive;
+
+  if (NEWactive.image1) {
+    console.log('=======================================img1');
+    const imageAddress = `actives/${imagePos(NEWactive.image1)}`;
+    const storageRef = firebase.storage().ref().child(imageAddress);
+    const response = await fetch(NEWactive.image1);
+    const blob = await response.blob();
+    const st1 = storageRef.put(blob);
+    await st1;
+    url1 = await storageRef.getDownloadURL();
+    if (url1 !== undefined) {
+      NEWitem.imageUri1 = url1;
+    } else {
+      NEWitem.imageUri1 = '';
+    }
+  }
+  if (NEWactive.image2) {
+    console.log('=======================================img2');
+    const imageAddress = `actives/${imagePos(NEWactive.image2)}`;
+    const storageRef = firebase.storage().ref().child(imageAddress);
+    const response = await fetch(NEWactive.image2);
+    const blob = await response.blob();
+    const st2 = storageRef.put(blob);
+    await st2;
+    url2 = await storageRef.getDownloadURL();
+    if (url2 !== undefined) {
+      NEWitem.imageUri2 = url2;
+    } else {
+      NEWitem.imageUri2 = '';
+    }
+  }
+  if (NEWactive.image3) {
+    console.log('=======================================img3');
+    const imageAddress = `actives/${imagePos(NEWactive.image3)}`;
+    const storageRef = firebase.storage().ref().child(imageAddress);
+    const response = await fetch(NEWactive.image3);
+    const blob = await response.blob();
+    const st3 = storageRef.put(blob);
+    await st3;
+    url3 = await storageRef.getDownloadURL();
+    if (url3 !== undefined) {
+      NEWitem.imageUri3 = url3;
+    } else {
+      NEWitem.imageUri3 = '';
+    }
+  }
+
+  if (NEWactive.cost) {
+    if (NEWactive.cost === 0 || NEWactive.cost === '') {
+      NEWitem.cost = '免費free';
+    }
+  }
+
+  const db = firebase.firestore();
+  console.log(NEWitem);
+  const activesRef = db.collection('actives').doc(oldID);
+  const doc = await activesRef.get();
+  await doc.set(NEWitem).then(() => { console.log('updateActive Successful'); });
+}
+
 async function getAllActive() {
   const db = firebase.firestore();
   const activesRef = db.collection('actives');
@@ -204,7 +275,6 @@ async function getAllActive() {
 }
 
 async function getOneActive(id) {
-  console.log('testnew', id);
   const db = firebase.firestore();
   const activesRef = db.collection('actives').doc(id);
 
@@ -215,6 +285,8 @@ async function getOneActive(id) {
     imageUri1: querySnapshot.data().imageUri1,
     imageUri2: querySnapshot.data().imageUri2,
     imageUri3: querySnapshot.data().imageUri3,
+    startTimeInNum: toDateString(querySnapshot.data().startTime),
+    endTimeInNum: toDateString(querySnapshot.data().endTime),
     startTimeWeekday: dateToWeekday(querySnapshot.data().startTime),
     endTimeWeekday: dateToWeekday(querySnapshot.data().endTime),
     place: querySnapshot.data().place,
@@ -228,7 +300,7 @@ async function getOneActive(id) {
     details: querySnapshot.data().details,
   }];
 
-  console.log(querySnapshot.data());
+  console.log(oneactive);
 
   console.log('getOneActive Successful');
 
@@ -342,7 +414,9 @@ async function fuseSearchName(searchString) {
 
 export default {
   firebaseConfig,
+  toDateString,
   addActive,
+  updateActive,
   getAllActive,
   getGenreActive,
   deleteOneActive,

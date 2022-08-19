@@ -15,6 +15,7 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import ActiveController from '../../controller/Active';
 import styles from './style_folder/Styles_manage';
+import Active from '../../controller/Active';
 
 function manage({ route, navigation }) {
   const Cd = route.params;
@@ -108,6 +109,21 @@ function manage({ route, navigation }) {
                   name="trash-2"
                   size={25}
                   color="darkblue"
+                  onPress={() => {
+                    Alert.alert(
+                      '確認刪除?',
+                      '確認後不可返回',
+                      [{ text: '取消' },
+                        {
+                          text: '確認',
+                          onPress: () => {
+                            ActiveController.deleteOneActive(passedID);
+                            navigation.navigate('list');
+                          },
+                        },
+                      ],
+                    );
+                  }}
                 />
               </View>
               <View style={{

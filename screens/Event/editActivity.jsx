@@ -24,33 +24,33 @@ function edit({ route, navigation }) {
     {
       id: '0',
       type: 'carpool',
-      link: 'https://firebasestorage.googleapis.com/v0/b/active-e1014.appspot.com/o/actives%2FAImKb4m8BxsM3lIyYBDCGJBWH6lXBB3FB9LZveoRoq1NsgarKrRJO5jdwBDNhlb-8AwXkOfVAf2a2x12HxONG-8%3Dw1280?alt=media&token=3d70e398-e41f-45a0-bd71-402a83ee9482',
+      link: 'https://lh3.googleusercontent.com/cLrc_IU_8wcqIeOgpUIgLz2EbBD6z6PrQLp5l0dtTsvPzsAZFxitJ5gzZ2VGz7Y4bIFrG8hQcTuYXzMHMvj-JN0=w1280',
     },
     1:
     {
       id: '1',
       type: 'exercising',
-      link: 'https://firebasestorage.googleapis.com/v0/b/active-e1014.appspot.com/o/actives%2F13WRw2-wmjCVD1QuSUjUjeJVOKnamdacrG9rYAu-6TEjxao7qkq4SaaL6I--LsqFdPiDto2MripJ0AeqX1jpLkw%3Dw1280?alt=media&token=30dc159f-b873-4c01-8095-47dcd7eb1e52',
+      link: 'https://lh3.googleusercontent.com/13WRw2-wmjCVD1QuSUjUjeJVOKnamdacrG9rYAu-6TEjxao7qkq4SaaL6I--LsqFdPiDto2MripJ0AeqX1jpLkw=w1280',
     },
     2: {
       id: '2',
       type: 'HangOut',
-      link: 'https://firebasestorage.googleapis.com/v0/b/active-e1014.appspot.com/o/actives%2F9-KpYqgT7JpVxN9YJdyZK6cs1KkjkW3FvJfNN_MKIWC0TJsF23naOw4xeELUkmKGpK0Ql-YwOYAV6Nm7a10aHBs%3Dw1280?alt=media&token=d3e971f5-4494-405a-a327-e215b7947fc8',
+      link: 'https://lh3.googleusercontent.com/9-KpYqgT7JpVxN9YJdyZK6cs1KkjkW3FvJfNN_MKIWC0TJsF23naOw4xeELUkmKGpK0Ql-YwOYAV6Nm7a10aHBs=w1280',
     },
     3: {
       id: '3',
       type: 'schoolEvent',
-      link: 'https://firebasestorage.googleapis.com/v0/b/active-e1014.appspot.com/o/actives%2FVhFxnnfJno8OaJEejdzQUfTkOPBXH0EkDpp_fZU1lAqe8mxsqUryurnBGu88QwWx1ZuW5dOMUwQdOOIlVHXZVdo%3Dw1280?alt=media&token=f728d517-3e01-40b3-853a-19530447ad84',
+      link: 'https://lh6.googleusercontent.com/VhFxnnfJno8OaJEejdzQUfTkOPBXH0EkDpp_fZU1lAqe8mxsqUryurnBGu88QwWx1ZuW5dOMUwQdOOIlVHXZVdo=w1280',
     },
     4: {
       id: '4',
       type: 'tiedEvent',
-      link: 'https://firebasestorage.googleapis.com/v0/b/active-e1014.appspot.com/o/actives%2FMI5GYVApUBawNSN07_TzzpjRT4Kso7Lr2xa0ryVIiRM6dvFQBsgr568WEfLCLtl1NeUia0wZQB8ZBrvATX7dvKo%3Dw1280?alt=media&token=72657e1a-0bc5-43db-b981-3da482226a49',
+      link: 'https://lh4.googleusercontent.com/MI5GYVApUBawNSN07_TzzpjRT4Kso7Lr2xa0ryVIiRM6dvFQBsgr568WEfLCLtl1NeUia0wZQB8ZBrvATX7dvKo=w1280',
     },
     5: {
       id: '5',
       type: 'clubEvent',
-      link: 'https://firebasestorage.googleapis.com/v0/b/active-e1014.appspot.com/o/actives%2F_4pimcui3FxablQrSCnQcZYCRBw8GHl-P604nwcGPnniiMrAoE23lCkWaaEgJ2flQbqcxTrn7PEp6GnehqFeruE%3Dw1280?alt=media&token=acca5f3f-000d-41bb-b7a2-c5575641cdfb',
+      link: 'https://lh6.googleusercontent.com/_4pimcui3FxablQrSCnQcZYCRBw8GHl-P604nwcGPnniiMrAoE23lCkWaaEgJ2flQbqcxTrn7PEp6GnehqFeruE=w1280',
     },
   };
   const Cd = route.params;
@@ -67,6 +67,7 @@ function edit({ route, navigation }) {
   const [OLDdata, setOLDdata] = useState([]);
   const [NEWdata, setNEWdata] = useState([]);
   let genreLINK; // 活動種類預設圖片連結
+  let genreID;
   let NoPicLink;
 
   const [image1, setImage1] = useState();

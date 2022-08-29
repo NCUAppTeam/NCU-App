@@ -15,7 +15,6 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import ActiveController from '../../controller/Active';
 import styles from './style_folder/Styles_manage';
-import Active from '../../controller/Active';
 
 function manage({ route, navigation }) {
   const Cd = route.params;

@@ -164,8 +164,6 @@ async function addActive(active) {
     if (uri1 !== undefined) {
       item.imageUri1 = uri1;
     }
-  } else {
-    item.imageUri1 = defaultLinks[values.indexOf(active.genre)].link;
   }
 
   if (active.image2) {
@@ -277,9 +275,8 @@ async function getAllActive() {
       id: doc.id,
       name: doc.data().name,
       imageUri1: doc.data().imageUri1,
-      imageUri2: doc.data().imageUri2,
-      imageUri3: doc.data().imageUri3,
       startTimeWeekday: dateToWeekday(doc.data().startTime),
+      startTimeInNum: toDateString(doc.data().startTime),
       place: doc.data().place,
       cost: doc.data().cost,
       limitNum: doc.data().limitNum,
@@ -301,12 +298,10 @@ async function getOneActive(id) {
   const activesRef = db.collection('actives').doc(id);
 
   const querySnapshot = await activesRef.get();
-  const oneactive = [{
+  const oneactive = {
     id: querySnapshot.id,
     name: querySnapshot.data().name,
     imageUri1: querySnapshot.data().imageUri1,
-    imageUri2: querySnapshot.data().imageUri2,
-    imageUri3: querySnapshot.data().imageUri3,
     startTimeInNum: toDateString(querySnapshot.data().startTime),
     endTimeInNum: toDateString(querySnapshot.data().endTime),
     startTimeWeekday: dateToWeekday(querySnapshot.data().startTime),
@@ -321,13 +316,18 @@ async function getOneActive(id) {
     hostPhone: querySnapshot.data().hostPhone,
     hostMail: querySnapshot.data().hostMail,
     details: querySnapshot.data().details,
-  }];
-
+  };
+  if (querySnapshot.data().imageUri2) {
+    oneactive.imageUri2 = querySnapshot.data().imageUri2;
+  }
+  if (querySnapshot.data().imageUri3) {
+    oneactive.imageUri3 = querySnapshot.data().imageUri3;
+  }
   console.log(oneactive);
 
   console.log('getOneActive Successful');
 
-  return oneactive;
+  return [oneactive];
 }
 
 /**

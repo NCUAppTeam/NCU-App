@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Text, View, SafeAreaView, ScrollView, RefreshControl, Image, Dimensions,
+  Text, View, SafeAreaView, ScrollView, RefreshControl, Image, Dimensions, TouchableOpacity, Alert,
 } from 'react-native';
+import Dialog, { DialogContent } from 'react-native-popup-dialog';
 import { Button } from 'react-native-elements';
 import {
   Ionicons, FontAwesome5, AntDesign, MaterialCommunityIcons, Feather,
 } from '@expo/vector-icons';
 import {
-  List, ListItem, NativeBaseProvider, Box, Divider, ZStack,
+  List, ListItem, NativeBaseProvider, Box, Divider, ZStack, Center,
 } from 'native-base';
 import styles from './style_folder/Styles_showActivityDetails';
 import ActiveController from '../../controller/Active';
@@ -42,6 +43,7 @@ function detailscreen({ route, navigation }) {
       setSlideDot3(true);
     }
   };
+  const [showDialog, setShowDialog] = useState(false);
   return (
 
     <NativeBaseProvider>
@@ -63,7 +65,7 @@ function detailscreen({ route, navigation }) {
             >
               <AntDesign
                 name="arrowleft"
-                size={28}
+                size={33}
                 color="#28527A"
                 onPress={() => { navigation.navigate('list'); }}
               />
@@ -85,31 +87,39 @@ function detailscreen({ route, navigation }) {
               horizontal
               onScroll={whenScrolling}
               showsHorizontalScrollIndicator={false}
+              style={imageUri2 || imageUri3
+                ? { marginLeft: Dimensions.get('window').width * 0.08 }
+                : { marginLeft: Dimensions.get('window').width * 0.138 }}
             >
-              {(imageUri2) && (
-              <View style={{
-                flexDirection: 'row',
-                paddingHorizontal: Dimensions.get('window').width * 0.07,
-              }}
-              >
-                <View style={{ marginRight: 10 }}>
-                  <Image
-                    style={styles.bigpic}
-                    source={{
-                      uri: imageUri1,
-                    }}
-                  />
-                </View>
+              {(imageUri1) && (
                 <View>
-                  <Image
-                    style={styles.bigpic}
-                    source={{
-                      uri: imageUri2,
-                    }}
-                  />
+                  <View>
+                    <Image
+                      style={styles.bigpic}
+                      source={{
+                        uri: imageUri1,
+                      }}
+                    />
+                  </View>
                 </View>
-                {(imageUri3) && (
-                <View style={{ marginLeft: 10 }}>
+              )}
+              {(imageUri2) && (
+                <View style={imageUri3
+                  ? { marginLeft: 10 }
+                  : { marginLeft: 10, marginRight: Dimensions.get('window').width * 0.07 }}
+                >
+                  <View>
+                    <Image
+                      style={styles.bigpic}
+                      source={{
+                        uri: imageUri2,
+                      }}
+                    />
+                  </View>
+                </View>
+              )}
+              {(imageUri3) && (
+                <View style={{ marginLeft: 10, marginRight: Dimensions.get('window').width * 0.07 }}>
                   <Image
                     style={styles.bigpic}
                     source={{
@@ -117,8 +127,6 @@ function detailscreen({ route, navigation }) {
                     }}
                   />
                 </View>
-                )}
-              </View>
               )}
             </ScrollView>
             <View style={{
@@ -178,14 +186,35 @@ function detailscreen({ route, navigation }) {
                     name="share-social-outline"
                     size={28}
                     color="#28527A"
+                    onPress={() => {
+                      setShowDialog(true);
+                    }}
                   />
+                  <Dialog
+                    width={414}
+                    height={380}
+                    visible={showDialog}
+                    dialogTitle={(
+                      <NativeBaseProvider>
+                        <Box style={{ width: 357, height: 36, alignItems: 'center' }}>
+                          <Text style={{ color: '#71717A', fontSize: 24, fontWeight: 400 }}>分享活動</Text>
+                        </Box>
+                      </NativeBaseProvider>
+                    )}
+                    onTouchOutside={() => {
+                      setShowDialog(false);
+                    }}
+                  >
+                    <DialogContent style={styles.shareBox} />
+
+                  </Dialog>
                 </View>
               </View>
               <View style={{ flexDirection: 'row', marginBottom: 10 }}>
                 <View style={{ justifyContent: 'center' }}>
                   <AntDesign
                     name="clockcircleo"
-                    size={20}
+                    size={16}
                     color="#28527A"
                   />
                 </View>
@@ -202,120 +231,187 @@ function detailscreen({ route, navigation }) {
                 </Text>
               </View>
               <View style={{
-                flexDirection: 'row', marginLeft: -1, marginBottom: 10,
+                flexDirection: 'row', marginLeft: -2, marginBottom: 10,
               }}
               >
                 <Ionicons
                   name="location-outline"
-                  size={22}
+                  size={20}
                   color="#28527A"
                 />
-                <Text style={{ fontSize: 16, marginLeft: -1 }}>
+                <Text style={{ fontSize: 16, marginLeft: -2 }}>
                   &emsp;
                   {place}
                 </Text>
               </View>
-              <View style={{ flexDirection: 'row' }}>
+              <View style={{ flexDirection: 'row', marginLeft: -2 }}>
                 <MaterialCommunityIcons
                   name="web"
-                  size={22}
+                  size={20}
                   color="#28527A"
                 />
-                <Text style={{ fontSize: 12 }}>
+                <Text style={{ fontSize: 16, marginBottom: 15 }}>
+                  &emsp;
                   {link}
                 </Text>
               </View>
             </View>
-            <View>
-              <Divider marginTop={7} bg="#bfbebe" /* my=margin-top and margin-bottom */ />
+            <View style={{ marginLeft: 25, marginRight: 15 }}>
+              <Divider bg="#d9d9d9" w={374}/* my=margin-top and margin-bottom */ />
             </View>
-            <View style={{ flexDirection: 'row' }}>
+            <View style={{ flexDirection: 'row', marginLeft: Dimensions.get('window').width * 0.08 }}>
               <View>
-                <Text style={{ fontSize: 18, marginTop: 10 }}>
-                        &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;參加費用
-                </Text>
                 <Ionicons
                   name="logo-usd"
-                  size={25}
-                  color="black"
-                  style={{ marginTop: 10 }}
+                  size={22}
+                  color="#28527A"
+                  style={{ marginTop: 10, marginLeft: -2 }}
                 >
-                  <Text style={{ fontSize: 18, marginTop: 10 }}>
-                    {'        '}
+                  <Text style={{ fontSize: 16, color: 'black' }}>
+                    &emsp;&emsp;&emsp;&emsp;
                     {cost}
                   </Text>
                 </Ionicons>
               </View>
-              <Divider marginTop={5} mx={10} orientation="vertical" bg="#bfbebe" /* my=margin-top and margin-bottom */ />
+              <Center>
+                <Divider my={2} marginLeft={Dimensions.get('window').width * 0.17} marginRight={5} h={28} orientation="vertical" bg="#bfbebe" /* my=margin-top and margin-bottom */ />
+              </Center>
               <View>
-                <Text style={{ fontSize: 18, marginTop: 10 }}>
-                        &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;人數上限
-                </Text>
                 <Feather
                   name="users"
-                  size={25}
-                  color="black"
-                  style={{ marginTop: 10 }}
+                  size={22}
+                  color="#28527A"
+                  style={{ marginTop: 10, marginLeft: -2 }}
                 >
-                  <Text style={{ fontSize: 18, marginTop: 10 }}>
-                    {'        '}
+                  <Text style={{ fontSize: 16, color: 'black' }}>
+                    &emsp;
+                    100 /
+                    {' '}
                     {limitNum}
+                    {' '}
+                    人
                   </Text>
                 </Feather>
               </View>
             </View>
-            <Divider marginTop={7} bg="#bfbebe" /* my=margin-top and margin-bottom */ />
-            <View>
-              <Text style={{ fontSize: 12, marginTop: 10 }}>
-                詳細資訊 |
+            <View style={{ marginLeft: 25, marginRight: 15 }}>
+              <Divider bg="#d9d9d9" w={374}/* my=margin-top and margin-bottom */ />
+            </View>
+            <View style={{ marginLeft: Dimensions.get('window').width * 0.08 }}>
+              <Text style={{
+                color: 'black', fontSize: 16, fontWeight: 'bold', marginVertical: 10,
+              }}
+              >
+                詳細資訊
               </Text>
               <Text>
                 {details}
               </Text>
             </View>
-            <Divider marginTop={7} bg="#bfbebe" /* my=margin-top and margin-bottom */ />
-            <View>
-              <Text style={{ fontSize: 12, marginTop: 10 }}>
-                更多聯絡資訊 |
+            <View style={{ marginLeft: 25, marginRight: 15 }}>
+              <Divider bg="#d9d9d9" w={374}/* my=margin-top and margin-bottom */ />
+            </View>
+            <View style={{ marginLeft: Dimensions.get('window').width * 0.08 }}>
+              <Text style={{
+                color: 'black', fontSize: 16, fontWeight: 'bold', marginVertical: 10,
+              }}
+              >
+                主辦人
               </Text>
-              <Text>
-                <Feather
-                  name="user"
-                  size={18}
-                  color="black"
-                  style={{ marginTop: 10 }}
-                >
-                  <Text style={{ fontSize: 12, marginTop: 10 }}>
-                    {'  聯絡人     '}
-                            &ensp;&ensp;|&ensp;
-                    {hostName}
-                  </Text>
-                </Feather>
-                {'\n'}
-                <Feather
-                  name="phone"
-                  size={18}
-                  color="black"
-                  style={{ marginTop: 10 }}
-                >
-                  <Text style={{ fontSize: 12, marginTop: 10 }}>
-                    {'  電話          | '}
-                    {hostPhone}
-                  </Text>
-                </Feather>
-                {'\n'}
-                <Feather
-                  name="mail"
-                  size={18}
-                  color="black"
-                  style={{ marginTop: 10 }}
-                >
-                  <Text style={{ fontSize: 12, marginTop: 10 }}>
-                    {'  電子郵件     | '}
-                    {hostMail}
-                  </Text>
-                </Feather>
-              </Text>
+            </View>
+            <View style={{ flexDirection: 'row', marginLeft: Dimensions.get('window').width * 0.08, marginBottom: 5 }}>
+              <Box style={{ flex: 1, marginLeft: Dimensions.get('window').width * 0.05, marginTop: Dimensions.get('window').width * 0.03 }}>
+                <Image
+                  style={styles.avatar}
+
+                />
+              </Box>
+              <Box style={{ flex: 3 }}>
+                <Text>
+                  <Box>
+                    <Feather
+                      name="user"
+                      size={20}
+                      color="#28527A"
+                      style={{ marginTop: 10 }}
+                    >
+                      <Text style={{ fontSize: 12, marginTop: 10 }}>
+                  &emsp;
+                        {hostName}
+                      </Text>
+                    </Feather>
+                  </Box>
+                  {'\n'}
+                  <Box>
+                    <Feather
+                      name="phone"
+                      size={18}
+                      color="#28527A"
+                      style={{ marginTop: 10 }}
+                    >
+                      <Text style={{ fontSize: 12, textAlignVertical: 'center' }}>
+                    &emsp;
+                        {hostPhone}
+                      </Text>
+                    </Feather>
+                  </Box>
+                  {'\n'}
+                  <Box>
+                    <Feather
+                      name="mail"
+                      size={18}
+                      color="#28527A"
+                      style={{ marginTop: 10 }}
+                    >
+                      <Text style={{ fontSize: 12, textAlignVertical: 'center' }}>
+                      &emsp;
+                        {hostMail}
+                      </Text>
+                    </Feather>
+                  </Box>
+                  {'\n'}
+                  <Box>
+                    <FontAwesome5
+                      name="comment"
+                      size={20}
+                      color="#28527A"
+                      style={{ marginTop: 10 }}
+                    >
+                      <Text style={{ fontSize: 12, marginTop: 10 }}>
+                        {'    '}
+                      </Text>
+
+                      <Text
+                        style={{ fontSize: 12, marginTop: 10, textDecorationLine: 'underline' }}
+                        onPress={() => {
+                          console.log('私訊功能仍在開發中');
+                        }}
+                      >
+                        私訊主辦人
+                      </Text>
+                    </FontAwesome5>
+                  </Box>
+                </Text>
+              </Box>
+            </View>
+            <View style={{ flexDirection: 'row', marginBottom: 20 }}>
+              <TouchableOpacity
+                style={styles.sentMessage}
+                onPress={() => {
+                  console.log('報名功能仍在開發中');
+                }}
+              >
+                <Text style={styles.sentButtonText}>
+                  <Feather
+                    name="users"
+                    size={16}
+                    color="#FBEEAC"
+                  />
+
+                  報名候補
+                </Text>
+
+              </TouchableOpacity>
             </View>
           </ScrollView>
         </SafeAreaView>

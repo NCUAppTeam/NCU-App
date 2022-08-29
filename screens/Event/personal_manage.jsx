@@ -234,7 +234,7 @@ function personal({ navigation }) {
                             />
                             <Text style={styles.Card3Text}>
                               {'   開始 ：'}
-                              {item.startNoYr}
+                              {item.startTimeInNum}
                             </Text>
                           </View>
                           <View style={styles.Card3Details}>

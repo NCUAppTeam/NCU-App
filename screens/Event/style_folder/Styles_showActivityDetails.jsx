@@ -1,6 +1,16 @@
 import { StyleSheet, Dimensions } from 'react-native';
 
 export default StyleSheet.create({
+  avatar: {
+    margin: 10,
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    borderBottomWidth: 2,
+    borderBottomEndRadius: 10,
+    borderEndColor: '#bfbebe',
+    backgroundColor: '#bfbfbf',
+  },
   bigpic: {
     width: 300,
     height: 300,
@@ -55,5 +65,27 @@ export default StyleSheet.create({
   imageDotIsHere: {
     color: '#F4D160',
     marginHorizontal: 2.5,
+  },
+  sentMessage: {
+    borderRadius: 30,
+    width: 130,
+    height: 38,
+    paddingVertical: 4,
+    marginVertical: 51,
+    backgroundColor: '#28527A',
+    marginLeft: Dimensions.get('window').width * 0.3,
+  },
+  sentButtonText: {
+    fontSize: 14,
+    textAlign: 'center',
+    paddingTop: 5,
+    color: '#FBEEAC',
+    fontWeight: 'bold',
+  },
+  shareBox: {
+    width: 414,
+    height: 380,
+    marginTop: 36,
+
   },
 });

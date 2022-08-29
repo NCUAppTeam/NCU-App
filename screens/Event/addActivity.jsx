@@ -52,7 +52,7 @@ function add({ navigation }) {
     if (!result.cancelled) {
       if (image1 === undefined) {
         setImage1(result.uri);
-        setData({ ...data, image1: defaultLinks[values.indexOf(data.genre)] });
+        setData({ ...data, image1: result.uri });
       } else if (image2 === undefined) {
         setImage2(result.uri);
         setData({ ...data, image2: result.uri });

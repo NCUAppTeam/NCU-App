@@ -158,7 +158,8 @@ function manage({ route, navigation }) {
                   />
                   <LinearGradient
                     colors={['#1784B2', '#1D74A0', '#28527A']}
-                    start={[0.1203, 0.6497, 0.9972]}
+                    start={[0.6497, 0.9972]}
+                    end={[0.1203, 0.6497]}
                     style={styles.manageSendMessagebtn}
                   >
                     <TouchableOpacity

@@ -22,33 +22,33 @@ function edit({ route, navigation }) {
   const defaultLinks = {
     0:
     {
-      id: '0',
+      genreid: '0',
       type: 'carpool',
       link: 'https://lh3.googleusercontent.com/cLrc_IU_8wcqIeOgpUIgLz2EbBD6z6PrQLp5l0dtTsvPzsAZFxitJ5gzZ2VGz7Y4bIFrG8hQcTuYXzMHMvj-JN0=w1280',
     },
     1:
     {
-      id: '1',
+      genreid: '1',
       type: 'exercising',
       link: 'https://lh3.googleusercontent.com/13WRw2-wmjCVD1QuSUjUjeJVOKnamdacrG9rYAu-6TEjxao7qkq4SaaL6I--LsqFdPiDto2MripJ0AeqX1jpLkw=w1280',
     },
     2: {
-      id: '2',
+      genreid: '2',
       type: 'HangOut',
       link: 'https://lh3.googleusercontent.com/9-KpYqgT7JpVxN9YJdyZK6cs1KkjkW3FvJfNN_MKIWC0TJsF23naOw4xeELUkmKGpK0Ql-YwOYAV6Nm7a10aHBs=w1280',
     },
     3: {
-      id: '3',
+      genreid: '3',
       type: 'schoolEvent',
       link: 'https://lh6.googleusercontent.com/VhFxnnfJno8OaJEejdzQUfTkOPBXH0EkDpp_fZU1lAqe8mxsqUryurnBGu88QwWx1ZuW5dOMUwQdOOIlVHXZVdo=w1280',
     },
     4: {
-      id: '4',
+      genreid: '4',
       type: 'tiedEvent',
       link: 'https://lh4.googleusercontent.com/MI5GYVApUBawNSN07_TzzpjRT4Kso7Lr2xa0ryVIiRM6dvFQBsgr568WEfLCLtl1NeUia0wZQB8ZBrvATX7dvKo=w1280',
     },
     5: {
-      id: '5',
+      genreid: '5',
       type: 'clubEvent',
       link: 'https://lh6.googleusercontent.com/_4pimcui3FxablQrSCnQcZYCRBw8GHl-P604nwcGPnniiMrAoE23lCkWaaEgJ2flQbqcxTrn7PEp6GnehqFeruE=w1280',
     },

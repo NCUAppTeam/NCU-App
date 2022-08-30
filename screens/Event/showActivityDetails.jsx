@@ -5,7 +5,7 @@ import {
 import Dialog, { DialogContent } from 'react-native-popup-dialog';
 import { Button } from 'react-native-elements';
 import {
-  Ionicons, FontAwesome5, AntDesign, MaterialCommunityIcons, Feather,
+  Ionicons, FontAwesome5, AntDesign, MaterialCommunityIcons, Feather, Fontisto, Octicons,
 } from '@expo/vector-icons';
 import {
   List, ListItem, NativeBaseProvider, Box, Divider, ZStack, Center,
@@ -44,14 +44,15 @@ function detailscreen({ route, navigation }) {
     }
   };
   const [showDialog, setShowDialog] = useState(false);
+  const [SignUp, setSignUp] = useState(false);
   return (
 
     <NativeBaseProvider>
       {active.map(({
-        name, imageUri1, startTimeWeekday, endTimeWeekday, place, limitNum, genre,
+        id, name, imageUri1, startTimeWeekday, endTimeWeekday, place, limitNum, genre,
         cost, link, hostName, hostPhone, hostMail, details, imageUri2, imageUri3,
       }) => (
-        <SafeAreaView style={styles.showActivityDetails_container}>
+        <SafeAreaView style={styles.showActivityDetails_container} key={id}>
           <View style={{
             flexDirection: 'row', width: 'auto',
           }}
@@ -89,7 +90,7 @@ function detailscreen({ route, navigation }) {
               showsHorizontalScrollIndicator={false}
               style={imageUri2 || imageUri3
                 ? { marginLeft: Dimensions.get('window').width * 0.08 }
-                : { marginLeft: Dimensions.get('window').width * 0.138 }}
+                : { marginLeft: Dimensions.get('window').width * 0.149 }}
             >
               {(imageUri1) && (
                 <View>
@@ -191,23 +192,110 @@ function detailscreen({ route, navigation }) {
                     }}
                   />
                   <Dialog
-                    width={414}
-                    height={380}
+                    width={Dimensions.get('window').width * 0.9}
+                    height={Dimensions.get('window').width}
                     visible={showDialog}
                     dialogTitle={(
                       <NativeBaseProvider>
-                        <Box style={{ width: 357, height: 36, alignItems: 'center' }}>
-                          <Text style={{ color: '#71717A', fontSize: 24, fontWeight: 400 }}>分享活動</Text>
+                        <Box>
+                          <Text style={{
+                            textAlign: 'center', color: '#71717A', fontSize: 24, fontWeight: '400', marginTop: 30,
+                          }}
+                          >
+                            分享活動
+                          </Text>
+                        </Box>
+                        <Box style={styles.shareBox}>
+                          <Fontisto
+                            name="link"
+                            size={25}
+                            color="#28527A"
+                            onPress={() => {
+                              console.log('Link Copied');
+                            }}
+                          >
+                            <Text style={{
+                              color: '#1f2937', fontSize: 20, fontWeight: '300',
+                            }}
+                            >
+                              &ensp;https://helloworld
+                            </Text>
+                          </Fontisto>
+                          <Box style={{ marginVertical: 20 }} />
+                          <FontAwesome5
+                            name="facebook"
+                            size={25}
+                            color="#28527A"
+                            onPress={() => {
+                              console.log('share to fb');
+                            }}
+                          >
+                            <Text style={{
+                              color: '#1f2937', fontSize: 20, fontWeight: '400',
+                            }}
+                            >
+                              &ensp;分享到 Facebook
+                            </Text>
+                          </FontAwesome5>
+                          <Box style={{ marginVertical: 20 }} />
+                          <FontAwesome5
+                            name="facebook-messenger"
+                            size={25}
+                            color="#28527A"
+                            onPress={() => {
+                              console.log('share to messenger');
+                            }}
+                          >
+                            <Text style={{
+                              color: '#1f2937', fontSize: 20, fontWeight: '400',
+                            }}
+                            >
+                              &ensp;分享到 Messenger
+                            </Text>
+                          </FontAwesome5>
+                          <Box style={{ marginVertical: 20 }} />
+                          <FontAwesome5
+                            name="discord"
+                            size={25}
+                            color="#28527A"
+                            style={{ marginLeft: 2 }}
+                            onPress={() => {
+                              console.log('share to discord');
+                            }}
+
+                          >
+                            <Text style={{
+                              color: '#1f2937', fontSize: 20, fontWeight: '400',
+                            }}
+                            >
+                              &ensp;分享到 Discord
+                            </Text>
+                          </FontAwesome5>
+                          <Box style={{ marginVertical: 20 }} />
+                          <Octicons
+                            name="x"
+                            size={28}
+                            color="#28527A"
+                            style={{ marginLeft: 5 }}
+                            onPress={() => {
+                              console.log('cancel');
+                              setShowDialog(false);
+                            }}
+                          >
+                            <Text style={{
+                              color: '#1f2937', fontSize: 20, fontWeight: '400',
+                            }}
+                            >
+                              &nbsp;&ensp;取消
+                            </Text>
+                          </Octicons>
                         </Box>
                       </NativeBaseProvider>
                     )}
                     onTouchOutside={() => {
                       setShowDialog(false);
                     }}
-                  >
-                    <DialogContent style={styles.shareBox} />
-
-                  </Dialog>
+                  />
                 </View>
               </View>
               <View style={{ flexDirection: 'row', marginBottom: 10 }}>
@@ -399,6 +487,37 @@ function detailscreen({ route, navigation }) {
                 style={styles.sentMessage}
                 onPress={() => {
                   console.log('報名功能仍在開發中');
+                  if (!SignUp) {
+                    Alert.alert(
+                      '確認報名?',
+                      '請盡可能確保能參加活動, 方便主辦方統計參與人數, 謝謝配合！',
+                      [{ text: '我要反悔T~T' },
+                        {
+                          text: '確認報名',
+                          onPress: () => (
+                            setSignUp(true)
+                            // navigation.navigate('manage', { Cd: passedID })
+                          ),
+                        },
+                      ],
+
+                    );
+                  } else {
+                    Alert.alert(
+                      '確認取消報名?',
+                      '如果時間上真的無法配合，那下次有機會再一起參加活動吧~~',
+                      [{ text: '想想還是參加吧XD' },
+                        {
+                          text: '忍痛取消報名',
+                          onPress: () => (
+                            setSignUp(false)
+                            // navigation.navigate('manage', { Cd: passedID })
+                          ),
+                        },
+                      ],
+
+                    );
+                  }
                 }}
               >
                 <Text style={styles.sentButtonText}>
@@ -407,8 +526,7 @@ function detailscreen({ route, navigation }) {
                     size={16}
                     color="#FBEEAC"
                   />
-
-                  報名候補
+                  {SignUp ? '取消報名' : '報名候補'}
                 </Text>
 
               </TouchableOpacity>

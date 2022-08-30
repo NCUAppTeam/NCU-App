@@ -39,7 +39,7 @@ export default StyleSheet.create({
     marginTop: 7,
   },
   CardInMore: {
-    height: 225,
+    height: Dimensions.get('window').width * 0.56,
     width: Dimensions.get('window').width * 0.4,
     borderRadius: 10,
     shadowColor: 'black',

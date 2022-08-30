@@ -73,7 +73,7 @@ export default StyleSheet.create({
     paddingVertical: 4,
     marginVertical: 51,
     backgroundColor: '#28527A',
-    marginLeft: Dimensions.get('window').width * 0.3,
+    marginLeft: Dimensions.get('window').width * 0.336,
   },
   sentButtonText: {
     fontSize: 14,
@@ -83,9 +83,9 @@ export default StyleSheet.create({
     fontWeight: 'bold',
   },
   shareBox: {
-    width: 414,
-    height: 380,
-    marginTop: 36,
-
+    width: 300,
+    height: 100,
+    marginTop: Dimensions.get('window').height * 0.02,
+    marginLeft: Dimensions.get('window').width * 0.04,
   },
 });

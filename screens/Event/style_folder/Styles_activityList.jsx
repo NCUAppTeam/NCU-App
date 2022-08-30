@@ -18,8 +18,8 @@ export default StyleSheet.create({
   },
   Card2: {
     marginTop: 10,
-    height: 225,
-    width: Dimensions.get('window').width * 0.4,
+    height: Dimensions.get('window').width * 0.52,
+    width: Dimensions.get('window').width * 0.37,
     borderRadius: 10,
     shadowColor: 'black',
     shadowOffset: {
@@ -35,8 +35,8 @@ export default StyleSheet.create({
     textAlign: 'center',
     justifyContent: 'center',
     alignContent: 'center',
-    alignItems: 'center',
     color: '#28527A',
+    marginTop: -5,
     fontSize: 14,
   },
   CardDetails: {

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   Text, View, SafeAreaView,
-  TouchableOpacity, Image, RefreshControl,
+  TouchableOpacity, Image, RefreshControl, Dimensions,
 } from 'react-native';
 import {
   Title, Card,
@@ -74,7 +74,8 @@ function personal({ navigation }) {
         <ZStack>
           <LinearGradient
             colors={['#1784B2', '#1D74A0', '#28527A']}
-            start={[0.1203, 0.6497, 0.9972]}
+            start={[0.6497, 0.9972]}
+            end={[0.1203, 0.6497]}
             style={{
               width: 323,
               height: 323,
@@ -155,9 +156,9 @@ function personal({ navigation }) {
               style={isPress === '參加中' ? styles.personalbtnPress : styles.personalbtn}
               onPress={() => {
                 setIsPress('參加中');
-              //  console.log(isPress);
-              //    ActiveController.getActiveByForm('participate')
-              //    .then(() => { onRefresh(); });
+                //  console.log(isPress);
+                //    ActiveController.getActiveByForm('participate')
+                //    .then(() => { onRefresh(); });
               }}
             >
               <Text style={isPress === '參加中' ? styles.personalbtnPressText : styles.personalbtnText}>
@@ -275,6 +276,7 @@ function personal({ navigation }) {
               numColumns={2}
               data={showNow}
               keyExtractor={(item) => item.id}
+              contentContainerStyle={{ marginLeft: Dimensions.get('window').width * 0.043, justifyContent: 'space-between' }}
               refreshControl={(
                 <RefreshControl
                   refreshing={refreshing}
@@ -298,15 +300,11 @@ function personal({ navigation }) {
                         <AntDesign
                           name="clockcircleo"
                           size={12}
-                          style={{ justifyContent: 'center' }}
+                          style={{ marginLeft: Dimensions.get('window').width * 0.006, marginTop: 2 }}
                         />
                         <Text style={styles.CardText}>
-                          {'   '}
-                          {item.startNoYr}
-                        </Text>
-                        <Text style={styles.CardText}>
-                          {' ~ '}
-                          {item.endNoYr}
+                          &ensp;
+                          {item.startTimeWeekday}
                         </Text>
                       </Box>
                       <Box style={{ marginHorizontal: 8, flexDirection: 'row' }}>
@@ -315,8 +313,8 @@ function personal({ navigation }) {
                           size={15}
                           color="black"
                         />
-                        <Text style={{ fontSize: 12 }}>
-                          {'  '}
+                        <Text style={styles.CardText}>
+                          &ensp;
                           {item.place}
                         </Text>
                       </Box>
@@ -331,6 +329,7 @@ function personal({ navigation }) {
               numColumns={2}
               data={showEnd}
               keyExtractor={(item) => item.id}
+              contentContainerStyle={{ marginLeft: Dimensions.get('window').width * 0.043, justifyContent: 'space-between' }}
               refreshControl={(
                 <RefreshControl
                   refreshing={refreshing}
@@ -354,15 +353,11 @@ function personal({ navigation }) {
                         <AntDesign
                           name="clockcircleo"
                           size={12}
-                          style={{ justifyContent: 'center' }}
+                          style={{ marginLeft: Dimensions.get('window').width * 0.006, marginTop: 2 }}
                         />
                         <Text style={styles.CardText}>
-                          {'   '}
-                          {item.startNoYr}
-                        </Text>
-                        <Text style={styles.CardText}>
-                          {' ~ '}
-                          {item.endNoYr}
+                          &ensp;
+                          {item.startTimeWeekday}
                         </Text>
                       </Box>
                       <Box style={{ marginHorizontal: 8, flexDirection: 'row' }}>
@@ -371,8 +366,8 @@ function personal({ navigation }) {
                           size={15}
                           color="black"
                         />
-                        <Text style={{ fontSize: 12 }}>
-                          {'  '}
+                        <Text style={styles.CardText}>
+                          &ensp;
                           {item.place}
                         </Text>
                       </Box>

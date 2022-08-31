@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {
   Text, View, SafeAreaView, ScrollView, RefreshControl, Image, Dimensions, TouchableOpacity, Alert,
 } from 'react-native';
-import Dialog, { DialogContent } from 'react-native-popup-dialog';
+import Dialog from 'react-native-popup-dialog';
 import { Button } from 'react-native-elements';
 import {
   Ionicons, FontAwesome5, AntDesign, MaterialCommunityIcons, Feather, Fontisto, Octicons,

@@ -8,33 +8,33 @@ const defaultLinks = {
     {
       id: '0',
       type: 'carpool',
-      link: 'https://lh3.googleusercontent.com/cLrc_IU_8wcqIeOgpUIgLz2EbBD6z6PrQLp5l0dtTsvPzsAZFxitJ5gzZ2VGz7Y4bIFrG8hQcTuYXzMHMvj-JN0=w1280',
+      link: 'https://firebasestorage.googleapis.com/v0/b/active-e1014.appspot.com/o/actives%2FAImKb4m8BxsM3lIyYBDCGJBWH6lXBB3FB9LZveoRoq1NsgarKrRJO5jdwBDNhlb-8AwXkOfVAf2a2x12HxONG-8%3Dw1280?alt=media&token=3d70e398-e41f-45a0-bd71-402a83ee9482',
     },
   1:
     {
       id: '1',
       type: 'exercising',
-      link: 'https://lh3.googleusercontent.com/13WRw2-wmjCVD1QuSUjUjeJVOKnamdacrG9rYAu-6TEjxao7qkq4SaaL6I--LsqFdPiDto2MripJ0AeqX1jpLkw=w1280',
+      link: 'https://firebasestorage.googleapis.com/v0/b/active-e1014.appspot.com/o/actives%2F13WRw2-wmjCVD1QuSUjUjeJVOKnamdacrG9rYAu-6TEjxao7qkq4SaaL6I--LsqFdPiDto2MripJ0AeqX1jpLkw%3Dw1280?alt=media&token=30dc159f-b873-4c01-8095-47dcd7eb1e52',
     },
   2: {
     id: '2',
     type: 'HangOut',
-    link: 'https://lh3.googleusercontent.com/9-KpYqgT7JpVxN9YJdyZK6cs1KkjkW3FvJfNN_MKIWC0TJsF23naOw4xeELUkmKGpK0Ql-YwOYAV6Nm7a10aHBs=w1280',
+    link: 'https://firebasestorage.googleapis.com/v0/b/active-e1014.appspot.com/o/actives%2F9-KpYqgT7JpVxN9YJdyZK6cs1KkjkW3FvJfNN_MKIWC0TJsF23naOw4xeELUkmKGpK0Ql-YwOYAV6Nm7a10aHBs%3Dw1280?alt=media&token=d3e971f5-4494-405a-a327-e215b7947fc8',
   },
   3: {
     id: '3',
     type: 'schoolEvent',
-    link: 'https://lh6.googleusercontent.com/VhFxnnfJno8OaJEejdzQUfTkOPBXH0EkDpp_fZU1lAqe8mxsqUryurnBGu88QwWx1ZuW5dOMUwQdOOIlVHXZVdo=w1280',
+    link: 'https://firebasestorage.googleapis.com/v0/b/active-e1014.appspot.com/o/actives%2FVhFxnnfJno8OaJEejdzQUfTkOPBXH0EkDpp_fZU1lAqe8mxsqUryurnBGu88QwWx1ZuW5dOMUwQdOOIlVHXZVdo%3Dw1280?alt=media&token=f728d517-3e01-40b3-853a-19530447ad84',
   },
   4: {
     id: '4',
     type: 'tiedEvent',
-    link: 'https://lh4.googleusercontent.com/MI5GYVApUBawNSN07_TzzpjRT4Kso7Lr2xa0ryVIiRM6dvFQBsgr568WEfLCLtl1NeUia0wZQB8ZBrvATX7dvKo=w1280',
+    link: 'https://firebasestorage.googleapis.com/v0/b/active-e1014.appspot.com/o/actives%2FMI5GYVApUBawNSN07_TzzpjRT4Kso7Lr2xa0ryVIiRM6dvFQBsgr568WEfLCLtl1NeUia0wZQB8ZBrvATX7dvKo%3Dw1280?alt=media&token=72657e1a-0bc5-43db-b981-3da482226a49',
   },
   5: {
     id: '5',
     type: 'clubEvent',
-    link: 'https://lh6.googleusercontent.com/_4pimcui3FxablQrSCnQcZYCRBw8GHl-P604nwcGPnniiMrAoE23lCkWaaEgJ2flQbqcxTrn7PEp6GnehqFeruE=w1280',
+    link: 'https://firebasestorage.googleapis.com/v0/b/active-e1014.appspot.com/o/actives%2F_4pimcui3FxablQrSCnQcZYCRBw8GHl-P604nwcGPnniiMrAoE23lCkWaaEgJ2flQbqcxTrn7PEp6GnehqFeruE%3Dw1280?alt=media&token=acca5f3f-000d-41bb-b7a2-c5575641cdfb',
   },
 };
 
@@ -164,6 +164,8 @@ async function addActive(active) {
     if (uri1 !== undefined) {
       item.imageUri1 = uri1;
     }
+  } else {
+    item.imageUri1 = defaultLinks[values.indexOf(active.genre)].link;
   }
 
   if (active.image2) {
@@ -194,6 +196,9 @@ async function addActive(active) {
   if (active.cost === 0 || active.cost === '') {
     item.cost = '免費free';
   }
+  if (active.limitNum === 0) {
+    item.limitNum = '人數沒限制';
+  }
   const db = firebase.firestore();
   const activesRef = db.collection('actives');
   console.log('active');
@@ -211,12 +216,36 @@ async function updateActive(oldID, NEWactive) {
   let uri1;
   let uri2;
   let uri3;
+  let defaultRef;
 
   const NEWitem = NEWactive;
   const db = firebase.firestore();
   const activesRef = db.collection('actives');
+  const querySnapshot = await activesRef.doc(oldID).get();
 
-  if (NEWactive.image1) {
+  if (NEWactive.genre) {
+    defaultRef = defaultLinks[values.indexOf(NEWactive.genre)].link;
+  } else {
+    defaultRef = defaultLinks[values.indexOf(querySnapshot.data().genre)].link;
+  }
+
+  if (!NEWactive.image1 && NEWactive.genre && querySnapshot.data().imageUri1 === defaultLinks[values.indexOf(querySnapshot.data().genre)].link) {
+    console.log('new genre link');
+    NEWitem.imageUri1 = defaultRef;
+  } else if (!NEWactive.image1 && !NEWactive.genre && querySnapshot.data().imageUri1 === defaultLinks[values.indexOf(querySnapshot.data().genre)].link) {
+    console.log('new genre link');
+    NEWitem.imageUri1 = defaultRef;
+  } else if (NEWactive.image1 === values.indexOf(querySnapshot.data().genre)) {
+    NEWitem.imageUri1 = defaultRef;
+  } else if (NEWactive.image1 === values.indexOf(NEWactive.genre)) {
+    NEWitem.imageUri1 = defaultRef;
+  } else if (NEWactive.image1) {
+    if (NEWactive.image1 === querySnapshot.data().imageUri2) {
+      activesRef.doc(oldID).update({
+        image2: firebase.firestore.FieldValue.delete(),
+        imageUri2: firebase.firestore.FieldValue.delete(),
+      });
+    }
     const imageAddress = `actives/${imagePos(NEWactive.image1)}`;
     const storageRef = firebase.storage().ref().child(imageAddress);
     const response = await fetch(NEWactive.image1);
@@ -230,6 +259,12 @@ async function updateActive(oldID, NEWactive) {
   }
 
   if (NEWactive.image2) {
+    if (NEWactive.image2 === querySnapshot.data().imageUri3) {
+      activesRef.doc(oldID).update({
+        image3: firebase.firestore.FieldValue.delete(),
+        imageUri3: firebase.firestore.FieldValue.delete(),
+      });
+    }
     const imageAddress = `actives/${imagePos(NEWactive.image2)}`;
     const storageRef = firebase.storage().ref().child(imageAddress);
     const response = await fetch(NEWactive.image2);
@@ -240,7 +275,10 @@ async function updateActive(oldID, NEWactive) {
     if (uri2 !== undefined) {
       NEWitem.imageUri2 = uri2;
     }
+  } else {
+    delete NEWitem.image2;
   }
+
   if (NEWactive.image3) {
     const imageAddress = `actives/${imagePos(NEWactive.image3)}`;
     const storageRef = firebase.storage().ref().child(imageAddress);
@@ -252,6 +290,8 @@ async function updateActive(oldID, NEWactive) {
     if (uri3 !== undefined) {
       NEWitem.imageUri3 = uri3;
     }
+  } else {
+    delete NEWitem.image3;
   }
 
   if (NEWactive.cost) {
@@ -259,9 +299,14 @@ async function updateActive(oldID, NEWactive) {
       NEWitem.cost = '免費free';
     }
   }
+  if (NEWactive.limitNum) {
+    if (NEWactive.limitNum === 0) {
+      NEWitem.limitNum = '人數沒限制';
+    }
+  }
 
   console.log(NEWitem);
-  activesRef.doc(oldID).set(NEWitem)
+  activesRef.doc(oldID).set(NEWitem, { merge: true })
     .then(() => { console.log('updateActive Successful'); });
 }
 

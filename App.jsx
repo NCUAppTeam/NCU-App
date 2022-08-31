@@ -127,7 +127,7 @@ function MainApp() {
 }
 
 export default function App() {
-  if (!firebase.apps.length) {
+  /*if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
   } else {
     firebase.app();
@@ -149,6 +149,15 @@ export default function App() {
       }}
     >
       { auth ? <MainApp /> : <AuthScreen />}
+    </PaperProvider>
+  );*/
+  return (
+    <PaperProvider
+      settings={{
+        icon: (props) => <AwesomeIcon {...props} />,
+      }}
+    >
+      <MainApp />
     </PaperProvider>
   );
 }

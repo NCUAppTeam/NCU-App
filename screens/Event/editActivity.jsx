@@ -15,44 +15,10 @@ import {
 } from 'native-base';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as ImagePicker from 'expo-image-picker';
-import ActiveController from '../../controller/Active';
 import styles from './style_folder/Styles_editActivity';
+import ActiveController from '../../controller/Active';
 
 function edit({ route, navigation }) {
-  const defaultLinks = {
-    0:
-    {
-      genreid: '0',
-      type: 'carpool',
-      link: 'https://lh3.googleusercontent.com/cLrc_IU_8wcqIeOgpUIgLz2EbBD6z6PrQLp5l0dtTsvPzsAZFxitJ5gzZ2VGz7Y4bIFrG8hQcTuYXzMHMvj-JN0=w1280',
-    },
-    1:
-    {
-      genreid: '1',
-      type: 'exercising',
-      link: 'https://lh3.googleusercontent.com/13WRw2-wmjCVD1QuSUjUjeJVOKnamdacrG9rYAu-6TEjxao7qkq4SaaL6I--LsqFdPiDto2MripJ0AeqX1jpLkw=w1280',
-    },
-    2: {
-      genreid: '2',
-      type: 'HangOut',
-      link: 'https://lh3.googleusercontent.com/9-KpYqgT7JpVxN9YJdyZK6cs1KkjkW3FvJfNN_MKIWC0TJsF23naOw4xeELUkmKGpK0Ql-YwOYAV6Nm7a10aHBs=w1280',
-    },
-    3: {
-      genreid: '3',
-      type: 'schoolEvent',
-      link: 'https://lh6.googleusercontent.com/VhFxnnfJno8OaJEejdzQUfTkOPBXH0EkDpp_fZU1lAqe8mxsqUryurnBGu88QwWx1ZuW5dOMUwQdOOIlVHXZVdo=w1280',
-    },
-    4: {
-      genreid: '4',
-      type: 'tiedEvent',
-      link: 'https://lh4.googleusercontent.com/MI5GYVApUBawNSN07_TzzpjRT4Kso7Lr2xa0ryVIiRM6dvFQBsgr568WEfLCLtl1NeUia0wZQB8ZBrvATX7dvKo=w1280',
-    },
-    5: {
-      genreid: '5',
-      type: 'clubEvent',
-      link: 'https://lh6.googleusercontent.com/_4pimcui3FxablQrSCnQcZYCRBw8GHl-P604nwcGPnniiMrAoE23lCkWaaEgJ2flQbqcxTrn7PEp6GnehqFeruE=w1280',
-    },
-  };
   const Cd = route.params;
   const passedID = JSON.stringify(Cd).slice(7, -2);
   // 必填檢查參數
@@ -66,13 +32,13 @@ function edit({ route, navigation }) {
   //
   const [OLDdata, setOLDdata] = useState([]);
   const [NEWdata, setNEWdata] = useState([]);
-  let genreLINK; // 活動種類預設圖片連結
-  let genreID;
+  const [genreID, setgenreID] = useState();
   let NoPicLink;
 
   const [image1, setImage1] = useState();
   const [image2, setImage2] = useState();
   const [image3, setImage3] = useState();
+  const [noPhoto, setNoPhoto] = useState(false);
 
   const [isPress, setIsPress] = useState('');
   const values = ['揪人共乘', '揪人運動', '揪人遊戲', '校園活動', '系上活動', '社團活動'];
@@ -89,6 +55,7 @@ function edit({ route, navigation }) {
     setRefreshing(true);
     ActiveController.getOneActive(passedID).then((res) => {
       setOLDdata(res[0]);
+      setgenreID(values.indexOf(res[0].genre));
       setImage1(res[0].imageUri1);
       if (res[0].imageUri2) {
         setImage2(res[0].imageUri2);
@@ -125,7 +92,7 @@ function edit({ route, navigation }) {
     if (!result.cancelled) {
       if (image1 === undefined) {
         setImage1(result.uri);
-        setNEWdata({ ...NEWdata, image1: genreLINK });
+        setNEWdata({ ...NEWdata, image1: result.uri });
       } else if (image2 === undefined) {
         setImage2(result.uri);
         setNEWdata({ ...NEWdata, image2: result.uri });
@@ -330,7 +297,7 @@ function edit({ route, navigation }) {
                     underlayColor="#28527A" // 切換時候的顏色
                     onPress={() => {
                       setIsPress(value);
-                      genreLINK = defaultLinks[values.indexOf(value)].link;
+                      setgenreID(values.indexOf(value));
                       setNEWdata({ ...NEWdata, genre: value });
                       setGenre(true);
                     }}
@@ -589,16 +556,23 @@ function edit({ route, navigation }) {
                       style={{ marginLeft: 68, marginTop: 6 }}
                       onPress={() => {
                         setImage1(NoPicLink);
-                        setNEWdata({ ...NEWdata, image1: NoPicLink });
                         if (image2) {
                           setImage1(image2);
+                          NEWdata.image1 = image2;
                           setImage2(NoPicLink);
                           setNEWdata({ ...NEWdata, image2: NoPicLink });
                         }
                         if (image3) {
+                          setImage1(image2);
+                          NEWdata.image1 = image2;
                           setImage2(image3);
+                          NEWdata.image2 = image3;
                           setImage3(NoPicLink);
                           setNEWdata({ ...NEWdata, image3: NoPicLink });
+                        }
+                        if (!NEWdata.image1) {
+                          setNoPhoto(true);
+                          setNEWdata({ ...NEWdata, image1: genreID });
                         }
                       }}
                     />
@@ -616,9 +590,9 @@ function edit({ route, navigation }) {
                       style={{ marginLeft: 68, marginTop: 6 }}
                       onPress={() => {
                         setImage2(NoPicLink);
-                        setNEWdata({ ...NEWdata, image2: NoPicLink });
                         if (image3) {
                           setImage2(image3);
+                          NEWdata.image2 = image3;
                           setImage3(NoPicLink);
                           setNEWdata({ ...NEWdata, image3: NoPicLink });
                         }
@@ -689,7 +663,7 @@ function edit({ route, navigation }) {
                   <TextInput
                     style={styles.input}
                     placeholder="電子郵件"
-                    defaultValue={NEWdata.HostMail}
+                    defaultValue={OLDdata.HostMail}
                     value={NEWdata.hostMail}
                     onChangeText={(text) => setNEWdata({ ...NEWdata, hostMail: text })}
                     selectionColor="#ccc"

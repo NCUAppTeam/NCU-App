@@ -38,8 +38,8 @@ function add({ navigation }) {
   const [image1, setImage1] = useState();
   const [image2, setImage2] = useState();
   const [image3, setImage3] = useState();
-
   let NoPicLink;
+
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -509,11 +509,13 @@ function add({ navigation }) {
                         setData({ ...data, image1: NoPicLink });
                         if (image2) {
                           setImage1(image2);
+                          setData({ ...data, image1: image2 });
                           setImage2(NoPicLink);
                           setData({ ...data, image2: NoPicLink });
                         }
                         if (image3) {
                           setImage2(image3);
+                          setData({ ...data, image2: image3 });
                           setImage3(NoPicLink);
                           setData({ ...data, image3: NoPicLink });
                         }
@@ -536,6 +538,7 @@ function add({ navigation }) {
                           setData({ ...data, image2: NoPicLink });
                           if (image3) {
                             setImage2(image3);
+                            setData({ ...data, image2: image3 });
                             setImage3(NoPicLink);
                             setData({ ...data, image3: NoPicLink });
                           }

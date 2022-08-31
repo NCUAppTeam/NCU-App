@@ -142,9 +142,9 @@ function manage({ route, navigation }) {
           </View>
           <View style={{ flex: 1 }}>
             {active.map(({
-              name, limitNum,
+              id, name, limitNum,
             }) => (
-              <Box style={{ marginTop: 20, marginHorizontal: 8 }}>
+              <Box key={id} style={{ marginTop: 20, marginHorizontal: 8 }}>
                 <Heading>{name}</Heading>
                 <Divider my={2} bg="#bfbebe" /* my=margin-top and margin-bottom */ />
                 <View style={{ flexDirection: 'column' }}>

@@ -117,7 +117,7 @@ function manage({ route, navigation }) {
                           text: '確認',
                           onPress: () => {
                             ActiveController.deleteOneActive(passedID);
-                            navigation.navigate('list');
+                            navigation.navigate('personal');
                           },
                         },
                       ],

@@ -27,7 +27,7 @@ function personal({ navigation }) {
   }, []);
   const [showManage, setShowManage] = useState([]);
   useEffect(() => {
-    ActiveController.getAllActive().then((res) => {
+    ActiveController.getHostedEvent().then((res) => {
       setShowManage(res);
     }).catch((err) => {
       throw err;
@@ -48,7 +48,7 @@ function personal({ navigation }) {
   const onRefresh = () => {
     setRefreshing(true);
     if (isPress === '管理活動') {
-      ActiveController.getAllActive().then((res) => {
+      ActiveController.getHostedEvent().then((res) => {
         setShowManage(res);
         setRefreshing(false);
       });
@@ -284,7 +284,7 @@ function personal({ navigation }) {
                 />
               )}
               renderItem={({ item }) => (
-                <Pressable onPress={() => { navigation.navigate('details', { Cd: item.id }); }}>
+                <Pressable onPress={() => { navigation.navigate('details', { Cd: item.id, prepage: 'personal' }); }}>
                   <HStack space={2}>
                     <VStack style={styles.CardInPersonal}>
                       <Image
@@ -337,7 +337,7 @@ function personal({ navigation }) {
                 />
               )}
               renderItem={({ item }) => (
-                <Pressable onPress={() => { navigation.navigate('details', { Cd: item.id }); }}>
+                <Pressable onPress={() => { navigation.navigate('details', { Cd: item.id, prepage: 'personal' }); }}>
                   <HStack space={2}>
                     <VStack style={styles.CardInPersonal}>
                       <Image

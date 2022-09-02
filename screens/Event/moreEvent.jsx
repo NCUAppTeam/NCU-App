@@ -79,7 +79,7 @@ function more({ navigation }) {
             renderItem={({ item }) => (
               <Pressable
                 onPress={() => {
-                  navigation.navigate('details', { Cd: item.id });
+                  navigation.navigate('details', { Cd: item.id, prepage: 'more' });
                 }}
               >
                 <VStack style={styles.CardInMore}>

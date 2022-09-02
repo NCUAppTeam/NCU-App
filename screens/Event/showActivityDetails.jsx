@@ -15,10 +15,13 @@ import ActiveController from '../../controller/Active';
 
 function detailscreen({ route, navigation }) {
   const Cd = route.params;
+  console.log(JSON.stringify(Cd).slice(7, 27));
+  const prepage = JSON.stringify(Cd).slice(40, -2);
+  console.log(prepage);
   // console.log('123', JSON.stringify(Cd).slice(6, -1));
   const [active, setActive] = useState([]);
   useEffect(() => {
-    ActiveController.getOneActive(JSON.stringify(Cd).slice(7, -2)).then((res) => {
+    ActiveController.getOneActive(JSON.stringify(Cd).slice(7, 27)).then((res) => {
       setActive(res);
     }).catch((err) => {
       throw err;
@@ -68,7 +71,7 @@ function detailscreen({ route, navigation }) {
                 name="arrowleft"
                 size={33}
                 color="#28527A"
-                onPress={() => { navigation.navigate('list'); }}
+                onPress={() => { navigation.navigate(prepage); }}
               />
             </View>
             <View style={{
@@ -495,7 +498,8 @@ function detailscreen({ route, navigation }) {
                         {
                           text: '確認報名',
                           onPress: () => (
-                            setSignUp(true)
+                            ActiveController.signUp().then(() => setSignUp(true))
+
                             // navigation.navigate('manage', { Cd: passedID })
                           ),
                         },

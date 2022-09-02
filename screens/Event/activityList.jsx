@@ -98,7 +98,7 @@ function list({ navigation }) {
                     key={id}
                     style={styles.Card2}
                     onPress={() => {
-                      navigation.navigate('details', { Cd: id });
+                      navigation.navigate('details', { Cd: id, prepage: 'list' });
                     }}
                   >
                     <Card.Content>
@@ -161,7 +161,7 @@ function list({ navigation }) {
                     key={id}
                     style={styles.Card2}
                     onPress={() => {
-                      navigation.navigate('details', { Cd: id });
+                      navigation.navigate('details', { Cd: id, prepage: 'list' });
                     }}
                   >
                     <Card.Content>
@@ -208,13 +208,13 @@ function list({ navigation }) {
             </ScrollView>
           </View>
         </ScrollView>
-        {/* <View>
+        <View>
           <Button
             style={styles.button}
             onPress={() => {
-              ActiveController.deleteAllActive().then(() => { onRefresh(); });
+              ActiveController.getHostedEvent().then(() => { onRefresh(); });
             }}
-            title="刪除所有活動"
+            title="加user"
             type="outline"
             icon={(
               <Ionicons
@@ -224,7 +224,7 @@ function list({ navigation }) {
               />
           )}
           />
-        </View> */}
+        </View>
       </NativeBaseProvider>
     </SafeAreaView>
   );

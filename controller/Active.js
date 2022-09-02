@@ -306,6 +306,33 @@ async function updateActive(oldID, NEWactive) {
   }
 
   console.log(NEWitem);
+  if (NEWitem.imageUri1) {
+    if (querySnapshot.data().imageUri1 !== defaultLinks[values.indexOf(querySnapshot.data().genre)].link) {
+      console.log('image 1 has been replaced, old image has been deleted');
+      // const image1Ref = firebase.storage().refFromURL(querySnapshot.data().imageUri1);
+      // image1Ref.delete().then(() => {
+      //   console.log('Image 1 has been deleted!');
+      // }).catch((err) => {
+      //   console.log(err);
+      // });
+    }
+  }
+  if (NEWitem.imageUri2) {
+    const image2Ref = firebase.storage().refFromURL(querySnapshot.data().imageUri2);
+    image2Ref.delete().then(() => {
+      console.log('Image 2 has been deleted!');
+    }).catch((err) => {
+      console.log(err);
+    });
+  }
+  if (NEWitem.imageUri3) {
+    const image3Ref = firebase.storage().refFromURL(querySnapshot.data().imageUri3);
+    image3Ref.delete().then(() => {
+      console.log('Image 3 has been deleted!');
+    }).catch((err) => {
+      console.log(err);
+    });
+  }
   activesRef.doc(oldID).set(NEWitem, { merge: true })
     .then(() => { console.log('updateActive Successful'); });
 }
@@ -333,7 +360,7 @@ async function getAllActive() {
       details: doc.data().details,
     });
   });
-  console.log(activeArray);
+  // console.log(activeArray);
   console.log('getAllActive Successful');
   return activeArray;
 }
@@ -435,7 +462,35 @@ async function getActiveByName(name) {
 async function deleteOneActive(deleteDocId) {
   const db = firebase.firestore();
   const activesRef = db.collection('actives');
+  const deletedDoc = await activesRef.doc(deleteDocId).get();
+  if (deletedDoc.data().imageUri1 !== defaultLinks[values.indexOf(deletedDoc.data().genre)].link) {
+    if (deletedDoc.data().imageUri1) {
+      const image1Ref = firebase.storage().refFromURL(deletedDoc.data().imageUri1);
+      image1Ref.delete().then(() => {
+        console.log('Image 1 has been deleted!');
+      }).catch((err) => {
+        console.log(err);
+      });
+    }
+  }
+  if (deletedDoc.data().imageUri2) {
+    const image2Ref = firebase.storage().refFromURL(deletedDoc.data().imageUri2);
+    image2Ref.delete().then(() => {
+      console.log('Image 2 has been deleted!');
+    }).catch((err) => {
+      console.log(err);
+    });
+  }
+  if (deletedDoc.data().imageUri3) {
+    const image3Ref = firebase.storage().refFromURL(deletedDoc.data().imageUri3);
+    image3Ref.delete().then(() => {
+      console.log('Image 3 has been deleted!');
+    }).catch((err) => {
+      console.log(err);
+    });
+  }
   activesRef.doc(deleteDocId).delete();
+
   console.log('deleteOneActive Successful');
 }
 
@@ -450,6 +505,89 @@ async function deleteAllActive() {
   });
 
   console.log('deleteAllActive Successful');
+}
+
+async function deleteAllAttendees() {
+  const db = firebase.firestore();
+  const attendeesRef = db.collection('attendees');
+
+  const querySnapshot = await attendeesRef.get();
+  querySnapshot.forEach((doc) => {
+    db.collection('attendees').doc(doc.id).delete();
+  });
+
+  console.log('deleteAllAttendees Successful');
+}
+
+async function addUser() {
+  const db = firebase.firestore();
+  const attendeeRef = db.collection('attendees');
+  const memberInfo = {
+    BasicInfo: {
+      studentID: '111403523',
+      name: '王曉明',
+      major: '資管系',
+      grade: 3,
+      phone: '0905123456',
+      email: 'soongraduate@gmail.com',
+      avatar: 'https://firebasestorage.googleapis.com/v0/b/active-e1014.appspot.com/o/actives%2FAImKb4m8BxsM3lIyYBDCGJBWH6lXBB3FB9LZveoRoq1NsgarKrRJO5jdwBDNhlb-8AwXkOfVAf2a2x12HxONG-8%3Dw1280?alt=media&token=3d70e398-e41f-45a0-bd71-402a83ee9482',
+    },
+    hostedEvent: {
+      1: 'Sc4ZV6kUCgDhW7aEK4DC',
+      2: 'FS3QFcyrTJ8WDAi100MR',
+    },
+    participatedEvent: {
+      1: 'vxGU7JJEPKdrmxIBrxQV',
+    },
+  };
+
+  attendeeRef.doc('110403523').set(memberInfo, { merge: true }).then(console.log('succeed'));
+  const result = await attendeeRef.get();
+  result.forEach((doc) => console.log(doc.data()));
+}
+
+async function getHostedEvent() {
+  const hostID = '110403523';
+  const db = firebase.firestore();
+  const activesRef = db.collection('actives');
+  const hostArray = [];
+
+  activesRef.doc('Sc4ZV6kUCgDhW7aEK4DC').set({ hostID: '110403523' }, { merge: true });
+  activesRef.doc('FS3QFcyrTJ8WDAi100MR').set({ hostID: '110403523' }, { merge: true });
+
+  const querySnapshot = await activesRef.orderBy('uploadTime', 'desc').get();
+  querySnapshot.forEach((doc) => {
+    if (doc.data().hostID === hostID) {
+      hostArray.push({
+        id: doc.id,
+        name: doc.data().name,
+        imageUri1: doc.data().imageUri1,
+        startTimeWeekday: dateToWeekday(doc.data().startTime),
+        startTimeInNum: toDateString(doc.data().startTime),
+        place: doc.data().place,
+        cost: doc.data().cost,
+        limitNum: doc.data().limitNum,
+        genre: doc.data().genre,
+        link: doc.data().link,
+        hostID: doc.data().hostID,
+        hostName: doc.data().hostName,
+        hostPhone: doc.data().hostPhone,
+        hostMail: doc.data().hostMail,
+        details: doc.data().details,
+      });
+    }
+  });
+
+  return hostArray;
+}
+
+async function signUp() {
+  const attendeesID = '110403523';
+  const db = firebase.firestore();
+  const activesRef = db.collection('actives').doc('jm1VZceUTuhU74A2HBuA').collection('attendees');
+  const attendeeRef = db.collection('attendees');
+  const result = await attendeeRef.doc(attendeesID).get();
+  // console.log(result.data().BasicInfo.name);
 }
 
 async function fuseSearchName(searchString) {
@@ -490,4 +628,8 @@ export default {
   getActiveByName,
   fuseSearchName,
   sentMessage,
+  addUser,
+  signUp,
+  deleteAllAttendees,
+  getHostedEvent,
 };

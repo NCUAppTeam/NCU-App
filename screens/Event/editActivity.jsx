@@ -38,7 +38,6 @@ function edit({ route, navigation }) {
   const [image1, setImage1] = useState();
   const [image2, setImage2] = useState();
   const [image3, setImage3] = useState();
-  const [noPhoto, setNoPhoto] = useState(false);
 
   const [isPress, setIsPress] = useState('');
   const values = ['揪人共乘', '揪人運動', '揪人遊戲', '校園活動', '系上活動', '社團活動'];
@@ -545,7 +544,6 @@ function edit({ route, navigation }) {
                 <Box style={{ marginRight: 12 }}>
                   <ZStack style={{ marginBottom: 65 }}>
                     <Image
-                      defaultSource={{ uri: OLDdata.imageUri1 }}
                       source={{ uri: image1 }}
                       style={styles.image}
                     />
@@ -571,7 +569,6 @@ function edit({ route, navigation }) {
                           setNEWdata({ ...NEWdata, image3: NoPicLink });
                         }
                         if (!NEWdata.image1) {
-                          setNoPhoto(true);
                           setNEWdata({ ...NEWdata, image1: genreID });
                         }
                       }}

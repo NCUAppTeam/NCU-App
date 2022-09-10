@@ -1,5 +1,7 @@
 import firebase from 'firebase';
+import React, { useState, useEffect } from 'react';
 import Fuse from 'fuse.js';
+import { isTablet } from 'react-native-calendars/src/expandableCalendar/commons';
 // import storage from '@react-native-firebase/storage';
 
 const values = ['揪人共乘', '揪人運動', '揪人遊戲', '校園活動', '系上活動', '社團活動'];
@@ -8,33 +10,33 @@ const defaultLinks = {
     {
       id: '0',
       type: 'carpool',
-      link: 'https://firebasestorage.googleapis.com/v0/b/active-e1014.appspot.com/o/actives%2FAImKb4m8BxsM3lIyYBDCGJBWH6lXBB3FB9LZveoRoq1NsgarKrRJO5jdwBDNhlb-8AwXkOfVAf2a2x12HxONG-8%3Dw1280?alt=media&token=3d70e398-e41f-45a0-bd71-402a83ee9482',
+      link: 'https://firebasestorage.googleapis.com/v0/b/test-e75af.appspot.com/o/actives%2Fcarpool.jpg?alt=media&token=7bd43726-708e-401b-9750-f7cd21aa966e',
     },
   1:
     {
       id: '1',
       type: 'exercising',
-      link: 'https://firebasestorage.googleapis.com/v0/b/active-e1014.appspot.com/o/actives%2F13WRw2-wmjCVD1QuSUjUjeJVOKnamdacrG9rYAu-6TEjxao7qkq4SaaL6I--LsqFdPiDto2MripJ0AeqX1jpLkw%3Dw1280?alt=media&token=30dc159f-b873-4c01-8095-47dcd7eb1e52',
+      link: 'https://firebasestorage.googleapis.com/v0/b/test-e75af.appspot.com/o/actives%2Fexercising.jpg?alt=media&token=c83916b6-a886-4a3a-a41a-6a142893c2f9',
     },
   2: {
     id: '2',
     type: 'HangOut',
-    link: 'https://firebasestorage.googleapis.com/v0/b/active-e1014.appspot.com/o/actives%2F9-KpYqgT7JpVxN9YJdyZK6cs1KkjkW3FvJfNN_MKIWC0TJsF23naOw4xeELUkmKGpK0Ql-YwOYAV6Nm7a10aHBs%3Dw1280?alt=media&token=d3e971f5-4494-405a-a327-e215b7947fc8',
+    link: 'https://firebasestorage.googleapis.com/v0/b/test-e75af.appspot.com/o/actives%2Fhangout.jpg?alt=media&token=2a0690ce-a757-43dd-bc5f-b01677d49538',
   },
   3: {
     id: '3',
     type: 'schoolEvent',
-    link: 'https://firebasestorage.googleapis.com/v0/b/active-e1014.appspot.com/o/actives%2FVhFxnnfJno8OaJEejdzQUfTkOPBXH0EkDpp_fZU1lAqe8mxsqUryurnBGu88QwWx1ZuW5dOMUwQdOOIlVHXZVdo%3Dw1280?alt=media&token=f728d517-3e01-40b3-853a-19530447ad84',
+    link: 'https://firebasestorage.googleapis.com/v0/b/test-e75af.appspot.com/o/actives%2FschoolEvent.jpg?alt=media&token=3c5d6b97-e420-4a79-a2b0-bb5841a7cd66',
   },
   4: {
     id: '4',
     type: 'tiedEvent',
-    link: 'https://firebasestorage.googleapis.com/v0/b/active-e1014.appspot.com/o/actives%2FMI5GYVApUBawNSN07_TzzpjRT4Kso7Lr2xa0ryVIiRM6dvFQBsgr568WEfLCLtl1NeUia0wZQB8ZBrvATX7dvKo%3Dw1280?alt=media&token=72657e1a-0bc5-43db-b981-3da482226a49',
+    link: 'https://firebasestorage.googleapis.com/v0/b/test-e75af.appspot.com/o/actives%2FtiedEvent.jpg?alt=media&token=e6f2f797-34ac-497e-9abe-8acdfd9dd1bf',
   },
   5: {
     id: '5',
     type: 'clubEvent',
-    link: 'https://firebasestorage.googleapis.com/v0/b/active-e1014.appspot.com/o/actives%2F_4pimcui3FxablQrSCnQcZYCRBw8GHl-P604nwcGPnniiMrAoE23lCkWaaEgJ2flQbqcxTrn7PEp6GnehqFeruE%3Dw1280?alt=media&token=acca5f3f-000d-41bb-b7a2-c5575641cdfb',
+    link: 'https://firebasestorage.googleapis.com/v0/b/test-e75af.appspot.com/o/actives%2FclubEvent.jpg?alt=media&token=d08968d7-c673-4987-aab8-961fa3f85c8e',
   },
 };
 
@@ -52,16 +54,6 @@ function toDateString(time) {
     date.getHours().toString().padStart(2, '0')}:${
     date.getMinutes().toString().padStart(2, '0')}`;
   return dateString;
-}
-
-function Datewithnoyr(time) {
-  const date = new Date(time * 1000);
-  const noyr = `${
-    (date.getMonth() + 1).toString().padStart(2, '0')}/${
-    date.getDate().toString().padStart(2, '0')} ${
-    date.getHours().toString().padStart(2, '0')}:${
-    date.getMinutes().toString().padStart(2, '0')}`;
-  return noyr;
 }
 
 function dateToWeekday(t) {
@@ -92,13 +84,13 @@ function sentMessage(message) {
 }
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyBAdIwqHbhRHs7pgEukVCc2uXUwRAmJu8w',
-  authDomain: 'active-e1014.firebaseapp.com',
-  projectId: 'active-e1014',
-  storageBucket: 'active-e1014.appspot.com',
-  messagingSenderId: '1030625507659',
-  appId: '1:1030625507659:web:3665e92f26f92e7bc850ce',
-  measurementId: 'G-YR1M91G56B',
+  apiKey: 'AIzaSyAE1BMN-NymGGpNppqzqeOkQTfVZyrBXzo',
+  authDomain: 'test-e75af.firebaseapp.com',
+  projectId: 'test-e75af',
+  storageBucket: 'test-e75af.appspot.com',
+  messagingSenderId: '521591460213',
+  appId: '1:521591460213:web:1e510d65b7c13ebe76833c',
+  measurementId: 'G-T1RS72GEX1',
 };
 
 //   測試用 Firebase//劭劭的
@@ -196,12 +188,8 @@ async function addActive(active) {
   if (active.cost === 0 || active.cost === '') {
     item.cost = '免費free';
   }
-  if (active.limitNum === 0) {
-    item.limitNum = '人數沒限制';
-  }
   const db = firebase.firestore();
   const activesRef = db.collection('actives');
-  console.log('active');
   console.log(item);
   activesRef.add(item);
   console.log('addActive Successful');
@@ -299,22 +287,17 @@ async function updateActive(oldID, NEWactive) {
       NEWitem.cost = '免費free';
     }
   }
-  if (NEWactive.limitNum) {
-    if (NEWactive.limitNum === 0) {
-      NEWitem.limitNum = '人數沒限制';
-    }
-  }
 
   console.log(NEWitem);
   if (NEWitem.imageUri1) {
     if (querySnapshot.data().imageUri1 !== defaultLinks[values.indexOf(querySnapshot.data().genre)].link) {
       console.log('image 1 has been replaced, old image has been deleted');
-      // const image1Ref = firebase.storage().refFromURL(querySnapshot.data().imageUri1);
-      // image1Ref.delete().then(() => {
-      //   console.log('Image 1 has been deleted!');
-      // }).catch((err) => {
-      //   console.log(err);
-      // });
+      const image1Ref = firebase.storage().refFromURL(querySnapshot.data().imageUri1);
+      image1Ref.delete().then(() => {
+        console.log('Image 1 has been deleted!');
+      }).catch((err) => {
+        console.log(err);
+      });
     }
   }
   if (NEWitem.imageUri2) {
@@ -365,6 +348,73 @@ async function getAllActive() {
   return activeArray;
 }
 
+async function getParticipatedActive() {
+  const user = '110501444';
+  const db = firebase.firestore();
+  const activesRef1 = db.collection('attendees').doc(user).collection('attendedEvent');
+  const activeArray = [];
+  const current = new Date();
+  const querySnapshot = await activesRef1.orderBy('uploadTime', 'desc').get();
+  querySnapshot.forEach(async (doc1) => {
+    const activesRef2 = await db.collection('actives').doc(doc1.id).collection('attendPeople').doc(user)
+      .get();
+    if (new Date(toDateString(doc1.data().endTime)) > current && activesRef2.exists) {
+      activeArray.push({
+        id: doc1.id,
+        name: doc1.data().name,
+        imageUri1: doc1.data().imageUri1,
+        startTimeWeekday: dateToWeekday(doc1.data().startTime),
+        startTimeInNum: toDateString(doc1.data().startTime),
+        place: doc1.data().place,
+        cost: doc1.data().cost,
+        limitNum: doc1.data().limitNum,
+        genre: doc1.data().genre,
+        link: doc1.data().link,
+        hostName: doc1.data().hostName,
+        hostPhone: doc1.data().hostPhone,
+        hostMail: doc1.data().hostMail,
+        details: doc1.data().details,
+      });
+    }
+  });
+  console.log(activeArray);
+  console.log('getParticipatedActive Successful');
+  return activeArray;
+}
+
+async function getFinishedActive() {
+  const user = '110501023';
+  const db = firebase.firestore();
+  const activesRef1 = db.collection('actives');
+  const activeArray = [];
+  const querySnapshot = await activesRef1.orderBy('uploadTime', 'desc').get();
+  querySnapshot.forEach(async (doc1) => {
+    const activesRef2 = await db.collection('actives').doc(doc1.id).collection('attendPeople').doc(user)
+      .get();
+    if (new Date(toDateString(doc1.data().endTime)) < new Date() && activesRef2.exists) {
+      activeArray.push({
+        id: doc1.id,
+        name: doc1.data().name,
+        imageUri1: doc1.data().imageUri1,
+        startTimeWeekday: dateToWeekday(doc1.data().startTime),
+        startTimeInNum: toDateString(doc1.data().startTime),
+        place: doc1.data().place,
+        cost: doc1.data().cost,
+        limitNum: doc1.data().limitNum,
+        genre: doc1.data().genre,
+        link: doc1.data().link,
+        hostName: doc1.data().hostName,
+        hostPhone: doc1.data().hostPhone,
+        hostMail: doc1.data().hostMail,
+        details: doc1.data().details,
+      });
+    }
+  });
+  console.log(activeArray);
+  console.log('getFinishedActive Successful');
+  return activeArray;
+}
+
 async function getOneActive(id) {
   const db = firebase.firestore();
   const activesRef = db.collection('actives').doc(id);
@@ -408,11 +458,11 @@ async function getOneActive(id) {
  * @returns
  */
 
-async function getGenreActive(genre) {
+async function getHangOutActive() {
   const db = firebase.firestore();
   const activesRef = db.collection('actives');
   const GenreArray = [];
-  const querySnapshot = await activesRef.where('genre', '==', genre).get();
+  const querySnapshot = await activesRef.where('genre', 'in', ['揪人遊戲', '揪人共乘', '揪人運動']).get();
   querySnapshot.forEach((doc) => {
     GenreArray.push({
       id: doc.id,
@@ -421,9 +471,9 @@ async function getGenreActive(genre) {
       imageUri2: doc.data().imageUri2,
       imageUri3: doc.data().imageUri3,
       startTime: toDateString(doc.data().startTime),
-      startNoYr: Datewithnoyr(doc.data().startTime),
       endTime: toDateString(doc.data().endTime),
-      endNoYr: Datewithnoyr(doc.data().endTime),
+      startTimeWeekday: dateToWeekday(doc.data().startTime),
+      endTimeWeekday: dateToWeekday(doc.data().endTime),
       place: doc.data().place,
       cost: doc.data().cost,
       limitNum: doc.data().limitNum,
@@ -435,28 +485,43 @@ async function getGenreActive(genre) {
       details: doc.data().details,
     });
   });
-  console.log('getGenreActive Successful');
+  console.log('hangeout');
+  console.log(GenreArray);
+  console.log('getHangOutActive Successful');
   return GenreArray;
 }
 
-/**
- *
- * @param {*} name
- * @returns
- */
-async function getActiveByName(name) {
+async function getEventActive() {
   const db = firebase.firestore();
   const activesRef = db.collection('actives');
-  const GenreArray = [];
-  const querySnapshot = await activesRef.where('name', '==', name).get();
+  const EventArray = [];
+  const querySnapshot = await activesRef.where('genre', 'in', ['校園活動', '系上活動', '社團活動']).get();
   querySnapshot.forEach((doc) => {
-    GenreArray.push({
+    EventArray.push({
       id: doc.id,
-      ...doc.data(),
+      name: doc.data().name,
+      imageUri1: doc.data().imageUri1,
+      imageUri2: doc.data().imageUri2,
+      imageUri3: doc.data().imageUri3,
+      startTime: toDateString(doc.data().startTime),
+      endTime: toDateString(doc.data().endTime),
+      startTimeWeekday: dateToWeekday(doc.data().startTime),
+      endTimeWeekday: dateToWeekday(doc.data().endTime),
+      place: doc.data().place,
+      cost: doc.data().cost,
+      limitNum: doc.data().limitNum,
+      genre: doc.data().genre,
+      link: doc.data().link,
+      hostName: doc.data().hostName,
+      hostPhone: doc.data().hostPhone,
+      hostMail: doc.data().hostMail,
+      details: doc.data().details,
     });
   });
-  console.log('getActiveByName Successful');
-  return GenreArray;
+  console.log('event');
+  console.log(EventArray);
+  console.log('getEventActive Successful');
+  return EventArray;
 }
 
 async function deleteOneActive(deleteDocId) {
@@ -494,51 +559,73 @@ async function deleteOneActive(deleteDocId) {
   console.log('deleteOneActive Successful');
 }
 
-async function deleteAllActive() {
+async function getTotalOfAttendees(docID) {
   const db = firebase.firestore();
-  const activesRef = db.collection('actives');
-
-  const querySnapshot = await activesRef.get();
-  querySnapshot.forEach((doc) => {
-    firebase.storage().ref().child(doc.data().imageAddress).delete();
-    db.collection('actives').doc(doc.id).delete();
+  const totalRef = db.collection('attendees');
+  const querySnapshot = await totalRef.get();
+  const attendeeList = [];
+  const total = [];
+  querySnapshot.forEach((attendee) => {
+    attendeeList.push(attendee.id);
   });
-
-  console.log('deleteAllActive Successful');
+  for (let i = 0; i < attendeeList.length; i += 1) {
+    const result = await totalRef.doc(attendeeList[i]).collection('attendedEvent').get();
+    result.forEach((event) => {
+      if (event.id === docID) {
+        total.push(attendeeList[i]);
+      }
+    });
+  }
+  return total.length;
 }
 
-async function deleteAllAttendees() {
+async function getAllAttendees(docID) {
   const db = firebase.firestore();
-  const attendeesRef = db.collection('attendees');
-
-  const querySnapshot = await attendeesRef.get();
-  querySnapshot.forEach((doc) => {
-    db.collection('attendees').doc(doc.id).delete();
+  const infoRef = db.collection('attendees');
+  const querySnapshot = await infoRef.get();
+  const attendeeList = [];
+  const IDlist = [];
+  const info = [];
+  querySnapshot.forEach((attendee) => {
+    attendeeList.push(attendee.id);
   });
+  for (let i = 0; i < attendeeList.length; i += 1) {
+    const result = await infoRef.doc(attendeeList[i]).collection('attendedEvent').get();
+    result.forEach((event) => {
+      if (event.id === docID) {
+        IDlist.push(attendeeList[i]);
+      }
+    });
+  }
+  console.log(IDlist);
+  for (let j = 0; j < IDlist.length; j += 1) {
+    const querySnapshot2 = await infoRef.doc(IDlist[j]).get();
+    info.push(querySnapshot2.data());
+  }
+  return info;
+}
 
-  console.log('deleteAllAttendees Successful');
+async function removeAttendee(docID, studentID) { // remove attendee
+  const db = firebase.firestore();
+  const activesRef = db.collection('attendees').doc(studentID).collection('attendedEvent');
+  activesRef.doc(docID).delete();
+  console.log(docID, studentID);
+  console.log('delete successfully!');
+  const result = await activesRef.get();
+  result.forEach((doc) => console.log(doc.id));
 }
 
 async function addUser() {
   const db = firebase.firestore();
   const attendeeRef = db.collection('attendees');
   const memberInfo = {
-    BasicInfo: {
-      studentID: '111403523',
-      name: '王曉明',
-      major: '資管系',
-      grade: 3,
-      phone: '0905123456',
-      email: 'soongraduate@gmail.com',
-      avatar: 'https://firebasestorage.googleapis.com/v0/b/active-e1014.appspot.com/o/actives%2FAImKb4m8BxsM3lIyYBDCGJBWH6lXBB3FB9LZveoRoq1NsgarKrRJO5jdwBDNhlb-8AwXkOfVAf2a2x12HxONG-8%3Dw1280?alt=media&token=3d70e398-e41f-45a0-bd71-402a83ee9482',
-    },
-    hostedEvent: {
-      1: 'Sc4ZV6kUCgDhW7aEK4DC',
-      2: 'FS3QFcyrTJ8WDAi100MR',
-    },
-    participatedEvent: {
-      1: 'vxGU7JJEPKdrmxIBrxQV',
-    },
+    studentID: '110403523',
+    name: '徐雯',
+    major: '化學工程與材料工程學系',
+    grade: 4,
+    phone: '0906666888',
+    email: 'ncu@gmail.com',
+    avatar: 'https://firebasestorage.googleapis.com/v0/b/active-e1014.appspot.com/o/actives%2F_4pimcui3FxablQrSCnQcZYCRBw8GHl-P604nwcGPnniiMrAoE23lCkWaaEgJ2flQbqcxTrn7PEp6GnehqFeruE%3Dw1280?alt=media&token=acca5f3f-000d-41bb-b7a2-c5575641cdfb',
   };
 
   attendeeRef.doc('110403523').set(memberInfo, { merge: true }).then(console.log('succeed'));
@@ -547,17 +634,14 @@ async function addUser() {
 }
 
 async function getHostedEvent() {
-  const hostID = '110403523';
+  const host = '110501444';
   const db = firebase.firestore();
   const activesRef = db.collection('actives');
   const hostArray = [];
 
-  activesRef.doc('Sc4ZV6kUCgDhW7aEK4DC').set({ hostID: '110403523' }, { merge: true });
-  activesRef.doc('FS3QFcyrTJ8WDAi100MR').set({ hostID: '110403523' }, { merge: true });
-
   const querySnapshot = await activesRef.orderBy('uploadTime', 'desc').get();
   querySnapshot.forEach((doc) => {
-    if (doc.data().hostID === hostID) {
+    if (doc.data().hostID === host) {
       hostArray.push({
         id: doc.id,
         name: doc.data().name,
@@ -577,17 +661,54 @@ async function getHostedEvent() {
       });
     }
   });
-
+  console.log('getHostEvent Successfully');
   return hostArray;
 }
 
-async function signUp() {
-  const attendeesID = '110403523';
+async function signUp(docID) {
+  const attendeesID = '110501444';
   const db = firebase.firestore();
-  const activesRef = db.collection('actives').doc('jm1VZceUTuhU74A2HBuA').collection('attendees');
-  const attendeeRef = db.collection('attendees');
-  const result = await attendeeRef.doc(attendeesID).get();
-  // console.log(result.data().BasicInfo.name);
+  const Ref = db.collection('attendees').doc(attendeesID).collection('attendedEvent');
+  Ref.doc(docID).set({});
+  console.log('sign up successfully!');
+  const result = await Ref.get();
+  result.forEach((doc) => console.log(doc.id));
+}
+
+async function quitEvent(docID) {
+  const attendeesID = '110501444';
+  const db = firebase.firestore();
+  const Ref = db.collection('attendees').doc(attendeesID).collection('attendedEvent');
+  Ref.doc(docID).delete();
+  console.log('delete successfully!');
+  const result = await Ref.get();
+  result.forEach((doc) => console.log(doc.id));
+}
+
+async function getHostInfo(docID) {
+  const db = firebase.firestore();
+  const infoRef = db.collection('attendees');
+  const querySnapshot = await infoRef.get();
+  const attendeeList = [];
+  const IDlist = [];
+  const info = [];
+  querySnapshot.forEach((attendee) => {
+    attendeeList.push(attendee.id);
+  });
+  for (let i = 0; i < attendeeList.length; i += 1) {
+    const result = await infoRef.doc(attendeeList[i]).collection('hostedEvent').get();
+    result.forEach((event) => {
+      if (event.id === docID) {
+        IDlist.push(attendeeList[i]);
+      }
+    });
+  }
+  for (let j = 0; j < IDlist.length; j += 1) {
+    const querySnapshot2 = await infoRef.doc(IDlist[j]).get();
+    info.push(querySnapshot2.data());
+  }
+  console.log(info);
+  return info;
 }
 
 async function fuseSearchName(searchString) {
@@ -621,15 +742,20 @@ export default {
   addActive,
   updateActive,
   getAllActive,
-  getGenreActive,
+  getParticipatedActive,
+  getHostedEvent,
+  getFinishedActive,
+  getHangOutActive,
+  getEventActive,
   deleteOneActive,
   getOneActive,
-  deleteAllActive,
-  getActiveByName,
   fuseSearchName,
   sentMessage,
   addUser,
   signUp,
-  deleteAllAttendees,
-  getHostedEvent,
+  quitEvent,
+  getHostInfo,
+  getAllAttendees,
+  getTotalOfAttendees,
+  removeAttendee,
 };

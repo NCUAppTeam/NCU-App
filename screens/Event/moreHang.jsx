@@ -12,10 +12,10 @@ import {
 import styles from './style_folder/Styles_moreEvent';
 import ActiveController from '../../controller/Active';
 
-function more({ navigation, route }) {
+function moreHang({ navigation }) {
   const [active, setActive] = useState([]);
   useEffect(() => {
-    ActiveController.getEventActive().then((res) => {
+    ActiveController.getHangOutActive().then((res) => {
       setActive(res);
     }).catch((err) => {
       throw err;
@@ -25,7 +25,7 @@ function more({ navigation, route }) {
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = () => {
     setRefreshing(true);
-    ActiveController.getEventActive().then((res) => {
+    ActiveController.getHangOutActive('hangout').then((res) => {
       setActive(res);
       setRefreshing(false);
     });
@@ -45,7 +45,7 @@ function more({ navigation, route }) {
           </Box>
           <View style={styles.nameheader}>
             <Text style={styles.name}>
-              近期活動
+              近期揪人
             </Text>
           </View>
           <View style={styles.headerCommentView}>
@@ -79,7 +79,7 @@ function more({ navigation, route }) {
             renderItem={({ item }) => (
               <Pressable
                 onPress={() => {
-                  navigation.navigate('details', { Cd: item.id, prepage: 'more' });
+                  navigation.navigate('details', { Cd: item.id, prepage: 'moreHang' });
                 }}
               >
                 <VStack style={styles.CardInMore}>
@@ -124,4 +124,4 @@ function more({ navigation, route }) {
   );
 }
 
-export default more;
+export default moreHang;

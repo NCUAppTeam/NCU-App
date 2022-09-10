@@ -6,6 +6,7 @@ import personal from './personal_manage';
 import manage from './manage';
 import list from './activityList';
 import more from './moreEvent';
+import moreHang from './moreHang';
 import message from './Message';
 import detailscreen from './showActivityDetails';
 import search from './search';
@@ -22,6 +23,7 @@ function EventStack() {
     >
       <Stack.Screen name="list" component={list} />
       <Stack.Screen name="more" component={more} />
+      <Stack.Screen name="moreHang" component={moreHang} />
       <Stack.Screen name="add" component={add} />
       <Stack.Screen name="edit" component={edit} />
       <Stack.Screen name="personal" component={personal} />

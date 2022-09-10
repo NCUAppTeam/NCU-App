@@ -10,7 +10,7 @@ import {
   Ionicons, FontAwesome5, AntDesign, Feather,
 } from '@expo/vector-icons';
 import {
-  NativeBaseProvider, Box, Divider, ZStack,
+  NativeBaseProvider, Box, Divider, ZStack, HStack,
 } from 'native-base';
 import styles from './style_folder/Styles_activityList';
 import ActiveController from '../../controller/Active';
@@ -19,10 +19,16 @@ function list({ navigation }) {
   // const [searchQuery, setSearchQuery] = useState('');
   // const onChangeSearch = (query) => setSearchQuery(query);
 
-  const [active, setActive] = useState([]);
+  const [active1, setActive1] = useState([]);
+  const [active2, setActive2] = useState([]);
   useEffect(() => {
-    ActiveController.getAllActive().then((res) => {
-      setActive(res);
+    ActiveController.getHangOutActive().then((res) => {
+      setActive1(res);
+    }).then().catch((err) => {
+      throw err;
+    });
+    ActiveController.getEventActive().then((res) => {
+      setActive2(res);
     }).catch((err) => {
       throw err;
     });
@@ -31,10 +37,13 @@ function list({ navigation }) {
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = () => {
     setRefreshing(true);
-    ActiveController.getAllActive().then((res) => {
-      setActive(res);
-      setRefreshing(false);
+    ActiveController.getHangOutActive().then((res) => {
+      setActive1(res);
     });
+    ActiveController.getEventActive().then((res) => {
+      setActive2(res);
+    });
+    setRefreshing(false);
   };
 
   return (
@@ -82,7 +91,12 @@ function list({ navigation }) {
       )}
         >
           <Box style={{ marginHorizontal: Dimensions.get('window').width * 0.0592 }}>
-            <Text style={styles.more} onPress={() => { navigation.navigate('more'); }}>查看更多</Text>
+            <Box style={styles.more}>
+              <HStack>
+                <Text style={{ marginRight: Dimensions.get('window').width * 0.62 }}>近期揪人</Text>
+                <Text style={{ textDecorationLine: 'underline' }} onPress={() => { navigation.navigate('moreHang'); }}>查看更多</Text>
+              </HStack>
+            </Box>
             <Divider style={{ marginTop: 5 }} bg="#BFBFBF" /* my=margin-top and margin-bottom */ />
           </Box>
           <View style={{ height: 'auto', width: 'auto' }}>
@@ -91,7 +105,7 @@ function list({ navigation }) {
                 width: 'auto', marginRight: Dimensions.get('window').width * 0.0694, height: 246, flexDirection: 'row',
               }}
               >
-                {active.map(({
+                {active1.map(({
                   id, name, imageUri1, place, startTimeWeekday,
                 }) => (
                   <Card
@@ -145,7 +159,12 @@ function list({ navigation }) {
             </ScrollView>
           </View>
           <Box style={{ marginHorizontal: Dimensions.get('window').width * 0.0592 }}>
-            <Text style={styles.more} onPress={() => { navigation.navigate('more'); }}>查看更多</Text>
+            <Box style={styles.more}>
+              <HStack>
+                <Text style={{ marginRight: Dimensions.get('window').width * 0.62 }}>近期活動</Text>
+                <Text style={{ textDecorationLine: 'underline' }} onPress={() => { navigation.navigate('more'); }}>查看更多</Text>
+              </HStack>
+            </Box>
             <Divider style={{ marginTop: 5 }} bg="#BFBFBF" /* my=margin-top and margin-bottom */ />
           </Box>
           <View style={{ height: 'auto', width: 'auto' }}>
@@ -154,7 +173,7 @@ function list({ navigation }) {
                 width: 'auto', marginRight: Dimensions.get('window').width * 0.0694, height: 246, flexDirection: 'row',
               }}
               >
-                {active.map(({
+                {active2.map(({
                   id, name, imageUri1, place, startTimeWeekday,
                 }) => (
                   <Card
@@ -208,11 +227,11 @@ function list({ navigation }) {
             </ScrollView>
           </View>
         </ScrollView>
-        <View>
+        {/* <View>
           <Button
             style={styles.button}
             onPress={() => {
-              ActiveController.getHostedEvent().then(() => { onRefresh(); });
+              ActiveController.addUser().then(() => { onRefresh(); });
             }}
             title="加user"
             type="outline"
@@ -224,7 +243,7 @@ function list({ navigation }) {
               />
           )}
           />
-        </View>
+        </View> */}
       </NativeBaseProvider>
     </SafeAreaView>
   );

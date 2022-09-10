@@ -41,28 +41,31 @@ function personal({ navigation }) {
       throw err;
     });
   }, []);
-
   const [isPress, setIsPress] = useState('參加中');
 
   const [refreshing, setRefreshing] = useState(false);
-  const onRefresh = () => {
+  const onRefresh = async () => {
     setRefreshing(true);
-    if (isPress === '管理活動') {
-      ActiveController.getHostedEvent().then((res) => {
-        setShowManage(res);
-        setRefreshing(false);
-      });
-    } else if (isPress === '參加中') {
-      ActiveController.getAllActive().then((res) => {
+    if (isPress === '參加中') {
+      await ActiveController.getAllActive().then((res) => {
         setShowNow(res);
-        setRefreshing(false);
+      }).catch((err) => {
+        throw err;
+      });
+    } else if (isPress === '管理活動') {
+      await ActiveController.getHostedEvent().then((res) => {
+        setShowManage(res);
+      }).catch((err) => {
+        throw err;
       });
     } else {
-      ActiveController.getAllActive().then((res) => {
+      await ActiveController.getAllActive().then((res) => {
         setShowEnd(res);
-        setRefreshing(false);
+      }).catch((err) => {
+        throw err;
       });
     }
+    setRefreshing(false);
   };
 
   return (
@@ -156,9 +159,7 @@ function personal({ navigation }) {
               style={isPress === '參加中' ? styles.personalbtnPress : styles.personalbtn}
               onPress={() => {
                 setIsPress('參加中');
-                //  console.log(isPress);
-                //    ActiveController.getActiveByForm('participate')
-                //    .then(() => { onRefresh(); });
+                // onRefresh();
               }}
             >
               <Text style={isPress === '參加中' ? styles.personalbtnPressText : styles.personalbtnText}>
@@ -169,9 +170,7 @@ function personal({ navigation }) {
               style={isPress === '管理活動' ? styles.personalbtnPress : styles.personalbtn}
               onPress={() => {
                 setIsPress('管理活動');
-                // console.log(isPress);
-              //    ActiveController.getActiveByForm('MyOwn')
-              //    .then(() => { onRefresh(); }); }}
+                // onRefresh();
               }}
             >
               <Text style={isPress === '管理活動' ? styles.personalmanagebtnPressText : styles.personalmanagebtnText}>
@@ -182,9 +181,7 @@ function personal({ navigation }) {
               style={isPress === '已結束' ? styles.personalbtnPress : styles.personalbtn}
               onPress={() => {
                 setIsPress('已結束');
-                // console.log(isPress);
-                // ActiveController.getActiveByForm('End')
-                //    .then(() => { onRefresh(); }); }}}
+                // onRefresh();
               }}
             >
               <Text style={isPress === '已結束' ? styles.personalbtnPressText : styles.personalbtnText}>

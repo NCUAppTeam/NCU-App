@@ -23,13 +23,13 @@ import EventScreen from './screens/Event';
 //   appId: '1:739839700130:web:37591d0118a440488cfbfb',
 // };
 const firebaseConfig = {
-  apiKey: 'AIzaSyBAdIwqHbhRHs7pgEukVCc2uXUwRAmJu8w',
-  authDomain: 'active-e1014.firebaseapp.com',
-  projectId: 'active-e1014',
-  storageBucket: 'active-e1014.appspot.com',
-  messagingSenderId: '1030625507659',
-  appId: '1:1030625507659:web:3665e92f26f92e7bc850ce',
-  measurementId: 'G-YR1M91G56B',
+  apiKey: 'AIzaSyAE1BMN-NymGGpNppqzqeOkQTfVZyrBXzo',
+  authDomain: 'test-e75af.firebaseapp.com',
+  projectId: 'test-e75af',
+  storageBucket: 'test-e75af.appspot.com',
+  messagingSenderId: '521591460213',
+  appId: '1:521591460213:web:1e510d65b7c13ebe76833c',
+  measurementId: 'G-T1RS72GEX1',
 };
 const Tab = createBottomTabNavigator();
 

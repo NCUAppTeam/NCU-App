@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Text, View, SafeAreaView, TextInput, RefreshControl,
+  Text, View, SafeAreaView, TextInput, RefreshControl, Dimensions,
   ScrollView, TouchableOpacity, Alert, Image, TouchableHighlight,
 } from 'react-native';
 import {
@@ -19,13 +19,30 @@ import styles from './style_folder/Styles_manage';
 function manage({ route, navigation }) {
   const Cd = route.params;
   const passedID = JSON.stringify(Cd).slice(7, -2);
-
+  const [message, messageSent] = useState('');
+  const [attendeesNum, setAttendeeNum] = useState(); // 測試用
+  useEffect(() => {
+    ActiveController.getTotalOfAttendees(passedID).then((res) => {
+      setAttendeeNum(res);
+      // console.log(res);
+    }).catch((err) => {
+      throw err;
+    });
+  }, []);
   const [active, setActive] = useState([]);
   useEffect(() => {
     console.log('get id from personal_manage: ', passedID);
     ActiveController.getOneActive(passedID).then((res) => {
       setActive(res);
-      console.log(active);
+      // console.log(res);
+    }).catch((err) => {
+      throw err;
+    });
+  }, []);
+  const [attendeeINFO, setAttendeeInfo] = useState();
+  useEffect(() => {
+    ActiveController.getAllAttendees(passedID).then((res) => {
+      setAttendeeInfo(res);
     }).catch((err) => {
       throw err;
     });
@@ -34,48 +51,26 @@ function manage({ route, navigation }) {
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = () => {
     setRefreshing(true);
-    // ActiveController.getAllAttendees().then((res) => {
-    //   setActive(res);
-    //   setRefreshing(false);
-    // });
+    ActiveController.getOneActive(passedID).then((res) => {
+      setActive(res);
+      console.log(active);
+    }).catch((err) => {
+      throw err;
+    });
+    ActiveController.getTotalOfAttendees(passedID).then((res) => {
+      setAttendeeNum(res);
+      console.log(attendeesNum);
+    }).catch((err) => {
+      throw err;
+    });
+    ActiveController.getAllAttendees(passedID).then((res) => {
+      setAttendeeInfo(res);
+      console.log(attendeeINFO);
+    }).catch((err) => {
+      throw err;
+    });
     setRefreshing(false);
   };
-
-  const [message, messageSent] = useState('');
-  const attendees = 1; // 測試用
-  const attendeeINFO = [{
-    signupindex: '#001',
-    fullName: 'David Henrie',
-    avatarUrl: 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-    department: '資訊工程學系',
-    grade: '一',
-  }, {
-    signupindex: '#002',
-    fullName: 'Sujitha Mathur',
-    avatarUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTyEaZqT3fHeNrPGcnjLLX1v_W4mvBlgpwxnA&usqp=CAU',
-    department: '資訊管理學系',
-    grade: '三',
-  }, {
-    signupindex: '#003',
-    fullName: 'Anci Barroco',
-    avatarUrl: 'https://miro.medium.com/max/1400/0*0fClPmIScV5pTLoE.jpg',
-    department: '大氣科學系',
-    grade: '二',
-  }, {
-    signupindex: '#004',
-    fullName: 'Anci Barroco',
-    avatarUrl: 'https://miro.medium.com/max/1400/0*0fClPmIScV5pTLoE.jpg',
-    department: '物理學系',
-    grade: '二',
-  }, {
-    signupindex: '#005',
-    fullName: 'Sujitha Mathur',
-    avatarUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTyEaZqT3fHeNrPGcnjLLX1v_W4mvBlgpwxnA&usqp=CAU',
-    department: '文學院學士班',
-    grade: '三',
-  },
-
-  ];
 
   return (
     <Provider>
@@ -178,24 +173,32 @@ function manage({ route, navigation }) {
                       }}
                       >
                         參加名單
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        &emsp;&emsp;&emsp;&ensp;
                         目前人數：
                       </Text>
                     </Box>
                     <Box>
-                      <Text
-                        style={attendees >= limitNum
-                          ? styles.reachLimitNum
-                          : styles.underLimitNum}
+                      {limitNum !== '0' && (
+                      <Text style={attendeesNum >= limitNum
+                        ? styles.reachLimitNum
+                        : styles.underLimitNum}
                       >
-                        {attendees}
-                        {' '}
+                        {attendeesNum}
+                        &ensp;
                         /
                         {' '}
                         {limitNum}
+                        {' '}
                         人
                       </Text>
+                      )}
+                      {limitNum === '0' && (
+                      <Text style={styles.NoLimitNum}>
+                        {attendeesNum}
+                        &ensp;
+                        (無上限)
+                      </Text>
+                      )}
                     </Box>
                   </HStack>
                 </Box>
@@ -203,59 +206,62 @@ function manage({ route, navigation }) {
             ))}
 
             <View style={{ flex: 1 }}>
-              <Box style={styles.participantsBox}>
-                <FlatList
-                  data={attendeeINFO}
-                  keyExtractor={(item) => item.signupindex}
-                  refreshControl={(
-                    <RefreshControl
-                      refreshing={refreshing}
-                      onRefresh={onRefresh}
-                    />
-              )}
-                  renderItem={({ item }) => (
-                    <ScrollView>
-                      <HStack style={styles.cardForAttendees}>
-                        <Image
-                          style={styles.avatar}
-                          source={{
-                            uri: item.avatarUrl,
-                          }}
-                        />
-                        <VStack>
-                          <Title style={styles.signupIndex}>
-                            {item.signupindex}
-                          </Title>
-                          <Text>
-                            {item.fullName}
-                          </Text>
-                          <HStack>
-                            <Text style={{ textAlign: 'left' }}>
-                              {item.department}
-                            </Text>
-                            <Text style={{ textAlign: 'right' }}>
-                              {item.grade}
-                              年級
-                            </Text>
-                          </HStack>
-                        </VStack>
-                        <HStack style={{ alignContent: 'flex-end' }}>
-                          <Box style={styles.DeletebtnInManage}>
-                            <TouchableHighlight>
-                              <Text style={styles.DeletebtnInManageText}>移除</Text>
-                            </TouchableHighlight>
-                          </Box>
-                          <Box style={styles.MessagebtnInManage}>
-                            <TouchableHighlight>
-                              <Text style={styles.MessagebtnInManageText}>私訊</Text>
-                            </TouchableHighlight>
-                          </Box>
-                        </HStack>
-                      </HStack>
-                    </ScrollView>
+              <FlatList
+                data={attendeeINFO}
+                keyExtractor={(item) => item.studentID}
+                refreshControl={(
+                  <RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={onRefresh}
+                  />
                   )}
-                />
-              </Box>
+                renderItem={({ item }) => (
+                  <ScrollView>
+                    <HStack style={styles.cardForAttendees}>
+                      <Image
+                        style={styles.avatar}
+                        source={{
+                          uri: item.avatar,
+                        }}
+                      />
+                      <VStack style={{ marginLeft: 5, width: Dimensions.get('window').width * 0.28 }}>
+                        <Title style={styles.signupIndex}>
+                          {item.signupindex}
+                        </Title>
+                        <Text style={{ fontWeight: '700', fontSize: 18 }}>
+                          {item.name}
+                        </Text>
+                        <HStack>
+                          <Text style={{ textAlign: 'left', fontWeight: '400', fontSize: 10 }}>
+                            {item.major}
+                          </Text>
+                        </HStack>
+                        <HStack>
+                          <Text style={{ textAlign: 'left', fontWeight: '400', fontSize: 10 }}>
+                            {item.grade}
+                            年級
+                          </Text>
+                        </HStack>
+                      </VStack>
+                      <HStack style={styles.manageBtn}>
+                        <Box style={styles.DeletebtnInManage}>
+                          <TouchableHighlight onPress={() => {
+                            ActiveController.removeAttendee(passedID, item.studentID);
+                          }}
+                          >
+                            <Text style={styles.DeletebtnInManageText}>移除</Text>
+                          </TouchableHighlight>
+                        </Box>
+                        <Box style={styles.MessagebtnInManage}>
+                          <TouchableHighlight>
+                            <Text style={styles.MessagebtnInManageText}>私訊</Text>
+                          </TouchableHighlight>
+                        </Box>
+                      </HStack>
+                    </HStack>
+                  </ScrollView>
+                )}
+              />
             </View>
 
           </View>

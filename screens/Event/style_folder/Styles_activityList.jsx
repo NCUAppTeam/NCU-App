@@ -18,7 +18,7 @@ export default StyleSheet.create({
   },
   Card2: {
     marginTop: 10,
-    height: Dimensions.get('window').width * 0.52,
+    height: Dimensions.get('window').width * 0.55,
     width: Dimensions.get('window').width * 0.37,
     borderRadius: 10,
     shadowColor: 'black',
@@ -50,9 +50,6 @@ export default StyleSheet.create({
     marginTop: -3,
   },
   more: {
-    textAlign: 'right',
-    justifyContent: 'flex-end',
-    textDecorationLine: 'underline',
     height: 27,
     paddingTop: 10,
   },

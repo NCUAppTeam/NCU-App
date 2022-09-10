@@ -3,9 +3,9 @@ import { StyleSheet, Dimensions } from 'react-native';
 export default StyleSheet.create({
   avatar: {
     margin: 10,
-    width: 60,
-    height: 60,
-    borderRadius: 30,
+    width: 80,
+    height: 80,
+    borderRadius: 40,
     borderBottomWidth: 2,
     borderBottomEndRadius: 10,
     borderEndColor: '#bfbebe',
@@ -87,5 +87,23 @@ export default StyleSheet.create({
     height: 100,
     marginTop: Dimensions.get('window').height * 0.02,
     marginLeft: Dimensions.get('window').width * 0.04,
+  },
+  reachLimitNum: {
+    fontSize: 18,
+    color: 'red',
+    marginTop: 10,
+    marginLeft: 50,
+  },
+  underLimitNum: {
+    fontSize: 18,
+    color: '#abd873',
+    marginTop: 10,
+    marginLeft: 50,
+  },
+  NoLimitNum: {
+    fontSize: 18,
+    color: '#abd873',
+    marginTop: 10,
+    marginLeft: 15,
   },
 });

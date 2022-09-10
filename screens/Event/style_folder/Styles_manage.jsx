@@ -18,18 +18,8 @@ export default StyleSheet.create({
     marginHorizontal: 15,
     // marginHorizontal: Dimensions.get('window').width * 0.07,
   },
-  cardForAttendees: {
-    height: 90,
-    width: Dimensions.get('window').width * 0.9,
-    borderRadius: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#000',
-    marginTop: 15,
-    flexDirection: 'row',
-    shadowColor: '#000',
-  },
   DeletebtnInManage: {
-    backgroundColor: 'red',
+    backgroundColor: '#eb6f6f',
     width: 70,
     height: 35,
     borderRadius: 30,
@@ -40,7 +30,8 @@ export default StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
     textAlign: 'center',
-    paddingTop: 10,
+    paddingTop: Dimensions.get('window').width * 0.02,
+    fontSize: 14,
   },
   messageBox: {
     width: Dimensions.get('window').width * 0.9,
@@ -71,7 +62,7 @@ export default StyleSheet.create({
     fontWeight: 'bold',
   },
   MessagebtnInManage: {
-    backgroundColor: 'green',
+    backgroundColor: '#abd873',
     width: 70,
     height: 35,
     borderRadius: 30,
@@ -82,7 +73,8 @@ export default StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
     textAlign: 'center',
-    paddingTop: 10,
+    paddingTop: Dimensions.get('window').width * 0.02,
+    fontSize: 14,
   },
   name: {
     marginLeft: 45,
@@ -97,10 +89,21 @@ export default StyleSheet.create({
     borderRadius: 50,
     justifyContent: 'center',
   },
-  participantsBox: {
-    width: Dimensions.get('window').width * 0.9,
-    alignItems: 'center',
-    // marginHorizontal: 7,
+  cardForAttendees: {
+    width: Dimensions.get('window').width * 0.875,
+    height: Dimensions.get('window').width * 0.2,
+    backgroundColor: '#ffffff',
+    borderRadius: 10,
+    shadowColor: 'bebebe',
+    shadowOffset: {
+      width: 0,
+      height: -10,
+    },
+    shadowRadius: 10,
+    elevation: 4,
+    marginTop: Dimensions.get('window').width * 0.04,
+    marginLeft: Dimensions.get('window').width * 0.025,
+    marginBottom: 5,
   },
   reachLimitNum: {
     fontSize: 18,
@@ -114,9 +117,18 @@ export default StyleSheet.create({
   },
   underLimitNum: {
     fontSize: 18,
-    color: 'lightgreen',
+    color: '#abd873',
     marginTop: 10,
     marginLeft: 50,
   },
-
+  NoLimitNum: {
+    fontSize: 18,
+    color: '#abd873',
+    marginTop: 10,
+    marginLeft: 15,
+  },
+  manageBtn: {
+    alignContent: 'flex-end',
+    marginLeft: 1,
+  },
 });

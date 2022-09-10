@@ -22,9 +22,9 @@ function add({ navigation }) {
   const [data, setData] = useState({
     cost: '',
     link: '',
-    hostName: '',
-    hostPhone: '',
-    hostMail: '',
+    // hostName: '',
+    // hostPhone: '',
+    // hostMail: '',
   });
 
   const [genre, setGenre] = useState(false);

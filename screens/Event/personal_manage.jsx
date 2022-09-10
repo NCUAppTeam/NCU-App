@@ -17,6 +17,7 @@ import ActiveController from '../../controller/Active';
 import styles from './style_folder/Styles_personal_manage';
 
 function personal({ navigation }) {
+  const [num, setNum] = useState();
   const [showNow, setShowNow] = useState([]);
   useEffect(() => {
     ActiveController.getParticipatedActive().then((res) => {
@@ -252,13 +253,24 @@ function personal({ navigation }) {
                               size={16}
                               color="black"
                             />
+                            {item.limitNum !== '0' && (
                             <Text style={styles.Card3Text}>
-                              {'  '}
-                              100
+                              {'   '}
+                              {item.num}
                               {' / '}
                               {item.limitNum}
                               人
                             </Text>
+                            )}
+                            {item.limitNum === '0' && (
+                            <Text style={styles.Card3Text}>
+                              {'   '}
+                              {item.num}
+                              &ensp;
+                              (無上限)
+                            </Text>
+                            )}
+
                           </View>
                         </View>
                       </View>

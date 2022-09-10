@@ -128,7 +128,7 @@ async function addActive(active) {
   let uri1;
   let uri2;
   let uri3;
-
+  const user = '110501444';
   const item = {
     name: active.name,
     startTime: active.startTime,
@@ -139,9 +139,9 @@ async function addActive(active) {
     limitNum: active.limitNum,
     genre: active.genre,
     link: active.link.trim(),
-    hostName: active.hostName.trim(),
-    hostPhone: active.hostPhone.trim(),
-    hostMail: active.hostMail.trim(),
+    // hostName: active.hostName.trim(),
+    // hostPhone: active.hostPhone.trim(),
+    // hostMail: active.hostMail.trim(),
     details: active.details.trim(),
   };
 
@@ -190,8 +190,15 @@ async function addActive(active) {
   }
   const db = firebase.firestore();
   const activesRef = db.collection('actives');
-  console.log(item);
+  const hostRef = db.collection('attendees').doc(user).collection('hostedEvent');
   activesRef.add(item);
+
+  const querySnapshot = await activesRef.get();
+  querySnapshot.forEach((doc) => {
+    if (doc.data().name === item.name) {
+      hostRef.doc(doc.id).set({});
+    }
+  });
   console.log('addActive Successful');
 }
 
@@ -660,6 +667,7 @@ async function getHostedEvent() {
   console.log(hostIDArray);
   for (let i = 0; i < hostIDArray.length; i += 1) {
     const result = await db.collection('actives').doc(hostIDArray[i]).get();
+    const num = await getTotalOfAttendees(result.id);
     eventArray.push({
       id: result.id,
       name: result.data().name,
@@ -676,6 +684,7 @@ async function getHostedEvent() {
       hostPhone: result.data().hostPhone,
       hostMail: result.data().hostMail,
       details: result.data().details,
+      num,
     });
   }
   console.log('getHostEvent Successfully');

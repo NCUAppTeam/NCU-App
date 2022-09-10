@@ -351,66 +351,79 @@ async function getAllActive() {
 async function getParticipatedActive() {
   const user = '110501444';
   const db = firebase.firestore();
-  const activesRef1 = db.collection('attendees').doc(user).collection('attendedEvent');
+  const activesRef = db.collection('actives');
+  const attendRef = db.collection('attendees').doc(user).collection('attendedEvent');
+  const attendIDArray = [];
   const activeArray = [];
   const current = new Date();
-  const querySnapshot = await activesRef1.orderBy('uploadTime', 'desc').get();
-  querySnapshot.forEach(async (doc1) => {
-    const activesRef2 = await db.collection('actives').doc(doc1.id).collection('attendPeople').doc(user)
-      .get();
-    if (new Date(toDateString(doc1.data().endTime)) > current && activesRef2.exists) {
+  const querySnapshot = await attendRef.get();
+  querySnapshot.forEach((attendID) => {
+    attendIDArray.push(attendID.id);
+  });
+
+  for (let i = 0; i < attendIDArray.length; i += 1) {
+    const result = await activesRef.doc(attendIDArray[i]).get();
+    // console.log(attendIDArray[i], new Date(toDateString(result.data().endTime)), current);
+    if (new Date(toDateString(result.data().endTime)) > current) {
       activeArray.push({
-        id: doc1.id,
-        name: doc1.data().name,
-        imageUri1: doc1.data().imageUri1,
-        startTimeWeekday: dateToWeekday(doc1.data().startTime),
-        startTimeInNum: toDateString(doc1.data().startTime),
-        place: doc1.data().place,
-        cost: doc1.data().cost,
-        limitNum: doc1.data().limitNum,
-        genre: doc1.data().genre,
-        link: doc1.data().link,
-        hostName: doc1.data().hostName,
-        hostPhone: doc1.data().hostPhone,
-        hostMail: doc1.data().hostMail,
-        details: doc1.data().details,
+        id: result.id,
+        name: result.data().name,
+        imageUri1: result.data().imageUri1,
+        startTimeWeekday: dateToWeekday(result.data().startTime),
+        startTimeInNum: toDateString(result.data().startTime),
+        place: result.data().place,
+        cost: result.data().cost,
+        limitNum: result.data().limitNum,
+        genre: result.data().genre,
+        link: result.data().link,
+        hostName: result.data().hostName,
+        hostPhone: result.data().hostPhone,
+        hostMail: result.data().hostMail,
+        details: result.data().details,
       });
     }
-  });
-  console.log(activeArray);
+  }
+  // console.log(activeArray);
   console.log('getParticipatedActive Successful');
   return activeArray;
 }
 
 async function getFinishedActive() {
-  const user = '110501023';
+  const user = '110501444';
   const db = firebase.firestore();
-  const activesRef1 = db.collection('actives');
+  const activesRef = db.collection('actives');
+  const attendRef = db.collection('attendees').doc(user).collection('attendedEvent');
+  const attendIDArray = [];
   const activeArray = [];
-  const querySnapshot = await activesRef1.orderBy('uploadTime', 'desc').get();
-  querySnapshot.forEach(async (doc1) => {
-    const activesRef2 = await db.collection('actives').doc(doc1.id).collection('attendPeople').doc(user)
-      .get();
-    if (new Date(toDateString(doc1.data().endTime)) < new Date() && activesRef2.exists) {
+  const current = new Date();
+  const querySnapshot = await attendRef.get();
+  querySnapshot.forEach((attendID) => {
+    attendIDArray.push(attendID.id);
+  });
+
+  for (let i = 0; i < attendIDArray.length; i += 1) {
+    const result = await activesRef.doc(attendIDArray[i]).get();
+    // console.log(attendIDArray[i], new Date(toDateString(result.data().endTime)), current);
+    if (new Date(toDateString(result.data().endTime)) < current) {
       activeArray.push({
-        id: doc1.id,
-        name: doc1.data().name,
-        imageUri1: doc1.data().imageUri1,
-        startTimeWeekday: dateToWeekday(doc1.data().startTime),
-        startTimeInNum: toDateString(doc1.data().startTime),
-        place: doc1.data().place,
-        cost: doc1.data().cost,
-        limitNum: doc1.data().limitNum,
-        genre: doc1.data().genre,
-        link: doc1.data().link,
-        hostName: doc1.data().hostName,
-        hostPhone: doc1.data().hostPhone,
-        hostMail: doc1.data().hostMail,
-        details: doc1.data().details,
+        id: result.id,
+        name: result.data().name,
+        imageUri1: result.data().imageUri1,
+        startTimeWeekday: dateToWeekday(result.data().startTime),
+        startTimeInNum: toDateString(result.data().startTime),
+        place: result.data().place,
+        cost: result.data().cost,
+        limitNum: result.data().limitNum,
+        genre: result.data().genre,
+        link: result.data().link,
+        hostName: result.data().hostName,
+        hostPhone: result.data().hostPhone,
+        hostMail: result.data().hostMail,
+        details: result.data().details,
       });
     }
-  });
-  console.log(activeArray);
+  }
+  // console.log(activeArray);
   console.log('getFinishedActive Successful');
   return activeArray;
 }
@@ -636,33 +649,37 @@ async function addUser() {
 async function getHostedEvent() {
   const host = '110501444';
   const db = firebase.firestore();
-  const activesRef = db.collection('actives');
-  const hostArray = [];
-
-  const querySnapshot = await activesRef.orderBy('uploadTime', 'desc').get();
+  const Ref = db.collection('attendees').doc(host).collection('hostedEvent');
+  const hostIDArray = [];
+  const eventArray = [];
+  const num = [];
+  const querySnapshot = await Ref.get();
   querySnapshot.forEach((doc) => {
-    if (doc.data().hostID === host) {
-      hostArray.push({
-        id: doc.id,
-        name: doc.data().name,
-        imageUri1: doc.data().imageUri1,
-        startTimeWeekday: dateToWeekday(doc.data().startTime),
-        startTimeInNum: toDateString(doc.data().startTime),
-        place: doc.data().place,
-        cost: doc.data().cost,
-        limitNum: doc.data().limitNum,
-        genre: doc.data().genre,
-        link: doc.data().link,
-        hostID: doc.data().hostID,
-        hostName: doc.data().hostName,
-        hostPhone: doc.data().hostPhone,
-        hostMail: doc.data().hostMail,
-        details: doc.data().details,
-      });
-    }
+    hostIDArray.push(doc.id);
   });
+  console.log(hostIDArray);
+  for (let i = 0; i < hostIDArray.length; i += 1) {
+    const result = await db.collection('actives').doc(hostIDArray[i]).get();
+    eventArray.push({
+      id: result.id,
+      name: result.data().name,
+      imageUri1: result.data().imageUri1,
+      startTimeWeekday: dateToWeekday(result.data().startTime),
+      startTimeInNum: toDateString(result.data().startTime),
+      place: result.data().place,
+      cost: result.data().cost,
+      limitNum: result.data().limitNum,
+      genre: result.data().genre,
+      link: result.data().link,
+      hostID: result.data().hostID,
+      hostName: result.data().hostName,
+      hostPhone: result.data().hostPhone,
+      hostMail: result.data().hostMail,
+      details: result.data().details,
+    });
+  }
   console.log('getHostEvent Successfully');
-  return hostArray;
+  return eventArray;
 }
 
 async function signUp(docID) {

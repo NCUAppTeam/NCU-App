@@ -4,7 +4,7 @@ import {
   TouchableOpacity, Image, RefreshControl, Dimensions,
 } from 'react-native';
 import {
-  Title, Card,
+  Title, Card, Portal,
 } from 'react-native-paper';
 import {
   Ionicons, AntDesign, Feather,
@@ -19,7 +19,7 @@ import styles from './style_folder/Styles_personal_manage';
 function personal({ navigation }) {
   const [showNow, setShowNow] = useState([]);
   useEffect(() => {
-    ActiveController.getAllActive().then((res) => {
+    ActiveController.getParticipatedActive().then((res) => {
       setShowNow(res);
     }).catch((err) => {
       throw err;
@@ -35,7 +35,7 @@ function personal({ navigation }) {
   }, []);
   const [showEnd, setShowEnd] = useState([]);
   useEffect(() => {
-    ActiveController.getAllActive().then((res) => {
+    ActiveController.getFinishedActive().then((res) => {
       setShowEnd(res);
     }).catch((err) => {
       throw err;
@@ -47,7 +47,7 @@ function personal({ navigation }) {
   const onRefresh = async () => {
     setRefreshing(true);
     if (isPress === '參加中') {
-      await ActiveController.getAllActive().then((res) => {
+      await ActiveController.getParticipatedActive().then((res) => {
         setShowNow(res);
       }).catch((err) => {
         throw err;
@@ -59,7 +59,7 @@ function personal({ navigation }) {
         throw err;
       });
     } else {
-      await ActiveController.getAllActive().then((res) => {
+      await ActiveController.getFinishedActive().then((res) => {
         setShowEnd(res);
       }).catch((err) => {
         throw err;
@@ -159,7 +159,7 @@ function personal({ navigation }) {
               style={isPress === '參加中' ? styles.personalbtnPress : styles.personalbtn}
               onPress={() => {
                 setIsPress('參加中');
-                // onRefresh();
+                ActiveController.getParticipatedActive();
               }}
             >
               <Text style={isPress === '參加中' ? styles.personalbtnPressText : styles.personalbtnText}>
@@ -170,7 +170,7 @@ function personal({ navigation }) {
               style={isPress === '管理活動' ? styles.personalbtnPress : styles.personalbtn}
               onPress={() => {
                 setIsPress('管理活動');
-                // onRefresh();
+                ActiveController.getHostedEvent();
               }}
             >
               <Text style={isPress === '管理活動' ? styles.personalmanagebtnPressText : styles.personalmanagebtnText}>
@@ -181,7 +181,7 @@ function personal({ navigation }) {
               style={isPress === '已結束' ? styles.personalbtnPress : styles.personalbtn}
               onPress={() => {
                 setIsPress('已結束');
-                // onRefresh();
+                ActiveController.getFinishedActive();
               }}
             >
               <Text style={isPress === '已結束' ? styles.personalbtnPressText : styles.personalbtnText}>

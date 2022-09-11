@@ -19,6 +19,15 @@ function detailscreen({ route, navigation }) {
   const prepage = JSON.stringify(Cd).slice(40, -2);
   console.log(prepage);
   // console.log('123', JSON.stringify(Cd).slice(6, -1));
+  const [SignUp, setSignUp] = useState();
+  useEffect(() => {
+    ActiveController.getAttendedOrNot(passedID).then((res) => {
+      setSignUp(res);
+    }).catch((err) => {
+      throw err;
+    });
+  });
+
   const [totalAttended, setTotal] = useState();
   useEffect(() => {
     ActiveController.getTotalOfAttendees(passedID).then((res) => {
@@ -65,7 +74,6 @@ function detailscreen({ route, navigation }) {
     }
   };
   const [showDialog, setShowDialog] = useState(false);
-  const [SignUp, setSignUp] = useState(false);
   return (
 
     <NativeBaseProvider>

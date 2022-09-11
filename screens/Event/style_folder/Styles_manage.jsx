@@ -131,4 +131,8 @@ export default StyleSheet.create({
     alignContent: 'flex-end',
     marginLeft: 1,
   },
+  removeBox: {
+    width: 350,
+    marginTop: Dimensions.get('window').height * 0.02,
+  },
 });

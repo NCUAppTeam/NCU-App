@@ -762,6 +762,24 @@ async function fuseSearchName(searchString) {
   return result;
 }
 
+async function getAttendedOrNot(docID) {
+  const user = '110501444';
+  const result = [];
+  const db = firebase.firestore();
+  const attendRef = db.collection('attendees').doc(user).collection('attendedEvent');
+  const querySnapshot = await attendRef.get();
+  querySnapshot.forEach((attendID) => {
+    if (attendID.id === docID) {
+      result.push(docID);
+    }
+  });
+  if (result.length) {
+    console.log('getAttendedOrNot Successful');
+    return true;
+  }
+  return false;
+}
+
 export default {
   firebaseConfig,
   toDateString,
@@ -784,4 +802,5 @@ export default {
   getAllAttendees,
   getTotalOfAttendees,
   removeAttendee,
+  getAttendedOrNot,
 };

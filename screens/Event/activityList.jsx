@@ -16,9 +16,6 @@ import styles from './style_folder/Styles_activityList';
 import ActiveController from '../../controller/Active';
 
 function list({ navigation }) {
-  // const [searchQuery, setSearchQuery] = useState('');
-  // const onChangeSearch = (query) => setSearchQuery(query);
-
   const [active1, setActive1] = useState([]);
   const [active2, setActive2] = useState([]);
   useEffect(() => {
@@ -80,7 +77,6 @@ function list({ navigation }) {
             />
           </View>
         </View>
-        {/* </View> */}
         <ScrollView
           style={{ flex: 1 }}
           refreshControl={(

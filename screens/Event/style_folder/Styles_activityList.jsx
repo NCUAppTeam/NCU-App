@@ -50,7 +50,7 @@ export default StyleSheet.create({
     marginTop: -3,
   },
   more: {
-    height: 27,
+    height: 35,
     paddingTop: 10,
   },
   pic: {

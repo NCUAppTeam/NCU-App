@@ -190,16 +190,18 @@ function manage({ route, navigation }) {
                             </Box>
                             <Box
                               style={{ marginTop: 10 }}
-                              onPress={() => {
-                                ActiveController.removeAttendee(passedID, item.studentID);
-                              }}
                             >
                               <Text
                                 style={{
                                   color: '#ffffff', backgroundColor: '#ef4444', padding: 10, borderRadius: 4, marginLeft: 10, marginTop: Dimensions.get('window').width * 0.009,
                                 }}
+                                onPress={() => {
+                                  setShowDialog1(false);
+                                  ActiveController.deleteOneActive(passedID);
+                                  ActiveController.deleteEverySingleAttendee(passedID);
+                                }}
                               >
-                                移除
+                                刪除
 
                               </Text>
                             </Box>
@@ -433,6 +435,7 @@ function manage({ route, navigation }) {
                                       <Box
                                         style={{ marginTop: 10 }}
                                         onPress={() => {
+                                          setShowDialog2(false);
                                           ActiveController.removeAttendee(passedID, item.studentID);
                                         }}
                                       >

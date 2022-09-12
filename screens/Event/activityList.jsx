@@ -89,8 +89,8 @@ function list({ navigation }) {
           <Box style={{ marginHorizontal: Dimensions.get('window').width * 0.0592 }}>
             <Box style={styles.more}>
               <HStack>
-                <Text style={{ marginRight: Dimensions.get('window').width * 0.62 }}>近期揪人</Text>
-                <Text style={{ textDecorationLine: 'underline' }} onPress={() => { navigation.navigate('moreHang'); }}>查看更多</Text>
+                <Text style={{ color: '#28527a', fontSize: 18, marginRight: Dimensions.get('window').width * 0.57 }}>近期揪人</Text>
+                <Text style={{ color: '#28527a' }} onPress={() => { navigation.navigate('moreHang'); }}>顯示更多</Text>
               </HStack>
             </Box>
             <Divider style={{ marginTop: 5 }} bg="#BFBFBF" /* my=margin-top and margin-bottom */ />
@@ -154,11 +154,11 @@ function list({ navigation }) {
               </View>
             </ScrollView>
           </View>
-          <Box style={{ marginHorizontal: Dimensions.get('window').width * 0.0592 }}>
+          <Box style={{ marginHorizontal: Dimensions.get('window').width * 0.06 }}>
             <Box style={styles.more}>
               <HStack>
-                <Text style={{ marginRight: Dimensions.get('window').width * 0.62 }}>近期活動</Text>
-                <Text style={{ textDecorationLine: 'underline' }} onPress={() => { navigation.navigate('more'); }}>查看更多</Text>
+                <Text style={{ color: '#28527a', fontSize: 18, marginRight: Dimensions.get('window').width * 0.57 }}>熱門活動</Text>
+                <Text style={{ color: '#28527a' }} onPress={() => { navigation.navigate('more'); }}>顯示更多</Text>
               </HStack>
             </Box>
             <Divider style={{ marginTop: 5 }} bg="#BFBFBF" /* my=margin-top and margin-bottom */ />

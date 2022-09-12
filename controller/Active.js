@@ -624,6 +624,16 @@ async function getAllAttendees(docID) {
   }
   return info;
 }
+async function deleteEverySingleAttendee(docID) {
+  const db = firebase.firestore();
+  const activesRef = db.collection('attendees');
+  const querySnapshot = await activesRef.get();
+  querySnapshot.forEach(async (student) => {
+    await activesRef.doc(student.id).collection('attendedEvent').doc(docID).delete();
+    await activesRef.doc(student.id).collection('hostedEvent').doc(docID).delete();
+  });
+  console.log('delete successfully!');
+}
 
 async function removeAttendee(docID, studentID) { // remove attendee
   const db = firebase.firestore();
@@ -792,6 +802,7 @@ export default {
   getHangOutActive,
   getEventActive,
   deleteOneActive,
+  deleteEverySingleAttendee,
   getOneActive,
   fuseSearchName,
   sentMessage,

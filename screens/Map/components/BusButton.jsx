@@ -27,7 +27,7 @@ export default function BusButton({ bottomDrawerShow, navigation }) {
           shadowRadius: 1.3,
           display: bottomDrawerShow ? 'none' : 'flex',
         }}
-        onPress={() => navigation.navigate('公車')}
+        onPress={() => navigation.navigate('依班次')}
       >
         <Icon as={Ionicons} name="bus-outline" size="9" color="#fbeeac" />
       </TouchableOpacity>

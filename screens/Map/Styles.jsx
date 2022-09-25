@@ -3,6 +3,22 @@ import { StyleSheet } from 'react-native';
 const colorDarkBlue = '#28527A';
 
 export default StyleSheet.create({
+  background: {
+    paddingTop: 50,
+    flex: 1,
+    justifyContent: 'flex-start',
+    marginHorizontal: 16,
+  },
+  title: {
+    textAlign: 'center',
+  },
+  separator: {
+    borderBottomColor: '#737373',
+    borderBottomWidth: StyleSheet.hairlineWidth,
+  },
+  fixToText: {
+    flexDirection: 'row',
+  },
   flex: {
     flex: 1,
   },

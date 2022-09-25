@@ -8,7 +8,8 @@ import { Alert } from 'react-native';
  *
  * @returns {Date} the formatted date string
  */
-function toDateString(date) {
+function toDateString(time) {
+  const date = new Date(time * 1000);
   const dateString = `${date.getFullYear().toString()}/${
     (date.getMonth() + 1).toString().padStart(2, '0')}/${
     date.getDate().toString().padStart(2, '0')}  ${
@@ -449,6 +450,223 @@ async function getItemComment(itemId) {
   return (result);
 }
 
+// 新的 addItem
+async function newAddItem(
+  type, productName, price, negotiable, tradeLocation, description, tag, imageUri,
+) {
+  const { uid } = firebase.auth().currentUser;
+  const date = new Date();
+
+  const db = firebase.firestore();
+  const itemRef = db.collection('Sales');
+
+  const imageAddress = `sales/${getImageName(uid, date)}`;
+  const storageRef = firebase.storage().ref();
+  const imageRef = storageRef.child(imageAddress);
+
+  const item = {
+    uid,
+    description: description.trim(),
+    imageAddress,
+    launchTime: date,
+    negotiable,
+    price: price.trim(),
+    productName: productName.trim(),
+    tag: tag.trim(),
+    tradeLocation,
+    type: type.trim(),
+  };
+
+  const response = await fetch(imageUri);
+  const blob = await response.blob();
+  imageRef.put(blob);
+  itemRef.add(item);
+  Alert.alert('新增成功!');
+}
+
+// 新的 updateItem
+async function newUpdateItem(
+  itemId, productName, price, tradeLocation, description, tag, imageEditted, imageUri = undefined,
+) {
+  const { uid } = firebase.auth().currentUser;
+  const date = new Date();
+
+  const db = firebase.firestore();
+  const itemRef = db.collection('Sales');
+  const itemDocRef = await itemRef.doc(itemId).get();
+
+  const imageAddress = imageEditted ? `sales/${getImageName(uid, date)}` : itemDocRef.data().imageAddress;
+  const storageRef = firebase.storage().ref();
+  const oldImageRef = storageRef.child(itemDocRef.data().imageAddress);
+  const newImageRef = storageRef.child(imageAddress);
+
+  const newItem = {
+    uid,
+    productName: productName.trim(),
+    price: price.trim(),
+    tradeLocation: tradeLocation.trim(),
+    description: description.trim(),
+    launchTime: date,
+    dateString: toDateString(date),
+    tag: tag.trim(),
+    imageAddress,
+  };
+
+  if (!newItem.productName) throw new Error('名稱不得為空！');
+  if (!newItem.price) throw new Error('價錢不得為空！');
+  if (!newItem.tradeLocation) throw new Error('地點不得為空！');
+  if (!newItem.tagId) throw new Error('你必須選擇一個標籤！');
+  if (imageEditted && !imageUri) throw new Error('你必須上傳一張圖片！');
+
+  newItem.price = Number(newItem.price);
+  if (Number.isNaN(newItem.price)) throw new Error('價格必須為數字！');
+
+  if (imageEditted) {
+    const response = await fetch(imageUri);
+    const blob = await response.blob();
+    oldImageRef.delete();
+    newImageRef.put(blob);
+  }
+  itemRef.doc(itemId).set(newItem, { merge: true });
+  Alert.alert('更新成功!');
+}
+
+// 新的 deleteItem
+async function newDeleteItem(itemId) {
+  const db = firebase.firestore();
+  const itemDocRef = db.collection('Sales').doc(itemId);
+  const itemDocData = await itemDocRef.get();
+
+  const storageRef = firebase.storage().ref();
+  const imageRef = storageRef.child(itemDocData.data().imageAddress);
+
+  imageRef.delete();
+  itemDocRef.delete();
+  Alert.alert('刪除成功');
+}
+
+// 根據 type 得到商品 option 0: 出售、1:收購、2:租借
+/**
+ * Get items filtered by type as an array
+ *
+ * item type definition
+ * @typedef {Object} item
+ * @property {String} id - the ID of the item
+ * @property {String} productName - the name of the item
+ * @property {String} price - the price of the item
+ * @property {String} place - where the seller expected to deal
+ * @property {String} description - detail or note of the item
+ * @property {String} dateString - the formatted date string
+ * @property {Boolean} show - true: visible, false: invisible
+ * @property {String} tag - the name of the tag
+ * @property {String} imageURL - the url of the image
+ *
+ * @returns {Array} all items filterd by type
+ */
+async function getItembyType(option) {
+  const itemsArray = [];
+  const type = ['出售', '收購', '租借'];
+  // console.log('typeOption', type[option]);
+  const db = firebase.firestore();
+  const itemRef = db.collection('Sales');
+  const storageRef = firebase.storage().ref();
+  const querySnapshot = await itemRef.where('type', '==', type[option]).orderBy('launchTime', 'desc').get();
+  querySnapshot.forEach((doc) => {
+    itemsArray.push({ launchTime: toDateString(doc.data().launchTime), ...doc.data(), id: doc.id });
+  });
+  // console.log(itemsArray);
+
+  const result = await Promise.all(itemsArray.map(async (item) => {
+    const imageURL = await storageRef.child(item.imageAddress).getDownloadURL();
+    return {
+      ...item,
+      imageURL,
+    };
+  }));
+  return (result);
+}
+
+// 根據 tag 得到商品 option 0: 課業文具、1:日常用品、2:居家用品、3: 美食料理、4:衣服配件、5:美妝保護、6:票券/周邊、7:其他
+/**
+ * Get items filtered by type as an array
+ *
+ * item type definition
+ * @typedef {Object} item
+ * @property {String} id - the ID of the item
+ * @property {String} productName - the name of the item
+ * @property {String} price - the price of the item
+ * @property {String} place - where the seller expected to deal
+ * @property {String} description - detail or note of the item
+ * @property {String} dateString - the formatted date string
+ * @property {Boolean} show - true: visible, false: invisible
+ * @property {String} tag - the name of the tag
+ * @property {String} imageURL - the url of the image
+ *
+ * @returns {Array} all items filterd by type
+ */
+async function getItembyTag(tagid) {
+  const itemsArray = [];
+  const tag = ['課業文具', '日常用品', '居家用品', '美食料理', '衣服配件', '美妝保護', '票券/周邊', '其他'];
+  const db = firebase.firestore();
+  const itemRef = db.collection('Sales');
+  const storageRef = firebase.storage().ref();
+  const querySnapshot = await itemRef.where('tag', '==', tag[tagid]).orderBy('launchTime', 'desc').get();
+  querySnapshot.forEach((doc) => {
+    itemsArray.push({ launchTime: toDateString(doc.data().launchTime), ...doc.data(), id: doc.id });
+  });
+
+  const result = await Promise.all(itemsArray.map(async (item) => {
+    const imageURL = await storageRef.child(item.imageAddress).getDownloadURL();
+    return {
+      ...item,
+      imageURL,
+    };
+  }));
+  return (result);
+}
+
+async function getItembyTagandType(tagid, typeid) {
+  const itemsArray = [];
+  const tag = ['課業文具', '日常用品', '居家用品', '美食料理', '衣服配件', '美妝保護', '票券/周邊', '其他'];
+  const type = ['出售', '收購', '租借'];
+  const db = firebase.firestore();
+  const itemRef = db.collection('Sales');
+  const storageRef = firebase.storage().ref();
+  const querySnapshot = await itemRef.where('tag', '==', tag[tagid]).where('type', '==', type[typeid]).orderBy('launchTime', 'desc').get();
+  querySnapshot.forEach((doc) => {
+    itemsArray.push({ launchTime: toDateString(doc.data().launchTime), ...doc.data(), id: doc.id });
+  });
+
+  const result = await Promise.all(itemsArray.map(async (item) => {
+    const imageURL = await storageRef.child(item.imageAddress).getDownloadURL();
+    return {
+      ...item,
+      imageURL,
+    };
+  }));
+  return (result);
+}
+
+async function getAllItems() {
+  const itemsArray = [];
+  const db = firebase.firestore();
+  const itemRef = db.collection('Sales');
+  const storageRef = firebase.storage().ref();
+  const querySnapshot = await itemRef.orderBy('launchTime', 'desc').get();
+  querySnapshot.forEach((doc) => {
+    itemsArray.push({ launchTime: toDateString(doc.data().launchTime), ...doc.data(), id: doc.id });
+  });
+
+  const result = await Promise.all(itemsArray.map(async (item) => {
+    const imageURL = await storageRef.child(item.imageAddress).getDownloadURL();
+    return {
+      ...item,
+      imageURL,
+    };
+  }));
+  return (result);
+}
+
 export default {
   getAllTag,
   addItem,
@@ -462,4 +680,11 @@ export default {
   updateComment,
   deleteComment,
   getItemComment,
+  newAddItem,
+  newUpdateItem,
+  newDeleteItem,
+  getItembyType,
+  getItembyTag,
+  getItembyTagandType,
+  getAllItems,
 };

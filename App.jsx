@@ -14,14 +14,6 @@ import MapScreen from './screens/Map';
 import SaleScreen from './screens/Sale';
 import EventScreen from './screens/Event';
 
-// const firebaseConfig = {
-//   apiKey: 'AIzaSyA8GH6yj1i4gJM0H_ZTsurYG3Dqn4-nIS8',
-//   authDomain: 'ncu-app-test.firebaseapp.com',
-//   projectId: 'ncu-app-test',
-//   storageBucket: 'ncu-app-test.appspot.com',
-//   messagingSenderId: '739839700130',
-//   appId: '1:739839700130:web:37591d0118a440488cfbfb',
-// };
 const firebaseConfig = {
   apiKey: 'AIzaSyAE1BMN-NymGGpNppqzqeOkQTfVZyrBXzo',
   authDomain: 'test-e75af.firebaseapp.com',

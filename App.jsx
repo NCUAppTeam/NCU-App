@@ -14,15 +14,23 @@ import MapScreen from './screens/Map';
 import SaleScreen from './screens/Sale';
 import EventScreen from './screens/Event';
 
+// const firebaseConfig = {
+//   apiKey: 'AIzaSyA8GH6yj1i4gJM0H_ZTsurYG3Dqn4-nIS8',
+//   authDomain: 'ncu-app-test.firebaseapp.com',
+//   projectId: 'ncu-app-test',
+//   storageBucket: 'ncu-app-test.appspot.com',
+//   messagingSenderId: '739839700130',
+//   appId: '1:739839700130:web:37591d0118a440488cfbfb',
+// };
 const firebaseConfig = {
-  apiKey: 'AIzaSyA8GH6yj1i4gJM0H_ZTsurYG3Dqn4-nIS8',
-  authDomain: 'ncu-app-test.firebaseapp.com',
-  projectId: 'ncu-app-test',
-  storageBucket: 'ncu-app-test.appspot.com',
-  messagingSenderId: '739839700130',
-  appId: '1:739839700130:web:37591d0118a440488cfbfb',
+  apiKey: 'AIzaSyAE1BMN-NymGGpNppqzqeOkQTfVZyrBXzo',
+  authDomain: 'test-e75af.firebaseapp.com',
+  projectId: 'test-e75af',
+  storageBucket: 'test-e75af.appspot.com',
+  messagingSenderId: '521591460213',
+  appId: '1:521591460213:web:1e510d65b7c13ebe76833c',
+  measurementId: 'G-T1RS72GEX1',
 };
-
 const Tab = createBottomTabNavigator();
 
 function MainApp() {

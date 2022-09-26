@@ -1,12 +1,33 @@
 import React, { useState } from 'react';
-import { View, Platform } from 'react-native';
+import { View, Dimensions } from 'react-native';
+
 import firebase from 'firebase';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Provider as PaperProvider } from 'react-native-paper';
-import { Icon, NativeBaseProvider } from 'native-base';
+import {
+  NativeBaseProvider,
+  Box,
+  Text,
+  Heading,
+  VStack,
+  FormControl,
+  Input,
+  Link,
+  Button,
+  Icon,
+  HStack,
+  Center,
+  Pressable,
+  Container,
+  TouchableOpacity,
+} from 'native-base';
+import {
+  MaterialCommunityIcons,
+  MaterialIcons,
+  Ionicons,
+} from '@expo/vector-icons';
 import AwesomeIcon from '@expo/vector-icons/FontAwesome5';
-import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
+
 import AuthScreen from './screens/Auth';
 import DashboardScreen from './screens/Dashboard';
 import CalendarScreen from './screens/Calendar';
@@ -14,120 +35,184 @@ import MapScreen from './screens/Map';
 import SaleScreen from './screens/Sale';
 import EventScreen from './screens/Event';
 
+
+
+
 const firebaseConfig = {
-  apiKey: 'AIzaSyAE1BMN-NymGGpNppqzqeOkQTfVZyrBXzo',
-  authDomain: 'test-e75af.firebaseapp.com',
-  projectId: 'test-e75af',
-  storageBucket: 'test-e75af.appspot.com',
-  messagingSenderId: '521591460213',
-  appId: '1:521591460213:web:1e510d65b7c13ebe76833c',
-  measurementId: 'G-T1RS72GEX1',
+  apiKey: 'AIzaSyA8GH6yj1i4gJM0H_ZTsurYG3Dqn4-nIS8',
+  authDomain: 'ncu-app-test.firebaseapp.com',
+  projectId: 'ncu-app-test',
+  storageBucket: 'ncu-app-test.appspot.com',
+  messagingSenderId: '739839700130',
+  appId: '1:739839700130:web:37591d0118a440488cfbfb',
 };
 const Tab = createBottomTabNavigator();
-
 function MainApp() {
+  const [selected, setSelected] = React.useState(1);
+
+  const renderSelectedTab = () => {
+    switch (selected) {
+      case 0:
+        return <DashboardScreen />;
+        break;
+      case 1:
+        return <CalendarScreen />;
+        break;
+      case 2:
+        return <EventScreen />;
+        break;
+      case 3:
+        return <MapScreen />;
+        break;
+      case 4:
+        return <SaleScreen />;
+        break;
+      default:
+    }
+  };
+
+
+  // activeTintColor: '#E5EBF1',
+  //           inactiveTintColor: '#28527A',
+  //           activeBackgroundColor: '#28527A',
+  //           inactiveBackgroundColor: '#E5EBF1',
   return (
     <NativeBaseProvider>
-      <NavigationContainer>
-        <Tab.Navigator
-          initialRouteName="Dashboard"
-          screenOptions={{
-            tabBarStyle: { height: Platform.OS === 'ios' ? '10%' : '8%' },
-            tabBarLabelStyle: {
-              marginBottom: 5,
-              fontWeight: 'bold',
-            },
-          }}
-          tabBarOptions={{
-            activeTintColor: '#E5EBF1',
-            inactiveTintColor: '#28527A',
-            activeBackgroundColor: '#28527A',
-            inactiveBackgroundColor: '#E5EBF1',
-          }}
-        >
-          <Tab.Screen
-            name="Dashboard"
-            component={DashboardScreen}
-            options={{
-              headerShown: false,
-              tabBarLabel: '首頁',
-              tabBarIcon: ({ focused }) => (
-                <Icon
-                  as={MaterialCommunityIcons}
-                  name="home-outline"
-                  color={focused ? '#E5EBF1' : '#28527A'}
-                />
-              ),
-            }}
-          />
-          <Tab.Screen
-            name="Sales"
-            component={SaleScreen}
-            options={{
-              headerShown: false,
-              tabBarLabel: '拍賣',
-              tabBarIcon: ({ focused }) => (
-                <Icon
-                  as={MaterialCommunityIcons}
-                  name="cart-outline"
-                  color={focused ? '#E5EBF1' : '#28527A'}
-                />
-              ),
-            }}
-          />
-          <Tab.Screen
-            name="Calendar"
-            component={CalendarScreen}
-            options={{
-              headerShown: false,
-              tabBarLabel: '行事曆',
-              tabBarIcon: ({ focused }) => (
-                <Icon
-                  as={MaterialCommunityIcons}
-                  name="calendar-month"
-                  color={focused ? '#E5EBF1' : '#28527A'}
-                />
-              ),
-            }}
-          />
-          <Tab.Screen
-            name="Event"
-            component={EventScreen}
-            options={{
-              headerShown: false,
-              tabBarLabel: '揪人',
-              tabBarIcon: ({ focused }) => (
-                <Icon
-                  as={Ionicons}
-                  name="game-controller-outline"
-                  color={focused ? '#E5EBF1' : '#28527A'}
-                />
-              ),
-            }}
-          />
-          <Tab.Screen
-            name="Map"
-            component={MapScreen}
-            options={{
-              headerShown: false,
-              tabBarLabel: '地圖',
-              tabBarIcon: ({ focused }) => (
-                <Icon
-                  as={MaterialCommunityIcons}
-                  name="map-outline"
-                  color={focused ? '#E5EBF1' : '#28527A'}
-                />
-              ),
-            }}
-          />
-        </Tab.Navigator>
-      </NavigationContainer>
+
+      <Box flex={1} bg="white" safeAreaTop width="100%" alignSelf="center">
+          <Center flex={1}>{renderSelectedTab()}</Center>
+        <HStack bg="#E5EBF1" alignItems="center" safeAreaBottom shadow={6}>
+          <Pressable py="2" flex={1} onPress={() => setSelected(0)} bg={selected === 0 ? '#28527A' : '#E5EBF1'}>
+            <Center>
+              <Icon
+                as={MaterialCommunityIcons}
+                name="home-outline"
+                color={selected === 0 ? '#E5EBF1' : '#28527A'}
+                size="sm"
+              />
+              <Text color={selected === 0 ? '#E5EBF1' : '#28527A'} fontSize="12">
+                首頁
+              </Text>
+            </Center>
+          </Pressable>
+          
+          <Pressable py="2" flex={1} onPress={() => setSelected(1)} bg={selected === 1 ? '#28527A' : '#E5EBF1'}>
+            <Center>
+              <Icon
+                as={MaterialCommunityIcons}
+                name="calendar-month"
+                color={selected === 1 ? '#E5EBF1' : '#28527A'}
+                
+                size="sm"
+              />
+              <Text color={selected === 1 ? '#E5EBF1' : '#28527A'} fontSize="12">
+                行事曆
+              </Text>
+            </Center>
+          </Pressable>
+          <Pressable py="2" flex={1} onPress={() => setSelected(2)} bg={selected === 2 ? '#28527A' : '#E5EBF1'}>
+            <Center>
+              <Icon
+                as={Ionicons}
+                name="game-controller-outline"
+                color={selected === 2 ? '#E5EBF1' : '#28527A'}
+                size="sm"
+              />
+              <Text color={selected === 2 ? '#E5EBF1' : '#28527A'} fontSize="12">
+                活動
+              </Text>
+            </Center>
+          </Pressable>
+          <Pressable py="2" flex={1} onPress={() => setSelected(3)} bg={selected === 3 ? '#28527A' : '#E5EBF1'}>
+            <Center>
+              <Icon
+                as={MaterialCommunityIcons}
+                name="map-outline"
+                color={selected === 3 ? '#E5EBF1' : '#28527A'}
+                size="sm"
+              />
+              <Text color={selected === 3 ? '#E5EBF1' : '#28527A'} fontSize="12">
+                地圖
+              </Text>
+            </Center>
+          </Pressable>
+          <Pressable py="2" flex={1} onPress={() => setSelected(4)} bg={selected === 4 ? '#28527A' : '#E5EBF1'}>
+            <Center>
+              <Icon
+                as={MaterialCommunityIcons}
+                name="cart-outline"
+                color={selected === 4 ? '#E5EBF1' : '#28527A'}
+                size="sm"
+              />
+              <Text color={selected === 4 ? '#E5EBF1' : '#28527A'} fontSize="12">
+                拍賣
+              </Text>
+            </Center>
+          </Pressable>
+        </HStack>
+      </Box>
     </NativeBaseProvider>
   );
 }
 
+const CustomTabBar = ({ state, descriptors, navigation }) => {
+  const [selected, setSelected] = React.useState(1);
+  return (
+    <HStack bg="#E5EBF1" alignItems="center" safeAreaBottom shadow={6}>
+    {state.routes.map((route, index) => {
+        const { options } = descriptors[route.key];
+        const label =
+          options.tabBarLabel !== undefined
+            ? options.tabBarLabel
+            : options.title !== undefined
+            ? options.title
+            : route.name;
+
+        const isFocused = state.index === index;
+
+        const onPress = () => {
+          const event = navigation.emit({
+            type: 'tabPress',
+            target: route.key,
+          });
+
+          if (!isFocused && !event.defaultPrevented) {
+            navigation.navigate(route.name);
+          }
+        };
+
+        const icon_name = {
+            '首頁': 'home-outline',
+            '行事曆':'calendar-month',
+            '活動':'game-controller-outline',
+            '地圖':'map-outline',
+            '拍賣':'cart-outline'
+        };
+
+        return (
+          
+          <Pressable py="2" flex={1} onPress={onPress} bg={isFocused? '#28527A' : '#E5EBF1'}>
+            <Center>
+              <Icon
+                as={label === '活動' ? Ionicons : MaterialCommunityIcons }
+                name={icon_name[label]}
+                color={isFocused ? '#E5EBF1' : '#28527A'}
+                size="sm"
+              />
+              <Text color={isFocused ? '#E5EBF1' : '#28527A'} fontSize="12">
+                {label}
+              </Text>
+            </Center>
+          </Pressable>
+        
+        );
+      })}
+      </HStack>
+  )
+}
+
 export default function App() {
-  /*if (!firebase.apps.length) {
+  if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
   } else {
     firebase.app();
@@ -139,25 +224,28 @@ export default function App() {
   });
 
   if (auth === undefined) {
-    return (<View />);
+    return <View />;
   }
 
   return (
-    <PaperProvider
-      settings={{
-        icon: (props) => <AwesomeIcon {...props} />,
-      }}
-    >
-      { auth ? <MainApp /> : <AuthScreen />}
-    </PaperProvider>
-  );*/
-  return (
-    <PaperProvider
-      settings={{
-        icon: (props) => <AwesomeIcon {...props} />,
-      }}
-    >
-      <MainApp />
-    </PaperProvider>
+    /* { auth ? <MainApp /> : <AuthScreen />} */
+    <NativeBaseProvider>
+    <NavigationContainer>
+      <Tab.Navigator
+        screenOptions={{
+          headerShown: false,
+        }}
+        tabBar={(props) => (
+          <CustomTabBar {...props} />
+        )}
+      >
+        <Tab.Screen name="首頁" component={DashboardScreen}/>
+        <Tab.Screen name="行事曆" component={CalendarScreen} />
+        <Tab.Screen name="活動" component={EventScreen} />
+        <Tab.Screen name="地圖" component={MapScreen} />
+        <Tab.Screen name="拍賣" component={SaleScreen} />
+      </Tab.Navigator>
+    </NavigationContainer>
+    </NativeBaseProvider>
   );
 }

@@ -10,33 +10,33 @@ const defaultLinks = {
     {
       id: '0',
       type: 'carpool',
-      link: 'https://firebasestorage.googleapis.com/v0/b/test-e75af.appspot.com/o/actives%2Fcarpool.jpg?alt=media&token=7bd43726-708e-401b-9750-f7cd21aa966e',
+      link: 'https://firebasestorage.googleapis.com/v0/b/ncu-app-test.appspot.com/o/actives%2Fcarpool.jpg?alt=media&token=e1486af1-6c69-4079-a0c1-d2071ab3fc5d',
     },
   1:
     {
       id: '1',
       type: 'exercising',
-      link: 'https://firebasestorage.googleapis.com/v0/b/test-e75af.appspot.com/o/actives%2Fexercising.jpg?alt=media&token=c83916b6-a886-4a3a-a41a-6a142893c2f9',
+      link: 'https://firebasestorage.googleapis.com/v0/b/ncu-app-test.appspot.com/o/actives%2Fexercising.jpg?alt=media&token=7f6ab5d3-658a-4a18-b05e-7c8f4082d8c6',
     },
   2: {
     id: '2',
     type: 'HangOut',
-    link: 'https://firebasestorage.googleapis.com/v0/b/test-e75af.appspot.com/o/actives%2Fhangout.jpg?alt=media&token=2a0690ce-a757-43dd-bc5f-b01677d49538',
+    link: 'https://firebasestorage.googleapis.com/v0/b/ncu-app-test.appspot.com/o/actives%2Fhangout.jpg?alt=media&token=dc27fce4-572b-430d-8868-51b522a9f523',
   },
   3: {
     id: '3',
     type: 'schoolEvent',
-    link: 'https://firebasestorage.googleapis.com/v0/b/test-e75af.appspot.com/o/actives%2FschoolEvent.jpg?alt=media&token=3c5d6b97-e420-4a79-a2b0-bb5841a7cd66',
+    link: 'https://firebasestorage.googleapis.com/v0/b/ncu-app-test.appspot.com/o/actives%2FschoolEvent.jpg?alt=media&token=7c4fce8e-1d8b-4c36-a227-e73ecba8a56b',
   },
   4: {
     id: '4',
     type: 'tiedEvent',
-    link: 'https://firebasestorage.googleapis.com/v0/b/test-e75af.appspot.com/o/actives%2FtiedEvent.jpg?alt=media&token=e6f2f797-34ac-497e-9abe-8acdfd9dd1bf',
+    link: 'https://firebasestorage.googleapis.com/v0/b/ncu-app-test.appspot.com/o/actives%2FtiedEvent.jpg?alt=media&token=4bb055ea-cbc3-4afd-953e-be38a7104c82',
   },
   5: {
     id: '5',
     type: 'clubEvent',
-    link: 'https://firebasestorage.googleapis.com/v0/b/test-e75af.appspot.com/o/actives%2FclubEvent.jpg?alt=media&token=d08968d7-c673-4987-aab8-961fa3f85c8e',
+    link: 'https://firebasestorage.googleapis.com/v0/b/ncu-app-test.appspot.com/o/actives%2FclubEvent.jpg?alt=media&token=3a29c950-b9b7-4d92-8cca-362d4308a4db',
   },
 };
 
@@ -84,24 +84,22 @@ function sentMessage(message) {
 }
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyAE1BMN-NymGGpNppqzqeOkQTfVZyrBXzo',
-  authDomain: 'test-e75af.firebaseapp.com',
-  projectId: 'test-e75af',
-  storageBucket: 'test-e75af.appspot.com',
-  messagingSenderId: '521591460213',
-  appId: '1:521591460213:web:1e510d65b7c13ebe76833c',
-  measurementId: 'G-T1RS72GEX1',
+  apiKey: 'AIzaSyA8GH6yj1i4gJM0H_ZTsurYG3Dqn4-nIS8',
+  authDomain: 'ncu-app-test.firebaseapp.com',
+  projectId: 'ncu-app-test',
+  storageBucket: 'ncu-app-test.appspot.com',
+  messagingSenderId: '739839700130',
+  appId: '1:739839700130:web:37591d0118a440488cfbfb',
 };
 
-//   測試用 Firebase//劭劭的
-// const firebaseConfig = {
-//   apiKey: 'AIzaSyBm2ChoLgXWTpgqEY-ZcANn2Uymmop0hPM',
-//   authDomain: 'test-85cdf.firebaseapp.com',
-//   projectId: 'test-85cdf',
-//   storageBucket: 'test-85cdf.appspot.com',
-//   messagingSenderId: '15833338613',
-//   appId: '1:15833338613:web:b7f820d6b80972c40babbc',
-//   measurementId: 'G-KLH3NVQ7PH',
+// const firebaseConfig = { //測試用firebase
+//   apiKey: 'AIzaSyAE1BMN-NymGGpNppqzqeOkQTfVZyrBXzo',
+//   authDomain: 'test-e75af.firebaseapp.com',
+//   projectId: 'test-e75af',
+//   storageBucket: 'test-e75af.appspot.com',
+//   messagingSenderId: '521591460213',
+//   appId: '1:521591460213:web:1e510d65b7c13ebe76833c',
+//   measurementId: 'G-T1RS72GEX1',
 // };
 
 //    測試用 output -- 顯示在手機上
@@ -139,9 +137,6 @@ async function addActive(active) {
     limitNum: active.limitNum,
     genre: active.genre,
     link: active.link.trim(),
-    // hostName: active.hostName.trim(),
-    // hostPhone: active.hostPhone.trim(),
-    // hostMail: active.hostMail.trim(),
     details: active.details.trim(),
   };
 
@@ -649,16 +644,16 @@ async function addUser() {
   const db = firebase.firestore();
   const attendeeRef = db.collection('attendees');
   const memberInfo = {
-    studentID: '110403523',
-    name: '徐雯',
-    major: '化學工程與材料工程學系',
-    grade: 4,
+    studentID: '111201512',
+    name: '沈思怡',
+    major: '英美語文學系',
+    grade: 1,
     phone: '0906666888',
-    email: 'ncu@gmail.com',
-    avatar: 'https://firebasestorage.googleapis.com/v0/b/active-e1014.appspot.com/o/actives%2F_4pimcui3FxablQrSCnQcZYCRBw8GHl-P604nwcGPnniiMrAoE23lCkWaaEgJ2flQbqcxTrn7PEp6GnehqFeruE%3Dw1280?alt=media&token=acca5f3f-000d-41bb-b7a2-c5575641cdfb',
+    email: 'jintong@4ever.com',
+    avatar: 'https://firebasestorage.googleapis.com/v0/b/ncu-app-test.appspot.com/o/avatar%2Fsee.jpg?alt=media&token=38cd1d0d-2b29-44cd-9461-5f9afa354f53',
   };
 
-  attendeeRef.doc('110403523').set(memberInfo, { merge: true }).then(console.log('succeed'));
+  attendeeRef.doc('111201512').set(memberInfo, { merge: true }).then(console.log('succeed'));
   const result = await attendeeRef.get();
   result.forEach((doc) => console.log(doc.data()));
 }

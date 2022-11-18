@@ -133,6 +133,5 @@ export default StyleSheet.create({
   },
   removeBox: {
     width: 350,
-    marginTop: Dimensions.get('window').height * 0.02,
   },
 });

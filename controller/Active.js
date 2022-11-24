@@ -819,6 +819,32 @@ async function getMessage(fromData,toData){
   return message;
 }
 
+async function getRelativeMessage(){
+  const user="110501444";
+  const db = firebase.firestore();
+  const messageRef = db.collection('message');
+  const message = [];
+  const querySnapshot1 = await messageRef.where("send","==",user).get();
+  const querySnapshot2 = await messageRef.where("receive","==",user).get();
+  querySnapshot1.forEach((doc) => {
+    message.push({
+      message: doc.data().message,
+      send: doc.data().send,
+      receive: doc.data().receive,
+      sendTime:doc.data().sendTime,
+    });
+    }
+  );
+  querySnapshot2.forEach((doc) => {
+    message.push({
+      message: doc.data().message,
+      send: doc.data().send,
+      receive: doc.data().receive,
+      sendTime:doc.data().sendTime,
+    });
+  });
+  return message;
+}
 export default {
   firebaseConfig,
   toDateString,
@@ -845,4 +871,5 @@ export default {
   getAttendedOrNot,
   addMessage,
   getMessage,
+  getRelativeMessage,
 };

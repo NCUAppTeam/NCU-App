@@ -15,7 +15,8 @@ import styles from './style_folder/Styles_Message';
 import ActiveController from '../../controller/Active';
 
 function message({ route, navigation }) {
-  const prepage = JSON.stringify(route.params).slice(12, -2);
+  const Cd = route.params;
+  const prepage = JSON.stringify(Cd).slice(12, -2);
   const [data, setData] = useState({});
   const [getData, setGetData] = useState([]);
   useEffect(() => {

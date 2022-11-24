@@ -18,11 +18,7 @@ function Send({ navigation }) {
   const [data, setData] = useState({});
   const [getData, setGetData] = useState([]);
   useEffect(() => {
-    if (data.from === undefined && data.to === undefined) {
-      data.from = '110303987';
-      data.to = '110303876';
-    }
-    ActiveController.getMessage(data.from, data.to).then((res) => {
+    ActiveController.getRelativeMessage().then((res) => {
       setGetData(res);
     }).then().catch((err) => {
       throw err;
@@ -31,11 +27,7 @@ function Send({ navigation }) {
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = () => {
     setRefreshing(true);
-    if (data.from === undefined && data.to === undefined) {
-      data.from = '110303987';
-      data.to = '110303876';
-    }
-    ActiveController.getMessage(data.from, data.to).then((res) => {
+    ActiveController.getRelativeMessage().then((res) => {
       setGetData(res);
     }).then().catch((err) => {
       throw err;
@@ -87,15 +79,15 @@ function Send({ navigation }) {
             <Text>from</Text>
             <TextInput
               placeholder="學號"
-              value={data.from}
-              onChangeText={(text) => setData({ ...data, from: text })}
+              value={data.send}
+              onChangeText={(text) => setData({ ...data, send: text })}
               selectionColor="#ccc"
             />
             <Text>to</Text>
             <TextInput
               placeholder="學號"
-              value={data.to}
-              onChangeText={(text) => setData({ ...data, to: text })}
+              value={data.receive}
+              onChangeText={(text) => setData({ ...data, receive: text })}
               selectionColor="#ccc"
             />
             <Text>message</Text>
@@ -107,7 +99,7 @@ function Send({ navigation }) {
             <Button
               title="傳送"
               onPress={() => {
-                data.uploadTime = new Date();
+                data.sendTime = new Date();
                 ActiveController.addMessage(data);
               }}
             />
@@ -116,7 +108,7 @@ function Send({ navigation }) {
 
             <View>
               {getData.map(({
-                id, from, to, message,
+                id, send, receive, message,
               }) => (
                 <Card
                   key={id}
@@ -124,11 +116,11 @@ function Send({ navigation }) {
                   <Card.Content>
                     <Text>
                       from:
-                      {from}
+                      {send}
                     </Text>
                     <Text>
                       to:
-                      {to}
+                      {receive}
                     </Text>
                     <Text>
                       message:
@@ -141,7 +133,7 @@ function Send({ navigation }) {
             <Button
               title="讀取"
               onPress={() => {
-                ActiveController.getMessage(110303987, 110303876);
+                ActiveController.getRelativeMessage();
               }}
             />
 

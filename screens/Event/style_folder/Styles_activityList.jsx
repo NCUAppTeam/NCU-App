@@ -18,8 +18,8 @@ export default StyleSheet.create({
   },
   Card2: {
     marginTop: 10,
-    height: Dimensions.get('window').width * 0.55,
-    width: Dimensions.get('window').width * 0.37,
+    height: Dimensions.get('window').width * 0.6,
+    width: Dimensions.get('window').width * 0.43,
     borderRadius: 10,
     shadowColor: 'black',
     shadowOffset: {

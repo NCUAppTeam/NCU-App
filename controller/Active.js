@@ -785,40 +785,68 @@ async function getAttendedOrNot(docID) {
   return false;
 }
 
-async function addMessage(active){
-  const item={
-    message:active.message,
-    from:active.from.trim(),
-    to:active.to.trim(),
-    uploadTime:active.uploadTime,
-  }
+async function addMessage(active) {
+  const item = {
+    message: active.message,
+    from: active.from.trim(),
+    to: active.to.trim(),
+    uploadTime: active.uploadTime,
+  };
   const db = firebase.firestore();
   const messageRef = db.collection('message');
   messageRef.add(item);
   console.log(item);
 }
 
-async function getMessage(fromData,toData){
+async function getMessage(fromData, toData) {
   const db = firebase.firestore();
   const activesRef = db.collection('message');
   const message = [];
-  const querySnapshot = await activesRef.orderBy("uploadTime").get();
+  const querySnapshot = await activesRef.orderBy('uploadTime').get();
   querySnapshot.forEach((doc) => {
-    if((doc.data().from ==fromData && doc.data().to ==toData) ||
-    (doc.data().from ==toData && doc.data().to ==fromData)){
+    if ((doc.data().from == fromData && doc.data().to == toData)
+    || (doc.data().from == toData && doc.data().to == fromData)) {
       message.push({
         id: doc.id,
         message: doc.data().message,
         from: doc.data().from,
         to: doc.data().to,
-        uploadTime:doc.data().uploadTime,
+        uploadTime: doc.data().uploadTime,
       });
     }
   });
-  console.log(message);
   return message;
 }
 
+async function getRelativeMessage() {
+  const user = '110501444';
+  const db = firebase.firestore();
+  const messageRef = db.collection('message');
+  const message = [];
+  const querySnapshot1 = await messageRef.where('send', '==', user).get();
+  querySnapshot1.forEach((doc) => {
+    message.push({
+      id: doc.id,
+      message: doc.data().message,
+      send: doc.data().send,
+      receive: doc.data().receive,
+      sendTime: doc.data().sendTime,
+    });
+  });
+  const querySnapshot2 = await messageRef.where('receive', '==', user).get();
+  querySnapshot2.forEach((doc) => {
+    message.push({
+      id: doc.id,
+      message: doc.data().message,
+      send: doc.data().send,
+      receive: doc.data().receive,
+      sendTime: doc.data().sendTime,
+    });
+  });
+  // console.log(message);
+  message.sort((a, b) => a.sendTime - b.sendTime);
+  return message;
+}
 export default {
   firebaseConfig,
   toDateString,
@@ -845,4 +873,5 @@ export default {
   getAttendedOrNot,
   addMessage,
   getMessage,
+  getRelativeMessage,
 };

@@ -20,15 +20,7 @@ function message({ route, navigation }) {
   const [data, setData] = useState({});
   const [getData, setGetData] = useState([]);
   useEffect(() => {
-    if (data.from === undefined && data.to === undefined) {
-      data.from = '110303987';
-      data.to = '110303876';
-    }
-    ActiveController.getMessage(data.from, data.to).then((res) => {
-      setGetData(res);
-    }).then().catch((err) => {
-      throw err;
-    });
+
   }, []);
 
   const [attendeeINFO, setAttendeeInfo] = useState();
@@ -43,15 +35,7 @@ function message({ route, navigation }) {
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = () => {
     setRefreshing(true);
-    if (data.from === undefined && data.to === undefined) {
-      data.from = '110303987';
-      data.to = '110303876';
-    }
-    ActiveController.getMessage(data.from, data.to).then((res) => {
-      setGetData(res);
-    }).then().catch((err) => {
-      throw err;
-    });
+
     setRefreshing(false);
   };
 

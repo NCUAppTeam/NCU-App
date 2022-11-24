@@ -118,7 +118,7 @@ function personal({ navigation }) {
             >
               <TouchableOpacity
                 style={{ flexDirection: 'row' }}
-                onPress={() => navigation.navigate('message')}
+                onPress={() => navigation.navigate('message', { prepage: 'personal' })}
               >
                 <Feather name="message-circle" size={14} color="white" style={{ marginTop: 3 }} />
                 <Text style={{ color: 'white', fontSize: 14, fontWeight: 'bold' }}>

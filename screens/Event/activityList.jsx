@@ -63,7 +63,7 @@ function list({ navigation }) {
               name="comment"
               size={25}
               color="#28527A"
-              onPress={() => { navigation.navigate('message'); }}
+              onPress={() => { navigation.navigate('message', { prepage: 'list' }); }}
             />
           </View>
           <View style={{

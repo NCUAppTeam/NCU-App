@@ -14,8 +14,9 @@ export default StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     alignContent: 'center',
-    marginTop: 50,
-    marginHorizontal: 15,
+    paddingTop: 50,
+    paddingHorizontal: 15,
+    backgroundColor: '#fafafa',
     // marginHorizontal: Dimensions.get('window').width * 0.07,
   },
   DeletebtnInManage: {

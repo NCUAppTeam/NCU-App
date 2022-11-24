@@ -114,116 +114,121 @@ function manage({ route, navigation }) {
                   width={Dimensions.get('window').width * 0.9}
                   height={Dimensions.get('window').width * 0.733}
                   visible={showDialog1}
+                >
+                  <DialogContent style={{
+                    paddingBottom: 0,
+                    borderBottomWidth: 1,
+                    borderBottomColor: '#e5e5e5',
+                  }}
                   >
-                    <DialogContent style={{paddingBottom:0,
-                      borderBottomWidth:1,
-                      borderBottomColor:"#e5e5e5",}}>
-                      <View style={{
-                        flexDirection: 'row',
-                        
-                        paddingBottom:5,
-                        justifyContent: "space-between",
-                        }}>
-                        <View>
-                          <Text style={{
-                            textAlign: 'left',
-                            color: '#1f2937',
-                            fontSize: 16,
-                            fontWeight: '400',
-                            marginTop: 17,
-                            marginBottom: 10,
-                          }}
-                          >
-                            刪除活動&ensp;
-                          </Text>
-                        </View>
-                        <View>
-                          <Feather
-                            name="x"
-                            size={26}
-                            color="#1F2937"
-                            style={{ 
-                              // marginLeft: Dimensions.get('window').width * 0.5,
-                              marginTop: 15
-                            }}
-                            onPress={() => { setShowDialog1(false); }}
-                          />
-                        </View>
-                      </View>
-                    </DialogContent>
+                    <View style={{
+                      flexDirection: 'row',
 
-                    <DialogContent style={{paddingTop:10,paddingBottom:10,}}>
-                      <View style={styles.removeBox}>
-                          <Text style={{ fontSize: 14,}}>
-                            注意事項：
-                          </Text>
-                          <Text style={{ fontSize: 14, marginBottom: 5, }}>
-                            1. 這將會刪除活動的資料，並同時移除所有此活動
-                            {'\n'}
-                            &emsp;的參加者。
-                          </Text>
-                          <Text style={{
-                            fontSize: 14, marginBottom: 5,
-                          }}
-                          >
-                            2. 當此活動被刪除，系統將自動發送通知給此活動
-                            {'\n'}
-                            &emsp;的所有參加者，讓他們知道活動已被刪除。
-                          </Text>
-                          <Text style={{
-                            fontSize: 14, marginBottom: 5, color: '#ef4444',
-                          }}
-                          >
-                            3. 一旦按下下方紅色刪除按鈕，即立刻執行刪除，
-                            {'\n'}
-                            &emsp;且無法復原！
-                          </Text>
-                      </View> 
-                  </DialogContent>
-                  <DialogContent style={{paddingLeft:0}}>
-                        <View style={{
-                          height: 61, 
-                          width: Dimensions.get('window').width * 0.9, backgroundColor: '#f3f4f6',
+                      paddingBottom: 5,
+                      justifyContent: 'space-between',
+                    }}
+                    >
+                      <View>
+                        <Text style={{
+                          textAlign: 'left',
+                          color: '#1f2937',
+                          fontSize: 16,
+                          fontWeight: '400',
+                          marginTop: 17,
+                          marginBottom: 10,
                         }}
                         >
-                          <View style={{flexDirection: 'row'}}>
-                            <View
-                              style={{ marginTop: 10 }}
-                            >
-                              <Text
-                                style={{
-                                  fontSize: 14, color: '#64748B', padding: 10, marginLeft: Dimensions.get('window').width * 0.6, 
-                                  //marginTop: Dimensions.get('window').width * 0.009,
-                                }}
-                                onPress={() => {
-                                  setShowDialog1(false);
-                                }}
-                              >
-                                取消
+                          刪除活動&ensp;
+                        </Text>
+                      </View>
+                      <View>
+                        <Feather
+                          name="x"
+                          size={26}
+                          color="#1F2937"
+                          style={{
+                            // marginLeft: Dimensions.get('window').width * 0.5,
+                            marginTop: 15,
+                          }}
+                          onPress={() => { setShowDialog1(false); }}
+                        />
+                      </View>
+                    </View>
+                  </DialogContent>
 
-                              </Text>
-                            </View>
-                            <View
-                              style={{ marginTop: 10 }}
-                            >
-                              <Text
-                                style={{
-                                  color: '#ffffff', backgroundColor: '#ef4444', padding: 10, borderRadius: 4, marginLeft: 10, 
-                                  //marginTop: Dimensions.get('window').width * 0.009,
-                                }}
-                                onPress={() => {
-                                  setShowDialog1(false);
-                                  ActiveController.deleteOneActive(passedID);
-                                  ActiveController.deleteEverySingleAttendee(passedID);
-                                }}
-                              >
-                                刪除
+                  <DialogContent style={{ paddingTop: 10, paddingBottom: 10 }}>
+                    <View style={styles.removeBox}>
+                      <Text style={{ fontSize: 14 }}>
+                        注意事項：
+                      </Text>
+                      <Text style={{ fontSize: 14, marginBottom: 5 }}>
+                        1. 這將會刪除活動的資料，並同時移除所有此活動
+                        {'\n'}
+                            &emsp;的參加者。
+                      </Text>
+                      <Text style={{
+                        fontSize: 14, marginBottom: 5,
+                      }}
+                      >
+                        2. 當此活動被刪除，系統將自動發送通知給此活動
+                        {'\n'}
+                            &emsp;的所有參加者，讓他們知道活動已被刪除。
+                      </Text>
+                      <Text style={{
+                        fontSize: 14, marginBottom: 5, color: '#ef4444',
+                      }}
+                      >
+                        3. 一旦按下下方紅色刪除按鈕，即立刻執行刪除，
+                        {'\n'}
+                            &emsp;且無法復原！
+                      </Text>
+                    </View>
+                  </DialogContent>
+                  <DialogContent style={{ paddingLeft: 0 }}>
+                    <View style={{
+                      height: 61,
+                      width: Dimensions.get('window').width * 0.9,
+                      backgroundColor: '#f3f4f6',
+                    }}
+                    >
+                      <View style={{ flexDirection: 'row' }}>
+                        <View
+                          style={{ marginTop: 10 }}
+                        >
+                          <Text
+                            style={{
+                              fontSize: 14, color: '#64748B', padding: 10, marginLeft: Dimensions.get('window').width * 0.6,
+                              // marginTop: Dimensions.get('window').width * 0.009,
+                            }}
+                            onPress={() => {
+                              setShowDialog1(false);
+                            }}
+                          >
+                            取消
 
-                              </Text>
-                            </View>
-                          </View>
+                          </Text>
                         </View>
-                      </DialogContent>
+                        <View
+                          style={{ marginTop: 10 }}
+                        >
+                          <Text
+                            style={{
+                              color: '#ffffff', backgroundColor: '#ef4444', padding: 10, borderRadius: 4, marginLeft: 10,
+                              // marginTop: Dimensions.get('window').width * 0.009,
+                            }}
+                            onPress={() => {
+                              setShowDialog1(false);
+                              ActiveController.deleteOneActive(passedID);
+                              ActiveController.deleteEverySingleAttendee(passedID);
+                            }}
+                          >
+                            刪除
+
+                          </Text>
+                        </View>
+                      </View>
+                    </View>
+                  </DialogContent>
                 </Dialog>
                 {/* <Dialog
                   width={Dimensions.get('window').width * 0.9}

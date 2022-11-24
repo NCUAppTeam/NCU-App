@@ -9,6 +9,7 @@ import more from './moreEvent';
 import moreHang from './moreHang';
 import message from './Message';
 import detailscreen from './showActivityDetails';
+import Send from './Send';
 import search from './search';
 
 const Stack = createNativeStackNavigator();
@@ -31,6 +32,7 @@ function EventStack() {
       <Stack.Screen name="details" component={detailscreen} />
       <Stack.Screen name="search" component={search} />
       <Stack.Screen name="message" component={message} />
+      <Stack.Screen name="Send" component={Send} />
     </Stack.Navigator>
   );
 }

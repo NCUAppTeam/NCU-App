@@ -785,6 +785,40 @@ async function getAttendedOrNot(docID) {
   return false;
 }
 
+async function addMessage(active){
+  const item={
+    message:active.message,
+    from:active.from.trim(),
+    to:active.to.trim(),
+    uploadTime:active.uploadTime,
+  }
+  const db = firebase.firestore();
+  const messageRef = db.collection('message');
+  messageRef.add(item);
+  console.log(item);
+}
+
+async function getMessage(fromData,toData){
+  const db = firebase.firestore();
+  const activesRef = db.collection('message');
+  const message = [];
+  const querySnapshot = await activesRef.orderBy("uploadTime").get();
+  querySnapshot.forEach((doc) => {
+    if((doc.data().from ==fromData && doc.data().to ==toData) ||
+    (doc.data().from ==toData && doc.data().to ==fromData)){
+      message.push({
+        id: doc.id,
+        message: doc.data().message,
+        from: doc.data().from,
+        to: doc.data().to,
+        uploadTime:doc.data().uploadTime,
+      });
+    }
+  });
+  console.log(message);
+  return message;
+}
+
 export default {
   firebaseConfig,
   toDateString,
@@ -809,4 +843,6 @@ export default {
   getTotalOfAttendees,
   removeAttendee,
   getAttendedOrNot,
+  addMessage,
+  getMessage,
 };

@@ -6,7 +6,7 @@ export default StyleSheet.create({
     flexDirection: 'column',
     alignContent: 'center',
     paddingTop: 50,
-    backgroundColor: 'white',
+    backgroundColor: '#fafafa',
     // borderWidth: 1,
   },
   headerContainer: {

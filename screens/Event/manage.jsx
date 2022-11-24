@@ -135,7 +135,6 @@ function manage({ route, navigation }) {
                           }}
                           >
                             刪除活動&ensp;
-
                           </Text>
                         </View>
                         <View>

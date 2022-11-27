@@ -1,5 +1,5 @@
 import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import MapScreen from './MapScreen';
 import Bus132 from './BusScreen/132-1';
 import List132 from './BusScreen/132-2';
@@ -21,7 +21,7 @@ import Sl from './BusScreen/sl';
 import Bus173 from './BusScreen/173-1';
 import List173 from './BusScreen/173-2';
 
-const Stack = createStackNavigator();
+const Stack = createNativeStackNavigator();
 
 function MapStack() {
   return (
@@ -40,12 +40,12 @@ function MapStack() {
       <Stack.Screen name="中央大學後門" component={Backdoor} />
       <Stack.Screen name="中央大學依仁堂" component={Gym} />
       <Stack.Screen name="中大湖" component={Lake} />
-      <Stack.Screen name="國鼎圖書館" component={Library}/>
-      <Stack.Screen name="中央大學警衛室" component={Sg}/>
-      <Stack.Screen name="中央大學正門" component={Frontdoor}/>
-      <Stack.Screen name="中央大學觀景台" component={Sl}/>
-      <Stack.Screen name="Bus173" component={Bus173}/>
-      <Stack.Screen name="List173" component={List173}/>
+      <Stack.Screen name="國鼎圖書館" component={Library} />
+      <Stack.Screen name="中央大學警衛室" component={Sg} />
+      <Stack.Screen name="中央大學正門" component={Frontdoor} />
+      <Stack.Screen name="中央大學觀景台" component={Sl} />
+      <Stack.Screen name="Bus173" component={Bus173} />
+      <Stack.Screen name="List173" component={List173} />
     </Stack.Navigator>
   );
 }

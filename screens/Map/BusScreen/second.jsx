@@ -34,8 +34,7 @@ function Second({ navigation }) {
       setStart(false);
       onRefresh();
     }
-    let id;
-    id = setInterval(onRefresh, 10000);
+    const id = setInterval(onRefresh, 10000);
     return () => {
       clearInterval(id);
     };

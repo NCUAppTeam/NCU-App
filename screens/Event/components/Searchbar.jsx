@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Searchbar } from 'react-native-paper';
 
-const MyComponent = ({ onChange }) => {
+function MyComponent({ onChange }) {
   const [searchQuery, setSearchQuery] = React.useState('');
 
   return (
@@ -14,6 +14,6 @@ const MyComponent = ({ onChange }) => {
       value={searchQuery}
     />
   );
-};
+}
 
 export default MyComponent;

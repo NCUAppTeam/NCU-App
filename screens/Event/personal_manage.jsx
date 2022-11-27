@@ -4,7 +4,7 @@ import {
   TouchableOpacity, Image, RefreshControl, Dimensions,
 } from 'react-native';
 import {
-  Title, Card, Portal,
+  Title, Card,
 } from 'react-native-paper';
 import {
   Ionicons, AntDesign, Feather,

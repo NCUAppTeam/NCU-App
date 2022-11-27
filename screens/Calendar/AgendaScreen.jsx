@@ -69,7 +69,7 @@ function AgendaScreen({ navigation }) {
     });
   };
 
-  const renderItem = () => ({ event }) => {
+  const renderItem = () => function ({ event }) {
     const {
       data: {
         name, startTime, endTime, location,
@@ -81,7 +81,7 @@ function AgendaScreen({ navigation }) {
       <TouchableOpacity onPress={() => handleEventSelection(event)}>
         <View style={styles.item}>
           <Caption>{`${startTimeStr}-${endTimeStr}`}</Caption>
-          <Headline>{name}</Headline>
+          <Headline />
           <Subheading>{location}</Subheading>
         </View>
       </TouchableOpacity>

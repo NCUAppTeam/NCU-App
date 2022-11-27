@@ -6,7 +6,7 @@ import {
   Avatar, Button, Headline,
 } from 'react-native-paper';
 import Constants from 'expo-constants';
-import * as firebase from 'firebase';
+import firebase from 'firebase/app';
 import * as Facebook from 'expo-facebook';
 import logo from '../assets/icon.png';
 import Controller from '../controller/Profile';
@@ -14,7 +14,7 @@ import Controller from '../controller/Profile';
 const PRODUCTION = false;
 const supportedURL = 'https://ncuappteam.github.io/PRIVACY';
 
-const OpenURLButton = ({ url, children }) => {
+function OpenURLButton({ url, children }) {
   const handlePress = useCallback(async () => {
     // Checking if the link is supported for links with custom URL scheme.
     const supported = await Linking.canOpenURL(url);
@@ -29,7 +29,7 @@ const OpenURLButton = ({ url, children }) => {
   }, [url]);
 
   return <Button title={children} onPress={handlePress}>隱私權政策</Button>;
-};
+}
 
 const styles = StyleSheet.create({
   container: {

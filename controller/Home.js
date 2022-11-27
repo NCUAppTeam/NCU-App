@@ -1,4 +1,4 @@
-import * as firebase from 'firebase';
+import firebase from 'firebase/app';
 import 'firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 

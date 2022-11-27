@@ -1,7 +1,6 @@
-import firebase from 'firebase';
-import React, { useState, useEffect } from 'react';
+import firebase from 'firebase/app';
+import 'firebase/firestore';
 import Fuse from 'fuse.js';
-import { isTablet } from 'react-native-calendars/src/expandableCalendar/commons';
 // import storage from '@react-native-firebase/storage';
 
 const values = ['揪人共乘', '揪人運動', '揪人遊戲', '校園活動', '系上活動', '社團活動'];

@@ -8,7 +8,9 @@ import {
 import BusController from '../../../controller/Bus';
 import Styles from '../Styles';
 
-const Separator = () => <View style={Styles.separator} />;
+function Separator() {
+  return <View style={Styles.separator} />;
+}
 function Gym() {
   const [item, setItems] = useState([]);
 
@@ -29,8 +31,7 @@ function Gym() {
       setStart(false);
       onRefresh();
     }
-    let id;
-    id = setInterval(onRefresh, 10000);
+    const id = setInterval(onRefresh, 10000);
     return () => {
       clearInterval(id);
     };

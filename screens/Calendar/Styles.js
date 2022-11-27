@@ -6,11 +6,4 @@ export default StyleSheet.create({
     flex: 1,
     marginTop: Constants.statusBarHeight,
   },
-  inputField: {
-    margin: 8,
-    marginBottom: 0,
-  },
-  submitButton: {
-    margin: 16,
-  },
 });

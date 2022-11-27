@@ -1,18 +1,15 @@
 import React from 'react';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import AgendaScreen from './AgendaScreen';
-import DetailScreen from './DetailScreen';
-import EditScreen from './EditScreen';
-
-const Stack = createNativeStackNavigator();
+import { SafeAreaView } from 'react-native';
+import { WebView } from 'react-native-webview';
+import styles from './Styles';
 
 function CalendarStack() {
   return (
-    <Stack.Navigator initialRouteName="行事曆">
-      <Stack.Screen name="行事曆" component={AgendaScreen} />
-      <Stack.Screen name="行程詳細資料" component={DetailScreen} />
-      <Stack.Screen name="編輯行程" component={EditScreen} />
-    </Stack.Navigator>
+    <SafeAreaView style={styles.container}>
+      <WebView
+        source={{ uri: 'https://calendar.google.com/calendar/embed?src=ncu.acad@gmail.com&ctz=Asia/Taipei' }}
+      />
+    </SafeAreaView>
   );
 }
 

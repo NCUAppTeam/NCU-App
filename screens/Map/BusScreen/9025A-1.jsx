@@ -10,7 +10,9 @@ import {
 import BusController from '../../../controller/Bus';
 import Styles from '../Styles';
 
-const Separator = () => <View style={Styles.separator} />;
+function Separator() {
+  return <View style={Styles.separator} />;
+}
 function Bus9025A({ navigation }) {
   const [item, setItems] = useState([]);
 
@@ -22,7 +24,7 @@ function Bus9025A({ navigation }) {
 
   const onRefresh = () => {
     setRefreshing(true);
-    BusController.afun9025({type: 0, dir: 1 }).then((res) => {
+    BusController.afun9025({ type: 0, dir: 1 }).then((res) => {
       setItems(res);
       setRefreshing(false);
     });
@@ -30,7 +32,7 @@ function Bus9025A({ navigation }) {
 
   const onRefresh1 = () => {
     setRefreshing(true);
-    BusController.afun9025({type: 0, dir: 0 }).then((res) => {
+    BusController.afun9025({ type: 0, dir: 0 }).then((res) => {
       setItems(res);
       setRefreshing(false);
     });

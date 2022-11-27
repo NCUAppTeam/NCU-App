@@ -7,9 +7,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import {
   Dialog, Portal, Button, Provider,
 } from 'react-native-paper';
-import {
-  Ionicons, AntDesign, MaterialCommunityIcons, Foundation,
-} from '@expo/vector-icons';
+import { AntDesign, MaterialCommunityIcons, Foundation } from '@expo/vector-icons';
 import {
   NativeBaseProvider, Box, Divider, Heading, ZStack,
 } from 'native-base';

@@ -6,7 +6,9 @@ import {
 } from 'react-native';
 import Styles from '../Styles';
 
-const Separator = () => <View style={Styles.separator} />;
+function Separator() {
+  return <View style={Styles.separator} />;
+}
 function List133() {
   return (
     <SafeAreaView style={Styles.background}>

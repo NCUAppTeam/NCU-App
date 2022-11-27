@@ -19,7 +19,7 @@ import {
   Ionicons,
 } from '@expo/vector-icons';
 
-// import CalendarScreen from './screens/Calendar';
+import CalendarScreen from './screens/Calendar';
 import MapScreen from './screens/Map';
 import EventScreen from './screens/Event';
 

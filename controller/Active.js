@@ -1,5 +1,15 @@
-import firebase from 'firebase/app';
-import 'firebase/firestore';
+import { initializeApp, firebase } from 'firebase/app';
+import {
+  getFirestore, collection, query, getDoc, getDocs, addDoc,
+  setDoc, updateDoc, doc, orderBy, where, deleteDoc,
+} from 'firebase/firestore';
+import {
+  getStorage,
+  ref,
+  getDownloadURL,
+  refFromURL,
+} from 'firebase/storage';
+// import { getMessaging, getToken } from 'firebase/messaging';
 import Fuse from 'fuse.js';
 // import storage from '@react-native-firebase/storage';
 
@@ -81,7 +91,6 @@ function dateToWeekday(t) {
 function sentMessage(message) {
   console.log(message);
 }
-
 const firebaseConfig = {
   apiKey: 'AIzaSyA8GH6yj1i4gJM0H_ZTsurYG3Dqn4-nIS8',
   authDomain: 'ncu-app-test.firebaseapp.com',
@@ -90,6 +99,8 @@ const firebaseConfig = {
   messagingSenderId: '739839700130',
   appId: '1:739839700130:web:37591d0118a440488cfbfb',
 };
+const app = initializeApp(firebaseConfig);
+const storage = getStorage(app);
 
 // const firebaseConfig = { //測試用firebase
 //   apiKey: 'AIzaSyAE1BMN-NymGGpNppqzqeOkQTfVZyrBXzo',
@@ -141,39 +152,39 @@ async function addActive(active) {
 
   if (active.image1) {
     const imageAddress = `actives/${imagePos(active.image1)}`;
-    const storageRef = firebase.storage().ref().child(imageAddress);
+    const storageRef = ref(storage).child(imageAddress);
     const response = await fetch(active.image1);
     const blob = await response.blob();
     const st1 = storageRef.put(blob);
     await st1;
-    uri1 = await storageRef.getDownloadURL();
+    uri1 = await getDownloadURL(storageRef);
     if (uri1 !== undefined) {
       item.imageUri1 = uri1;
+    } else {
+      item.imageUri1 = defaultLinks[values.indexOf(active.genre)].link;
     }
-  } else {
-    item.imageUri1 = defaultLinks[values.indexOf(active.genre)].link;
   }
 
   if (active.image2) {
     const imageAddress = `actives/${imagePos(active.image2)}`;
-    const storageRef = firebase.storage().ref().child(imageAddress);
+    const storageRef = ref(storage).child(imageAddress);
     const response = await fetch(active.image2);
     const blob = await response.blob();
     const st2 = storageRef.put(blob);
     await st2;
-    uri2 = await storageRef.getDownloadURL();
+    uri2 = await getDownloadURL(storageRef);
     if (uri2 !== undefined) {
       item.imageUri2 = uri2;
     }
   }
   if (active.image3) {
     const imageAddress = `actives/${imagePos(active.image3)}`;
-    const storageRef = firebase.storage().ref().child(imageAddress);
+    const storageRef = ref(storage).child(imageAddress);
     const response = await fetch(active.image3);
     const blob = await response.blob();
     const st3 = storageRef.put(blob);
     await st3;
-    uri3 = await storageRef.getDownloadURL();
+    uri3 = await getDownloadURL(storageRef);
     if (uri3 !== undefined) {
       item.imageUri3 = uri3;
     }
@@ -182,15 +193,20 @@ async function addActive(active) {
   if (active.cost === 0 || active.cost === '') {
     item.cost = '免費free';
   }
-  const db = firebase.firestore();
-  const activesRef = db.collection('actives');
-  const hostRef = db.collection('attendees').doc(user).collection('hostedEvent');
-  activesRef.add(item);
+  const db = getFirestore(app);
+  const activesRef = query(collection(db, 'actives'));
+  const hostRef = query(collection(db, `attendees/${user}/hostedEvent`));
+  addDoc(activesRef, item).then(() => {
+    console.log('Document has been added successfully');
+  })
+    .catch((error) => {
+      console.log(error);
+    });
 
-  const querySnapshot = await activesRef.get();
-  querySnapshot.forEach((doc) => {
-    if (doc.data().name === item.name) {
-      hostRef.doc(doc.id).set({});
+  const querySnapshot = await getDocs(activesRef);
+  querySnapshot.forEach((doc1) => {
+    if (doc1.data().name === item.name) {
+      setDoc(hostRef, doc1.id);
     }
   });
   console.log('addActive Successful');
@@ -208,9 +224,9 @@ async function updateActive(oldID, NEWactive) {
   let defaultRef;
 
   const NEWitem = NEWactive;
-  const db = firebase.firestore();
-  const activesRef = db.collection('actives');
-  const querySnapshot = await activesRef.doc(oldID).get();
+  const db = getFirestore(app);
+  const activesRef = query(collection(db, 'actives'));
+  const querySnapshot = await getDocs(activesRef, oldID);
 
   if (NEWactive.genre) {
     defaultRef = defaultLinks[values.indexOf(NEWactive.genre)].link;
@@ -230,18 +246,20 @@ async function updateActive(oldID, NEWactive) {
     NEWitem.imageUri1 = defaultRef;
   } else if (NEWactive.image1) {
     if (NEWactive.image1 === querySnapshot.data().imageUri2) {
-      activesRef.doc(oldID).update({
+      const docRef = doc(db, 'actives', oldID);
+      const data = {
         image2: firebase.firestore.FieldValue.delete(),
         imageUri2: firebase.firestore.FieldValue.delete(),
-      });
+      };
+      updateDoc(docRef, data);
     }
     const imageAddress = `actives/${imagePos(NEWactive.image1)}`;
-    const storageRef = firebase.storage().ref().child(imageAddress);
+    const storageRef = ref(storage).child(imageAddress);
     const response = await fetch(NEWactive.image1);
     const blob = await response.blob();
     const st1 = storageRef.put(blob);
     await st1;
-    uri1 = await storageRef.getDownloadURL();
+    uri1 = await getDownloadURL(storageRef);
     if (uri1 !== undefined) {
       NEWitem.imageUri1 = uri1;
     }
@@ -249,10 +267,12 @@ async function updateActive(oldID, NEWactive) {
 
   if (NEWactive.image2) {
     if (NEWactive.image2 === querySnapshot.data().imageUri3) {
-      activesRef.doc(oldID).update({
+      const docRef = doc(db, 'actives', oldID);
+      const data = {
         image3: firebase.firestore.FieldValue.delete(),
         imageUri3: firebase.firestore.FieldValue.delete(),
-      });
+      };
+      updateDoc(docRef, data);
     }
     const imageAddress = `actives/${imagePos(NEWactive.image2)}`;
     const storageRef = firebase.storage().ref().child(imageAddress);
@@ -260,7 +280,7 @@ async function updateActive(oldID, NEWactive) {
     const blob = await response.blob();
     const st2 = storageRef.put(blob);
     await st2;
-    uri2 = await storageRef.getDownloadURL();
+    uri2 = await getDownloadURL(storageRef);
     if (uri2 !== undefined) {
       NEWitem.imageUri2 = uri2;
     }
@@ -270,12 +290,12 @@ async function updateActive(oldID, NEWactive) {
 
   if (NEWactive.image3) {
     const imageAddress = `actives/${imagePos(NEWactive.image3)}`;
-    const storageRef = firebase.storage().ref().child(imageAddress);
+    const storageRef = ref(storage).child(imageAddress);
     const response = await fetch(NEWactive.image3);
     const blob = await response.blob();
     const st3 = storageRef.put(blob);
     await st3;
-    uri3 = await storageRef.getDownloadURL();
+    uri3 = await getDownloadURL(storageRef);
     if (uri3 !== undefined) {
       NEWitem.imageUri3 = uri3;
     }
@@ -293,7 +313,7 @@ async function updateActive(oldID, NEWactive) {
   if (NEWitem.imageUri1) {
     if (querySnapshot.data().imageUri1 !== defaultLinks[values.indexOf(querySnapshot.data().genre)].link) {
       console.log('image 1 has been replaced, old image has been deleted');
-      const image1Ref = firebase.storage().refFromURL(querySnapshot.data().imageUri1);
+      const image1Ref = refFromURL(querySnapshot.data().imageUri1);
       image1Ref.delete().then(() => {
         console.log('Image 1 has been deleted!');
       }).catch((err) => {
@@ -302,7 +322,7 @@ async function updateActive(oldID, NEWactive) {
     }
   }
   if (NEWitem.imageUri2) {
-    const image2Ref = firebase.storage().refFromURL(querySnapshot.data().imageUri2);
+    const image2Ref = refFromURL(querySnapshot.data().imageUri2);
     image2Ref.delete().then(() => {
       console.log('Image 2 has been deleted!');
     }).catch((err) => {
@@ -310,38 +330,39 @@ async function updateActive(oldID, NEWactive) {
     });
   }
   if (NEWitem.imageUri3) {
-    const image3Ref = firebase.storage().refFromURL(querySnapshot.data().imageUri3);
+    const image3Ref = refFromURL(querySnapshot.data().imageUri3);
     image3Ref.delete().then(() => {
       console.log('Image 3 has been deleted!');
     }).catch((err) => {
       console.log(err);
     });
   }
-  activesRef.doc(oldID).set(NEWitem, { merge: true })
+  const docRef = doc(activesRef, oldID);
+  setDoc(docRef, NEWitem, { merge: true })
     .then(() => { console.log('updateActive Successful'); });
 }
 
 async function getAllActive() {
-  const db = firebase.firestore();
-  const activesRef = db.collection('actives');
+  const db = getFirestore(app);
+  const activesRef = query(collection(db, 'actives'), orderBy('uploadTime', 'desc'));
   const activeArray = [];
-  const querySnapshot = await activesRef.orderBy('uploadTime', 'desc').get();
-  querySnapshot.forEach((doc) => {
+  const querySnapshot = await getDocs(activesRef);
+  querySnapshot.forEach((doc1) => {
     activeArray.push({
-      id: doc.id,
-      name: doc.data().name,
-      imageUri1: doc.data().imageUri1,
-      startTimeWeekday: dateToWeekday(doc.data().startTime),
-      startTimeInNum: toDateString(doc.data().startTime),
-      place: doc.data().place,
-      cost: doc.data().cost,
-      limitNum: doc.data().limitNum,
-      genre: doc.data().genre,
-      link: doc.data().link,
-      hostName: doc.data().hostName,
-      hostPhone: doc.data().hostPhone,
-      hostMail: doc.data().hostMail,
-      details: doc.data().details,
+      id: doc1.id,
+      name: doc1.data().name,
+      imageUri1: doc1.data().imageUri1,
+      startTimeWeekday: dateToWeekday(doc1.data().startTime),
+      startTimeInNum: toDateString(doc1.data().startTime),
+      place: doc1.data().place,
+      cost: doc1.data().cost,
+      limitNum: doc1.data().limitNum,
+      genre: doc1.data().genre,
+      link: doc1.data().link,
+      hostName: doc1.data().hostName,
+      hostPhone: doc1.data().hostPhone,
+      hostMail: doc1.data().hostMail,
+      details: doc1.data().details,
     });
   });
   // console.log(activeArray);
@@ -351,19 +372,18 @@ async function getAllActive() {
 
 async function getParticipatedActive() {
   const user = '110501444';
-  const db = firebase.firestore();
-  const activesRef = db.collection('actives');
-  const attendRef = db.collection('attendees').doc(user).collection('attendedEvent');
+  const db = getFirestore(app);
+  const attendRef = query(collection(db, `attendees/${user}/attendedEvent`));
   const attendIDArray = [];
   const activeArray = [];
   const current = new Date();
-  const querySnapshot = await attendRef.get();
+  const querySnapshot = await getDocs(attendRef);
   querySnapshot.forEach((attendID) => {
     attendIDArray.push(attendID.id);
   });
 
   for (let i = 0; i < attendIDArray.length; i += 1) {
-    const result = await activesRef.doc(attendIDArray[i]).get();
+    const result = await getDoc(doc(db, 'actives', attendIDArray[i]));
     // console.log(attendIDArray[i], new Date(toDateString(result.data().endTime)), current);
     if (new Date(toDateString(result.data().endTime)) > current) {
       activeArray.push({
@@ -391,19 +411,19 @@ async function getParticipatedActive() {
 
 async function getFinishedActive() {
   const user = '110501444';
-  const db = firebase.firestore();
-  const activesRef = db.collection('actives');
-  const attendRef = db.collection('attendees').doc(user).collection('attendedEvent');
+  const db = getFirestore(app);
+  // const attendRef = query(collection(`${db}/attendees/${user}/attendedEvent`));
+  const attendRef = query(collection(db, `attendees/${user}/attendedEvent`));
+  // const attendDocs = query(collection(attendRef, 'attendedEvent'));
   const attendIDArray = [];
   const activeArray = [];
   const current = new Date();
-  const querySnapshot = await attendRef.get();
+  const querySnapshot = await getDocs(attendRef);
   querySnapshot.forEach((attendID) => {
     attendIDArray.push(attendID.id);
   });
-
   for (let i = 0; i < attendIDArray.length; i += 1) {
-    const result = await activesRef.doc(attendIDArray[i]).get();
+    const result = await getDoc(doc(db, 'actives', attendIDArray[i]));
     // console.log(attendIDArray[i], new Date(toDateString(result.data().endTime)), current);
     if (new Date(toDateString(result.data().endTime)) < current) {
       activeArray.push({
@@ -430,10 +450,10 @@ async function getFinishedActive() {
 }
 
 async function getOneActive(id) {
-  const db = firebase.firestore();
-  const activesRef = db.collection('actives').doc(id);
+  const db = getFirestore(app);
+  const activesDoc = doc(db, `actives/${id}`);
 
-  const querySnapshot = await activesRef.get();
+  const querySnapshot = await getDoc(activesDoc);
   const oneactive = {
     id: querySnapshot.id,
     name: querySnapshot.data().name,
@@ -473,30 +493,30 @@ async function getOneActive(id) {
  */
 
 async function getHangOutActive() {
-  const db = firebase.firestore();
-  const activesRef = db.collection('actives');
+  const db = getFirestore(app);
+  const activesRef = query(collection(db, 'actives'));
   const GenreArray = [];
-  const querySnapshot = await activesRef.where('genre', 'in', ['揪人遊戲', '揪人共乘', '揪人運動']).get();
-  querySnapshot.forEach((doc) => {
+  const querySnapshot = await getDocs(activesRef, where('genre', 'in', ['揪人遊戲', '揪人共乘', '揪人運動']));
+  querySnapshot.forEach((doc1) => {
     GenreArray.push({
-      id: doc.id,
-      name: doc.data().name,
-      imageUri1: doc.data().imageUri1,
-      imageUri2: doc.data().imageUri2,
-      imageUri3: doc.data().imageUri3,
-      startTime: toDateString(doc.data().startTime),
-      endTime: toDateString(doc.data().endTime),
-      startTimeWeekday: dateToWeekday(doc.data().startTime),
-      endTimeWeekday: dateToWeekday(doc.data().endTime),
-      place: doc.data().place,
-      cost: doc.data().cost,
-      limitNum: doc.data().limitNum,
-      genre: doc.data().genre,
-      link: doc.data().link,
-      hostName: doc.data().hostName,
-      hostPhone: doc.data().hostPhone,
-      hostMail: doc.data().hostMail,
-      details: doc.data().details,
+      id: doc1.id,
+      name: doc1.data().name,
+      imageUri1: doc1.data().imageUri1,
+      imageUri2: doc1.data().imageUri2,
+      imageUri3: doc1.data().imageUri3,
+      startTime: toDateString(doc1.data().startTime),
+      endTime: toDateString(doc1.data().endTime),
+      startTimeWeekday: dateToWeekday(doc1.data().startTime),
+      endTimeWeekday: dateToWeekday(doc1.data().endTime),
+      place: doc1.data().place,
+      cost: doc1.data().cost,
+      limitNum: doc1.data().limitNum,
+      genre: doc1.data().genre,
+      link: doc1.data().link,
+      hostName: doc1.data().hostName,
+      hostPhone: doc1.data().hostPhone,
+      hostMail: doc1.data().hostMail,
+      details: doc1.data().details,
     });
   });
   console.log('hangeout');
@@ -506,30 +526,30 @@ async function getHangOutActive() {
 }
 
 async function getEventActive() {
-  const db = firebase.firestore();
-  const activesRef = db.collection('actives');
+  const db = getFirestore(app);
+  const activesRef = query(collection(db, 'actives'));
   const EventArray = [];
-  const querySnapshot = await activesRef.where('genre', 'in', ['校園活動', '系上活動', '社團活動']).get();
-  querySnapshot.forEach((doc) => {
+  const querySnapshot = await getDocs(activesRef, where('genre', 'in', ['校園活動', '系上活動', '社團活動']));
+  querySnapshot.forEach((doc1) => {
     EventArray.push({
-      id: doc.id,
-      name: doc.data().name,
-      imageUri1: doc.data().imageUri1,
-      imageUri2: doc.data().imageUri2,
-      imageUri3: doc.data().imageUri3,
-      startTime: toDateString(doc.data().startTime),
-      endTime: toDateString(doc.data().endTime),
-      startTimeWeekday: dateToWeekday(doc.data().startTime),
-      endTimeWeekday: dateToWeekday(doc.data().endTime),
-      place: doc.data().place,
-      cost: doc.data().cost,
-      limitNum: doc.data().limitNum,
-      genre: doc.data().genre,
-      link: doc.data().link,
-      hostName: doc.data().hostName,
-      hostPhone: doc.data().hostPhone,
-      hostMail: doc.data().hostMail,
-      details: doc.data().details,
+      id: doc1.id,
+      name: doc1.data().name,
+      imageUri1: doc1.data().imageUri1,
+      imageUri2: doc1.data().imageUri2,
+      imageUri3: doc1.data().imageUri3,
+      startTime: toDateString(doc1.data().startTime),
+      endTime: toDateString(doc1.data().endTime),
+      startTimeWeekday: dateToWeekday(doc1.data().startTime),
+      endTimeWeekday: dateToWeekday(doc1.data().endTime),
+      place: doc1.data().place,
+      cost: doc1.data().cost,
+      limitNum: doc1.data().limitNum,
+      genre: doc1.data().genre,
+      link: doc1.data().link,
+      hostName: doc1.data().hostName,
+      hostPhone: doc1.data().hostPhone,
+      hostMail: doc1.data().hostMail,
+      details: doc1.data().details,
     });
   });
   console.log('event');
@@ -538,13 +558,13 @@ async function getEventActive() {
   return EventArray;
 }
 
-async function deleteOneActive(deleteDocId) {
-  const db = firebase.firestore();
-  const activesRef = db.collection('actives');
-  const deletedDoc = await activesRef.doc(deleteDocId).get();
+async function deleteOneActive(deleteDocId) { // 還未解決
+  const db = getFirestore(app);
+  const activesRef = query(collection(db, 'actives'));
+  const deletedDoc = await getDocs(activesRef, deleteDocId);
   if (deletedDoc.data().imageUri1 !== defaultLinks[values.indexOf(deletedDoc.data().genre)].link) {
     if (deletedDoc.data().imageUri1) {
-      const image1Ref = firebase.storage().refFromURL(deletedDoc.data().imageUri1);
+      const image1Ref = refFromURL(deletedDoc.data().imageUri1);
       image1Ref.delete().then(() => {
         console.log('Image 1 has been deleted!');
       }).catch((err) => {
@@ -553,7 +573,7 @@ async function deleteOneActive(deleteDocId) {
     }
   }
   if (deletedDoc.data().imageUri2) {
-    const image2Ref = firebase.storage().refFromURL(deletedDoc.data().imageUri2);
+    const image2Ref = refFromURL(deletedDoc.data().imageUri2);
     image2Ref.delete().then(() => {
       console.log('Image 2 has been deleted!');
     }).catch((err) => {
@@ -561,7 +581,7 @@ async function deleteOneActive(deleteDocId) {
     });
   }
   if (deletedDoc.data().imageUri3) {
-    const image3Ref = firebase.storage().refFromURL(deletedDoc.data().imageUri3);
+    const image3Ref = refFromURL(deletedDoc.data().imageUri3);
     image3Ref.delete().then(() => {
       console.log('Image 3 has been deleted!');
     }).catch((err) => {
@@ -574,16 +594,16 @@ async function deleteOneActive(deleteDocId) {
 }
 
 async function getTotalOfAttendees(docID) {
-  const db = firebase.firestore();
-  const totalRef = db.collection('attendees');
-  const querySnapshot = await totalRef.get();
+  const db = getFirestore(app);
+  const totalRef = query(collection(db, 'attendees'));
+  const querySnapshot = await getDocs(totalRef);
   const attendeeList = [];
   const total = [];
   querySnapshot.forEach((attendee) => {
     attendeeList.push(attendee.id);
   });
   for (let i = 0; i < attendeeList.length; i += 1) {
-    const result = await totalRef.doc(attendeeList[i]).collection('attendedEvent').get();
+    const result = await getDocs(totalRef, attendeeList[i], 'attendedEvent');
     result.forEach((event) => {
       if (event.id === docID) {
         total.push(attendeeList[i]);
@@ -594,9 +614,9 @@ async function getTotalOfAttendees(docID) {
 }
 
 async function getAllAttendees(docID) {
-  const db = firebase.firestore();
-  const infoRef = db.collection('attendees');
-  const querySnapshot = await infoRef.get();
+  const db = getFirestore(app);
+  const infoRef = query(collection(db, 'attendees'));
+  const querySnapshot = await getDocs(infoRef);
   const attendeeList = [];
   const IDlist = [];
   const info = [];
@@ -604,7 +624,7 @@ async function getAllAttendees(docID) {
     attendeeList.push(attendee.id);
   });
   for (let i = 0; i < attendeeList.length; i += 1) {
-    const result = await infoRef.doc(attendeeList[i]).collection('attendedEvent').get();
+    const result = await getDocs(infoRef, attendeeList[i], 'attendedEvent');
     result.forEach((event) => {
       if (event.id === docID) {
         IDlist.push(attendeeList[i]);
@@ -613,15 +633,15 @@ async function getAllAttendees(docID) {
   }
   console.log(IDlist);
   for (let j = 0; j < IDlist.length; j += 1) {
-    const querySnapshot2 = await infoRef.doc(IDlist[j]).get();
+    const querySnapshot2 = await getDocs(infoRef, IDlist[j]);
     info.push(querySnapshot2.data());
   }
   return info;
 }
 async function deleteEverySingleAttendee(docID) {
-  const db = firebase.firestore();
-  const activesRef = db.collection('attendees');
-  const querySnapshot = await activesRef.get();
+  const db = getFirestore(app);
+  const activesRef = query(collection(db, 'attendees'));
+  const querySnapshot = await getDocs(activesRef);
   querySnapshot.forEach(async (student) => {
     await activesRef.doc(student.id).collection('attendedEvent').doc(docID).delete();
     await activesRef.doc(student.id).collection('hostedEvent').doc(docID).delete();
@@ -630,18 +650,18 @@ async function deleteEverySingleAttendee(docID) {
 }
 
 async function removeAttendee(docID, studentID) { // remove attendee
-  const db = firebase.firestore();
-  const activesRef = db.collection('attendees').doc(studentID).collection('attendedEvent');
+  const db = getFirestore(app);
+  const activesRef = query(collection(db, `attendees/${studentID}/attendedEvent`));
   activesRef.doc(docID).delete();
   console.log(docID, studentID);
   console.log('delete successfully!');
-  const result = await activesRef.get();
-  result.forEach((doc) => console.log(doc.id));
+  const result = await getDocs(activesRef);
+  result.forEach((doc1) => console.log(doc1.id));
 }
 
 async function addUser() {
-  const db = firebase.firestore();
-  const attendeeRef = db.collection('attendees');
+  const db = getFirestore(app);
+  const attendeeRef = query(collection(db, 'attendees'));
   const memberInfo = {
     studentID: '111201512',
     name: '沈思怡',
@@ -651,26 +671,27 @@ async function addUser() {
     email: 'jintong@4ever.com',
     avatar: 'https://firebasestorage.googleapis.com/v0/b/ncu-app-test.appspot.com/o/avatar%2Fsee.jpg?alt=media&token=38cd1d0d-2b29-44cd-9461-5f9afa354f53',
   };
+  const docRef = doc(db, 'attendees', '111201512');
 
-  attendeeRef.doc('111201512').set(memberInfo, { merge: true }).then(console.log('succeed'));
-  const result = await attendeeRef.get();
-  result.forEach((doc) => console.log(doc.data()));
+  setDoc(docRef, memberInfo, { merge: true })
+    .then(console.log('succeed'));
+  const result = await getDocs(attendeeRef);
+  result.forEach((doc1) => console.log(doc1.data()));
 }
 
 async function getHostedEvent() {
   const host = '110501444';
-  const db = firebase.firestore();
-  const Ref = db.collection('attendees').doc(host).collection('hostedEvent');
+  const db = getFirestore(app);
+  const Ref = query(collection(db, `attendees/${host}/hostedEvent`));
   const hostIDArray = [];
   const eventArray = [];
-  const num = [];
-  const querySnapshot = await Ref.get();
-  querySnapshot.forEach((doc) => {
-    hostIDArray.push(doc.id);
+  const querySnapshot = await getDocs(Ref);
+  querySnapshot.forEach((doc1) => {
+    hostIDArray.push(doc1.id);
   });
   console.log(hostIDArray);
   for (let i = 0; i < hostIDArray.length; i += 1) {
-    const result = await db.collection('actives').doc(hostIDArray[i]).get();
+    const result = await getDoc(doc(db, 'actives', hostIDArray[i]));
     const num = await getTotalOfAttendees(result.id);
     eventArray.push({
       id: result.id,
@@ -695,30 +716,40 @@ async function getHostedEvent() {
   return eventArray;
 }
 
-async function signUp(docID) {
+async function signUp(docID) { // 待測試
   const attendeesID = '110501444';
-  const db = firebase.firestore();
-  const Ref = db.collection('attendees').doc(attendeesID).collection('attendedEvent');
-  Ref.doc(docID).set({});
-  console.log('sign up successfully!');
-  const result = await Ref.get();
-  result.forEach((doc) => console.log(doc.id));
+  const db = getFirestore(app);
+  const Ref = doc(db, `attendees/${attendeesID}/attendedEvent/${docID}`);
+  setDoc(Ref, {})
+    .then(() => {
+      console.log('sign up successfully!');
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  const result = await getDocs(collection(db, `attendees/${attendeesID}/attendedEvent`));
+  result.forEach((doc1) => console.log(doc1.id));
 }
 
-async function quitEvent(docID) {
+async function quitEvent(docID) { // 待測試
   const attendeesID = '110501444';
-  const db = firebase.firestore();
-  const Ref = db.collection('attendees').doc(attendeesID).collection('attendedEvent');
-  Ref.doc(docID).delete();
-  console.log('delete successfully!');
-  const result = await Ref.get();
-  result.forEach((doc) => console.log(doc.id));
+  const db = getFirestore(app);
+  const Ref = doc(db, `attendees/${attendeesID}/attendedEvent/${docID}`);
+  deleteDoc(Ref)
+    .then(() => {
+      console.log('delete successfully!');
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  const result = await getDocs(collection(db, `attendees/${attendeesID}/attendedEvent`));
+  result.forEach((doc1) => console.log(doc1.id));
 }
 
-async function getHostInfo(docID) {
-  const db = firebase.firestore();
-  const infoRef = db.collection('attendees');
-  const querySnapshot = await infoRef.get();
+async function getHostInfo(docID) { // 待測試
+  const db = getFirestore(app);
+  const infoRef = query(collection(db, 'attendees'));
+  const querySnapshot = await getDocs(infoRef);
   const attendeeList = [];
   const IDlist = [];
   const info = [];
@@ -726,7 +757,7 @@ async function getHostInfo(docID) {
     attendeeList.push(attendee.id);
   });
   for (let i = 0; i < attendeeList.length; i += 1) {
-    const result = await infoRef.doc(attendeeList[i]).collection('hostedEvent').get();
+    const result = await getDocs(infoRef, attendeeList[i], 'hostedEvent');
     result.forEach((event) => {
       if (event.id === docID) {
         IDlist.push(attendeeList[i]);
@@ -734,23 +765,23 @@ async function getHostInfo(docID) {
     });
   }
   for (let j = 0; j < IDlist.length; j += 1) {
-    const querySnapshot2 = await infoRef.doc(IDlist[j]).get();
+    const querySnapshot2 = await getDocs(infoRef, IDlist[j]);
     info.push(querySnapshot2.data());
   }
   console.log(info);
   return info;
 }
 
-async function fuseSearchName(searchString) {
-  const db = firebase.firestore();
-  const activesRef = db.collection('actives');
+async function fuseSearchName(searchString) { // 待測試
+  const db = getFirestore(app);
+  const activesRef = query(collection(db, 'actives'));
   const activeArray = [];
-  const querySnapshot = await activesRef.get();
+  const querySnapshot = await getDocs(activesRef);
 
-  querySnapshot.forEach((doc) => {
+  querySnapshot.forEach((doc1) => {
     activeArray.push({
-      id: doc.id,
-      name: doc.data().name,
+      id: doc1.id,
+      name: doc1.data().name,
     });
   });
 
@@ -766,12 +797,12 @@ async function fuseSearchName(searchString) {
   return result;
 }
 
-async function getAttendedOrNot(docID) {
+async function getAttendedOrNot(docID) { // 待測試
   const user = '110501444';
   const result = [];
-  const db = firebase.firestore();
-  const attendRef = db.collection('attendees').doc(user).collection('attendedEvent');
-  const querySnapshot = await attendRef.get();
+  const db = getFirestore(app);
+  const attendRef = query(collection(db, `attendees/${user}/attendedEvent`));
+  const querySnapshot = await getDocs(attendRef);
   querySnapshot.forEach((attendID) => {
     if (attendID.id === docID) {
       result.push(docID);
@@ -784,62 +815,62 @@ async function getAttendedOrNot(docID) {
   return false;
 }
 
-async function addMessage(active) {
+async function addMessage(active) { // 待測試
   const item = {
     message: active.message,
     from: active.from.trim(),
     to: active.to.trim(),
     uploadTime: active.uploadTime,
   };
-  const db = firebase.firestore();
-  const messageRef = db.collection('message');
+  const db = getFirestore(app);
+  const messageRef = query(collection(db, 'message'));
   messageRef.add(item);
   console.log(item);
 }
 
 async function getMessage(fromData, toData) {
-  const db = firebase.firestore();
-  const activesRef = db.collection('message');
+  const db = getFirestore(app);
+  const activesRef = query(collection(db, 'message'));
   const message = [];
-  const querySnapshot = await activesRef.orderBy('uploadTime').get();
-  querySnapshot.forEach((doc) => {
-    if ((doc.data().from == fromData && doc.data().to == toData)
-    || (doc.data().from == toData && doc.data().to == fromData)) {
+  const querySnapshot = await getDocs(activesRef, orderBy('uploadTime'));
+  querySnapshot.forEach((doc1) => {
+    if ((doc1.data().from === fromData && doc1.data().to === toData)
+    || (doc1.data().from === toData && doc1.data().to === fromData)) {
       message.push({
-        id: doc.id,
-        message: doc.data().message,
-        from: doc.data().from,
-        to: doc.data().to,
-        uploadTime: doc.data().uploadTime,
+        id: doc1.id,
+        message: doc1.data().message,
+        from: doc1.data().from,
+        to: doc1.data().to,
+        uploadTime: doc1.data().uploadTime,
       });
     }
   });
   return message;
 }
 
-async function getRelativeMessage() {
+async function getRelativeMessage() { // 待測試
   const user = '110501444';
-  const db = firebase.firestore();
-  const messageRef = db.collection('message');
+  const db = getFirestore(app);
+  const messageRef = query(collection(db, 'message'));
   const message = [];
-  const querySnapshot1 = await messageRef.where('send', '==', user).get();
-  querySnapshot1.forEach((doc) => {
+  const querySnapshot1 = await getDocs(messageRef, where('send', '==', user));
+  querySnapshot1.forEach((doc1) => {
     message.push({
-      id: doc.id,
-      message: doc.data().message,
-      send: doc.data().send,
-      receive: doc.data().receive,
-      sendTime: doc.data().sendTime,
+      id: doc1.id,
+      message: doc1.data().message,
+      send: doc1.data().send,
+      receive: doc1.data().receive,
+      sendTime: doc1.data().sendTime,
     });
   });
-  const querySnapshot2 = await messageRef.where('receive', '==', user).get();
-  querySnapshot2.forEach((doc) => {
+  const querySnapshot2 = await getDocs(messageRef, where('receive', '==', user));
+  querySnapshot2.forEach((doc1) => {
     message.push({
-      id: doc.id,
-      message: doc.data().message,
-      send: doc.data().send,
-      receive: doc.data().receive,
-      sendTime: doc.data().sendTime,
+      id: doc1.id,
+      message: doc1.data().message,
+      send: doc1.data().send,
+      receive: doc1.data().receive,
+      sendTime: doc1.data().sendTime,
     });
   });
   // console.log(message);

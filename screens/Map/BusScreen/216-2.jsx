@@ -10,7 +10,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import Styles from '../Styles';
 
 const Separator = () => <View style={Styles.separator} />;
-function List173() {
+function List216() {
   const [workDay, setWorkDay] = useState(true);
   return (
     <SafeAreaView style={Styles.background}>
@@ -19,7 +19,7 @@ function List173() {
           textAlign: 'center', backgroundColor: '#28527A', color: 'white', height: 50, width: '100%', fontSize: 20, textAlignVertical: 'center', lineHeight: 50,
         }}
         >
-          173公車時刻表
+          216公車時刻表
         </Text>
       </View>
       <View>
@@ -54,13 +54,13 @@ function List173() {
           textAlign: 'center', width: '50%', fontSize: 20,
         }}
         >
-          往桃園高鐵站
+          往中央大學
         </Text>
         <Text style={{
           textAlign: 'center', width: '50%', fontSize: 20,
         }}
         >
-          往中央大學
+          往八德區公所
         </Text>
 
       </View>
@@ -75,28 +75,58 @@ function List173() {
                 textAlign: 'center', fontSize: 20, lineHeight: 50, backgroundColor: 'white', width: '50%',
               }}
               >
-                08:50
+                06:10
               </Text>
+              <Text style={{
+                textAlign: 'center', fontSize: 20, lineHeight: 50, backgroundColor: 'white', width: '50%',
+              }}
+              >
+                06:10
+              </Text>
+            </View>
+            <View style={Styles.fixToText}>
+
+              <Text style={{
+                textAlign: 'center', fontSize: 20, lineHeight: 50, backgroundColor: 'white', width: '50%',
+              }}
+              >
+                07:00
+              </Text>
+              <Text style={{
+                textAlign: 'center', fontSize: 20, lineHeight: 50, backgroundColor: 'white', width: '50%',
+              }}
+              >
+                07:00
+              </Text>
+            </View>
+            <View style={Styles.fixToText}>
+
+              <Text style={{
+                textAlign: 'center', fontSize: 20, lineHeight: 50, backgroundColor: 'white', width: '50%',
+              }}
+              >
+                08:00
+              </Text>
+              <Text style={{
+                textAlign: 'center', fontSize: 20, lineHeight: 50, backgroundColor: 'white', width: '50%',
+              }}
+              >
+                08:10
+              </Text>
+            </View>
+            <View style={Styles.fixToText}>
+
               <Text style={{
                 textAlign: 'center', fontSize: 20, lineHeight: 50, backgroundColor: 'white', width: '50%',
               }}
               >
                 09:20
               </Text>
-            </View>
-            <View style={Styles.fixToText}>
-
               <Text style={{
                 textAlign: 'center', fontSize: 20, lineHeight: 50, backgroundColor: 'white', width: '50%',
               }}
               >
-                10:50
-              </Text>
-              <Text style={{
-                textAlign: 'center', fontSize: 20, lineHeight: 50, backgroundColor: 'white', width: '50%',
-              }}
-              >
-                11:20
+                09:10
               </Text>
             </View>
             <View style={Styles.fixToText}>
@@ -105,14 +135,59 @@ function List173() {
                 textAlign: 'center', fontSize: 20, lineHeight: 50, backgroundColor: 'white', width: '50%',
               }}
               >
-                13:30
+                10:00
               </Text>
+              <Text style={{
+                textAlign: 'center', fontSize: 20, lineHeight: 50, backgroundColor: 'white', width: '50%',
+              }}
+              >
+                10:10
+              </Text>
+            </View>
+            <View style={Styles.fixToText}>
+
+              <Text style={{
+                textAlign: 'center', fontSize: 20, lineHeight: 50, backgroundColor: 'white', width: '50%',
+              }}
+              >
+                11:00
+              </Text>
+              <Text style={{
+                textAlign: 'center', fontSize: 20, lineHeight: 50, backgroundColor: 'white', width: '50%',
+              }}
+              >
+                11:10
+              </Text>
+            </View>
+            <View style={Styles.fixToText}>
+
+              <Text style={{
+                textAlign: 'center', fontSize: 20, lineHeight: 50, backgroundColor: 'white', width: '50%',
+              }}
+              >
+                12:00
+              </Text>
+              <Text style={{
+                textAlign: 'center', fontSize: 20, lineHeight: 50, backgroundColor: 'white', width: '50%',
+              }}
+              >
+                12:10
+              </Text>
+            </View>
+            <View style={Styles.fixToText}>
+
               <Text style={{
                 textAlign: 'center', fontSize: 20, lineHeight: 50, backgroundColor: 'white', width: '50%',
               }}
               >
                 14:00
               </Text>
+              <Text style={{
+                textAlign: 'center', fontSize: 20, lineHeight: 50, backgroundColor: 'white', width: '50%',
+              }}
+              >
+                14:10
+              </Text>
             </View>
             <View style={Styles.fixToText}>
 
@@ -120,7 +195,22 @@ function List173() {
                 textAlign: 'center', fontSize: 20, lineHeight: 50, backgroundColor: 'white', width: '50%',
               }}
               >
-                15:40
+                15:00
+              </Text>
+              <Text style={{
+                textAlign: 'center', fontSize: 20, lineHeight: 50, backgroundColor: 'white', width: '50%',
+              }}
+              >
+                15:10
+              </Text>
+            </View>
+            <View style={Styles.fixToText}>
+
+              <Text style={{
+                textAlign: 'center', fontSize: 20, lineHeight: 50, backgroundColor: 'white', width: '50%',
+              }}
+              >
+                16:00
               </Text>
               <Text style={{
                 textAlign: 'center', fontSize: 20, lineHeight: 50, backgroundColor: 'white', width: '50%',
@@ -135,13 +225,28 @@ function List173() {
                 textAlign: 'center', fontSize: 20, lineHeight: 50, backgroundColor: 'white', width: '50%',
               }}
               >
-                17:50
+                17:00
               </Text>
               <Text style={{
                 textAlign: 'center', fontSize: 20, lineHeight: 50, backgroundColor: 'white', width: '50%',
               }}
               >
-                18:20
+                17:10
+              </Text>
+            </View>
+            <View style={Styles.fixToText}>
+
+              <Text style={{
+                textAlign: 'center', fontSize: 20, lineHeight: 50, backgroundColor: 'white', width: '50%',
+              }}
+              >
+                18:00
+              </Text>
+              <Text style={{
+                textAlign: 'center', fontSize: 20, lineHeight: 50, backgroundColor: 'white', width: '50%',
+              }}
+              >
+                18:10
               </Text>
             </View>
           </View>
@@ -155,28 +260,43 @@ function List173() {
                 textAlign: 'center', fontSize: 20, lineHeight: 50, backgroundColor: 'white', width: '50%',
               }}
               >
-                10:30
+                07:00
               </Text>
+              <Text style={{
+                textAlign: 'center', fontSize: 20, lineHeight: 50, backgroundColor: 'white', width: '50%',
+              }}
+              >
+                06:10
+              </Text>
+            </View>
+            <View style={Styles.fixToText}>
+
+              <Text style={{
+                textAlign: 'center', fontSize: 20, lineHeight: 50, backgroundColor: 'white', width: '50%',
+              }}
+              >
+                09:20
+              </Text>
+              <Text style={{
+                textAlign: 'center', fontSize: 20, lineHeight: 50, backgroundColor: 'white', width: '50%',
+              }}
+              >
+                08:10
+              </Text>
+            </View>
+            <View style={Styles.fixToText}>
+
               <Text style={{
                 textAlign: 'center', fontSize: 20, lineHeight: 50, backgroundColor: 'white', width: '50%',
               }}
               >
                 11:00
               </Text>
-            </View>
-            <View style={Styles.fixToText}>
-
               <Text style={{
                 textAlign: 'center', fontSize: 20, lineHeight: 50, backgroundColor: 'white', width: '50%',
               }}
               >
-                12:30
-              </Text>
-              <Text style={{
-                textAlign: 'center', fontSize: 20, lineHeight: 50, backgroundColor: 'white', width: '50%',
-              }}
-              >
-                13:00
+                10:10
               </Text>
             </View>
             <View style={Styles.fixToText}>
@@ -185,13 +305,13 @@ function List173() {
                 textAlign: 'center', fontSize: 20, lineHeight: 50, backgroundColor: 'white', width: '50%',
               }}
               >
-                15:40
+                14:00
               </Text>
               <Text style={{
                 textAlign: 'center', fontSize: 20, lineHeight: 50, backgroundColor: 'white', width: '50%',
               }}
               >
-                16:10
+                12:10
               </Text>
             </View>
             <View style={Styles.fixToText}>
@@ -200,13 +320,28 @@ function List173() {
                 textAlign: 'center', fontSize: 20, lineHeight: 50, backgroundColor: 'white', width: '50%',
               }}
               >
-                17:50
+                16:00
               </Text>
               <Text style={{
                 textAlign: 'center', fontSize: 20, lineHeight: 50, backgroundColor: 'white', width: '50%',
               }}
               >
-                18:20
+                15:10
+              </Text>
+            </View>
+            <View style={Styles.fixToText}>
+
+              <Text style={{
+                textAlign: 'center', fontSize: 20, lineHeight: 50, backgroundColor: 'white', width: '50%',
+              }}
+              >
+                18:10
+              </Text>
+              <Text style={{
+                textAlign: 'center', fontSize: 20, lineHeight: 50, backgroundColor: 'white', width: '50%',
+              }}
+              >
+                17:10
               </Text>
             </View>
           </View>
@@ -220,4 +355,4 @@ function List173() {
     </SafeAreaView>
   );
 }
-export default List173;
+export default List216;

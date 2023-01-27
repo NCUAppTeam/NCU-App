@@ -193,12 +193,12 @@ export default function MapScreen({ navigation }) {
             textInputValue={textInputValue}
             setTextInputValue={setTextInputValue}
           />
-
           <CategorySlider
             setMarkerShowType={setMarkerShowType}
           />
+          <BusButton bottomDrawerShow={bottomDrawerShow} navigation={navigation} />
+
         </View>
-        <BusButton bottomDrawerShow={bottomDrawerShow} navigation={navigation} />
 
         <BottomDrawer
           bottomDrawerShow={bottomDrawerShow}

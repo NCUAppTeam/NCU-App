@@ -32,6 +32,7 @@
     "fuse.js": "^6.5.3",
     "jssha": "^2.3.1",
     "native-base": "^3.3.7",
+    "qs": "^6.11.0",
     "react": "18.0.0",
     "react-dom": "18.0.0",
     "react-native": "^0.69.5",

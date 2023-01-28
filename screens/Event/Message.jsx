@@ -14,7 +14,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import styles from './style_folder/Styles_Message';
 import ActiveController from '../../controller/Active';
 
-function message({ route, navigation }) {
+function Message({ route, navigation }) {
   const Cd = route.params;
   const prepage = JSON.stringify(Cd).slice(12, -2);
   const [data, setData] = useState({});
@@ -54,7 +54,7 @@ function message({ route, navigation }) {
                   name="arrowleft"
                   size={28}
                   color="#fff"
-                  onPress={() => { navigation.navigate(prepage); }}
+                  onPress={() => { navigation.navigate("list"); }}
                 />
               </Box>
               <Box style={styles.title}>
@@ -81,7 +81,11 @@ function message({ route, navigation }) {
         </Box>
         <Box style={{ flex: 1 }}>
           <TouchableOpacity
-            onPress={() => { navigation.navigate('Send'); }}
+            onPress={() => {
+                navigation.navigate('send',{
+                attendeeID:attendeeINFO[0].studentID,
+                userID:"111201512"});
+              }}
           >
             <FlatList
               data={attendeeINFO}
@@ -127,4 +131,4 @@ function message({ route, navigation }) {
     </SafeAreaView>
   );
 }
-export default message;
+export default Message;

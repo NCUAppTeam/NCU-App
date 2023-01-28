@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Text, View, SafeAreaView, RefreshControl, Dimensions,
   ScrollView, TouchableOpacity, Image, Button, TouchableHighlight, TextInput,
@@ -80,6 +80,7 @@ function Send({ route,navigation }) {
     });
     setRefreshing(false);
   };
+  const scrollview=useRef();
   return (
     <SafeAreaView style={styles.container}>
       <NativeBaseProvider>
@@ -112,7 +113,10 @@ function Send({ route,navigation }) {
             </Box>
           </LinearGradient>
             <View style={{paddingTop:15,height:Dimensions.get('window').height-155}}>
-            <ScrollView vertical>
+            <ScrollView
+              ref={scrollview}
+              onContentSizeChange={() => scrollview.current.scrollTo({ y:Dimensions.get('window').height-155})}
+            >
               {getData.map(({
                 id, send, receive, message, image
               }) => (

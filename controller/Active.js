@@ -787,65 +787,103 @@ async function getAttendedOrNot(docID) {
 
 async function addMessage(active) {
   const item = {
-    message: active.message,
-    from: active.from.trim(),
-    to: active.to.trim(),
-    uploadTime: active.uploadTime,
+    send: active.send.trim(),
+    receive: active.receive.trim(),
+    sendTime: active.sendTime,
   };
   const db = firebase.firestore();
+  if (active.message){
+    item.message=active.message;
+    item.image="";
+  }
+  else if (active.image){
+    const imageAddress = `message/${imagePos(active.image)}`;
+    const storageRef = firebase.storage().ref().child(imageAddress);
+    const response = await fetch(active.image);
+    const blob = await response.blob();
+    const st = storageRef.put(blob);
+    await st;
+    const uri = await storageRef.getDownloadURL();
+    if (uri !== undefined) {
+      item.image = uri;
+    }else{
+      item.image="";
+    }
+    item.message="";
+  }
   const messageRef = db.collection('message');
   messageRef.add(item);
   console.log(item);
 }
 
-async function getMessage(fromData, toData) {
-  const db = firebase.firestore();
-  const activesRef = db.collection('message');
-  const message = [];
-  const querySnapshot = await activesRef.orderBy('uploadTime').get();
-  querySnapshot.forEach((doc) => {
-    if ((doc.data().from == fromData && doc.data().to == toData)
-    || (doc.data().from == toData && doc.data().to == fromData)) {
-      message.push({
-        id: doc.id,
-        message: doc.data().message,
-        from: doc.data().from,
-        to: doc.data().to,
-        uploadTime: doc.data().uploadTime,
-      });
-    }
-  });
-  return message;
-}
+// async function getMessage(fromData, toData) {
+//   const db = firebase.firestore();
+//   const activesRef = db.collection('message');
+//   const message = [];
+//   const querySnapshot = await activesRef.orderBy('uploadTime').get();
+//   querySnapshot.forEach((doc) => {
+//     if ((doc.data().from == fromData && doc.data().to == toData)
+//     || (doc.data().from == toData && doc.data().to == fromData)) {
+//       message.push({
+//         id: doc.id,
+//         message: doc.data().message,
+//         from: doc.data().from,
+//         to: doc.data().to,
+//         uploadTime: doc.data().uploadTime,
+//       });
+//     }
+//   });
+//   return message;
+// }
 
-async function getRelativeMessage() {
-  const user = '110501444';
+async function getRelativeMessage(user,attendee) {
   const db = firebase.firestore();
   const messageRef = db.collection('message');
   const message = [];
   const querySnapshot1 = await messageRef.where('send', '==', user).get();
   querySnapshot1.forEach((doc) => {
-    message.push({
-      id: doc.id,
-      message: doc.data().message,
-      send: doc.data().send,
-      receive: doc.data().receive,
-      sendTime: doc.data().sendTime,
-    });
+    if(doc.data().receive==attendee){
+      message.push({
+        id: doc.id,
+        image:doc.data().image,
+        message: doc.data().message,
+        send: doc.data().send,
+        receive: doc.data().receive,
+        sendTime: doc.data().sendTime,
+      });
+    }
   });
   const querySnapshot2 = await messageRef.where('receive', '==', user).get();
   querySnapshot2.forEach((doc) => {
-    message.push({
-      id: doc.id,
-      message: doc.data().message,
-      send: doc.data().send,
-      receive: doc.data().receive,
-      sendTime: doc.data().sendTime,
-    });
+    if(doc.data().send==attendee){
+      message.push({
+        id: doc.id,
+        image:doc.data().image,
+        message: doc.data().message,
+        send: doc.data().send,
+        receive: doc.data().receive,
+        sendTime: doc.data().sendTime,
+      });
+    }
   });
-  // console.log(message);
   message.sort((a, b) => a.sendTime - b.sendTime);
   return message;
+}
+
+async function getINFO(ID){
+  const db = firebase.firestore();
+  const attendeeRef = db.collection('attendees').doc(ID);
+  const querySnapshot = await attendeeRef.get();
+  const attendeeInfo = {
+    avatar:querySnapshot.data().avatar,
+    email:querySnapshot.data().email,
+    grade:querySnapshot.data().grade,
+    major:querySnapshot.data().major,
+    name:querySnapshot.data().name,
+    phone:querySnapshot.data().phone,
+    studentID:querySnapshot.data().studentID,
+  };
+  return attendeeInfo;
 }
 export default {
   firebaseConfig,
@@ -872,6 +910,7 @@ export default {
   removeAttendee,
   getAttendedOrNot,
   addMessage,
-  getMessage,
+  //getMessage,
   getRelativeMessage,
+  getINFO,
 };

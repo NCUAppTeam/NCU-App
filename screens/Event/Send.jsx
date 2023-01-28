@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   Text, View, SafeAreaView, RefreshControl, Dimensions,
-  ScrollView, TouchableOpacity, Image, Button, TouchableHighlight, TextInput
+  ScrollView, TouchableOpacity, Image, Button, TouchableHighlight, TextInput,
 } from 'react-native';
 import {
   Ionicons, FontAwesome5, AntDesign, Feather,
@@ -15,6 +15,7 @@ import styles from './style_folder/Styles_Message';
 import ActiveController from '../../controller/Active';
 import Icon from 'react-native-vector-icons/Octicons';
 import * as ImagePicker from 'expo-image-picker';
+import { ScrollViewBase } from 'react-native';
 //set send:111201512
 //receive:110501444
 
@@ -82,16 +83,7 @@ function Send({ route,navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <NativeBaseProvider>
-        <ScrollView
-          Vertical
-          style={{ flex: 1 }}
-          refreshControl={(
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={onRefresh}
-            />
-  )}
-        >
+        <ScrollView>
           <LinearGradient
             colors={['#1784B2', '#28527A']}
             start={[1, 2]}
@@ -119,8 +111,8 @@ function Send({ route,navigation }) {
               </HStack>
             </Box>
           </LinearGradient>
-          <View>
-            <View style={{paddingTop:15,height:Dimensions.get('window').height-153}}>
+            <View style={{paddingTop:15,height:Dimensions.get('window').height-155}}>
+            <ScrollView vertical>
               {getData.map(({
                 id, send, receive, message, image
               }) => (
@@ -136,7 +128,7 @@ function Send({ route,navigation }) {
                         receive===userID&&{flexDirection:"row-reverse"}
                       ]}
                     >
-                      <View style={{}}>
+                      <View style={{maxWidth:180}}>
                       <Card
                       key={id}
                       style={{backgroundColor:"#E5EBF1",borderRadius:10}}
@@ -172,6 +164,7 @@ function Send({ route,navigation }) {
                   </View>
                 </View>
               ))}
+            </ScrollView>
             </View>
             <View style={{flexDirection:"row",height:50}}>
               <View style={{paddingTop:10,paddingLeft:18,paddingRight:12}}>
@@ -187,8 +180,10 @@ function Send({ route,navigation }) {
                 paddingHorizontal:12,height:35,marginTop:5,
                 borderWidth:1,borderColor: 'rgba(191, 191, 191, 0.7)'}}>
                 <TextInput
-                  style={{height:20,fontSize:16,marginTop:6}}
+                  style={{height:20,fontSize:14,marginTop:6}}
                   mode="flat"
+                  multiline
+                  numberOfLines={4}
                   value={data.message}
                   onChangeText={(text) => setData({ ...data, message: text })}
                   selectionColor="#ccc"
@@ -209,8 +204,7 @@ function Send({ route,navigation }) {
                 />
               </View>
             </View>
-          </View>
-        </ScrollView>
+          </ScrollView>
       </NativeBaseProvider>
     </SafeAreaView>
   );

@@ -15,7 +15,6 @@ import styles from './style_folder/Styles_Message';
 import ActiveController from '../../controller/Active';
 import Icon from 'react-native-vector-icons/Octicons';
 import * as ImagePicker from 'expo-image-picker';
-import { ScrollViewBase } from 'react-native';
 //set send:111201512
 //receive:110501444
 
@@ -28,20 +27,6 @@ function Send({ route,navigation }) {
     send:userID,
     receive:attendeeID,
   });
-  const pickImage = async () => {
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [1, 1],
-      quality: 1,
-    });
-    if (!result.cancelled) {
-      data.image=result.uri;
-      data.sendTime = new Date();
-      console.log(data);
-      ActiveController.addMessage(data);
-    }
-  };
   const [getData, setGetData] = useState([]);
   useEffect(() => {
     ActiveController.getRelativeMessage(userID,attendeeID).then((res) => {
@@ -81,6 +66,22 @@ function Send({ route,navigation }) {
     setRefreshing(false);
   };
   const scrollview=useRef();
+  const pickImage = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+    if (!result.cancelled) {
+      data.image=result.uri;
+      data.sendTime = new Date();
+      console.log(data);
+      await ActiveController.addMessage(data);
+      onRefresh();
+      scrollview.current.scrollToEnd({ animated: true })
+    }
+  };
   return (
     <SafeAreaView style={styles.container}>
       <NativeBaseProvider>
@@ -112,10 +113,11 @@ function Send({ route,navigation }) {
               </HStack>
             </Box>
           </LinearGradient>
-            <View style={{paddingTop:15,height:Dimensions.get('window').height-155}}>
+          <View style={{height:Dimensions.get('window').height-155}}>
             <ScrollView
+              style={{paddingVertical:4}}
               ref={scrollview}
-              onContentSizeChange={() => scrollview.current.scrollTo({ y:Dimensions.get('window').height-155})}
+              onContentSizeChange={() => scrollview.current.scrollToEnd({ animated: true })}
             >
               {getData.map(({
                 id, send, receive, message, image
@@ -164,51 +166,52 @@ function Send({ route,navigation }) {
                             }}/>
                         }
                       </View>
+                      
                     </View>
                   </View>
                 </View>
               ))}
             </ScrollView>
-            </View>
-            <View style={{flexDirection:"row",height:50}}>
-              <View style={{paddingTop:10,paddingLeft:18,paddingRight:12}}>
-                <FontAwesome5
-                    name="image"
-                    size={26}
-                    color="#28527A"
-                    onPress={pickImage}
-                />
-              </View>
-              <View
-                style={{flex:1,borderRadius:20,backgroundColor:"#E5EBF1",
-                paddingHorizontal:12,height:35,marginTop:5,
-                borderWidth:1,borderColor: 'rgba(191, 191, 191, 0.7)'}}>
-                <TextInput
-                  style={{height:20,fontSize:14,marginTop:6}}
-                  mode="flat"
-                  multiline
-                  numberOfLines={4}
-                  value={data.message}
-                  onChangeText={(text) => setData({ ...data, message: text })}
-                  selectionColor="#ccc"
-                />
-              </View>
-              <View style={{paddingTop:10,paddingLeft:12,paddingRight:18}}>
-                <Icon 
-                  name="paper-airplane"
+          </View>
+          <View style={{flexDirection:"row",height:50}}>
+            <View style={{paddingTop:10,paddingLeft:18,paddingRight:12}}>
+              <FontAwesome5
+                  name="image"
                   size={26}
                   color="#28527A"
-                  onPress={() => {
-                    data.sendTime = new Date();
-                    console.log(data);
-                    ActiveController.addMessage(data);
-                    onRefresh();
-                    setData({ ...data, message: "" })
-                  }}
-                />
-              </View>
+                  onPress={pickImage}
+              />
             </View>
-          </ScrollView>
+            <View
+              style={{flex:1,borderRadius:20,backgroundColor:"#E5EBF1",
+              paddingHorizontal:12,height:35,marginTop:5,
+              borderWidth:1,borderColor: 'rgba(191, 191, 191, 0.7)'}}>
+              <TextInput
+                style={{height:20,fontSize:14,marginTop:6}}
+                mode="flat"
+                multiline
+                numberOfLines={4}
+                value={data.message}
+                onChangeText={(text) => setData({ ...data, message: text })}
+                selectionColor="#ccc"
+              />
+            </View>
+            <View style={{paddingTop:10,paddingLeft:12,paddingRight:18}}>
+              <Icon 
+                name="paper-airplane"
+                size={26}
+                color="#28527A"
+                onPress={() => {
+                  data.sendTime = new Date();
+                  console.log(data);
+                  ActiveController.addMessage(data);
+                  onRefresh();
+                  setData({ ...data, message: "" })
+                }}
+              />
+            </View>
+          </View>
+        </ScrollView>
       </NativeBaseProvider>
     </SafeAreaView>
   );

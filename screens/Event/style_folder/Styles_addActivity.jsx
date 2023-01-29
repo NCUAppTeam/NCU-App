@@ -71,7 +71,6 @@ export default StyleSheet.create({
     flexDirection: 'row',
   },
   Cloudicon: {
-    marginTop: 9,
     color: 'white',
     fontSize: 14,
     marginLeft: 8,

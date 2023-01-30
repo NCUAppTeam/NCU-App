@@ -5,7 +5,6 @@ import {
 import {
   Title, Card, Searchbar,
 } from 'react-native-paper';
-import { Button } from 'react-native-elements';
 import {
   Ionicons, FontAwesome5, AntDesign, Feather,
 } from '@expo/vector-icons';
@@ -15,7 +14,7 @@ import {
 import styles from './style_folder/Styles_activityList';
 import ActiveController from '../../controller/Active';
 
-function list({ navigation }) {
+function List({ navigation }) {
   const [active1, setActive1] = useState([]);
   const [active2, setActive2] = useState([]);
   useEffect(() => {
@@ -246,4 +245,4 @@ function list({ navigation }) {
   );
 }
 
-export default list;
+export default List;

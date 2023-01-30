@@ -17,7 +17,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import ActiveController from '../../controller/Active';
 import styles from './style_folder/Styles_manage';
 
-function manage({ route, navigation }) {
+function Manage({ route, navigation }) {
   const [showDialog1, setShowDialog1] = useState(false);
   const [showDialog2, setShowDialog2] = useState(false);
   const Cd = route.params;
@@ -230,111 +230,6 @@ function manage({ route, navigation }) {
                     </View>
                   </DialogContent>
                 </Dialog>
-                {/* <Dialog
-                  width={Dimensions.get('window').width * 0.9}
-                  height={Dimensions.get('window').width * 0.733}
-                  visible={showDialog1}
-                  dialogTitle={(
-                    <NativeBaseProvider>
-                      <HStack>
-                        <Box>
-                          <Text style={{
-                            textAlign: 'left',
-                            color: '#1f2937',
-                            fontSize: 16,
-                            fontWeight: '400',
-                            marginTop: 17,
-                            marginBottom: 10,
-                            marginLeft: 16,
-                          }}
-                          >
-                            刪除活動&ensp;
-
-                          </Text>
-                        </Box>
-                        <Feather
-                          name="x"
-                          size={26}
-                          color="#1F2937"
-                          style={{ marginLeft: Dimensions.get('window').width * 0.6, marginTop: 15 }}
-                          onPress={() => { setShowDialog1(false); }}
-                        />
-                      </HStack>
-                      <Divider style={{ marginTop: 5 }} bg="#e5e5e5" />
-                      <Box style={styles.removeBox}>
-                        <Box>
-                          <Text style={{ fontSize: 14, marginBottom: 5, marginLeft: Dimensions.get('window').width * 0.04 }}>
-                            注意事項：
-                          </Text>
-                          <Text style={{ fontSize: 14, marginBottom: 5, marginLeft: Dimensions.get('window').width * 0.04 }}>
-                            1. 這將會刪除活動的資料，並同時移除所有此活動的
-                            {'\n'}
-                            &emsp;參加者。
-                          </Text>
-                          <Text style={{
-                            fontSize: 14, marginBottom: 5, marginLeft: Dimensions.get('window').width * 0.04,
-                          }}
-                          >
-                            2. 當此活動被刪除，系統將自動發送通知給此活動的
-                            {'\n'}
-                            &emsp;所有參加者，讓他們知道活動已被刪除。
-                          </Text>
-                          <Text style={{
-                            fontSize: 14, marginBottom: 5, color: '#ef4444', marginLeft: Dimensions.get('window').width * 0.04,
-                          }}
-                          >
-                            3. 一旦按下下方紅色刪除按鈕，即立刻執行刪除，
-                            {'\n'}
-                            &emsp;且無法復原！
-                          </Text>
-                        </Box>
-                        <Box style={{
-                          height: 61, width: Dimensions.get('window').width * 0.9, marginTop: 10, backgroundColor: '#f3f4f6',
-                        }}
-                        >
-                          <HStack>
-                            <Box
-                              style={{ marginTop: 10 }}
-                            >
-                              <Text
-                                style={{
-                                  fontSize: 14, color: '#64748B', padding: 10, marginLeft: Dimensions.get('window').width * 0.6, marginTop: Dimensions.get('window').width * 0.009,
-                                }}
-                                onPress={() => {
-                                  setShowDialog1(false);
-                                }}
-                              >
-                                取消
-
-                              </Text>
-                            </Box>
-                            <Box
-                              style={{ marginTop: 10 }}
-                            >
-                              <Text
-                                style={{
-                                  color: '#ffffff', backgroundColor: '#ef4444', padding: 10, borderRadius: 4, marginLeft: 10, marginTop: Dimensions.get('window').width * 0.009,
-                                }}
-                                onPress={() => {
-                                  setShowDialog1(false);
-                                  ActiveController.deleteOneActive(passedID);
-                                  ActiveController.deleteEverySingleAttendee(passedID);
-                                }}
-                              >
-                                刪除
-
-                              </Text>
-                            </Box>
-                          </HStack>
-
-                        </Box>
-                      </Box>
-                    </NativeBaseProvider>
-                          )}
-                  onTouchOutside={() => {
-                    setShowDialog1(false);
-                  }}
-                /> */}
               </View>
               <View style={{
                 flex: 1, justifyContent: 'center', alignItems: 'flex-end',
@@ -599,4 +494,4 @@ function manage({ route, navigation }) {
   );
 }
 
-export default manage;
+export default Manage;

@@ -13,7 +13,7 @@ import {
 } from 'native-base';
 import styles from './style_folder/Styles_search';
 
-function search({ navigation }) {
+function Search({ navigation }) {
   const [searchQuery, setSearchQuery] = useState('');
   const onChangeSearch = (query) => setSearchQuery(query);
   return (
@@ -127,4 +127,4 @@ function search({ navigation }) {
   );
 }
 
-export default search;
+export default Search;

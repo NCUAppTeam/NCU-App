@@ -1,13 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
+
 import {
   View,
   SafeAreaView,
   Text,
+  TouchableOpacity,
 } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import Styles from '../Styles';
 
 const Separator = () => <View style={Styles.separator} />;
 function List172() {
+  const [workDay, setWorkDay] = useState(true);
   return (
     <SafeAreaView style={Styles.background}>
       <View>
@@ -18,212 +22,199 @@ function List172() {
           172公車時刻表
         </Text>
       </View>
-
-      <Text style={{ textAlign: 'center', fontSize: 20 }}>
-        往中央大學
-      </Text>
       <View>
-        <View style={Styles.fixToText}>
-
-          <Text style={{
-            textAlign: 'center', width: '50%', backgroundColor: 'white', fontSize: 20,
-          }}
+        <View style={{ flexDirection: 'row', height: 50 }}>
+          <TouchableOpacity
+            onPress={() => { setWorkDay(true); }}
+            style={{ width: '50%', backgroundColor: 'white' }}
           >
-            平日
-          </Text>
-          <Text style={{
-            textAlign: 'center', width: '50%', backgroundColor: 'white', fontSize: 20,
-          }}
+            <Text style={{
+              textAlign: 'center', fontSize: 20, textAlignVertical: 'center', lineHeight: 50,
+            }}
+            >
+              平日
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => { setWorkDay(false); }}
+            style={{ width: '50%', backgroundColor: 'white' }}
           >
-            假日
-          </Text>
-
-        </View>
-        <Separator />
-        <View style={Styles.fixToText}>
-
-          <Text style={{
-            textAlign: 'center', width: '50%', backgroundColor: 'white', fontSize: 20,
-          }}
-          >
-            06:30
-          </Text>
-          <Text style={{
-            textAlign: 'center', width: '50%', backgroundColor: 'white', fontSize: 20,
-          }}
-          >
-            06:20
-          </Text>
-        </View>
-        <View style={Styles.fixToText}>
-
-          <Text style={{
-            textAlign: 'center', width: '50%', backgroundColor: 'white', fontSize: 20,
-          }}
-          >
-            07:00
-          </Text>
-          <Text style={{
-            textAlign: 'center', width: '50%', backgroundColor: 'white', fontSize: 20,
-          }}
-          >
-            07:00
-          </Text>
-        </View>
-        <View style={Styles.fixToText}>
-
-          <Text style={{
-            textAlign: 'center', width: '50%', backgroundColor: 'white', fontSize: 20,
-          }}
-          >
-            08:00
-          </Text>
-          <Text style={{
-            textAlign: 'center', width: '50%', backgroundColor: 'white', fontSize: 20,
-          }}
-          >
-            07:20
-          </Text>
-        </View>
-        <View style={Styles.fixToText}>
-
-          <Text style={{
-            textAlign: 'center', width: '50%', backgroundColor: 'white', fontSize: 20,
-          }}
-          >
-            08:30
-          </Text>
-          <Text style={{
-            textAlign: 'center', width: '50%', backgroundColor: 'white', fontSize: 20,
-          }}
-          >
-            08:00
-          </Text>
-        </View>
-        <View style={Styles.fixToText}>
-
-          <Text style={{
-            textAlign: 'center', width: '50%', backgroundColor: 'white', fontSize: 20,
-          }}
-          >
-            09:00
-          </Text>
-          <Text style={{
-            textAlign: 'center', width: '50%', backgroundColor: 'white', fontSize: 20,
-          }}
-          >
-            08:20
-          </Text>
-        </View>
-        <View style={Styles.fixToText}>
-
-          <Text style={{
-            textAlign: 'center', width: '50%', backgroundColor: 'white', fontSize: 20,
-          }}
-          >
-            09:30
-          </Text>
-          <Text style={{
-            textAlign: 'center', width: '50%', backgroundColor: 'white', fontSize: 20,
-          }}
-          >
-            09:00
-          </Text>
-        </View>
-        <View style={Styles.fixToText}>
-
-          <Text style={{
-            textAlign: 'center', width: '50%', backgroundColor: 'white', fontSize: 20,
-          }}
-          >
-            10:00
-          </Text>
-          <Text style={{
-            textAlign: 'center', width: '50%', backgroundColor: 'white', fontSize: 20,
-          }}
-          >
-            09:20
-          </Text>
-        </View>
-        <View style={Styles.fixToText}>
-
-          <Text style={{
-            textAlign: 'center', width: '50%', backgroundColor: 'white', fontSize: 20,
-          }}
-          >
-            10:30
-          </Text>
-          <Text style={{
-            textAlign: 'center', width: '50%', backgroundColor: 'white', fontSize: 20,
-          }}
-          >
-            10:00
-          </Text>
-        </View>
-        <View style={Styles.fixToText}>
-
-          <Text style={{
-            textAlign: 'center', width: '50%', backgroundColor: 'white', fontSize: 20,
-          }}
-          >
-            11:00
-          </Text>
-          <Text style={{
-            textAlign: 'center', width: '50%', backgroundColor: 'white', fontSize: 20,
-          }}
-          >
-            10:20
-          </Text>
-        </View>
-        <View style={Styles.fixToText}>
-
-          <Text style={{
-            textAlign: 'center', width: '50%', backgroundColor: 'white', fontSize: 20,
-          }}
-          >
-            11:30
-          </Text>
-          <Text style={{
-            textAlign: 'center', width: '50%', backgroundColor: 'white', fontSize: 20,
-          }}
-          >
-            11:00
-          </Text>
-        </View>
-        <View style={Styles.fixToText}>
-
-          <Text style={{
-            textAlign: 'center', width: '50%', backgroundColor: 'white', fontSize: 20,
-          }}
-          >
-            12:00
-          </Text>
-          <Text style={{
-            textAlign: 'center', width: '50%', backgroundColor: 'white', fontSize: 20,
-          }}
-          >
-            11:20
-          </Text>
-        </View>
-        <View style={Styles.fixToText}>
-
-          <Text style={{
-            textAlign: 'center', width: '50%', backgroundColor: 'white', fontSize: 20,
-          }}
-          >
-            12:25
-          </Text>
-          <Text style={{
-            textAlign: 'center', width: '50%', backgroundColor: 'white', fontSize: 20,
-          }}
-          >
-            12:00
-          </Text>
+            <Text style={{
+              textAlign: 'center', fontSize: 20, textAlignVertical: 'center', lineHeight: 50,
+            }}
+            >
+              假日
+            </Text>
+          </TouchableOpacity>
         </View>
       </View>
+      <View style={Styles.fixToText}>
+
+        <Text style={{
+          textAlign: 'center', width: '50%', fontSize: 20,
+        }}
+        >
+          往桃園高鐵站
+        </Text>
+        <Text style={{
+          textAlign: 'center', width: '50%', fontSize: 20,
+        }}
+        >
+          往中央大學
+        </Text>
+
+      </View>
+      <ScrollView>
+        {workDay
+          && (
+          <View>
+            <Separator />
+            <View style={Styles.fixToText}>
+
+              <Text style={{
+                textAlign: 'center', fontSize: 20, lineHeight: 50, backgroundColor: 'white', width: '50%',
+              }}
+              >
+                07:50
+              </Text>
+              <Text style={{
+                textAlign: 'center', fontSize: 20, lineHeight: 50, backgroundColor: 'white', width: '50%',
+              }}
+              >
+                08:20
+              </Text>
+            </View>
+            <View style={Styles.fixToText}>
+
+              <Text style={{
+                textAlign: 'center', fontSize: 20, lineHeight: 50, backgroundColor: 'white', width: '50%',
+              }}
+              >
+                09:50
+              </Text>
+              <Text style={{
+                textAlign: 'center', fontSize: 20, lineHeight: 50, backgroundColor: 'white', width: '50%',
+              }}
+              >
+                10:20
+              </Text>
+            </View>
+            <View style={Styles.fixToText}>
+
+              <Text style={{
+                textAlign: 'center', fontSize: 20, lineHeight: 50, backgroundColor: 'white', width: '50%',
+              }}
+              >
+                11:50
+              </Text>
+              <Text style={{
+                textAlign: 'center', fontSize: 20, lineHeight: 50, backgroundColor: 'white', width: '50%',
+              }}
+              >
+                12:20
+              </Text>
+            </View>
+            <View style={Styles.fixToText}>
+
+              <Text style={{
+                textAlign: 'center', fontSize: 20, lineHeight: 50, backgroundColor: 'white', width: '50%',
+              }}
+              >
+                14:30
+              </Text>
+              <Text style={{
+                textAlign: 'center', fontSize: 20, lineHeight: 50, backgroundColor: 'white', width: '50%',
+              }}
+              >
+                15:00
+              </Text>
+            </View>
+            <View style={Styles.fixToText}>
+
+              <Text style={{
+                textAlign: 'center', fontSize: 20, lineHeight: 50, backgroundColor: 'white', width: '50%',
+              }}
+              >
+                16:40
+              </Text>
+              <Text style={{
+                textAlign: 'center', fontSize: 20, lineHeight: 50, backgroundColor: 'white', width: '50%',
+              }}
+              >
+                17:10
+              </Text>
+            </View>
+          </View>
+          )}
+        {!workDay
+          && (
+          <View>
+            <View style={Styles.fixToText}>
+
+              <Text style={{
+                textAlign: 'center', fontSize: 20, lineHeight: 50, backgroundColor: 'white', width: '50%',
+              }}
+              >
+                09:30
+              </Text>
+              <Text style={{
+                textAlign: 'center', fontSize: 20, lineHeight: 50, backgroundColor: 'white', width: '50%',
+              }}
+              >
+                10:00
+              </Text>
+            </View>
+            <View style={Styles.fixToText}>
+
+              <Text style={{
+                textAlign: 'center', fontSize: 20, lineHeight: 50, backgroundColor: 'white', width: '50%',
+              }}
+              >
+                11:30
+              </Text>
+              <Text style={{
+                textAlign: 'center', fontSize: 20, lineHeight: 50, backgroundColor: 'white', width: '50%',
+              }}
+              >
+                12:00
+              </Text>
+            </View>
+            <View style={Styles.fixToText}>
+
+              <Text style={{
+                textAlign: 'center', fontSize: 20, lineHeight: 50, backgroundColor: 'white', width: '50%',
+              }}
+              >
+                14:30
+              </Text>
+              <Text style={{
+                textAlign: 'center', fontSize: 20, lineHeight: 50, backgroundColor: 'white', width: '50%',
+              }}
+              >
+                15:00
+              </Text>
+            </View>
+            <View style={Styles.fixToText}>
+
+              <Text style={{
+                textAlign: 'center', fontSize: 20, lineHeight: 50, backgroundColor: 'white', width: '50%',
+              }}
+              >
+                16:40
+              </Text>
+              <Text style={{
+                textAlign: 'center', fontSize: 20, lineHeight: 50, backgroundColor: 'white', width: '50%',
+              }}
+              >
+                17:10
+              </Text>
+            </View>
+          </View>
+          )}
+      </ScrollView>
 
       <Text style={{ textAlign: 'center', backgroundColor: 'white', color: 'gray' }}>
-        上次更新:2022/03/10
+        上次更新:2023/01/26
       </Text>
 
     </SafeAreaView>

@@ -39,7 +39,7 @@ export default StyleSheet.create({
     fontSize: 18,
   },
   cardForMessage: {
-    width: Dimensions.get('window').width * 0.875,
+    //width: Dimensions.get('window').width * 0.875,
     height: Dimensions.get('window').width * 0.2,
     backgroundColor: '#ffffff',
     borderRadius: 10,
@@ -50,9 +50,10 @@ export default StyleSheet.create({
     },
     shadowRadius: 10,
     elevation: 4,
-    marginTop: Dimensions.get('window').width * 0.04,
-    marginLeft: Dimensions.get('window').width * 0.065,
-    marginBottom: 5,
+    
+    
+    //marginLeft: Dimensions.get('window').width * 0.065,
+    marginBottom: 15,
   },
   avatar: {
     margin: 10,
@@ -65,7 +66,6 @@ export default StyleSheet.create({
   },
   messagePeople: {
     marginLeft: 5,
-    width: Dimensions.get('window').width * 0.28,
     paddingTop: 15,
   },
 });

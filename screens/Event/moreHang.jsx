@@ -12,7 +12,7 @@ import {
 import styles from './style_folder/Styles_moreEvent';
 import ActiveController from '../../controller/Active';
 
-function moreHang({ navigation }) {
+function MoreHang({ navigation }) {
   const [active, setActive] = useState([]);
   useEffect(() => {
     ActiveController.getHangOutActive().then((res) => {
@@ -124,4 +124,4 @@ function moreHang({ navigation }) {
   );
 }
 
-export default moreHang;
+export default MoreHang;

@@ -18,7 +18,7 @@ import * as ImagePicker from 'expo-image-picker';
 import ActiveController from '../../controller/Active';
 import styles from './style_folder/Styles_addActivity';
 
-function add({ navigation }) {
+function Add({ navigation }) {
   const [data, setData] = useState({
     cost: '',
     link: '',
@@ -754,4 +754,4 @@ function add({ navigation }) {
   );
 }
 
-export default add;
+export default Add;

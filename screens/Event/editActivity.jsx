@@ -18,7 +18,7 @@ import * as ImagePicker from 'expo-image-picker';
 import styles from './style_folder/Styles_editActivity';
 import ActiveController from '../../controller/Active';
 
-function edit({ route, navigation }) {
+function Edit({ route, navigation }) {
   const Cd = route.params;
   const passedID = JSON.stringify(Cd).slice(7, -2);
   // 必填檢查參數
@@ -817,4 +817,4 @@ function edit({ route, navigation }) {
   );
 }
 
-export default edit;
+export default Edit;

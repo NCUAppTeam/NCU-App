@@ -16,7 +16,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import ActiveController from '../../controller/Active';
 import styles from './style_folder/Styles_personal_manage';
 
-function personal({ navigation }) {
+function Personal({ navigation }) {
   const [num, setNum] = useState();
   const [showNow, setShowNow] = useState([]);
   useEffect(() => {
@@ -392,4 +392,4 @@ function personal({ navigation }) {
   );
 }
 
-export default personal;
+export default Personal;

@@ -13,7 +13,7 @@ import {
 import styles from './style_folder/Styles_showActivityDetails';
 import ActiveController from '../../controller/Active';
 
-function detailscreen({ route, navigation }) {
+function Detailscreen({ route, navigation }) {
   const Cd = route.params;
   const passedID = JSON.stringify(Cd).slice(7, 27);
   const prepage = JSON.stringify(Cd).slice(40, -2);
@@ -556,7 +556,7 @@ function detailscreen({ route, navigation }) {
                 <TouchableOpacity
                   style={styles.sentMessage}
                   onPress={() => {
-                    console.log('報名功能仍在開發中');
+                    // console.log('報名功能仍在開發中');
                     if (!SignUp) {
                       Alert.alert(
                         '確認報名?',
@@ -612,4 +612,4 @@ function detailscreen({ route, navigation }) {
   );
 }
 
-export default detailscreen;
+export default Detailscreen;

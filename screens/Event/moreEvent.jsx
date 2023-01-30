@@ -12,7 +12,7 @@ import {
 import styles from './style_folder/Styles_moreEvent';
 import ActiveController from '../../controller/Active';
 
-function more({ navigation, route }) {
+function More({ navigation, route }) {
   const [active, setActive] = useState([]);
   useEffect(() => {
     ActiveController.getEventActive().then((res) => {
@@ -124,4 +124,4 @@ function more({ navigation, route }) {
   );
 }
 
-export default more;
+export default More;

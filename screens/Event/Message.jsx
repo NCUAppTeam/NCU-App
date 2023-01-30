@@ -79,25 +79,25 @@ function Message({ route, navigation }) {
             </TouchableOpacity>
           </HStack>
         </Box>
-        <Box style={{ flex: 1 }}>
-          <TouchableOpacity
-            onPress={() => {
-                navigation.navigate('send',{
-                attendeeID:attendeeINFO[0].studentID,
-                userID:"111201512"});
-              }}
-          >
-            <FlatList
-              data={attendeeINFO}
-              keyExtractor={(item) => item.studentID}
-              refreshControl={(
-                <RefreshControl
-                  refreshing={refreshing}
-                  onRefresh={onRefresh}
-                />
-                  )}
-              renderItem={({ item }) => (
-                <ScrollView>
+        <Box style={{ flex: 1}}>
+          <FlatList
+            style={{marginTop: 30,marginHorizontal:25}}
+            data={attendeeINFO}
+            keyExtractor={(item) => item.studentID}
+            refreshControl={(
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+              />
+                )}
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('send',{
+                  attendeeID:item.studentID,
+                  userID:"111201512"});
+                }}
+              >
                   <HStack style={styles.cardForMessage}>
                     <Image
                       style={styles.avatar}
@@ -110,7 +110,7 @@ function Message({ route, navigation }) {
                         {item.name}
                       </Text>
                       <HStack>
-                        <Text style={{ textAlign: 'left', fontWeight: '400', fontSize: 10 }}>
+                        <Text style={{ textAlign: 'left', fontWeight: '400', fontSize: 10}}>
                           {item.major}
                           {item.identity}
                         </Text>
@@ -122,10 +122,9 @@ function Message({ route, navigation }) {
                       </HStack>
                     </VStack>
                   </HStack>
-                </ScrollView>
+                </TouchableOpacity>
               )}
             />
-          </TouchableOpacity>
         </Box>
       </NativeBaseProvider>
     </SafeAreaView>

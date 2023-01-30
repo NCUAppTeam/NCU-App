@@ -83,9 +83,14 @@ function Send({ route,navigation }) {
     }
   };
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView
+    style={{flex: 1,
+      flexDirection: 'column',
+      alignContent: 'center',
+      marginTop: 0,
+      width: Dimensions.get('window').width,
+      backgroundColor: '#fafafa'}}>
       <NativeBaseProvider>
-        <ScrollView>
           <LinearGradient
             colors={['#1784B2', '#28527A']}
             start={[1, 2]}
@@ -211,7 +216,6 @@ function Send({ route,navigation }) {
               />
             </View>
           </View>
-        </ScrollView>
       </NativeBaseProvider>
     </SafeAreaView>
   );

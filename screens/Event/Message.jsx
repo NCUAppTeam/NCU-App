@@ -6,7 +6,9 @@ import {
 import {
   Ionicons, FontAwesome5, AntDesign, Feather,
 } from '@expo/vector-icons';
-import { Card, TextInput, Title } from 'react-native-paper';
+import {
+  Card, List, TextInput, Title,
+} from 'react-native-paper';
 import {
   NativeBaseProvider, Box, Divider, VStack, HStack, FlatList, Button,
 } from 'native-base';
@@ -18,17 +20,18 @@ import MessageController from '../../controller/Message';
 function Message({ navigation }) {
   // 訊息傳送者為何人的辨別還需要改
   const [attendeeINFO, setAttendeeInfo] = useState();
-  const msnew = [];
+  const [newList, setNewList] = useState([]);
   useEffect(() => {
     ActiveController.getAllAttendees('hgt83cJhB6QnsUg1UxoF').then((res1) => {
       setAttendeeInfo(res1);
-      res1.forEach((person) => {
-        MessageController.getNewestMessage('111201512', person.studentID).then((res2) => {
-          msnew.push(res2);
+      res1.forEach((res) => {
+        MessageController.getNewestMessage('111201512', res.studentID).then((result) => {
+          for (let i = 0; i <= res1.length; i += 1) {
+            res.newMessage = result.message;
+            setNewList(result.message);
+          }
         });
       });
-      console.log(msnew);
-      console.log(Object.assign(res1, msnew));
     }).catch((err) => {
       throw err;
     });
@@ -38,17 +41,17 @@ function Message({ navigation }) {
     setRefreshing(true);
     ActiveController.getAllAttendees('hgt83cJhB6QnsUg1UxoF').then((res1) => {
       setAttendeeInfo(res1);
-      res1.forEach((person) => {
-        MessageController.getNewestMessage('111201512', person.studentID).then((res2) => {
-          msnew.push({ res2 });
+      res1.forEach((res) => {
+        MessageController.getNewestMessage('111201512', res.studentID).then((result) => {
+          for (let i = 0; i <= res1.length; i += 1) {
+            res.newMessage = result.message;
+            setNewList(result.message);
+          }
         });
       });
-      console.log(msnew);
-      console.log(Object.assign(res1, msnew));
     });
     setRefreshing(false);
   };
-
   return (
     <SafeAreaView style={styles.container}>
       <NativeBaseProvider>
@@ -120,18 +123,24 @@ function Message({ navigation }) {
                     }}
                   />
                   <VStack style={styles.messagePeople}>
-                    <Text style={{ fontWeight: '700', fontSize: 18 }}>
-                      {item.name}
-                    </Text>
                     <HStack>
-                      <Text style={{ textAlign: 'left', fontWeight: '400', fontSize: 10 }}>
-                        {item.major}
+                      <Text style={styles.name}>
+                        {item.name}
+                      </Text>
+                      <Text style={styles.identity}>
+                        &ensp;#
+                        {' '}
                         {item.identity}
                       </Text>
                     </HStack>
                     <HStack>
                       <Text style={{ textAlign: 'left', fontWeight: '400', fontSize: 10 }}>
-                        {item.newestMessage}
+                        {item.major}
+                      </Text>
+                    </HStack>
+                    <HStack>
+                      <Text style={styles.latest}>
+                        {item.newMessage}
                       </Text>
                     </HStack>
                   </VStack>

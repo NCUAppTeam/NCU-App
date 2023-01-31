@@ -111,4 +111,20 @@ export default StyleSheet.create({
     paddingLeft: 12,
     paddingRight: 18,
   },
+  name: {
+    fontWeight: '700',
+    fontSize: 18,
+    flexDirection: 'row',
+  },
+  identity: {
+    textAlignVertical: 'center',
+    fontWeight: '400',
+    fontSize: 10,
+  },
+  latest: {
+    textAlign: 'left',
+    fontWeight: '400',
+    fontSize: 10,
+    color: '#BFBFBF',
+  },
 });

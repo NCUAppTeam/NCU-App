@@ -110,7 +110,10 @@ async function getNewestMessage(user, attendee) {
   });
   message.sort((a, b) => a.sendTime - b.sendTime);
   const last = message.pop();
-  // console.log(last);
+  if (last.message === '' && last.image) {
+    last.message = '他傳送了一張照片';
+  }
+  console.log(last);
   return last;
 }
 

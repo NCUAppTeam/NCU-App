@@ -14,21 +14,21 @@ function imagePos(imageUri) {
   return imageUri.split('/').pop();
 }
 
-async function addMessage(active) {
+async function addMessage(messageData) {
   const item = {
-    send: active.send.trim(),
-    receive: active.receive.trim(),
-    sendTime: active.sendTime,
+    send: messageData.send.trim(),
+    receive: messageData.receive.trim(),
+    sendTime: messageData.sendTime,
     read: false,
   };
   const db = firebase.firestore();
-  if (active.message) {
-    item.message = active.message;
+  if (messageData.message) {
+    item.message = messageData.message;
     item.image = '';
-  } else if (active.image) {
-    const imageAddress = `message/${imagePos(active.image)}`;
+  } else if (messageData.image) {
+    const imageAddress = `message/${imagePos(messageData.image)}`;
     const storageRef = firebase.storage().ref().child(imageAddress);
-    const response = await fetch(active.image);
+    const response = await fetch(messageData.image);
     const blob = await response.blob();
     const st = storageRef.put(blob);
     await st;
@@ -42,7 +42,7 @@ async function addMessage(active) {
   }
   const messageRef = db.collection('message');
   messageRef.add(item);
-  console.log(item);
+  // console.log(item);
 }
 
 async function getRelativeMessage(user, attendee) {
@@ -56,10 +56,10 @@ async function getRelativeMessage(user, attendee) {
         id: doc.id,
         image: doc.data().image,
         message: doc.data().message,
+        read: doc.data().read,
         send: doc.data().send,
         receive: doc.data().receive,
         sendTime: doc.data().sendTime,
-        read: doc.data().read,
       });
     }
   });
@@ -70,6 +70,7 @@ async function getRelativeMessage(user, attendee) {
         id: doc.id,
         image: doc.data().image,
         message: doc.data().message,
+        read: doc.data().read,
         send: doc.data().send,
         receive: doc.data().receive,
         sendTime: doc.data().sendTime,
@@ -91,6 +92,7 @@ async function getNewestMessage(user, attendee) {
         id: doc.id,
         image: doc.data().image,
         message: doc.data().message,
+        read: doc.data().read,
         send: doc.data().send,
         receive: doc.data().receive,
         sendTime: doc.data().sendTime,
@@ -104,6 +106,7 @@ async function getNewestMessage(user, attendee) {
         id: doc.id,
         image: doc.data().image,
         message: doc.data().message,
+        read: doc.data().read,
         send: doc.data().send,
         receive: doc.data().receive,
         sendTime: doc.data().sendTime,
@@ -140,9 +143,9 @@ async function getMessagePerson(user) {
   // console.log(uniquePerson);
   const querySnapshot = await infoRef.get();
   const info = [];
-  uniquePerson.forEach((person) => {
+  uniquePerson.forEach((one) => {
     querySnapshot.forEach((doc) => {
-      if (doc.data().studentID === person) {
+      if (doc.data().studentID === one) {
         info.push(doc.data());
       }
     });
@@ -162,6 +165,7 @@ async function Notification(eventID) {
         id: doc.id,
         image: doc.data().image,
         message: doc.data().message,
+        read: doc.data().read,
         send: doc.data().send,
         receive: doc.data().receive,
         sendTime: doc.data().sendTime,

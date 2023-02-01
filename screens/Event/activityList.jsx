@@ -96,7 +96,11 @@ function List({ navigation }) {
             <Divider style={{ marginTop: 5 }} bg="#BFBFBF" /* my=margin-top and margin-bottom */ />
           </Box>
           <View style={{ height: 'auto', width: 'auto' }}>
-            <ScrollView horizontal style={styles.horizontal}>
+            <ScrollView
+              horizontal
+              style={styles.horizontal}
+              showsHorizontalScrollIndicator={false}
+            >
               <View style={{
                 width: 'auto', marginRight: Dimensions.get('window').width * 0.0694, height: 246, flexDirection: 'row',
               }}
@@ -164,7 +168,11 @@ function List({ navigation }) {
             <Divider style={{ marginTop: 5 }} bg="#BFBFBF" /* my=margin-top and margin-bottom */ />
           </Box>
           <View style={{ height: 'auto', width: 'auto' }}>
-            <ScrollView horizontal style={styles.horizontal}>
+            <ScrollView
+              horizontal
+              style={styles.horizontal}
+              showsHorizontalScrollIndicator={false}
+            >
               <View style={{
                 width: 'auto', marginRight: Dimensions.get('window').width * 0.0694, height: 246, flexDirection: 'row',
               }}

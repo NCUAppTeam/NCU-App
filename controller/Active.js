@@ -771,21 +771,6 @@ async function getAttendedOrNot(docID) {
   return false;
 }
 
-async function getINFO(ID) {
-  const db = firebase.firestore();
-  const attendeeRef = db.collection('attendees').doc(ID);
-  const querySnapshot = await attendeeRef.get();
-  const attendeeInfo = {
-    avatar: querySnapshot.data().avatar,
-    email: querySnapshot.data().email,
-    grade: querySnapshot.data().grade,
-    major: querySnapshot.data().major,
-    name: querySnapshot.data().name,
-    phone: querySnapshot.data().phone,
-    studentID: querySnapshot.data().studentID,
-  };
-  return attendeeInfo;
-}
 export default {
   firebaseConfig,
   toDateString,
@@ -810,6 +795,4 @@ export default {
   getTotalOfAttendees,
   removeAttendee,
   getAttendedOrNot,
-  // getMessage,
-  getINFO,
 };

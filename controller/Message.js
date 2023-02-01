@@ -19,6 +19,7 @@ async function addMessage(active) {
     send: active.send.trim(),
     receive: active.receive.trim(),
     sendTime: active.sendTime,
+    read: false,
   };
   const db = firebase.firestore();
   if (active.message) {
@@ -58,6 +59,7 @@ async function getRelativeMessage(user, attendee) {
         send: doc.data().send,
         receive: doc.data().receive,
         sendTime: doc.data().sendTime,
+        read: doc.data().read,
       });
     }
   });
@@ -113,8 +115,39 @@ async function getNewestMessage(user, attendee) {
   if (last.message === '' && last.image) {
     last.message = '他傳送了一張照片';
   }
-  console.log(last);
+  // console.log(last);
   return last;
+}
+
+async function getMessagePerson(user) {
+  const db = firebase.firestore();
+  const messageRef = db.collection('message');
+  const infoRef = db.collection('attendees');
+  const person = [];
+  const querySnapshot1 = await messageRef.where('send', '==', user).get();
+  querySnapshot1.forEach((doc) => {
+    if (doc.data().receive !== user) {
+      person.push(doc.data().receive);
+    }
+  });
+  const querySnapshot2 = await messageRef.where('receive', '==', user).get();
+  querySnapshot2.forEach((doc) => {
+    if (doc.data().send !== user) {
+      person.push(doc.data().send);
+    }
+  });
+  const uniquePerson = [...new Set(person)];
+  // console.log(uniquePerson);
+  const querySnapshot = await infoRef.get();
+  const info = [];
+  uniquePerson.forEach((person) => {
+    querySnapshot.forEach((doc) => {
+      if (doc.data().studentID === person) {
+        info.push(doc.data());
+      }
+    });
+  });
+  return info;
 }
 
 async function Notification(eventID) {
@@ -136,10 +169,45 @@ async function Notification(eventID) {
     }
   });
 }
-
+async function getINFO(ID) {
+  const db = firebase.firestore();
+  const attendeeRef = db.collection('attendees').doc(ID);
+  const querySnapshot = await attendeeRef.get();
+  const attendeeInfo = {
+    avatar: querySnapshot.data().avatar,
+    email: querySnapshot.data().email,
+    grade: querySnapshot.data().grade,
+    major: querySnapshot.data().major,
+    name: querySnapshot.data().name,
+    phone: querySnapshot.data().phone,
+    studentID: querySnapshot.data().studentID,
+  };
+  return attendeeInfo;
+}
+async function deleteMessage(messageID) {
+  const db = firebase.firestore();
+  const messageRef = await db.collection('message');
+  const deletedDoc = await messageRef.doc(messageID).get();
+  if (deletedDoc.data().image !== '') {
+    const image = firebase.storage().refFromURL(deletedDoc.data().image);
+    image.delete().then(() => {
+      console.log('image has been deleted!');
+    }).catch((err) => {
+      console.log(err);
+    });
+    messageRef.doc(messageID).delete();
+    // console.log('deleteMessage Successful');
+  } else {
+    messageRef.doc(messageID).delete();
+    // console.log('deleteMessage Successful');
+  }
+}
 export default {
   firebaseConfig,
   addMessage,
   getNewestMessage,
   getRelativeMessage,
+  getMessagePerson,
+  getINFO,
+  deleteMessage,
 };

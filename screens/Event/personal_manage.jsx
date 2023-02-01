@@ -196,6 +196,7 @@ function Personal({ navigation }) {
             <FlatList
               data={showManage}
               keyExtractor={(item) => item.id}
+              showsVerticalScrollIndicator={false}
               refreshControl={(
                 <RefreshControl
                   refreshing={refreshing}
@@ -285,6 +286,7 @@ function Personal({ navigation }) {
               numColumns={2}
               data={showNow}
               keyExtractor={(item) => item.id}
+              showsVerticalScrollIndicator={false}
               contentContainerStyle={{ marginLeft: Dimensions.get('window').width * 0.043, justifyContent: 'space-between' }}
               refreshControl={(
                 <RefreshControl
@@ -338,6 +340,7 @@ function Personal({ navigation }) {
               numColumns={2}
               data={showEnd}
               keyExtractor={(item) => item.id}
+              showsVerticalScrollIndicator={false}
               contentContainerStyle={{ marginLeft: Dimensions.get('window').width * 0.043, justifyContent: 'space-between' }}
               refreshControl={(
                 <RefreshControl

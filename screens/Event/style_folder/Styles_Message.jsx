@@ -70,6 +70,18 @@ export default StyleSheet.create({
     borderBottomEndRadius: 10,
     borderEndColor: '#bfbebe',
   },
+  sendAvatar: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    borderBottomWidth: 2,
+    borderBottomEndRadius: 10,
+    borderEndColor: '#bfbebe',
+    borderColor: '#bfbebe',
+    borderWidth: 1,
+    alignSelf: 'center',
+    marginLeft: 10,
+  },
   messagePeople: {
     marginLeft: 5,
     paddingTop: 15,
@@ -79,7 +91,7 @@ export default StyleSheet.create({
     marginTop: 15,
   },
   sendAreaFalse: {
-    marginBottom: 0.5,
+    marginBottom: 15,
     marginTop: 15,
   },
   typeFooter: {
@@ -112,9 +124,9 @@ export default StyleSheet.create({
     paddingRight: 18,
   },
   name: {
+    paddingTop: Dimensions.get('window').height * 0.0065,
     fontWeight: '700',
     fontSize: 18,
-    flexDirection: 'row',
   },
   identity: {
     textAlignVertical: 'center',
@@ -122,9 +134,59 @@ export default StyleSheet.create({
     fontSize: 10,
   },
   latest: {
+    marginTop: 2,
     textAlign: 'left',
     fontWeight: '400',
-    fontSize: 10,
+    fontSize: 10.5,
     color: '#BFBFBF',
+  },
+  sendPeople: {
+    // marginTop: Dimensions.get('window').height * 0.011,
+    marginLeft: 3,
+    color: '#fff',
+    fontWeight: '700',
+    fontSize: 18,
+    textAlignVertical: 'center',
+  },
+  info: {
+    color: '#000',
+    marginLeft: Dimensions.get('window').width * 0.47,
+    alignSelf: 'center',
+  },
+  Dot: {
+    flexDirection: 'row',
+    alignSelf: 'center',
+  },
+  Dotfalse: {
+    color: '#E5E5E5',
+    marginHorizontal: 2.5,
+  },
+  DotTrue: {
+    color: '#1784B2',
+    marginHorizontal: 2.5,
+  },
+  autoLeft: {
+    marginLeft: Dimensions.get('window').width * 0.02,
+  },
+  autoRight: {
+    marginRight: Dimensions.get('window').width * 0.01,
+  },
+  autoMessage: {
+    backgroundColor: '#E5EBF1',
+    borderRadius: 5,
+    marginTop: 10,
+    marginBottom: 5,
+    marginHorizontal: 5,
+  },
+  autoSend: {
+    marginHorizontal: 8,
+    marginVertical: 5,
+    fontWeight: '400',
+    fontSize: 14,
+    color: '#28527A',
+  },
+  unsentTitle: {
+    marginTop: 17,
+    marginBottom: 10,
   },
 });

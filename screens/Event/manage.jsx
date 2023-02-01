@@ -327,7 +327,7 @@ function Manage({ route, navigation }) {
                   />
                   )}
                 renderItem={({ item }) => (
-                  <ScrollView>
+                  <ScrollView showsVerticalScrollIndicator={false}>
                     <HStack style={styles.cardForAttendees}>
                       <Image
                         style={styles.avatar}

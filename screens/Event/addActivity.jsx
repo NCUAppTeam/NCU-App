@@ -216,7 +216,7 @@ function Add({ navigation }) {
 
   return (
     <Provider>
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <SafeAreaView style={styles.container}>
           <NativeBaseProvider>
             <View style={{ flex: 0.1, flexDirection: 'column' }}>

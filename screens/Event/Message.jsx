@@ -22,7 +22,7 @@ function Message({ navigation }) {
   const [attendeeINFO, setAttendeeInfo] = useState();
   const [newList, setNewList] = useState([]);
   useEffect(() => {
-    ActiveController.getAllAttendees('hgt83cJhB6QnsUg1UxoF').then((res1) => {
+    MessageController.getMessagePerson('111201512').then((res1) => {
       setAttendeeInfo(res1);
       res1.forEach((res) => {
         MessageController.getNewestMessage('111201512', res.studentID).then((result) => {
@@ -39,7 +39,7 @@ function Message({ navigation }) {
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = () => {
     setRefreshing(true);
-    ActiveController.getAllAttendees('hgt83cJhB6QnsUg1UxoF').then((res1) => {
+    MessageController.getMessagePerson('111201512').then((res1) => {
       setAttendeeInfo(res1);
       res1.forEach((res) => {
         MessageController.getNewestMessage('111201512', res.studentID).then((result) => {
@@ -98,6 +98,7 @@ function Message({ navigation }) {
             style={{ marginTop: 30, marginHorizontal: 25 }}
             data={attendeeINFO}
             keyExtractor={(item) => item.studentID}
+            showsVerticalScrollIndicator={false}
             refreshControl={(
               <RefreshControl
                 refreshing={refreshing}
@@ -127,17 +128,17 @@ function Message({ navigation }) {
                       <Text style={styles.name}>
                         {item.name}
                       </Text>
-                      <Text style={styles.identity}>
+                      {/* <Text style={styles.identity}>
                         &ensp;#
                         {' '}
                         {item.identity}
-                      </Text>
+                      </Text> */}
                     </HStack>
-                    <HStack>
+                    {/* <HStack>
                       <Text style={{ textAlign: 'left', fontWeight: '400', fontSize: 10 }}>
                         {item.major}
                       </Text>
-                    </HStack>
+                    </HStack> */}
                     <HStack>
                       <Text style={styles.latest}>
                         {item.newMessage}

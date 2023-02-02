@@ -14,14 +14,17 @@ function imagePos(imageUri) {
   return imageUri.split('/').pop();
 }
 
-async function addMessage(messageData) {
+async function addMessage(messageData, userID) {
   const item = {
     send: messageData.send.trim(),
     receive: messageData.receive.trim(),
     sendTime: messageData.sendTime,
-    read: false,
   };
   const db = firebase.firestore();
+  if (messageData.send.trim() === userID) {
+    item.readForUser = true;
+    item.readForOthers = false;
+  }
   if (messageData.message) {
     item.message = messageData.message;
     item.image = '';
@@ -45,18 +48,19 @@ async function addMessage(messageData) {
   // console.log(item);
 }
 
-async function getRelativeMessage(user, attendee) {
+async function getRelativeMessage(user, other) {
   const db = firebase.firestore();
   const messageRef = db.collection('message');
   const message = [];
   const querySnapshot1 = await messageRef.where('send', '==', user).get();
   querySnapshot1.forEach((doc) => {
-    if (doc.data().receive === attendee) {
+    if (doc.data().receive === other) {
       message.push({
         id: doc.id,
         image: doc.data().image,
         message: doc.data().message,
-        read: doc.data().read,
+        readForUser: doc.data().readForUser,
+        readForOthers: doc.data().readForOthers,
         send: doc.data().send,
         receive: doc.data().receive,
         sendTime: doc.data().sendTime,
@@ -65,12 +69,16 @@ async function getRelativeMessage(user, attendee) {
   });
   const querySnapshot2 = await messageRef.where('receive', '==', user).get();
   querySnapshot2.forEach((doc) => {
-    if (doc.data().send === attendee) {
+    if (doc.data().send === other) {
+      messageRef.doc(doc.id).set({
+        readForOthers: true,
+      }, { merge: true });
       message.push({
         id: doc.id,
         image: doc.data().image,
         message: doc.data().message,
-        read: doc.data().read,
+        readForUser: doc.data().readForUser,
+        readForOthers: doc.data().readForOthers,
         send: doc.data().send,
         receive: doc.data().receive,
         sendTime: doc.data().sendTime,
@@ -81,18 +89,19 @@ async function getRelativeMessage(user, attendee) {
   return message;
 }
 
-async function getNewestMessage(user, attendee) {
+async function getNewestMessage(user, other) {
   const db = firebase.firestore();
   const messageRef = db.collection('message');
   const message = [];
   const querySnapshot1 = await messageRef.where('send', '==', user).get();
   querySnapshot1.forEach((doc) => {
-    if (doc.data().receive === attendee) {
+    if (doc.data().receive === other) {
       message.push({
         id: doc.id,
         image: doc.data().image,
         message: doc.data().message,
-        read: doc.data().read,
+        readForUser: doc.data().readForUser,
+        readForOthers: doc.data().readForOthers,
         send: doc.data().send,
         receive: doc.data().receive,
         sendTime: doc.data().sendTime,
@@ -101,12 +110,13 @@ async function getNewestMessage(user, attendee) {
   });
   const querySnapshot2 = await messageRef.where('receive', '==', user).get();
   querySnapshot2.forEach((doc) => {
-    if (doc.data().send === attendee) {
+    if (doc.data().send === other) {
       message.push({
         id: doc.id,
         image: doc.data().image,
         message: doc.data().message,
-        read: doc.data().read,
+        readForUser: doc.data().readForUser,
+        readForOthers: doc.data().readForOthers,
         send: doc.data().send,
         receive: doc.data().receive,
         sendTime: doc.data().sendTime,
@@ -118,7 +128,7 @@ async function getNewestMessage(user, attendee) {
   if (last.message === '' && last.image) {
     last.message = '他傳送了一張照片';
   }
-  // console.log(last);
+  console.log(last);
   return last;
 }
 
@@ -153,25 +163,40 @@ async function getMessagePerson(user) {
   return info;
 }
 
-async function Notification(eventID) {
+async function Notification(notifymessage, eventID) {
+  const hostID = '110501444';
   const db = firebase.firestore();
+  const infoRef = db.collection('attendees');
   const messageRef = db.collection('message');
-  const attendeeRef = db.collection('attendees');
+  const eventInfo = await db.collection('active').doc(eventID).get();
+  const querySnapshot = await infoRef.get();
+  const attendeeList = [];
   const sendList = [];
-  const querySnapshot1 = await attendeeRef.where(doc.id, '==', eventID).get();
-  querySnapshot1.forEach((doc) => {
-    if (doc.data().receive === attendee) {
-      message.push({
-        id: doc.id,
-        image: doc.data().image,
-        message: doc.data().message,
-        read: doc.data().read,
-        send: doc.data().send,
-        receive: doc.data().receive,
-        sendTime: doc.data().sendTime,
-      });
-    }
+  querySnapshot.forEach((attendee) => {
+    attendeeList.push(attendee.id);
   });
+  for (let i = 0; i < attendeeList.length; i += 1) {
+    const result = await infoRef.doc(attendeeList[i]).collection('attendedEvent').get();
+    result.forEach((event) => {
+      if (event.id === eventInfo.id) {
+        sendList.push(attendeeList[i]);
+      }
+    });
+  }
+  for (let i = 0; i < sendList.length; i += 1) {
+    const item = {
+      send: hostID,
+      receive: sendList[i],
+      sendTime: new Date(),
+      readForUser: true,
+      readForOthers: false,
+      message: notifymessage,
+      image: '',
+    };
+    console.log(item);
+    messageRef.add(item);
+    console.log('inform everybody successfully!');
+  }
 }
 async function getINFO(ID) {
   const db = firebase.firestore();
@@ -206,12 +231,37 @@ async function deleteMessage(messageID) {
     // console.log('deleteMessage Successful');
   }
 }
+
+async function countUnreadMessage(user) {
+  const db = firebase.firestore();
+  const messageRef = db.collection('message');
+  const message = [];
+  const querySnapshot = await messageRef.where('receive', '==', user).get();
+  querySnapshot.forEach((doc) => {
+    if (doc.data().readForOthers === false) {
+      message.push({
+        id: doc.id,
+        image: doc.data().image,
+        message: doc.data().message,
+        readForUser: doc.data().readForUser,
+        readForOthers: doc.data().readForOthers,
+        send: doc.data().send,
+        receive: doc.data().receive,
+        sendTime: doc.data().sendTime,
+      });
+    }
+  });
+  console.log('message quantity: ', message.length);
+  // return message;
+}
 export default {
   firebaseConfig,
   addMessage,
   getNewestMessage,
   getRelativeMessage,
   getMessagePerson,
+  Notification,
   getINFO,
   deleteMessage,
+  countUnreadMessage,
 };

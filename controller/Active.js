@@ -76,10 +76,6 @@ function dateToWeekday(t) {
   return check;
 }
 
-function sentMessage(message) {
-  console.log(message);
-}
-
 const firebaseConfig = {
   apiKey: 'AIzaSyA8GH6yj1i4gJM0H_ZTsurYG3Dqn4-nIS8',
   authDomain: 'ncu-app-test.firebaseapp.com',
@@ -391,7 +387,7 @@ async function getFinishedActive() {
 
   for (let i = 0; i < attendIDArray.length; i += 1) {
     const result = await activesRef.doc(attendIDArray[i]).get();
-    // console.log(attendIDArray[i], new Date(toDateString(result.data().endTime)), current);
+    console.log(result.data());
     if (new Date(toDateString(result.data().endTime)) < current) {
       activeArray.push({
         id: result.id,
@@ -446,7 +442,7 @@ async function getOneActive(id) {
   if (querySnapshot.data().imageUri3) {
     oneactive.imageUri3 = querySnapshot.data().imageUri3;
   }
-  console.log(oneactive);
+  // console.log(oneactive);
 
   console.log('getOneActive Successful');
 
@@ -487,7 +483,7 @@ async function getHangOutActive() {
     });
   });
   console.log('hangeout');
-  console.log(GenreArray);
+  // console.log(GenreArray);
   console.log('getHangOutActive Successful');
   return GenreArray;
 }
@@ -520,7 +516,7 @@ async function getEventActive() {
     });
   });
   console.log('event');
-  console.log(EventArray);
+  // console.log(EventArray);
   console.log('getEventActive Successful');
   return EventArray;
 }
@@ -598,7 +594,7 @@ async function getAllAttendees(docID) {
       }
     });
   }
-  console.log(IDlist);
+  // console.log(IDlist);
   for (let j = 0; j < IDlist.length; j += 1) {
     const querySnapshot2 = await infoRef.doc(IDlist[j]).get();
     info.push(querySnapshot2.data());
@@ -620,7 +616,7 @@ async function removeAttendee(docID, studentID) { // remove attendee
   const db = firebase.firestore();
   const activesRef = db.collection('attendees').doc(studentID).collection('attendedEvent');
   activesRef.doc(docID).delete();
-  console.log(docID, studentID);
+  // console.log(docID, studentID);
   console.log('delete successfully!');
   const result = await activesRef.get();
   result.forEach((doc) => console.log(doc.id));
@@ -655,7 +651,7 @@ async function getHostedEvent() {
   querySnapshot.forEach((doc) => {
     hostIDArray.push(doc.id);
   });
-  console.log(hostIDArray);
+  // console.log(hostIDArray);
   for (let i = 0; i < hostIDArray.length; i += 1) {
     const result = await db.collection('actives').doc(hostIDArray[i]).get();
     const num = await getTotalOfAttendees(result.id);
@@ -724,7 +720,7 @@ async function getHostInfo(docID) {
     const querySnapshot2 = await infoRef.doc(IDlist[j]).get();
     info.push(querySnapshot2.data());
   }
-  console.log(info);
+  // console.log(info);
   return info;
 }
 
@@ -786,7 +782,6 @@ export default {
   deleteEverySingleAttendee,
   getOneActive,
   fuseSearchName,
-  sentMessage,
   addUser,
   signUp,
   quitEvent,

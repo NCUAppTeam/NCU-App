@@ -36,6 +36,7 @@ export default StyleSheet.create({
   },
   messageBox: {
     width: Dimensions.get('window').width * 0.9,
+    paddingHorizontal: 5,
     height: 100,
     borderWidth: 1,
     borderRadius: 10,

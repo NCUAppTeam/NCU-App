@@ -6,15 +6,24 @@ import {
   Title, Card, Searchbar,
 } from 'react-native-paper';
 import {
-  Ionicons, FontAwesome5, AntDesign, Feather,
+  Ionicons, FontAwesome5, AntDesign, Feather, Octicons,
 } from '@expo/vector-icons';
 import {
   NativeBaseProvider, Box, Divider, ZStack, HStack,
 } from 'native-base';
 import styles from './style_folder/Styles_activityList';
 import ActiveController from '../../controller/Active';
+import MessageController from '../../controller/Message';
 
 function List({ navigation }) {
+  const [Messagenum, setMessageNum] = useState(0);
+  useEffect(() => {
+    MessageController.countUnreadMessage().then((num) => {
+      setMessageNum(num);
+    }).catch((err) => {
+      throw err;
+    });
+  }, []);
   const [active1, setActive1] = useState([]);
   const [active2, setActive2] = useState([]);
   useEffect(() => {
@@ -38,6 +47,11 @@ function List({ navigation }) {
     });
     ActiveController.getEventActive().then((res) => {
       setActive2(res);
+    });
+    MessageController.countUnreadMessage().then((num) => {
+      setMessageNum(num);
+    }).catch((err) => {
+      throw err;
     });
     setRefreshing(false);
   };
@@ -65,6 +79,7 @@ function List({ navigation }) {
               onPress={() => { navigation.navigate('message', { prepage: 'list' }); }}
             />
           </View>
+          <Octicons name="dot-fill" size={16} color={Messagenum !== 0 ? '#EB6F6F' : 'transparent'} style={styles.readDot} />
           <View style={{
             flex: 1, justifyContent: 'center', alignItems: 'flex-end',
           }}
@@ -89,20 +104,26 @@ function List({ navigation }) {
           <Box style={{ marginHorizontal: Dimensions.get('window').width * 0.0592 }}>
             <Box style={styles.more}>
               <HStack>
-                <Text style={{ color: '#28527a', fontSize: 18, marginRight: Dimensions.get('window').width * 0.57 }}>近期揪人</Text>
-                <Text style={{ color: '#28527a' }} onPress={() => { navigation.navigate('moreHang'); }}>顯示更多</Text>
+                <Text style={{ color: '#28527a', fontSize: 18 }}>近期揪人</Text>
+                <Text style={{ color: '#28527a', marginLeft: Dimensions.get('window').width * 0.54 }} onPress={() => { navigation.navigate('moreHang'); }}>顯示更多</Text>
               </HStack>
             </Box>
             <Divider style={{ marginTop: 5 }} bg="#BFBFBF" /* my=margin-top and margin-bottom */ />
           </Box>
-          <View style={{ height: 'auto', width: 'auto' }}>
+          <View style={{
+            height: Dimensions.get('window').width * 0.65,
+            width: 'auto',
+            marginTop: 10,
+          }}
+          >
             <ScrollView
               horizontal
               style={styles.horizontal}
               showsHorizontalScrollIndicator={false}
             >
               <View style={{
-                width: 'auto', marginRight: Dimensions.get('window').width * 0.0694, height: 246, flexDirection: 'row',
+                marginRight: Dimensions.get('window').width * 0.0694,
+                flexDirection: 'row',
               }}
               >
                 {active1.map(({
@@ -158,16 +179,21 @@ function List({ navigation }) {
               </View>
             </ScrollView>
           </View>
-          <Box style={{ marginHorizontal: Dimensions.get('window').width * 0.06 }}>
+          <Box style={{ marginTop: 10, marginHorizontal: Dimensions.get('window').width * 0.06 }}>
             <Box style={styles.more}>
               <HStack>
-                <Text style={{ color: '#28527a', fontSize: 18, marginRight: Dimensions.get('window').width * 0.57 }}>熱門活動</Text>
-                <Text style={{ color: '#28527a' }} onPress={() => { navigation.navigate('more'); }}>顯示更多</Text>
+                <Text style={{ color: '#28527a', fontSize: 18 }}>熱門活動</Text>
+                <Text style={{ color: '#28527a', marginLeft: Dimensions.get('window').width * 0.54 }} onPress={() => { navigation.navigate('more'); }}>顯示更多</Text>
               </HStack>
             </Box>
             <Divider style={{ marginTop: 5 }} bg="#BFBFBF" /* my=margin-top and margin-bottom */ />
           </Box>
-          <View style={{ height: 'auto', width: 'auto' }}>
+          <View style={{
+            height: Dimensions.get('window').width * 0.65,
+            width: 'auto',
+            marginTop: 10,
+          }}
+          >
             <ScrollView
               horizontal
               style={styles.horizontal}

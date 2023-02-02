@@ -70,6 +70,7 @@ function More({ navigation, route }) {
             numColumns={2}
             data={active}
             keyExtractor={(item) => item.id}
+            showsVerticalScrollIndicator={false}
             refreshControl={(
               <RefreshControl
                 refreshing={refreshing}

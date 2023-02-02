@@ -4,13 +4,13 @@ import {
   ScrollView, Image, TouchableHighlight,
 } from 'react-native';
 import {
-  Ionicons, FontAwesome5, AntDesign, Feather,
+  Ionicons, FontAwesome5, AntDesign, Feather, Octicons,
 } from '@expo/vector-icons';
 import {
   Card, List, TextInput, Title,
 } from 'react-native-paper';
 import {
-  NativeBaseProvider, Box, Divider, VStack, HStack, FlatList, Button,
+  NativeBaseProvider, Box, Divider, VStack, HStack, FlatList, Button, ZStack,
 } from 'native-base';
 import { LinearGradient } from 'expo-linear-gradient';
 import styles from './style_folder/Styles_Message';
@@ -22,10 +22,10 @@ function Message({ navigation }) {
   const [attendeeINFO, setAttendeeInfo] = useState();
   const [newList, setNewList] = useState([]);
   useEffect(() => {
-    MessageController.getMessagePerson('111201512').then((res1) => {
+    MessageController.getMessagePerson('110501444').then((res1) => {
       setAttendeeInfo(res1);
       res1.forEach((res) => {
-        MessageController.getNewestMessage('111201512', res.studentID).then((result) => {
+        MessageController.getNewestMessage('110501444', res.studentID).then((result) => {
           for (let i = 0; i <= res1.length; i += 1) {
             res.newMessage = result.message;
             setNewList(result.message);
@@ -39,10 +39,10 @@ function Message({ navigation }) {
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = () => {
     setRefreshing(true);
-    MessageController.getMessagePerson('111201512').then((res1) => {
+    MessageController.getMessagePerson('110501444').then((res1) => {
       setAttendeeInfo(res1);
       res1.forEach((res) => {
-        MessageController.getNewestMessage('111201512', res.studentID).then((result) => {
+        MessageController.getNewestMessage('110501444', res.studentID).then((result) => {
           for (let i = 0; i <= res1.length; i += 1) {
             res.newMessage = result.message;
             setNewList(result.message);
@@ -106,47 +106,52 @@ function Message({ navigation }) {
               />
                 )}
             renderItem={({ item }) => (
-              <TouchableHighlight
-                activeOpacity={0.5}
-                underlayColor="#fff" // 切換時候的顏色
-                onPress={() => {
-                  navigation.navigate('send', {
-                    attendeeID: item.studentID,
-                    userID: '111201512',
-                  });
-                }}
-              >
-                <HStack style={styles.cardForMessage}>
-                  <Image
-                    style={styles.avatar}
-                    source={{
-                      uri: item.avatar,
-                    }}
-                  />
-                  <VStack style={styles.messagePeople}>
-                    <HStack>
-                      <Text style={styles.name}>
-                        {item.name}
-                      </Text>
-                      {/* <Text style={styles.identity}>
+              <ZStack>
+                <TouchableHighlight
+                  activeOpacity={0.5}
+                  underlayColor="#fff" // 切換時候的顏色
+                  onPress={() => {
+                    navigation.navigate('send', {
+                      attendeeID: item.studentID,
+                      userID: '110501444',
+                    });
+                  }}
+                >
+                  <HStack style={styles.cardForMessage}>
+                    <Image
+                      style={styles.avatar}
+                      source={{
+                        uri: item.avatar,
+                      }}
+                    />
+                    <VStack style={styles.messagePeople}>
+                      <HStack>
+                        <Text style={styles.name}>
+                          {item.name}
+                        </Text>
+                        {/* <Text style={styles.identity}>
                         &ensp;#
                         {' '}
                         {item.identity}
                       </Text> */}
-                    </HStack>
-                    {/* <HStack>
+                      </HStack>
+                      {/* <HStack>
                       <Text style={{ textAlign: 'left', fontWeight: '400', fontSize: 10 }}>
                         {item.major}
                       </Text>
                     </HStack> */}
-                    <HStack>
-                      <Text style={styles.latest}>
-                        {item.newMessage}
-                      </Text>
-                    </HStack>
-                  </VStack>
-                </HStack>
-              </TouchableHighlight>
+                      <HStack>
+                        <Text style={styles.latest}>
+                          {item.newMessage}
+                        </Text>
+                      </HStack>
+                    </VStack>
+                  </HStack>
+                </TouchableHighlight>
+                <Box>
+                  <Octicons name="dot-fill" size={24} color={item.readForOthers ? '#EB6F6F' : 'transparent'} style={styles.readDot} />
+                </Box>
+              </ZStack>
             )}
           />
         </Box>

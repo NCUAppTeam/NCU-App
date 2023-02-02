@@ -93,7 +93,7 @@ function Send({ route, navigation }) {
       data.image = result.uri;
       data.sendTime = new Date();
       console.log(data);
-      await MessageController.addMessage(data);
+      await MessageController.addMessage(data, userID);
       onRefresh();
       scrollview.current.scrollToEnd({ animated: true });
     }
@@ -312,7 +312,9 @@ function Send({ route, navigation }) {
                 underlayColor="#E5EBF1"
                 onPress={() => {
                   data.sendTime = new Date();
-                  MessageController.addMessage({ ...data, message: '請問有什麼需要注意的嗎？', sendTime: data.sendTime });
+                  MessageController.addMessage({
+                    ...data, message: '請問有什麼需要注意的嗎？', sendTime: data.sendTime, readForUser: true, readForOthers: false,
+                  }, userID);
                   onRefresh();
                 }}
               >
@@ -326,7 +328,9 @@ function Send({ route, navigation }) {
                 underlayColor="#E5EBF1"
                 onPress={() => {
                   data.sendTime = new Date();
-                  MessageController.addMessage({ ...data, message: '請問有需要自行準備的東西嗎？', sendTime: data.sendTime });
+                  MessageController.addMessage({
+                    ...data, message: '請問有需要自行準備的東西嗎？', sendTime: data.sendTime, readForUser: true, readForOthers: false,
+                  }, userID);
                   onRefresh();
                 }}
               >
@@ -387,7 +391,7 @@ function Send({ route, navigation }) {
                 if (!(data.message === '') || !(data.image === undefined)) {
                   data.sendTime = new Date();
                   // console.log(data);
-                  MessageController.addMessage(data);
+                  MessageController.addMessage(data, userID);
                   onRefresh();
                   setData({ ...data, message: '' });
                 }

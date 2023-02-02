@@ -50,6 +50,7 @@ export default StyleSheet.create({
     marginTop: -3,
   },
   more: {
+    width: 'auto',
     height: 35,
     paddingTop: 10,
   },
@@ -70,5 +71,8 @@ export default StyleSheet.create({
     borderRadius: 18,
     height: 36,
     elevation: 0,
+  },
+  readDot: {
+    marginLeft: -2.5,
   },
 });

@@ -14,6 +14,7 @@ import styles from './style_folder/Styles_showActivityDetails';
 import ActiveController from '../../controller/Active';
 
 function Detailscreen({ route, navigation }) {
+  const user = '110501444';
   const Cd = route.params;
   const passedID = JSON.stringify(Cd).slice(7, 27);
   const prepage = JSON.stringify(Cd).slice(40, -2);
@@ -109,6 +110,7 @@ function Detailscreen({ route, navigation }) {
         ))}
         <ScrollView
           vertical
+          showsVerticalScrollIndicator={false}
           style={{ flexDirection: 'column', marginTop: 8.5 }}
         >
           {active.map(({
@@ -466,9 +468,9 @@ function Detailscreen({ route, navigation }) {
             </View>
           ))}
           {info.map(({
-            name, phone, email, avatar,
+            name, phone, email, avatar, studentID,
           }) => (
-            <View style={{ marginLeft: Dimensions.get('window').width * 0.08 }}>
+            <View style={{ marginLeft: Dimensions.get('window').width * 0.08, marginBottom: 10 }}>
               <Text style={{
                 color: 'black', fontSize: 16, fontWeight: 'bold', marginVertical: 10,
               }}
@@ -542,7 +544,12 @@ function Detailscreen({ route, navigation }) {
                         <Text
                           style={{ fontSize: 12, marginTop: 10, textDecorationLine: 'underline' }}
                           onPress={() => {
-                            console.log('私訊功能仍在開發中');
+                            if (studentID !== '110501444') {
+                              navigation.navigate('send', {
+                                attendeeID: studentID,
+                                userID: '110501444',
+                              });
+                            }
                           }}
                         >
                           私訊主辦人
@@ -552,56 +559,58 @@ function Detailscreen({ route, navigation }) {
                   </Text>
                 </Box>
               </View>
-              <View style={{ flexDirection: 'row', marginBottom: 20 }}>
-                <TouchableOpacity
-                  style={styles.sentMessage}
-                  onPress={() => {
+              {user !== studentID && (
+                <View style={{ flexDirection: 'row', marginBottom: 20 }}>
+                  <TouchableOpacity
+                    style={styles.sentMessage}
+                    onPress={() => {
                     // console.log('報名功能仍在開發中');
-                    if (!SignUp) {
-                      Alert.alert(
-                        '確認報名?',
-                        '請盡可能確保能參加活動, 方便主辦方統計參與人數, 謝謝配合！',
-                        [{ text: '我要反悔T~T' },
-                          {
-                            text: '確認報名',
-                            onPress: () => (
-                              ActiveController.signUp(passedID).then(() => setSignUp(true))
+                      if (!SignUp) {
+                        Alert.alert(
+                          '確認報名?',
+                          '請盡可能確保能參加活動, 方便主辦方統計參與人數, 謝謝配合！',
+                          [{ text: '我要反悔T~T' },
+                            {
+                              text: '確認報名',
+                              onPress: () => (
+                                ActiveController.signUp(passedID).then(() => setSignUp(true))
 
-                            // navigation.navigate('manage', { Cd: passedID })
-                            ),
-                          },
-                        ],
+                                // navigation.navigate('manage', { Cd: passedID })
+                              ),
+                            },
+                          ],
 
-                      );
-                    } else {
-                      Alert.alert(
-                        '確認取消報名?',
-                        '如果時間上真的無法配合，那下次有機會再一起參加活動吧~~',
-                        [{ text: '想想還是參加吧XD' },
-                          {
-                            text: '忍痛取消報名',
-                            onPress: () => (
-                              ActiveController.quitEvent(passedID).then(() => setSignUp(false))
-                            // navigation.navigate('manage', { Cd: passedID })
-                            ),
-                          },
-                        ],
+                        );
+                      } else {
+                        Alert.alert(
+                          '確認取消報名?',
+                          '如果時間上真的無法配合，那下次有機會再一起參加活動吧~~',
+                          [{ text: '想想還是參加吧XD' },
+                            {
+                              text: '忍痛取消報名',
+                              onPress: () => (
+                                ActiveController.quitEvent(passedID).then(() => setSignUp(false))
+                                // navigation.navigate('manage', { Cd: passedID })
+                              ),
+                            },
+                          ],
 
-                      );
-                    }
-                  }}
-                >
-                  <Text style={styles.sentButtonText}>
-                    <Feather
-                      name="users"
-                      size={16}
-                      color="#FBEEAC"
-                    />
-                    {SignUp ? '取消報名' : '報名候補'}
-                  </Text>
+                        );
+                      }
+                    }}
+                  >
+                    <Text style={styles.sentButtonText}>
+                      <Feather
+                        name="users"
+                        size={16}
+                        color="#FBEEAC"
+                      />
+                      {SignUp ? '取消報名' : '報名候補'}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              )}
 
-                </TouchableOpacity>
-              </View>
             </View>
 
           ))}

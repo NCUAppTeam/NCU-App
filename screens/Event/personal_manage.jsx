@@ -7,17 +7,25 @@ import {
   Title, Card, Portal,
 } from 'react-native-paper';
 import {
-  Ionicons, AntDesign, Feather,
+  Ionicons, AntDesign, Feather, Octicons,
 } from '@expo/vector-icons';
 import {
   NativeBaseProvider, Box, ZStack, HStack, VStack, FlatList, Pressable,
 } from 'native-base';
 import { LinearGradient } from 'expo-linear-gradient';
 import ActiveController from '../../controller/Active';
+import MessageController from '../../controller/Message';
 import styles from './style_folder/Styles_personal_manage';
 
 function Personal({ navigation }) {
-  const [num, setNum] = useState();
+  const [Messagenum, setMessageNum] = useState(0);
+  useEffect(() => {
+    MessageController.countUnreadMessage().then((num) => {
+      setMessageNum(num);
+    }).catch((err) => {
+      throw err;
+    });
+  }, []);
   const [showNow, setShowNow] = useState([]);
   useEffect(() => {
     ActiveController.getParticipatedActive().then((res) => {
@@ -66,6 +74,11 @@ function Personal({ navigation }) {
         throw err;
       });
     }
+    MessageController.countUnreadMessage().then((num) => {
+      setMessageNum(num);
+    }).catch((err) => {
+      throw err;
+    });
     setRefreshing(false);
   };
 
@@ -109,22 +122,30 @@ function Personal({ navigation }) {
                 borderRadius: 25,
                 backgroundColor: '#1784B2',
                 flexDirection: 'row',
-                padding: 16,
+                paddingLeft: 16,
+                paddingVertical: 16,
                 alignContent: 'center',
                 elevation: 10,
                 shadowColor: '#000',
                 marginRight: 10,
               }}
             >
-              <TouchableOpacity
-                style={{ flexDirection: 'row' }}
-                onPress={() => navigation.navigate('message', { prepage: 'personal' })}
-              >
-                <Feather name="message-circle" size={14} color="white" style={{ marginTop: 3 }} />
-                <Text style={{ color: 'white', fontSize: 14, fontWeight: 'bold' }}>
+              <ZStack>
+                <TouchableOpacity
+                  style={{ flexDirection: 'row' }}
+                  onPress={() => navigation.navigate('message', { prepage: 'personal' })}
+                >
+                  <Feather name="message-circle" size={14} color="white" style={{ marginTop: 3 }} />
+                  <Text style={{ color: 'white', fontSize: 14, fontWeight: 'bold' }}>
                 &nbsp;私訊
+                  </Text>
+                </TouchableOpacity>
+                {Messagenum !== 0 && (
+                <Text style={styles.num}>
+                  {Messagenum}
                 </Text>
-              </TouchableOpacity>
+                )}
+              </ZStack>
             </LinearGradient>
             <LinearGradient
               colors={['#359DD9', '#1784B2']}
@@ -197,6 +218,7 @@ function Personal({ navigation }) {
               data={showManage}
               keyExtractor={(item) => item.id}
               showsVerticalScrollIndicator={false}
+              style={{ marginBottom: 10 }}
               refreshControl={(
                 <RefreshControl
                   refreshing={refreshing}

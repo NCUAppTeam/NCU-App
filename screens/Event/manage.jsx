@@ -15,6 +15,7 @@ import {
 } from 'native-base';
 import { LinearGradient } from 'expo-linear-gradient';
 import ActiveController from '../../controller/Active';
+import MessageController from '../../controller/Message';
 import styles from './style_folder/Styles_manage';
 
 function Manage({ route, navigation }) {
@@ -23,7 +24,7 @@ function Manage({ route, navigation }) {
   const Cd = route.params;
   const passedID = JSON.stringify(Cd).slice(7, -2);
   const [message, messageSent] = useState('');
-  const [attendeesNum, setAttendeeNum] = useState(); // 測試用
+  const [attendeesNum, setAttendeeNum] = useState();
   useEffect(() => {
     ActiveController.getTotalOfAttendees(passedID).then((res) => {
       setAttendeeNum(res);
@@ -259,6 +260,7 @@ function Manage({ route, navigation }) {
                     style={styles.messageBox}
                     multiline
                     placeholder="在這裡輸入的訊息，將以私訊的方式發送給所有參加者"
+                    value={message}
                     onChangeText={(text) => messageSent(text)}
                     selectionColor="#ccc"
                   />
@@ -269,7 +271,14 @@ function Manage({ route, navigation }) {
                     style={styles.manageSendMessagebtn}
                   >
                     <TouchableOpacity
-                      onPress={() => { ActiveController.sentMessage(message); }}
+                      onPress={() => {
+                        MessageController.Notification(message, passedID).then(() => {
+                          messageSent('');
+                        }).catch((err) => {
+                          throw err;
+                        });
+                        onRefresh();
+                      }}
                     >
                       <Text style={styles.manageSendMessagebtnText}>發送給所有參與者</Text>
                     </TouchableOpacity>

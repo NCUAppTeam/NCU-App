@@ -189,4 +189,7 @@ export default StyleSheet.create({
     marginTop: 17,
     marginBottom: 10,
   },
+  readDot: {
+    marginLeft: Dimensions.get('window').width * 0.82,
+  },
 });

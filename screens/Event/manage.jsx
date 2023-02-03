@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {
   Text, View, SafeAreaView, TextInput, RefreshControl, Dimensions,
   ScrollView, TouchableOpacity, Image, TouchableHighlight,
+  Platform,
 } from 'react-native';
 import {
   Button, Provider, Card, Title,
@@ -16,6 +17,7 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import ActiveController from '../../controller/Active';
 import MessageController from '../../controller/Message';
+import size from '../../controller/ModifySize';
 import styles from './style_folder/Styles_manage';
 
 function Manage({ route, navigation }) {
@@ -81,7 +83,7 @@ function Manage({ route, navigation }) {
       <SafeAreaView style={styles.container}>
         <NativeBaseProvider>
           <View style={{ flex: 0.1, flexDirection: 'column' }}>
-            <View style={{ flexDirection: 'row' }}>
+            <View style={styles.headerContainer}>
               <Box style={{
                 flex: 0.8, justifyContent: 'center', alignItems: 'flex-start',
               }}
@@ -89,7 +91,7 @@ function Manage({ route, navigation }) {
                 <AntDesign
                   name="arrowleft"
                   size={28}
-                  color="darkblue"
+                  color="#28527A"
                   style={{ justifyContent: 'center' }}
                   onPress={() => { navigation.navigate('personal'); }}
                 />
@@ -106,7 +108,7 @@ function Manage({ route, navigation }) {
                 <Feather
                   name="trash-2"
                   size={25}
-                  color="darkblue"
+                  color="#28527A"
                   onPress={() => {
                     setShowDialog1(true);
                   }}
@@ -239,7 +241,7 @@ function Manage({ route, navigation }) {
                 <Feather
                   name="edit"
                   size={24}
-                  color="darkblue"
+                  color="#28527A"
                   onPress={() => {
                     navigation.navigate('edit', { Cd: passedID });
                   }}
@@ -251,7 +253,7 @@ function Manage({ route, navigation }) {
             {active.map(({
               id, name, limitNum,
             }) => (
-              <Box key={id} style={{ marginTop: 20, marginHorizontal: 8 }}>
+              <Box key={id} style={{ marginTop: 20, marginHorizontal: Platform.OS === 'ios' ? (size.isIphoneX() ? 10 : 20) : 8 }}>
                 <Heading>{name}</Heading>
                 <Divider my={2} bg="#bfbebe" /* my=margin-top and margin-bottom */ />
                 <View style={{ flexDirection: 'column' }}>
@@ -288,14 +290,25 @@ function Manage({ route, navigation }) {
                 <Box>
                   <HStack>
                     <Box>
-                      <Text style={{
-                        fontSize: 18, color: 'black', marginTop: 10, fontWeight: 'bold',
-                      }}
-                      >
-                        參加名單
-                        &emsp;&emsp;&emsp;&ensp;
-                        目前人數：
-                      </Text>
+                      {Platform.OS === 'ios' ? (
+                        <Text style={{
+                          fontSize: 18, color: 'black', marginTop: 10, fontWeight: 'bold',
+                        }}
+                        >
+                          參加名單
+                          {'  '}
+                          目前人數：
+                        </Text>
+                      ) : (
+                        <Text style={{
+                          fontSize: 18, color: 'black', marginTop: 10, fontWeight: 'bold',
+                        }}
+                        >
+                          參加名單
+                          &emsp;&emsp;&emsp;&ensp;
+                          目前人數：
+                        </Text>
+                      )}
                     </Box>
                     <Box>
                       {limitNum !== '0' && (

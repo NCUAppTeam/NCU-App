@@ -332,6 +332,38 @@ async function getAllActive() {
   return activeArray;
 }
 
+async function getGenreActive(genre) {
+  const db = firebase.firestore();
+  const activesRef = db.collection('actives');
+  const GenreArray = [];
+  const querySnapshot = await activesRef.where('genre', '==', genre).get();
+  querySnapshot.forEach((doc) => {
+    GenreArray.push({
+      id: doc.id,
+      name: doc.data().name,
+      imageUri1: doc.data().imageUri1,
+      imageUri2: doc.data().imageUri2,
+      imageUri3: doc.data().imageUri3,
+      startTime: toDateString(doc.data().startTime),
+      endTime: toDateString(doc.data().endTime),
+      startTimeWeekday: dateToWeekday(doc.data().startTime),
+      endTimeWeekday: dateToWeekday(doc.data().endTime),
+      place: doc.data().place,
+      cost: doc.data().cost,
+      limitNum: doc.data().limitNum,
+      genre: doc.data().genre,
+      link: doc.data().link,
+      hostName: doc.data().hostName,
+      hostPhone: doc.data().hostPhone,
+      hostMail: doc.data().hostMail,
+      details: doc.data().details,
+    });
+  });
+  // console.log(GenreArray);
+  console.log('getGenreActive Successful');
+  return GenreArray;
+}
+
 async function getParticipatedActive() {
   const user = '110501444';
   const db = firebase.firestore();
@@ -744,7 +776,7 @@ async function fuseSearchName(searchString) {
 
   const fuse = new Fuse(activeArray, options);
   const result = fuse.search(searchString);
-  console.log(result);
+  // console.log(result);
   console.log('Search Successful');
   return result;
 }
@@ -773,6 +805,7 @@ export default {
   addActive,
   updateActive,
   getAllActive,
+  getGenreActive,
   getParticipatedActive,
   getHostedEvent,
   getFinishedActive,

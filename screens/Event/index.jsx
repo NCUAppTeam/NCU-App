@@ -8,6 +8,7 @@ import List from './activityList';
 import More from './moreEvent';
 import MoreHang from './moreHang';
 import Message from './Message';
+import Genre from './GenreEvent';
 import Detailscreen from './showActivityDetails';
 import Send from './Send';
 import Search from './search';
@@ -33,6 +34,7 @@ function EventStack() {
       <Stack.Screen name="search" component={Search} />
       <Stack.Screen name="message" component={Message} />
       <Stack.Screen name="send" component={Send} />
+      <Stack.Screen name="genre" component={Genre} />
     </Stack.Navigator>
   );
 }

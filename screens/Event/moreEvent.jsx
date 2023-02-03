@@ -4,15 +4,24 @@ import {
 } from 'react-native';
 import { Title } from 'react-native-paper';
 import {
-  Ionicons, FontAwesome5, AntDesign, Feather,
+  Ionicons, FontAwesome5, AntDesign, Feather, Octicons,
 } from '@expo/vector-icons';
 import {
-  NativeBaseProvider, Box, FlatList, VStack, Pressable,
+  NativeBaseProvider, Box, FlatList, VStack, Pressable, HStack,
 } from 'native-base';
 import styles from './style_folder/Styles_moreEvent';
 import ActiveController from '../../controller/Active';
+import MessageController from '../../controller/Message';
 
 function More({ navigation, route }) {
+  const [Messagenum, setMessageNum] = useState(0);
+  useEffect(() => {
+    MessageController.countUnreadMessage().then((num) => {
+      setMessageNum(num);
+    }).catch((err) => {
+      throw err;
+    });
+  }, []);
   const [active, setActive] = useState([]);
   useEffect(() => {
     ActiveController.getEventActive().then((res) => {
@@ -27,8 +36,13 @@ function More({ navigation, route }) {
     setRefreshing(true);
     ActiveController.getEventActive().then((res) => {
       setActive(res);
-      setRefreshing(false);
     });
+    MessageController.countUnreadMessage().then((num) => {
+      setMessageNum(num);
+    }).catch((err) => {
+      throw err;
+    });
+    setRefreshing(false);
   };
 
   return (
@@ -49,12 +63,15 @@ function More({ navigation, route }) {
             </Text>
           </View>
           <View style={styles.headerCommentView}>
-            <FontAwesome5
-              name="comment"
-              size={25}
-              color="#28527A"
-              onPress={() => { navigation.navigate('message'); }}
-            />
+            <HStack>
+              <FontAwesome5
+                name="comment"
+                size={25}
+                color="#28527A"
+                onPress={() => { navigation.navigate('message'); }}
+              />
+              <Octicons name="dot-fill" size={16} color={Messagenum !== 0 ? '#EB6F6F' : 'transparent'} style={styles.readDot} />
+            </HStack>
           </View>
           <View style={styles.headerPersonalView}>
             <Feather

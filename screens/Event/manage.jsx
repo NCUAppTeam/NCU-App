@@ -485,7 +485,18 @@ function Manage({ route, navigation }) {
                         </Box>
                         <Box style={styles.MessagebtnInManage}>
                           <TouchableHighlight>
-                            <Text style={styles.MessagebtnInManageText}>私訊</Text>
+                            <Text
+                              style={styles.MessagebtnInManageText}
+                              onPress={() => {
+                                navigation.navigate('send', {
+                                  attendeeID: item.studentID,
+                                  userID: '110501444',
+                                });
+                              }}
+                            >
+                              私訊
+
+                            </Text>
                           </TouchableHighlight>
                         </Box>
                       </HStack>

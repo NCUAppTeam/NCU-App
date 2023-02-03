@@ -3,14 +3,15 @@ import {
   Text, View, SafeAreaView, ScrollView, RefreshControl, Image, Dimensions,
 } from 'react-native';
 import {
-  Title, Card, Searchbar,
+  Title, Card, Searchbar, TextInput,
 } from 'react-native-paper';
 import {
   Ionicons, FontAwesome5, AntDesign, Feather, Octicons,
 } from '@expo/vector-icons';
 import {
-  NativeBaseProvider, Box, Divider, ZStack, HStack,
+  NativeBaseProvider, Box, Divider, ZStack, HStack, Button,
 } from 'native-base';
+import { TouchableHighlight } from 'react-native-gesture-handler';
 import styles from './style_folder/Styles_activityList';
 import ActiveController from '../../controller/Active';
 import MessageController from '../../controller/Message';
@@ -59,39 +60,35 @@ function List({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <NativeBaseProvider>
-        <View style={{ flexDirection: 'row', paddingBottom: 12, paddingHorizontal: Dimensions.get('window').width * 0.0592 }}>
-          <View style={styles.SearchBarStyle}>
-            <Searchbar
-              returnKeyType="previous"
-              placeholder="搜尋"
+        <HStack>
+          <ZStack>
+            <Button
               style={styles.SearchBar}
               onPress={() => { navigation.navigate('search'); }}
             />
-          </View>
-          <View style={{
-            flex: 1, justifyContent: 'center', alignItems: 'flex-end',
-          }}
-          >
-            <FontAwesome5
-              name="comment"
-              size={25}
-              color="#28527A"
-              onPress={() => { navigation.navigate('message', { prepage: 'list' }); }}
-            />
-          </View>
+            <AntDesign name="search1" size={24} color="#28527A" style={styles.searchIcon} onPress={() => { navigation.navigate('search'); }} />
+            <Box style={styles.searchtextBox}>
+              <Text style={styles.searchtext} onPress={() => { navigation.navigate('search'); }}>搜尋</Text>
+            </Box>
+          </ZStack>
+          <FontAwesome5
+            name="comment"
+            size={25}
+            color="#28527A"
+            onPress={() => { navigation.navigate('message', { prepage: 'list' }); }}
+            style={{ alignSelf: 'center', marginLeft: Dimensions.get('window').width * 0.65, marginTop: 3 }}
+          />
           <Octicons name="dot-fill" size={16} color={Messagenum !== 0 ? '#EB6F6F' : 'transparent'} style={styles.readDot} />
-          <View style={{
-            flex: 1, justifyContent: 'center', alignItems: 'flex-end',
-          }}
-          >
+          <Box>
             <Feather
               name="user"
               size={26}
               color="#28527A"
               onPress={() => { navigation.navigate('personal'); }}
+              style={{ alignSelf: 'center', marginLeft: 5, marginTop: 3 }}
             />
-          </View>
-        </View>
+          </Box>
+        </HStack>
         <ScrollView
           style={{ flex: 1 }}
           refreshControl={(

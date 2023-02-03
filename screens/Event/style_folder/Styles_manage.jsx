@@ -1,4 +1,6 @@
-import { StyleSheet, Dimensions } from 'react-native';
+import { Platform, StyleSheet, Dimensions } from 'react-native';
+
+import size from '../../../controller/ModifySize';
 
 export default StyleSheet.create({
   avatar: {
@@ -6,9 +8,6 @@ export default StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 30,
-    borderBottomWidth: 2,
-    borderBottomEndRadius: 10,
-    borderEndColor: '#bfbebe',
   },
   container: {
     flex: 1,
@@ -50,7 +49,7 @@ export default StyleSheet.create({
     alignSelf: 'flex-end',
     backgroundColor: '#1784B2',
     width: 200,
-    height: 40,
+    height: Platform.OS === 'ios' ? (size.isIphoneX() ? 35 : 45) : 40,
     borderWidth: 1,
     borderColor: '#28527A',
     marginTop: 10,
@@ -62,6 +61,7 @@ export default StyleSheet.create({
     color: '#FBEEAC',
     fontSize: 16,
     fontWeight: 'bold',
+
   },
   MessagebtnInManage: {
     backgroundColor: '#abd873',
@@ -135,5 +135,14 @@ export default StyleSheet.create({
   },
   removeBox: {
     width: 350,
+  },
+  headerContainer: {
+    marginHorizontal: Dimensions.get('window').width * 0.07,
+    flexDirection: 'row',
+  },
+  bodyContainer: {
+    flex: 1,
+    alignItems: 'center',
+    marginTop: 7,
   },
 });

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Text, View, SafeAreaView, ScrollView, RefreshControl, Image, Dimensions,
+  Text, View, SafeAreaView, ScrollView, RefreshControl, Image, Dimensions, Platform,
 } from 'react-native';
 import {
   Title, Card, Searchbar, TextInput,
@@ -15,6 +15,7 @@ import { TouchableHighlight } from 'react-native-gesture-handler';
 import styles from './style_folder/Styles_activityList';
 import ActiveController from '../../controller/Active';
 import MessageController from '../../controller/Message';
+import size from '../../controller/ModifySize';
 
 function List({ navigation }) {
   const [Messagenum, setMessageNum] = useState(0);
@@ -91,6 +92,7 @@ function List({ navigation }) {
         </HStack>
         <ScrollView
           style={{ flex: 1 }}
+          showsVerticalScrollIndicator={false}
           refreshControl={(
             <RefreshControl
               refreshing={refreshing}
@@ -102,15 +104,18 @@ function List({ navigation }) {
             <Box style={styles.more}>
               <HStack>
                 <Text style={{ color: '#28527a', fontSize: 18 }}>近期揪人</Text>
-                <Text style={{ color: '#28527a', marginLeft: Dimensions.get('window').width * 0.54 }} onPress={() => { navigation.navigate('moreHang'); }}>顯示更多</Text>
+                <Text style={styles.showMore} onPress={() => { navigation.navigate('moreHang'); }}>顯示更多</Text>
               </HStack>
             </Box>
             <Divider style={{ marginTop: 5 }} bg="#BFBFBF" /* my=margin-top and margin-bottom */ />
           </Box>
           <View style={{
-            height: Dimensions.get('window').width * 0.65,
+            height: Platform.OS === 'android'
+              ? Dimensions.get('window').width * 0.65
+              : (size.isIphoneX() ? Dimensions.get('window').height * 0.363 - 10 : Dimensions.get('window').height * 0.363),
             width: 'auto',
             marginTop: 10,
+            marginBottom: Platform.OS === 'android' ? 0 : -5,
           }}
           >
             <ScrollView
@@ -180,15 +185,18 @@ function List({ navigation }) {
             <Box style={styles.more}>
               <HStack>
                 <Text style={{ color: '#28527a', fontSize: 18 }}>熱門活動</Text>
-                <Text style={{ color: '#28527a', marginLeft: Dimensions.get('window').width * 0.54 }} onPress={() => { navigation.navigate('more'); }}>顯示更多</Text>
+                <Text style={styles.showMore} onPress={() => { navigation.navigate('more'); }}>顯示更多</Text>
               </HStack>
             </Box>
             <Divider style={{ marginTop: 5 }} bg="#BFBFBF" /* my=margin-top and margin-bottom */ />
           </Box>
           <View style={{
-            height: Dimensions.get('window').width * 0.65,
+            height: Platform.OS === 'android'
+              ? Dimensions.get('window').width * 0.65
+              : (size.isIphoneX() ? Dimensions.get('window').height * 0.363 - 10 : Dimensions.get('window').height * 0.363),
             width: 'auto',
             marginTop: 10,
+            marginBottom: Platform.OS === 'android' ? 0 : 20,
           }}
           >
             <ScrollView
@@ -197,7 +205,10 @@ function List({ navigation }) {
               showsHorizontalScrollIndicator={false}
             >
               <View style={{
-                width: 'auto', marginRight: Dimensions.get('window').width * 0.0694, height: 246, flexDirection: 'row',
+                width: 'auto',
+                marginRight: Dimensions.get('window').width * 0.0694,
+                height: 246,
+                flexDirection: 'row',
               }}
               >
                 {active2.map(({

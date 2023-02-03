@@ -16,6 +16,8 @@ import {
 } from 'native-base';
 import * as ImagePicker from 'expo-image-picker';
 import ActiveController from '../../controller/Active';
+import size from '../../controller/ModifySize';
+
 import styles from './style_folder/Styles_addActivity';
 
 function Add({ navigation }) {
@@ -329,13 +331,27 @@ function Add({ navigation }) {
                   >
                     {startText === undefined && (
                     <Text style={[styles.text, {
-                      fontWeight: 'normal', color: '#BEBEBE', textAlign: 'center', paddingTop: Dimensions.get('window').height * 0.01, fontSize: 16,
+                      fontWeight: 'normal',
+                      color: '#BEBEBE',
+                      textAlign: 'center',
+                      paddingTop: size.isIphoneX() ? Dimensions.get('window').width * 0.015 - 10 : Dimensions.get('window').width * 0.015,
+                      marginLeft: size.isIphoneX() ? -Dimensions.get('window').width * 0.7 - 10 : -Dimensions.get('window').width * 0.7,
+                      fontSize: 16,
                     }]}
                     >
                       開始時間
                     </Text>
                     )}
-                    <Text style={[styles.text, { fontWeight: 'normal', textAlign: 'center', paddingTop: Dimensions.get('window').height * 0.005 }]}>{startText}</Text>
+                    <Text style={[styles.text, {
+                      fontWeight: 'normal',
+                      textAlign: 'center',
+                      paddingTop: size.isIphoneX() ? Dimensions.get('window').width * 0.025 - 10 : Dimensions.get('window').width * 0.025,
+                      marginLeft: size.isIphoneX() ? -Dimensions.get('window').width * 0.61 - 10 : -Dimensions.get('window').width * 0.61,
+                    }]}
+                    >
+                      {startText}
+
+                    </Text>
                   </TouchableOpacity>
                   )}
                 </Box>
@@ -379,13 +395,27 @@ function Add({ navigation }) {
                   >
                     {endText === undefined && (
                     <Text style={[styles.text, {
-                      fontWeight: 'normal', color: '#BEBEBE', textAlign: 'center', paddingTop: Dimensions.get('window').height * 0.01, fontSize: 16,
+                      fontWeight: 'normal',
+                      color: '#BEBEBE',
+                      textAlign: 'center',
+                      paddingTop: size.isIphoneX() ? Dimensions.get('window').width * 0.015 - 10 : Dimensions.get('window').width * 0.015,
+                      marginLeft: size.isIphoneX() ? -Dimensions.get('window').width * 0.7 - 10 : -Dimensions.get('window').width * 0.7,
+                      fontSize: 16,
                     }]}
                     >
                       結束時間
                     </Text>
                     )}
-                    <Text style={[styles.text, { fontWeight: 'normal', textAlign: 'center', paddingTop: Dimensions.get('window').height * 0.005 }]}>{endText}</Text>
+                    <Text style={[styles.text, {
+                      fontWeight: 'normal',
+                      textAlign: 'center',
+                      paddingTop: size.isIphoneX() ? Dimensions.get('window').width * 0.025 - 10 : Dimensions.get('window').width * 0.025,
+                      marginLeft: size.isIphoneX() ? -Dimensions.get('window').width * 0.61 - 10 : -Dimensions.get('window').width * 0.61,
+                    }]}
+                    >
+                      {endText}
+
+                    </Text>
                   </TouchableOpacity>
                   )}
                 </Box>
@@ -566,7 +596,12 @@ function Add({ navigation }) {
                 )}
               </Box>
               <TouchableOpacity onPress={pickImage} style={styles.imageButton}>
-                <MaterialCommunityIcons name="cloud-upload-outline" size={24} color="white" style={{ marginLeft: 49 }} />
+                <MaterialCommunityIcons
+                  name="cloud-upload-outline"
+                  size={24}
+                  color="white"
+                  style={{ marginLeft: Platform.OS === 'ios' ? (size.isIphoneX() ? 30 : 40) : 49 }}
+                />
                 <Text style={styles.Cloudicon}>上傳</Text>
               </TouchableOpacity>
             </Box>

@@ -1,4 +1,6 @@
-import { StyleSheet, Dimensions } from 'react-native';
+import { Platform, StyleSheet, Dimensions } from 'react-native';
+
+import size from '../../../controller/ModifySize';
 
 export default StyleSheet.create({
   body: {
@@ -33,18 +35,6 @@ export default StyleSheet.create({
   bodyforCostAndLimitnum: {
     flexDirection: 'row',
   },
-  container: {
-    flex: 1,
-    flexDirection: 'column',
-    alignContent: 'center',
-    marginTop: 50,
-    marginHorizontal: 15,
-    // marginHorizontal: Dimensions.get('window').width * 0.07,
-  },
-  categorybutton: {
-    flexWrap: 'wrap',
-    flexDirection: 'row',
-  },
   CostTitle: {
     flex: 1.4,
     fontSize: 16,
@@ -69,9 +59,22 @@ export default StyleSheet.create({
     borderRadius: 5,
     textAlign: 'left',
     textAlignVertical: 'center',
+    marginTop: Platform.OS === 'ios' ? (size.isIphoneX() ? Dimensions.get('window').width * 0.02 - 10 : Dimensions.get('window').width * 0.02) : 0,
+
+  },
+  container: {
+    flex: 1,
+    flexDirection: 'column',
+    alignContent: 'center',
+    marginTop: 50,
+    marginHorizontal: 15,
+    // marginHorizontal: Dimensions.get('window').width * 0.07,
+  },
+  categorybutton: {
+    flexWrap: 'wrap',
+    flexDirection: 'row',
   },
   Cloudicon: {
-    marginTop: 9,
     color: 'white',
     fontSize: 14,
     marginLeft: 8,
@@ -89,6 +92,22 @@ export default StyleSheet.create({
     alignItems: 'center',
     alignContent: 'center',
     justifyContent: 'center',
+  },
+  image: {
+    width: 85,
+    height: 85,
+    alignItems: 'center',
+    marginTop: 5,
+    backgroundColor: '#4169E1',
+  },
+  imageButton: {
+    width: 160,
+    height: 40,
+    alignItems: 'center',
+    borderRadius: 4,
+    marginTop: 5,
+    flexDirection: 'row',
+    backgroundColor: '#28527A',
   },
   input: {
     width: '100%',
@@ -114,22 +133,6 @@ export default StyleSheet.create({
     alignItems: 'flex-start',
     textAlign: 'left',
     marginLeft: 5,
-  },
-  image: {
-    width: 85,
-    height: 85,
-    alignItems: 'center',
-    marginTop: 5,
-    backgroundColor: '#4169E1',
-  },
-  imageButton: {
-    width: 160,
-    height: 40,
-    alignItems: 'center',
-    borderRadius: 4,
-    marginTop: 5,
-    flexDirection: 'row',
-    backgroundColor: '#28527A',
   },
   LimitnumTitle: {
     flex: 1.3,
@@ -170,9 +173,10 @@ export default StyleSheet.create({
   unsentButton: {
     borderRadius: 30,
     width: 297,
-    height: 48,
+    height: 51,
     paddingVertical: 8,
-    marginVertical: 51,
+    marginTop: Platform.OS === 'ios' ? 0 : 51,
+    marginBottom: Platform.OS === 'ios' ? (size.isIphoneX() ? Dimensions.get('window').width * 0.055 - 10 : Dimensions.get('window').width * 0.055) : 51,
     backgroundColor: '#D4D4D4',
     elevation: 20,
     shadowColor: '#000',
@@ -186,9 +190,10 @@ export default StyleSheet.create({
   sentButton: {
     borderRadius: 30,
     width: 297,
-    height: 48,
+    height: 51,
     paddingVertical: 8,
-    marginVertical: 51,
+    marginTop: Platform.OS === 'ios' ? 0 : 51,
+    marginBottom: Platform.OS === 'ios' ? (size.isIphoneX() ? Dimensions.get('window').width * 0.055 - 10 : Dimensions.get('window').width * 0.055) : 51,
     elevation: 20,
     shadowColor: '#000',
   },

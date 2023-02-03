@@ -1,4 +1,6 @@
-import { StyleSheet, Dimensions } from 'react-native';
+import { Platform, StyleSheet, Dimensions } from 'react-native';
+
+import size from '../../../controller/ModifySize';
 
 export default StyleSheet.create({
   body: {
@@ -57,6 +59,8 @@ export default StyleSheet.create({
     borderRadius: 5,
     textAlign: 'left',
     textAlignVertical: 'center',
+    marginTop: Platform.OS === 'ios' ? (size.isIphoneX() ? Dimensions.get('window').width * 0.02 - 10 : Dimensions.get('window').width * 0.02) : 0,
+
   },
   container: {
     flex: 1,
@@ -169,9 +173,10 @@ export default StyleSheet.create({
   unsentButton: {
     borderRadius: 30,
     width: 297,
-    height: 48,
+    height: 51,
     paddingVertical: 8,
-    marginVertical: 51,
+    marginTop: Platform.OS === 'ios' ? 0 : 51,
+    marginBottom: Platform.OS === 'ios' ? (size.isIphoneX() ? Dimensions.get('window').width * 0.055 - 10 : Dimensions.get('window').width * 0.055) : 51,
     backgroundColor: '#D4D4D4',
     elevation: 20,
     shadowColor: '#000',
@@ -185,9 +190,10 @@ export default StyleSheet.create({
   sentButton: {
     borderRadius: 30,
     width: 297,
-    height: 48,
+    height: 51,
     paddingVertical: 8,
-    marginVertical: 51,
+    marginTop: Platform.OS === 'ios' ? 0 : 51,
+    marginBottom: Platform.OS === 'ios' ? (size.isIphoneX() ? Dimensions.get('window').width * 0.055 - 10 : Dimensions.get('window').width * 0.055) : 51,
     elevation: 20,
     shadowColor: '#000',
   },

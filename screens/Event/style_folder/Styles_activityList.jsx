@@ -1,4 +1,5 @@
-import { StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet, Dimensions, Platform } from 'react-native';
+import size from '../../../controller/ModifySize';
 
 export default StyleSheet.create({
   container: {
@@ -14,12 +15,19 @@ export default StyleSheet.create({
   },
   horizontal: {
     flex: 1,
-    height: 246,
+    height: Platform.OS === 'android'
+      ? 246
+      : (size.isIphoneX() ? Dimensions.get('window').width * 0.8 - 10 : 300),
+    flexDirection: 'row',
   },
   Card2: {
     marginTop: 10,
-    height: Dimensions.get('window').width * 0.6,
-    width: Dimensions.get('window').width * 0.43,
+    height: Platform.OS === 'android'
+      ? Dimensions.get('window').width * 0.6
+      : (size.isIphoneX() ? Dimensions.get('window').height * 0.35 - 10 : Dimensions.get('window').height * 0.35),
+    width: Platform.OS === 'android'
+      ? Dimensions.get('window').width * 0.43
+      : (size.isIphoneX() ? Dimensions.get('window').width * 0.55 - 10 : Dimensions.get('window').width * 0.55),
     borderRadius: 10,
     shadowColor: 'black',
     shadowOffset: {
@@ -53,7 +61,10 @@ export default StyleSheet.create({
     width: 'auto',
     height: 35,
     paddingTop: 10,
-    marginTop: 20,
+    marginTop: Platform.OS === 'android'
+      ? 20
+      : (size.isIphoneX() ? Dimensions.get('window').width * 0.02 - 10 : Dimensions.get('window').height * 0.001),
+    flexDirection: 'row',
   },
   pic: {
     // width: PixelRatio.getPixelSizeForLayoutSize(76),
@@ -85,5 +96,11 @@ export default StyleSheet.create({
   },
   readDot: {
     marginLeft: -2.5,
+  },
+  showMore: {
+    color: '#28527a',
+    marginLeft: Platform.OS === 'android'
+      ? Dimensions.get('window').width * 0.54
+      : (size.isIphoneX() ? Dimensions.get('window').width * 0.4 - 10 : Dimensions.get('window').width * 0.4),
   },
 });

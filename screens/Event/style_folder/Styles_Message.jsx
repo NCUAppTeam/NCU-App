@@ -150,7 +150,7 @@ export default StyleSheet.create({
   },
   info: {
     color: '#000',
-    marginLeft: Dimensions.get('window').width * 0.47,
+    marginLeft: Dimensions.get('window').width * 0.51,
     alignSelf: 'center',
   },
   Dot: {

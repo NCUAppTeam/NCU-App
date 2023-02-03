@@ -53,6 +53,7 @@ export default StyleSheet.create({
     width: 'auto',
     height: 35,
     paddingTop: 10,
+    marginTop: 20,
   },
   pic: {
     // width: PixelRatio.getPixelSizeForLayoutSize(76),
@@ -62,15 +63,25 @@ export default StyleSheet.create({
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
   },
-  SearchBarStyle: {
-    flex: 9,
-    justifyContent: 'center',
-  },
   SearchBar: {
     backgroundColor: '#E5EBF1',
     borderRadius: 18,
+    width: Dimensions.get('window').width * 0.7,
+    marginLeft: Dimensions.get('window').width * 0.05,
     height: 36,
-    elevation: 0,
+  },
+  searchIcon: {
+    marginLeft: Dimensions.get('window').width * 0.08,
+    marginTop: 6,
+  },
+  searchtextBox: {
+    marginLeft: Dimensions.get('window').width * 0.15,
+    marginTop: 6,
+    width: '100%',
+  },
+  searchtext: {
+    color: '#28527A',
+    fontSize: 18,
   },
   readDot: {
     marginLeft: -2.5,

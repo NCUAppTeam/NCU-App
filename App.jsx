@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import { View } from 'react-native';
-
 import { initializeApp, getApp } from 'firebase/app';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
@@ -19,6 +17,7 @@ import {
   Ionicons,
 } from '@expo/vector-icons';
 
+import { AuthScreen } from './screens/Auth';
 import CalendarScreen from './screens/Calendar';
 import MapScreen from './screens/Map';
 import EventScreen from './screens/Event';
@@ -94,8 +93,12 @@ export default function App() {
     setAuthState(user);
   });
 
-  if (authState === undefined) {
-    return <View />;
+  if (authState === null) {
+    return (
+    <NativeBaseProvider>
+        <AuthScreen />
+    </NativeBaseProvider>
+    );
   }
 
   return (

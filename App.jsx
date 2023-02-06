@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Dimensions } from 'react-native';
+import { View, Dimensions, Platform } from 'react-native';
 
 import firebase from 'firebase';
 import { NavigationContainer } from '@react-navigation/native';
@@ -35,9 +35,6 @@ import MapScreen from './screens/Map';
 import SaleScreen from './screens/Sale';
 import EventScreen from './screens/Event';
 
-
-
-
 const firebaseConfig = {
   apiKey: 'AIzaSyA8GH6yj1i4gJM0H_ZTsurYG3Dqn4-nIS8',
   authDomain: 'ncu-app-test.firebaseapp.com',
@@ -71,7 +68,6 @@ function MainApp() {
     }
   };
 
-
   // activeTintColor: '#E5EBF1',
   //           inactiveTintColor: '#28527A',
   //           activeBackgroundColor: '#28527A',
@@ -80,7 +76,7 @@ function MainApp() {
     <NativeBaseProvider>
 
       <Box flex={1} bg="white" safeAreaTop width="100%" alignSelf="center">
-          <Center flex={1}>{renderSelectedTab()}</Center>
+        <Center flex={1}>{renderSelectedTab()}</Center>
         <HStack bg="#E5EBF1" alignItems="center" safeAreaBottom shadow={6}>
           <Pressable py="2" flex={1} onPress={() => setSelected(0)} bg={selected === 0 ? '#28527A' : '#E5EBF1'}>
             <Center>
@@ -95,14 +91,14 @@ function MainApp() {
               </Text>
             </Center>
           </Pressable>
-          
+
           <Pressable py="2" flex={1} onPress={() => setSelected(1)} bg={selected === 1 ? '#28527A' : '#E5EBF1'}>
             <Center>
               <Icon
                 as={MaterialCommunityIcons}
                 name="calendar-month"
                 color={selected === 1 ? '#E5EBF1' : '#28527A'}
-                
+
                 size="sm"
               />
               <Text color={selected === 1 ? '#E5EBF1' : '#28527A'} fontSize="12">
@@ -159,12 +155,11 @@ const CustomTabBar = ({ state, descriptors, navigation }) => {
   const [selected, setSelected] = React.useState(1);
   return (
     <HStack bg="#E5EBF1" alignItems="center" safeAreaBottom shadow={6}>
-    {state.routes.map((route, index) => {
+      {state.routes.map((route, index) => {
         const { options } = descriptors[route.key];
-        const label =
-          options.tabBarLabel !== undefined
-            ? options.tabBarLabel
-            : options.title !== undefined
+        const label = options.tabBarLabel !== undefined
+          ? options.tabBarLabel
+          : options.title !== undefined
             ? options.title
             : route.name;
 
@@ -182,19 +177,19 @@ const CustomTabBar = ({ state, descriptors, navigation }) => {
         };
 
         const icon_name = {
-            '首頁': 'home-outline',
-            '行事曆':'calendar-month',
-            '活動':'game-controller-outline',
-            '地圖':'map-outline',
-            '拍賣':'cart-outline'
+          首頁: 'home-outline',
+          行事曆: 'calendar-month',
+          活動: 'game-controller-outline',
+          地圖: 'map-outline',
+          拍賣: 'cart-outline',
         };
 
         return (
-          
-          <Pressable py="2" flex={1} onPress={onPress} bg={isFocused? '#28527A' : '#E5EBF1'}>
+
+          <Pressable py="2" flex={1} onPress={onPress} bg={isFocused ? '#28527A' : '#E5EBF1'}>
             <Center>
               <Icon
-                as={label === '活動' ? Ionicons : MaterialCommunityIcons }
+                as={label === '活動' ? Ionicons : MaterialCommunityIcons}
                 name={icon_name[label]}
                 color={isFocused ? '#E5EBF1' : '#28527A'}
                 size="sm"
@@ -204,12 +199,12 @@ const CustomTabBar = ({ state, descriptors, navigation }) => {
               </Text>
             </Center>
           </Pressable>
-        
+
         );
       })}
-      </HStack>
-  )
-}
+    </HStack>
+  );
+};
 
 export default function App() {
   if (!firebase.apps.length) {
@@ -230,22 +225,22 @@ export default function App() {
   return (
     /* { auth ? <MainApp /> : <AuthScreen />} */
     <NativeBaseProvider>
-    <NavigationContainer>
-      <Tab.Navigator
-        screenOptions={{
-          headerShown: false,
-        }}
-        tabBar={(props) => (
-          <CustomTabBar {...props} />
-        )}
-      >
-        <Tab.Screen name="首頁" component={DashboardScreen}/>
-        <Tab.Screen name="行事曆" component={CalendarScreen} />
-        <Tab.Screen name="活動" component={EventScreen} />
-        <Tab.Screen name="地圖" component={MapScreen} />
-        <Tab.Screen name="拍賣" component={SaleScreen} />
-      </Tab.Navigator>
-    </NavigationContainer>
+      <NavigationContainer>
+        <Tab.Navigator
+          screenOptions={{
+            headerShown: false,
+          }}
+          tabBar={(props) => (
+            <CustomTabBar {...props} />
+          )}
+        >
+          <Tab.Screen name="首頁" component={DashboardScreen} />
+          <Tab.Screen name="行事曆" component={CalendarScreen} />
+          <Tab.Screen name="活動" component={EventScreen} />
+          <Tab.Screen name="地圖" component={MapScreen} />
+          <Tab.Screen name="拍賣" component={SaleScreen} />
+        </Tab.Navigator>
+      </NavigationContainer>
     </NativeBaseProvider>
   );
 }

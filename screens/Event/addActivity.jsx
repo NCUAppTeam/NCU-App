@@ -16,17 +16,12 @@ import {
 } from 'native-base';
 import * as ImagePicker from 'expo-image-picker';
 import ActiveController from '../../controller/Active';
-import size from '../../controller/ModifySize';
-
 import styles from './style_folder/Styles_addActivity';
 
 function Add({ navigation }) {
   const [data, setData] = useState({
     cost: '',
     link: '',
-    // hostName: '',
-    // hostPhone: '',
-    // hostMail: '',
   });
 
   const [genre, setGenre] = useState(false);
@@ -330,24 +325,26 @@ function Add({ navigation }) {
                     style={styles.input}
                   >
                     {startText === undefined && (
-                    <Text style={[styles.text, {
-                      fontWeight: 'normal',
+                    <Text style={{
+                      alignItems: 'center',
+                      fontWeight: 'bold',
                       color: '#BEBEBE',
-                      textAlign: 'center',
-                      paddingTop: size.isIphoneX() ? Dimensions.get('window').width * 0.015 - 10 : Dimensions.get('window').width * 0.015,
-                      marginLeft: size.isIphoneX() ? -Dimensions.get('window').width * 0.7 - 10 : -Dimensions.get('window').width * 0.7,
+                      textAlign: 'left',
+                      marginTop: Dimensions.get('window').height * 0.01,
                       fontSize: 16,
-                    }]}
+                    }}
                     >
                       開始時間
                     </Text>
                     )}
-                    <Text style={[styles.text, {
-                      fontWeight: 'normal',
-                      textAlign: 'center',
-                      paddingTop: size.isIphoneX() ? Dimensions.get('window').width * 0.025 - 10 : Dimensions.get('window').width * 0.025,
-                      marginLeft: size.isIphoneX() ? -Dimensions.get('window').width * 0.61 - 10 : -Dimensions.get('window').width * 0.61,
-                    }]}
+                    <Text style={{
+                      alignItems: 'center',
+                      fontWeight: 'bold',
+                      color: '#000',
+                      textAlign: 'left',
+                      marginTop: Dimensions.get('window').height * 0.01,
+                      fontSize: 16,
+                    }}
                     >
                       {startText}
 
@@ -394,24 +391,26 @@ function Add({ navigation }) {
                     style={styles.input}
                   >
                     {endText === undefined && (
-                    <Text style={[styles.text, {
-                      fontWeight: 'normal',
+                    <Text style={{
+                      alignItems: 'center',
+                      fontWeight: 'bold',
                       color: '#BEBEBE',
-                      textAlign: 'center',
-                      paddingTop: size.isIphoneX() ? Dimensions.get('window').width * 0.015 - 10 : Dimensions.get('window').width * 0.015,
-                      marginLeft: size.isIphoneX() ? -Dimensions.get('window').width * 0.7 - 10 : -Dimensions.get('window').width * 0.7,
+                      textAlign: 'left',
+                      marginTop: Dimensions.get('window').height * 0.01,
                       fontSize: 16,
-                    }]}
+                    }}
                     >
                       結束時間
                     </Text>
                     )}
-                    <Text style={[styles.text, {
-                      fontWeight: 'normal',
-                      textAlign: 'center',
-                      paddingTop: size.isIphoneX() ? Dimensions.get('window').width * 0.025 - 10 : Dimensions.get('window').width * 0.025,
-                      marginLeft: size.isIphoneX() ? -Dimensions.get('window').width * 0.61 - 10 : -Dimensions.get('window').width * 0.61,
-                    }]}
+                    <Text style={{
+                      alignItems: 'center',
+                      fontWeight: 'bold',
+                      color: '#000',
+                      textAlign: 'left',
+                      marginTop: Dimensions.get('window').height * 0.01,
+                      fontSize: 16,
+                    }}
                     >
                       {endText}
 
@@ -600,9 +599,9 @@ function Add({ navigation }) {
                   name="cloud-upload-outline"
                   size={24}
                   color="white"
-                  style={{ marginLeft: Platform.OS === 'ios' ? (size.isIphoneX() ? 30 : 40) : 49 }}
+                  style={styles.Cloudicon}
                 />
-                <Text style={styles.Cloudicon}>上傳</Text>
+                <Text style={styles.Cloudicontext}>上傳</Text>
               </TouchableOpacity>
             </Box>
             <Divider my={2} bg="#bfbebe" /* my=margin-top and margin-bottom */ />

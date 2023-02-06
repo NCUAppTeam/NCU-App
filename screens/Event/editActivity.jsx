@@ -8,7 +8,7 @@ import {
   Dialog, Portal, Button, Provider,
 } from 'react-native-paper';
 import {
-  Ionicons, AntDesign, MaterialCommunityIcons, Foundation,
+  AntDesign, MaterialCommunityIcons, Foundation,
 } from '@expo/vector-icons';
 import {
   NativeBaseProvider, Box, Divider, Heading, ZStack,
@@ -17,7 +17,6 @@ import { LinearGradient } from 'expo-linear-gradient';
 import * as ImagePicker from 'expo-image-picker';
 import styles from './style_folder/Styles_editActivity';
 import ActiveController from '../../controller/Active';
-import size from '../../controller/ModifySize';
 
 function Edit({ route, navigation }) {
   const Cd = route.params;
@@ -369,23 +368,26 @@ function Edit({ route, navigation }) {
                     style={styles.input}
                   >
                     {startText === undefined && (
-                    <Text style={[styles.text, {
-                      fontWeight: 'normal',
-                      color: '#ADADAD',
-                      textAlign: 'center',
-                      paddingTop: size.isIphoneX() ? Dimensions.get('window').width * 0.015 - 10 : Dimensions.get('window').width * 0.015,
-                      marginLeft: size.isIphoneX() ? -Dimensions.get('window').width * 0.7 - 10 : -Dimensions.get('window').width * 0.7,
-                    }]}
+                    <Text style={{
+                      alignItems: 'center',
+                      fontWeight: 'bold',
+                      color: '#BEBEBE',
+                      textAlign: 'left',
+                      marginTop: Dimensions.get('window').height * 0.01,
+                      fontSize: 16,
+                    }}
                     >
                       開始時間
                     </Text>
                     )}
-                    <Text style={[styles.text, {
-                      fontWeight: 'normal',
-                      textAlign: 'center',
-                      paddingTop: size.isIphoneX() ? Dimensions.get('window').width * 0.025 - 10 : Dimensions.get('window').width * 0.025,
-                      marginLeft: size.isIphoneX() ? -Dimensions.get('window').width * 0.61 - 10 : -Dimensions.get('window').width * 0.61,
-                    }]}
+                    <Text style={{
+                      alignItems: 'center',
+                      fontWeight: 'bold',
+                      color: '#000',
+                      textAlign: 'left',
+                      marginTop: Dimensions.get('window').height * 0.01,
+                      fontSize: 16,
+                    }}
                     >
                       {startText}
 
@@ -432,23 +434,26 @@ function Edit({ route, navigation }) {
                     style={styles.input}
                   >
                     {endText === undefined && (
-                    <Text style={[styles.text, {
-                      fontWeight: 'normal',
-                      color: '#ADADAD',
-                      textAlign: 'center',
-                      paddingTop: size.isIphoneX() ? Dimensions.get('window').width * 0.015 - 10 : Dimensions.get('window').width * 0.015,
-                      marginLeft: size.isIphoneX() ? -Dimensions.get('window').width * 0.7 - 10 : -Dimensions.get('window').width * 0.7,
-                    }]}
+                    <Text style={{
+                      alignItems: 'center',
+                      fontWeight: 'bold',
+                      color: '#BEBEBE',
+                      textAlign: 'left',
+                      marginTop: Dimensions.get('window').height * 0.01,
+                      fontSize: 16,
+                    }}
                     >
                       結束時間
                     </Text>
                     )}
-                    <Text style={[styles.text, {
-                      fontWeight: 'normal',
-                      textAlign: 'center',
-                      paddingTop: size.isIphoneX() ? Dimensions.get('window').width * 0.025 - 10 : Dimensions.get('window').width * 0.025,
-                      marginLeft: size.isIphoneX() ? -Dimensions.get('window').width * 0.61 - 10 : -Dimensions.get('window').width * 0.61,
-                    }]}
+                    <Text style={{
+                      alignItems: 'center',
+                      fontWeight: 'bold',
+                      color: '#000',
+                      textAlign: 'left',
+                      marginTop: Dimensions.get('window').height * 0.01,
+                      fontSize: 16,
+                    }}
                     >
                       {endText}
 
@@ -644,8 +649,8 @@ function Edit({ route, navigation }) {
                 )}
               </Box>
               <TouchableOpacity onPress={pickImage} style={styles.imageButton}>
-                <MaterialCommunityIcons name="cloud-upload-outline" size={24} color="white" style={{ marginLeft: Platform.OS === 'ios' ? (size.isIphoneX() ? 30 : 40) : 49 }} />
-                <Text style={styles.Cloudicon}>上傳</Text>
+                <MaterialCommunityIcons name="cloud-upload-outline" size={24} color="white" style={styles.Cloudicon} />
+                <Text style={styles.Cloudicontext}>上傳</Text>
               </TouchableOpacity>
             </Box>
             <Divider my={2} bg="#bfbebe" /* my=margin-top and margin-bottom */ />

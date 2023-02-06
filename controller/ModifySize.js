@@ -1,4 +1,4 @@
-import { Dimensions, PlatForm } from 'react-native';
+import { Dimensions, Platform } from 'react-native';
 
 function isIPhoneXSize(dim) {
   return dim.height === 812 || dim.width === 812;
@@ -11,7 +11,7 @@ function isIphoneX() {
 
   return (
   // This has to be iOS
-    PlatForm.OS === 'ios'
+    Platform.OS === 'ios'
 
         // Check either, iPhone X or XR
         && (isIPhoneXSize(dim) || isIPhoneXrSize(dim))

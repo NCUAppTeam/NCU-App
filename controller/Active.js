@@ -376,10 +376,10 @@ async function getParticipatedActive() {
   querySnapshot.forEach((attendID) => {
     attendIDArray.push(attendID.id);
   });
+  console.log(attendIDArray);
 
   for (let i = 0; i < attendIDArray.length; i += 1) {
     const result = await activesRef.doc(attendIDArray[i]).get();
-    // console.log(attendIDArray[i], new Date(toDateString(result.data().endTime)), current);
     if (new Date(toDateString(result.data().endTime)) > current) {
       activeArray.push({
         id: result.id,

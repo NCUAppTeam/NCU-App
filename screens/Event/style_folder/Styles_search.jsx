@@ -7,21 +7,15 @@ export default StyleSheet.create({
     alignContent: 'center',
     marginTop: 50,
     marginHorizontal: 15,
-    // marginHorizontal: Dimensions.get('window').width * 0.07,
-  },
-  choose: {
-    flex: 1,
-    marginVertical: 10,
   },
   genrebutton: {
-    marginLeft: Dimensions.get('window').width * 0.04,
+    marginRight: Dimensions.get('window').width * 0.04,
     marginBottom: 20,
     alignItems: 'center',
     justifyContent: 'center',
-    width: 172,
-    height: 120,
+    width: Dimensions.get('window').width * 0.4,
+    height: Dimensions.get('window').height * 0.2,
     borderRadius: 10,
-    flexDirection: 'column',
   },
   genreTitle: {
     color: '#0C4A6E',
@@ -30,32 +24,40 @@ export default StyleSheet.create({
     width: 90,
     marginLeft: 10,
   },
+  SearchArea: {
+    flex: 9,
+    marginLeft: Dimensions.get('window').width * 0.04,
+    height: 36,
+  },
   SearchBar: {
     backgroundColor: '#E5EBF1',
     borderRadius: 18,
     width: Dimensions.get('window').width * 0.77,
-    marginLeft: Dimensions.get('window').width * 0.02,
     height: 36,
   },
   searchIcon: {
-    marginLeft: Dimensions.get('window').width * 0.04,
+    marginLeft: 20,
     marginTop: 6,
   },
   searchtext: {
     fontSize: 18,
     marginTop: 4,
-    marginLeft: Dimensions.get('window').width * 0.09,
+    marginLeft: 10,
+    width: '100%',
+  },
+  cancelBox: {
+    flex: 1,
   },
   cancelText: {
-    marginLeft: Dimensions.get('window').width * 0.73,
     color: '#28527A',
     fontWeight: '400',
     fontSize: 17,
     marginTop: 6,
-    textAlignVertical: 'center',
   },
   btnArea: {
     marginTop: 35,
+    justifyContent: 'flex-start',
+    marginHorizontal: Dimensions.get('window').width * 0.04,
   },
   icon: {
     marginTop: -20,
@@ -69,9 +71,9 @@ export default StyleSheet.create({
   },
   keywordArea: {
     marginTop: 20,
+    width: '100%',
   },
   keywordBox: {
-    width: 364,
     borderWidth: 1,
     borderColor: '#E5E5E5',
     borderRadius: 5,

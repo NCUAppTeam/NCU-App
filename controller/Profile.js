@@ -1,4 +1,4 @@
-import firebase from 'firebase';
+import firebase from 'firebase/app';
 
 async function getCurrentUserProfile() {
   return firebase.auth().currentUser;

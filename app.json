@@ -5,6 +5,7 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -17,6 +18,7 @@
       "**/*"
     ],
     "ios": {
+      "supportsTablet": true,
       "bundleIdentifier": "tw.edu.ncu.app",
       "buildNumber": "1.0.0"
     },
@@ -35,9 +37,6 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    },
-    "facebookScheme": "fb717771508969062",
-    "facebookAppId": "717771508969062",
-    "facebookDisplayName": "NCU App"
+    }
   }
 }

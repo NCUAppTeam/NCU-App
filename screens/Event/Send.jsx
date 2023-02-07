@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Text, View, SafeAreaView, RefreshControl, Dimensions,
-  ScrollView, TouchableOpacity, Image, Button, TouchableHighlight,
+  Text, View, SafeAreaView, RefreshControl,
+  ScrollView, Button,
 } from 'react-native';
+import { FontAwesome5, AntDesign } from '@expo/vector-icons';
+import { Card, TextInput } from 'react-native-paper';
 import {
-  Ionicons, FontAwesome5, AntDesign, Feather,
-} from '@expo/vector-icons';
-import { Card, TextInput, Title } from 'react-native-paper';
-import {
-  NativeBaseProvider, Box, Divider, VStack, HStack, FlatList,
+  NativeBaseProvider, Box, HStack,
 } from 'native-base';
 import { LinearGradient } from 'expo-linear-gradient';
 import styles from './style_folder/Styles_Message';

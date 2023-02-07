@@ -1,25 +1,80 @@
-import { StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet, Dimensions, Platform } from 'react-native';
 
 export default StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'column',
     alignContent: 'center',
-    paddingTop: 53,
     backgroundColor: '#fafafa',
   },
-  horizontalArea: {
-    borderWidth: 1,
-    backgroundColor: 'black',
+  header: {
+    flexDirection: 'row',
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height * 0.04,
+    marginTop: Platform.OS === 'ios' ? Dimensions.get('window').height * 0.02 : 53,
+    marginBottom: 20,
   },
-  horizontal: {
-    flex: 1,
-    height: 246,
+  SearchArea: {
+    flex: 10,
+    backgroundColor: '#E5EBF1',
+    borderRadius: 18,
+    marginLeft: Dimensions.get('window').width * 0.05,
+    height: 36,
   },
-  Card2: {
+  SearchBar: {
+    width: '100%',
+    backgroundColor: '#E5EBF1',
+    borderRadius: 18,
+    height: 36,
+  },
+  searchIcon: {
+    marginLeft: 10,
+    paddingTop: 6,
+  },
+  searchtextBox: {
+    marginLeft: 10,
+  },
+  searchtext: {
+    paddingTop: 6,
+    color: '#28527A',
+    fontSize: 18,
+  },
+  comment: {
+    alignSelf: 'center',
+    marginLeft: Dimensions.get('window').width * 0.05,
+    marginTop: 0,
+  },
+  user: {
+    alignSelf: 'center',
+    marginHorizontal: Dimensions.get('window').width * 0.03,
+  },
+  body: {
+    flex: 2,
+  },
+  cardArea: {
+    width: '100%',
+    minHeight: 270,
     marginTop: 10,
-    height: Dimensions.get('window').width * 0.6,
-    width: Dimensions.get('window').width * 0.43,
+    marginBottom: 10,
+  },
+  more: {
+    marginHorizontal: Dimensions.get('window').width * 0.06,
+    height: 35,
+  },
+  title: {
+    flex: 10,
+    color: '#28527a',
+    fontSize: 18,
+  },
+  showMore: {
+    marginRight: Dimensions.get('window').width * 0.002,
+    color: '#28527a',
+    fontSize: 12,
+    alignSelf: 'center',
+  },
+  Card: {
+    marginTop: 5,
+    height: 260,
+    width: 180,
     borderRadius: 10,
     shadowColor: 'black',
     shadowOffset: {
@@ -34,7 +89,6 @@ export default StyleSheet.create({
   CardTitle: {
     textAlign: 'center',
     justifyContent: 'center',
-    alignContent: 'center',
     color: '#28527A',
     marginTop: -5,
     fontSize: 14,
@@ -45,30 +99,17 @@ export default StyleSheet.create({
     marginBottom: 2,
   },
   CardText: {
-    fontSize: 12,
+    fontSize: 10,
     color: 'rgba(40, 82, 122, 0.65)',
-    marginTop: -3,
-  },
-  more: {
-    height: 35,
-    paddingTop: 10,
+    textAlignVertical: 'center',
   },
   pic: {
-    // width: PixelRatio.getPixelSizeForLayoutSize(76),
-    // height: PixelRatio.getPixelSizeForLayoutSize(76),
     backgroundColor: '#E0E0E0',
     aspectRatio: 1,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
   },
-  SearchBarStyle: {
-    flex: 9,
-    justifyContent: 'center',
-  },
-  SearchBar: {
-    backgroundColor: '#E5EBF1',
-    borderRadius: 18,
-    height: 36,
-    elevation: 0,
+  readDot: {
+    marginLeft: -2.5,
   },
 });

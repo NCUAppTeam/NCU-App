@@ -141,17 +141,4 @@ export default StyleSheet.create({
     textAlign: 'center',
     textAlignVertical: 'center',
   },
-  num: {
-    minWidth: 16,
-    minHeight: 15,
-    marginLeft: Dimensions.get('window').width * 0.1,
-    marginTop: -40,
-    fontWeight: '400',
-    fontSize: 13,
-    color: '#fff',
-    backgroundColor: 'red',
-    borderRadius: 7.5,
-    alignSelf: 'center',
-    textAlign: 'center',
-  },
 });

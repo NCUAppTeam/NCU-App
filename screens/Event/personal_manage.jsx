@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {
   Text, View, SafeAreaView,
   TouchableOpacity, Image, RefreshControl, Dimensions,
+  Platform,
 } from 'react-native';
 import {
   Title, Card, Portal,
@@ -84,7 +85,7 @@ function Personal({ navigation }) {
 
   return (
     <SafeAreaView style={{
-      flex: 1, flexDirection: 'column', alignContent: 'center',
+      flex: 1, flexDirection: 'column', alignSelf: 'center',
     }}
     >
       <NativeBaseProvider>
@@ -94,12 +95,12 @@ function Personal({ navigation }) {
             start={[0.6497, 0.9972]}
             end={[0.1203, 0.6497]}
             style={{
-              width: 323,
-              height: 323,
-              borderRadius: 261,
+              width: Dimensions.get('window').width * 0.8,
+              height: Dimensions.get('window').width * 0.8,
+              borderRadius: Dimensions.get('window').width * 0.4,
               alignSelf: 'center',
               transform: [{ scaleX: 1.61 }],
-              marginTop: -172,
+              marginTop: Platform.OS === 'ios' ? -Dimensions.get('window').width * 0.6 : -178,
             }}
           />
           <Box style={{ alignSelf: 'center', marginTop: 61, flexDirection: 'row' }}>
@@ -212,7 +213,7 @@ function Personal({ navigation }) {
             </TouchableOpacity>
           </Box>
         </Box>
-        <View style={{ flex: 1, justifyContent: 'space-evenly' }}>
+        <Box style={{ flex: 1, alignSelf: 'center' }}>
           {isPress === '管理活動' && (
             <FlatList
               data={showManage}
@@ -226,58 +227,58 @@ function Personal({ navigation }) {
                 />
                 )}
               renderItem={({ item }) => (
-                <View style={{ flexDirection: 'column' }}>
+                <Box style={{ flexDirection: 'column' }}>
                   <Card
                     key={item.id}
-                    style={styles.Card3}
+                    style={styles.cardManage}
                     onPress={() => {
                       navigation.navigate('manage', { Cd: item.id });
                     }}
                   >
                     <Card.Content style={{ padding: 0 }}>
-                      <View style={{ flexDirection: 'row', margin: -15 }}>
-                        <View style={{ aspectRatio: 1 }}>
+                      <Box style={{ flexDirection: 'row', margin: -15 }}>
+                        <Box style={{ aspectRatio: 1 }}>
                           <Image
-                            style={styles.Card3pic}
+                            style={styles.cardManagepic}
                             source={{
                               uri: item.imageUri1,
                             }}
                           />
-                        </View>
-                        <View style={{ flexDirection: 'column' }}>
-                          <Title style={styles.Card3Title}>
+                        </Box>
+                        <Box style={{ flexDirection: 'column' }}>
+                          <Title style={styles.cardManageTitle}>
                             {item.name}
                           </Title>
-                          <View style={styles.Card3Details}>
+                          <Box style={styles.cardManageDetails}>
                             <AntDesign
                               name="clockcircleo"
                               size={15}
                               style={{ justifyContent: 'center' }}
                             />
-                            <Text style={styles.Card3Text}>
+                            <Text style={styles.cardManageText}>
                               {'   開始 ：'}
                               {item.startTimeInNum}
                             </Text>
-                          </View>
-                          <View style={styles.Card3Details}>
+                          </Box>
+                          <Box style={styles.cardManageDetails}>
                             <Ionicons
                               name="location-outline"
                               size={17}
                               color="black"
                             />
-                            <Text style={styles.Card3Text}>
+                            <Text style={styles.cardManageText}>
                               {'  '}
                               {item.place}
                             </Text>
-                          </View>
-                          <View style={styles.Card3Details}>
+                          </Box>
+                          <Box style={styles.cardManageDetails}>
                             <Feather
                               name="users"
                               size={16}
                               color="black"
                             />
                             {item.limitNum !== '0' && (
-                            <Text style={styles.Card3Text}>
+                            <Text style={styles.cardManageText}>
                               {'   '}
                               {item.num}
                               {' / '}
@@ -286,7 +287,7 @@ function Personal({ navigation }) {
                             </Text>
                             )}
                             {item.limitNum === '0' && (
-                            <Text style={styles.Card3Text}>
+                            <Text style={styles.cardManageText}>
                               {'   '}
                               {item.num}
                               &ensp;
@@ -294,17 +295,18 @@ function Personal({ navigation }) {
                             </Text>
                             )}
 
-                          </View>
-                        </View>
-                      </View>
+                          </Box>
+                        </Box>
+                      </Box>
                     </Card.Content>
                   </Card>
-                </View>
+                </Box>
               )}
             />
           )}
           {isPress === '參加中' && (
             <FlatList
+              style={{ widht: '100%', alignSelf: 'center' }}
               numColumns={2}
               data={showNow}
               keyExtractor={(item) => item.id}
@@ -318,47 +320,46 @@ function Personal({ navigation }) {
               )}
               renderItem={({ item }) => (
                 <Pressable onPress={() => { navigation.navigate('details', { Cd: item.id, prepage: 'personal' }); }}>
-                  <HStack space={2}>
-                    <VStack style={styles.CardInPersonal}>
-                      <Image
-                        style={styles.pic}
-                        source={{
-                          uri: item.imageUri1,
-                        }}
+                  <VStack style={styles.CardInPersonal}>
+                    <Image
+                      style={styles.pic}
+                      source={{
+                        uri: item.imageUri1,
+                      }}
+                    />
+                    <Title style={styles.CardTitle}>
+                      {item.name}
+                    </Title>
+                    <Box style={styles.CardStartTime}>
+                      <AntDesign
+                        name="clockcircleo"
+                        size={12}
+                        color="rgba(40, 82, 122, 0.65)"
                       />
-                      <Title style={styles.CardTitle}>
-                        {item.name}
-                      </Title>
-                      <Box style={styles.CardDetails}>
-                        <AntDesign
-                          name="clockcircleo"
-                          size={12}
-                          style={{ marginLeft: Dimensions.get('window').width * 0.006, marginTop: 2 }}
-                        />
-                        <Text style={styles.CardText}>
-                          &ensp;
-                          {item.startTimeWeekday}
-                        </Text>
-                      </Box>
-                      <Box style={{ marginHorizontal: 8, flexDirection: 'row' }}>
-                        <Ionicons
-                          name="location-outline"
-                          size={15}
-                          color="black"
-                        />
-                        <Text style={styles.CardText}>
-                          &ensp;
-                          {item.place}
-                        </Text>
-                      </Box>
-                    </VStack>
-                  </HStack>
+                      <Text style={styles.CardTimeText}>
+                        {'   '}
+                        {item.startTimeWeekday}
+                      </Text>
+                    </Box>
+                    <Box style={styles.CardPlace}>
+                      <Ionicons
+                        name="location-outline"
+                        size={15}
+                        color="rgba(40, 82, 122, 0.65)"
+                      />
+                      <Text style={styles.cardPlaceText}>
+                        {'  '}
+                        {item.place}
+                      </Text>
+                    </Box>
+                  </VStack>
                 </Pressable>
               )}
             />
           )}
           {isPress === '已結束' && (
             <FlatList
+              style={{ widht: '100%', alignSelf: 'center' }}
               numColumns={2}
               data={showEnd}
               keyExtractor={(item) => item.id}
@@ -372,46 +373,44 @@ function Personal({ navigation }) {
               )}
               renderItem={({ item }) => (
                 <Pressable onPress={() => { navigation.navigate('details', { Cd: item.id, prepage: 'personal' }); }}>
-                  <HStack space={2}>
-                    <VStack style={styles.CardInPersonal}>
-                      <Image
-                        style={styles.pic}
-                        source={{
-                          uri: item.imageUri1,
-                        }}
+                  <VStack style={styles.CardInPersonal}>
+                    <Image
+                      style={styles.pic}
+                      source={{
+                        uri: item.imageUri1,
+                      }}
+                    />
+                    <Title style={styles.CardTitle}>
+                      {item.name}
+                    </Title>
+                    <Box style={styles.CardStartTime}>
+                      <AntDesign
+                        name="clockcircleo"
+                        size={12}
+                        color="rgba(40, 82, 122, 0.65)"
                       />
-                      <Title style={styles.CardTitle}>
-                        {item.name}
-                      </Title>
-                      <Box style={styles.CardDetails}>
-                        <AntDesign
-                          name="clockcircleo"
-                          size={12}
-                          style={{ marginLeft: Dimensions.get('window').width * 0.006, marginTop: 2 }}
-                        />
-                        <Text style={styles.CardText}>
-                          &ensp;
-                          {item.startTimeWeekday}
-                        </Text>
-                      </Box>
-                      <Box style={{ marginHorizontal: 8, flexDirection: 'row' }}>
-                        <Ionicons
-                          name="location-outline"
-                          size={15}
-                          color="black"
-                        />
-                        <Text style={styles.CardText}>
-                          &ensp;
-                          {item.place}
-                        </Text>
-                      </Box>
-                    </VStack>
-                  </HStack>
+                      <Text style={styles.CardTimeText}>
+                        {'   '}
+                        {item.startTimeWeekday}
+                      </Text>
+                    </Box>
+                    <Box style={styles.CardPlace}>
+                      <Ionicons
+                        name="location-outline"
+                        size={15}
+                        color="rgba(40, 82, 122, 0.65)"
+                      />
+                      <Text style={styles.cardPlaceText}>
+                        {'  '}
+                        {item.place}
+                      </Text>
+                    </Box>
+                  </VStack>
                 </Pressable>
               )}
             />
           )}
-        </View>
+        </Box>
       </NativeBaseProvider>
     </SafeAreaView>
   );

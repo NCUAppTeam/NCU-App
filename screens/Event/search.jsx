@@ -1,18 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Text, Platform, View, SafeAreaView, TextInput,
-  ScrollView, TouchableOpacity, Alert, Dimensions, Image,
+  Text, SafeAreaView, TextInput,
 } from 'react-native';
-import { useKeyboard } from '@react-native-community/hooks';
 import { Title } from 'react-native-paper';
 import {
   Ionicons, FontAwesome5, FontAwesome, AntDesign, MaterialCommunityIcons, MaterialIcons,
 } from '@expo/vector-icons';
 import {
-  NativeBaseProvider, Box, Divider, Heading, HStack, VStack, ZStack, Button, FlatList, Pressable,
+  NativeBaseProvider, Box, HStack, VStack, ZStack, FlatList, Pressable,
 } from 'native-base';
 import { LinearGradient } from 'expo-linear-gradient';
-import { TouchableHighlight } from 'react-native-gesture-handler';
 import styles from './style_folder/Styles_search';
 import ActiveController from '../../controller/Active';
 
@@ -32,26 +29,30 @@ function Search({ navigation }) {
     <SafeAreaView style={styles.container}>
       <NativeBaseProvider>
         <HStack>
-          <ZStack>
+          <ZStack style={styles.SearchArea}>
             <Box style={styles.SearchBar}>
-              <TextInput
-                style={styles.searchtext}
-                placeholder="搜尋"
-                numberOfLines={1}
-                placeholderTextColor="#28527A"
-                value={searchQuery}
-                onChangeText={(text) => {
-                  setSearchQuery(text);
-                  ActiveController.fuseSearchName(text).then((query) => {
-                    setData(query);
-                  });
-                }}
-                selectionColor="#ccc"
-              />
+              <HStack>
+                <AntDesign name="search1" size={24} color="#28527A" style={styles.searchIcon} />
+                <TextInput
+                  style={styles.searchtext}
+                  placeholder="搜尋"
+                  numberOfLines={1}
+                  placeholderTextColor="#28527A"
+                  value={searchQuery}
+                  onChangeText={(text) => {
+                    setSearchQuery(text);
+                    ActiveController.fuseSearchName(text).then((query) => {
+                      setData(query);
+                    });
+                  }}
+                  selectionColor="#ccc"
+                />
+              </HStack>
             </Box>
-            <AntDesign name="search1" size={24} color="#28527A" style={styles.searchIcon} />
           </ZStack>
-          <Text style={styles.cancelText} onPress={() => navigation.navigate('list')}>取消</Text>
+          <Box style={styles.cancelBox}>
+            <Text style={styles.cancelText} onPress={() => navigation.navigate('list')}>取消</Text>
+          </Box>
         </HStack>
         {searchQuery === '' && (
         <Box style={styles.btnArea}>

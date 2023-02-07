@@ -31,7 +31,7 @@ export default StyleSheet.create({
     paddingTop: 6,
   },
   searchtextBox: {
-    marginLeft: Dimensions.get('window').width * 0.01,
+    marginLeft: 10,
   },
   searchtext: {
     paddingTop: 6,

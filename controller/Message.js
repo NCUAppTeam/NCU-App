@@ -270,7 +270,7 @@ async function addMessage(messageData, userID) {
       }
     });
     console.log('message quantity: ', message.length);
-    // return message;
+    return message.length;
   }
   export default {
     firebaseConfig,

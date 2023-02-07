@@ -18,7 +18,6 @@ import ActiveController from '../../controller/Active';
 import MessageController from '../../controller/Message';
 
 function Message({ navigation }) {
-  // 訊息傳送者為何人的辨別還需要改
   const [attendeeINFO, setAttendeeInfo] = useState();
   const [newList, setNewList] = useState([]);
   useEffect(() => {
@@ -60,27 +59,26 @@ function Message({ navigation }) {
           start={[1, 2]}
           end={[1, 0]}
         >
-          <Box style={styles.header}>
-            <HStack style={{ flex: 1 }}>
-              <Box style={styles.headerArrowBox}>
-                <AntDesign
-                  name="arrowleft"
-                  size={28}
-                  color="#fff"
-                  onPress={() => { navigation.navigate('list'); }}
-                />
-              </Box>
-              <Box style={styles.title}>
-                <FontAwesome5
-                  name="comment"
-                  size={25}
-                  color="#fff"
-                >
-                  <Text>&ensp;私訊中心</Text>
-                </FontAwesome5>
-              </Box>
-            </HStack>
-          </Box>
+          <HStack style={styles.header}>
+            <Box style={styles.headerArrowBox}>
+              <AntDesign
+                name="arrowleft"
+                size={28}
+                color="#fff"
+                onPress={() => { navigation.navigate('list'); }}
+              />
+            </Box>
+            <Box style={styles.title}>
+              <FontAwesome5
+                name="comment"
+                size={25}
+                color="#fff"
+              >
+                <Text>&ensp;私訊中心</Text>
+              </FontAwesome5>
+            </Box>
+            <Box style={{ flex: 1 }} />
+          </HStack>
         </LinearGradient>
         {/* 暫時關閉區分拍賣和活動的私訊按鈕 */}
         {/* <Box style={styles.option}>
@@ -93,9 +91,9 @@ function Message({ navigation }) {
             </TouchableOpacity>
           </HStack>
         </Box> */}
-        <Box style={{ flex: 1 }}>
+        <Box style={{ flex: 1, alignItems: 'center' }}>
           <FlatList
-            style={{ marginTop: 30, marginHorizontal: 25 }}
+            style={{ marginTop: 20 }}
             data={attendeeINFO}
             keyExtractor={(item) => item.studentID}
             showsVerticalScrollIndicator={false}
@@ -140,11 +138,9 @@ function Message({ navigation }) {
                         {item.major}
                       </Text>
                     </HStack> */}
-                      <HStack>
-                        <Text style={styles.latest}>
-                          {item.newMessage}
-                        </Text>
-                      </HStack>
+                      <Text style={styles.latest}>
+                        {item.newMessage}
+                      </Text>
                     </VStack>
                   </HStack>
                 </TouchableHighlight>

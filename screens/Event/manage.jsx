@@ -327,235 +327,218 @@ function Manage({ route, navigation }) {
           ))}
 
           <Box style={{ flex: 1 }}>
-            <ZStack>
-              <FlatList
-                data={attendeeINFO}
-                keyExtractor={(item) => item.studentID}
-                refreshControl={(
-                  <RefreshControl
-                    refreshing={refreshing}
-                    onRefresh={onRefresh}
-                  />
+            <FlatList
+              data={attendeeINFO}
+              keyExtractor={(item) => item.studentID}
+              refreshControl={(
+                <RefreshControl
+                  refreshing={refreshing}
+                  onRefresh={onRefresh}
+                />
                   )}
-                renderItem={({ item }) => (
-                  <ScrollView showsVerticalScrollIndicator={false}>
-                    <HStack style={styles.cardForAttendees}>
-                      <Box>
-                        <HStack>
-                          <Image
-                            style={styles.avatar}
-                            source={{
-                              uri: item.avatar,
-                            }}
-                          />
-                          <VStack style={{ alignSelf: 'center' }}>
-                            {/* <Title style={styles.signupIndex}>
+              renderItem={({ item }) => (
+                <ScrollView showsVerticalScrollIndicator={false}>
+                  <HStack style={styles.cardForAttendees}>
+                    <Box>
+                      <HStack>
+                        <Image
+                          style={styles.avatar}
+                          source={{
+                            uri: item.avatar,
+                          }}
+                        />
+                        <VStack style={{ alignSelf: 'center' }}>
+                          {/* <Title style={styles.signupIndex}>
                               {item.signupindex}
                             </Title> */}
-                            <Text style={{ fontWeight: '700', fontSize: 18 }}>
-                              {item.name}
+                          <Text style={{ fontWeight: '700', fontSize: 18 }}>
+                            {item.name}
+                          </Text>
+                          <HStack>
+                            <Text style={{ textAlign: 'left', fontWeight: '400', fontSize: 10 }}>
+                              {item.major}
                             </Text>
-                            <HStack>
-                              <Text style={{ textAlign: 'left', fontWeight: '400', fontSize: 10 }}>
-                                {item.major}
-                              </Text>
-                            </HStack>
-                            <HStack>
-                              <Text style={{ textAlign: 'left', fontWeight: '400', fontSize: 10 }}>
-                                {item.grade}
-                                年級
-                              </Text>
-                            </HStack>
-                          </VStack>
-                        </HStack>
-                      </Box>
-                      <HStack style={styles.manageBtn}>
-                        <Box style={styles.DeletebtnInManage}>
-                          <TouchableHighlight
-                            underlayColor="transparent"
-                            onPress={() => {
-                              setShowDialog2(true);
-                              setDeletePerson({ studentID: item.studentID, name: item.name });
-                            }}
-                          >
-                            <Text style={styles.DeletebtnInManageText}>移除</Text>
-                          </TouchableHighlight>
-
-                        </Box>
-                        <Box style={styles.MessagebtnInManage}>
-                          <TouchableHighlight>
-                            <Text
-                              style={styles.MessagebtnInManageText}
-                              onPress={() => {
-                                navigation.navigate('send', {
-                                  attendeeID: item.studentID,
-                                  userID: user,
-                                });
-                              }}
-                            >
-                              私訊
-
+                          </HStack>
+                          <HStack>
+                            <Text style={{ textAlign: 'left', fontWeight: '400', fontSize: 10 }}>
+                              {item.grade}
+                              年級
                             </Text>
-                          </TouchableHighlight>
-                        </Box>
+                          </HStack>
+                        </VStack>
                       </HStack>
-                    </HStack>
-
-                  </ScrollView>
-
-                )}
-              />
-              {(showDialog2) && (
-              <Box
-                style={{
-                  width: 360,
-                  height: 230,
-                  alignSelf: 'center',
-                  backgroundColor: '#fff',
-                  borderColor: '#e5e5e5',
-                  borderWidth: 2,
-                  borderRadius: 10,
-                }}
-              >
-                <VStack>
-                  <Box style={{
-                    borderBottomWidth: 1,
-                    borderBottomColor: '#e5e5e5',
-                  }}
-                  >
-                    <Box style={{
-                      flexDirection: 'row',
-                      paddingBottom: 5,
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      marginLeft: 10,
-                    }}
-                    >
-                      <Box>
-                        <Text style={{
-                          textAlign: 'left',
-                          color: '#1f2937',
-                          fontSize: 16,
-                          fontWeight: '400',
-                          marginTop: 17,
-                          marginBottom: 10,
-                          alignItems: 'center',
-                        }}
-                        >
-                          移除&ensp;
-                          {deletePerson.name}
-                        </Text>
-                      </Box>
-                      <Box>
-                        <Feather
-                          name="x"
-                          size={26}
-                          color="#1F2937"
-                          style={{
-                            marginTop: 10,
-                            marginRight: 10,
+                    </Box>
+                    <HStack style={styles.manageBtn}>
+                      <Box style={styles.DeletebtnInManage}>
+                        <TouchableHighlight
+                          underlayColor="transparent"
+                          onPress={() => {
+                            setShowDialog2(true);
+                            setDeletePerson({ studentID: item.studentID, name: item.name });
                           }}
-                          onPress={() => { setShowDialog2(false); }}
+                        >
+                          <Text style={styles.DeletebtnInManageText}>移除</Text>
+                        </TouchableHighlight>
+                        <Dialog
+                          width={358}
+                          height={240}
+                          visible={showDialog2}
+                          dialogTitle={(
+                            <NativeBaseProvider>
+                              <HStack style={{
+                                flexDirection: 'row',
+                                paddingBottom: 5,
+                                justifyContent: 'space-between',
+                                alignItems: 'center',
+                                marginLeft: 10,
+                              }}
+                              >
+                                <Box>
+                                  <Text style={{
+                                    textAlign: 'left',
+                                    color: '#1f2937',
+                                    fontSize: 16,
+                                    fontWeight: '400',
+                                    marginTop: 17,
+                                    marginBottom: 10,
+                                    alignItems: 'center',
+                                  }}
+                                  >
+                                    移除&ensp;
+                                    {deletePerson.name}
+                                  </Text>
+                                </Box>
+                                <Feather
+                                  name="x"
+                                  size={26}
+                                  color="#1F2937"
+                                  style={{
+                                    marginTop: 10,
+                                    marginRight: 10,
+                                  }}
+                                  onPress={() => { setShowDialog2(false); }}
+                                />
+                              </HStack>
+                              <Divider style={{ marginTop: 5 }} bg="#e5e5e5" />
+                              <Box style={styles.removeBox2}>
+                                <Box style={{
+                                  paddingTop: 10, paddingBottom: 10, marginLeft: 10,
+                                }}
+                                >
+                                  <Text style={{ fontSize: 14, marginBottom: 5 }}>
+                                    注意事項：
+                                  </Text>
+                                  <Text style={{ fontSize: 14, marginBottom: 5 }}>
+                                    1. 這將會把
+                                    {' '}
+                                    {deletePerson.name}
+                                    {' '}
+                                    從此活動移除。
+                                  </Text>
+                                  <Text style={{
+                                    fontSize: 14, marginBottom: 5, color: '#ef4444', width: 350,
+                                  }}
+                                  >
+                                    2. 當
+                                    {' '}
+                                    {deletePerson.name}
+                                    {' '}
+                                    被移除，系統將自動發送通知給
+                                    {' '}
+                                    {deletePerson.name}
+                                    {' '}
+                                    ，
+                                    {'\n'}
+                                    {'    '}
+                                    {deletePerson.name}
+                                    {' '}
+                                    將知道自己被從活動移除。
+                                  </Text>
+                                </Box>
+                                <Box style={{
+                                  flex: 1,
+                                  width: 357,
+                                  backgroundColor: '#f3f4f6',
+                                  justifyContent: 'center',
+                                  alignItems: 'flex-end',
+                                  borderRadius: 5,
+                                }}
+                                >
+                                  <HStack>
+                                    <Box
+                                      style={{ marginTop: 5, marginRight: 10 }}
+                                    >
+                                      <Text
+                                        style={{
+                                          fontSize: 14, color: '#64748B', padding: 10,
+                                        }}
+                                        onPress={() => {
+                                          setShowDialog2(false);
+                                        }}
+                                      >
+                                        取消
+                                      </Text>
+                                    </Box>
+                                    <Box
+                                      style={{
+                                        marginTop: 5, marginRight: 15, backgroundColor: '#ef4444', borderRadius: 4,
+                                      }}
+
+                                    >
+                                      <Text
+                                        style={{
+                                          color: '#ffffff', padding: 10,
+                                        }}
+                                        onPress={() => {
+                                          setShowDialog2(false);
+                                          ActiveController.removeAttendee(passedID, deletePerson.studentID);
+                                          ActiveController.getOneActive(passedID).then((event) => {
+                                            MessageController.addMessage({
+                                              message: `以下為自動寄出的訊息：你已被移出【${event[0].name}】的參加名單, 有任何問題請與活動負責人聯繫`,
+                                              send: user,
+                                              receive: deletePerson.studentID,
+                                              sendTime: new Date(),
+                                              readForUser: true,
+                                              readForOthers: false,
+                                              image: '',
+                                            }, user);
+                                          });
+                                        }}
+                                      >
+                                        移除
+
+                                      </Text>
+                                    </Box>
+                                  </HStack>
+                                </Box>
+                              </Box>
+                            </NativeBaseProvider>
+                          )}
+                          onTouchOutside={() => {
+                            setShowDialog2(false);
+                          }}
                         />
                       </Box>
-                    </Box>
-                  </Box>
-
-                  <Box style={{ paddingTop: 10, paddingBottom: 10, marginLeft: 10 }}>
-                    <Box style={styles.removeBox2}>
-                      <Text style={{ fontSize: 14, marginBottom: 5 }}>
-                        注意事項：
-                      </Text>
-                      <Text style={{ fontSize: 14, marginBottom: 5 }}>
-                        1. 這將會把
-                        {' '}
-                        {deletePerson.name}
-                        {' '}
-                        從此活動移除。
-                      </Text>
-                      <Text style={{
-                        fontSize: 14, marginBottom: 5, color: '#ef4444',
-                      }}
-                      >
-                        2. 當
-                        {' '}
-                        {deletePerson.name}
-                        {' '}
-                        被移除，系統將自動發送通知給
-                        {' '}
-                        {deletePerson.name}
-                        {' '}
-                        ，
-                        {'\n'}
-                        {'    '}
-                        讓
-                        {deletePerson.name}
-                        {' '}
-                        知道自己被從活動移除。
-                      </Text>
-
-                    </Box>
-                  </Box>
-                  <Box style={{
-                    height: 63,
-                    width: 357,
-                    backgroundColor: '#f3f4f6',
-                    justifyContent: 'center',
-                    alignItems: 'flex-end',
-                    borderRadius: 5,
-                  }}
-                  >
-                    <Box style={{ flexDirection: 'row' }}>
-                      <Box
-                        style={{ marginTop: 5, marginRight: 10 }}
-                      >
-                        <Text
-                          style={{
-                            fontSize: 14, color: '#64748B', padding: 10,
-                          }}
-                          onPress={() => {
-                            setShowDialog2(false);
-                          }}
-                        >
-                          取消
-
-                        </Text>
+                      <Box style={styles.MessagebtnInManage}>
+                        <TouchableHighlight>
+                          <Text
+                            style={styles.MessagebtnInManageText}
+                            onPress={() => {
+                              navigation.navigate('send', {
+                                attendeeID: item.studentID,
+                                userID: '110501444',
+                              });
+                            }}
+                          >
+                            私訊
+                          </Text>
+                        </TouchableHighlight>
                       </Box>
-                      <Box
-                        style={{
-                          marginTop: 5, marginRight: 15, backgroundColor: '#ef4444', borderRadius: 4,
-                        }}
-                      >
-                        <Text
-                          style={{
-                            color: '#ffffff', padding: 10,
-                          }}
-                          onPress={() => {
-                            setShowDialog2(false);
-                            ActiveController.removeAttendee(passedID, deletePerson.studentID);
-                            ActiveController.getOneActive(passedID).then((event) => {
-                              MessageController.addMessage({
-                                message: `以下為自動寄出的訊息：你已被移出【${event[0].name}】的參加名單, 有任何問題請與活動負責人聯繫`,
-                                send: user,
-                                receive: deletePerson.studentID,
-                                sendTime: new Date(),
-                                readForUser: true,
-                                readForOthers: false,
-                                image: '',
-                              }, user);
-                            });
-                          }}
-                        >
-                          移除
-
-                        </Text>
-                      </Box>
-                    </Box>
-                  </Box>
-                </VStack>
-              </Box>
+                    </HStack>
+                  </HStack>
+                </ScrollView>
               )}
-            </ZStack>
+            />
           </Box>
         </Box>
       </NativeBaseProvider>

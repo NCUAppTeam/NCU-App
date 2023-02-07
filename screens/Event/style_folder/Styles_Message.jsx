@@ -1,24 +1,24 @@
-import { StyleSheet, Dimensions } from 'react-native';
+import { Platform, StyleSheet, Dimensions } from 'react-native';
 import { useKeyboard } from '@react-native-community/hooks';
 
 export default StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'column',
     alignContent: 'center',
-    marginTop: 0,
-    width: Dimensions.get('window').width,
     backgroundColor: '#fafafa',
-    // marginHorizontal: Dimensions.get('window').width * 0.07,
   },
   header: {
-    paddingTop: 30,
-    height: 95,
+    flexDirection: 'row',
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height * 0.04,
+    marginTop: Platform.OS === 'ios' ? Dimensions.get('window').height * 0.02 : 53,
+    marginBottom: 20,
+    alignItems: 'center',
   },
   title: {
+    flex: 2,
     justifyContent: 'center',
     alignItems: 'center',
-    marginHorizontal: Dimensions.get('window').width * 0.2,
   },
   titleSend: {
     justifyContent: 'center',
@@ -26,8 +26,12 @@ export default StyleSheet.create({
     marginLeft: Dimensions.get('window').width * 0.25,
   },
   headerArrowBox: {
-    marginLeft: Dimensions.get('window').width * 0.06,
-    justifyContent: 'center',
+    flex: 1,
+    alignItems: 'center',
+  },
+  headerArrowBoxSend: {
+    flex: 3,
+    justifyContent: 'flex-start',
     alignItems: 'center',
   },
   option: {
@@ -46,8 +50,8 @@ export default StyleSheet.create({
     fontSize: 18,
   },
   cardForMessage: {
-    // width: Dimensions.get('window').width * 0.875,
-    height: Dimensions.get('window').width * 0.2,
+    width: Dimensions.get('window').width * 0.875,
+    height: 85,
     backgroundColor: '#ffffff',
     borderRadius: 10,
     shadowColor: 'bebebe',
@@ -66,17 +70,11 @@ export default StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 30,
-    borderBottomWidth: 2,
-    borderBottomEndRadius: 10,
-    borderEndColor: '#bfbebe',
   },
   sendAvatar: {
     width: 48,
     height: 48,
     borderRadius: 24,
-    borderBottomWidth: 2,
-    borderBottomEndRadius: 10,
-    borderEndColor: '#bfbebe',
     borderColor: '#bfbebe',
     borderWidth: 1,
     alignSelf: 'center',
@@ -86,20 +84,16 @@ export default StyleSheet.create({
     marginLeft: 5,
     paddingTop: 15,
   },
-  sendAreaTrue: {
-    marginBottom: useKeyboard.keyboardHeight,
-    marginTop: 15,
-  },
-  sendAreaFalse: {
+  sendArea: {
     marginBottom: 15,
     marginTop: 15,
   },
   typeFooter: {
     flexDirection: 'row',
-    height: 50,
+    alignItems: 'center',
   },
   pickImage: {
-    paddingTop: 10,
+    paddingTop: 5,
     paddingLeft: 18,
     paddingRight: 12,
   },
@@ -119,7 +113,7 @@ export default StyleSheet.create({
     marginTop: 6,
   },
   sendIcon: {
-    paddingTop: 10,
+    paddingTop: 5,
     paddingLeft: 12,
     paddingRight: 18,
   },
@@ -134,6 +128,8 @@ export default StyleSheet.create({
     fontSize: 10,
   },
   latest: {
+    width: Dimensions.get('window').width * 0.65,
+    height: 30,
     marginTop: 2,
     textAlign: 'left',
     fontWeight: '400',
@@ -149,9 +145,8 @@ export default StyleSheet.create({
     textAlignVertical: 'center',
   },
   info: {
+    flex: 1,
     color: '#000',
-    marginLeft: Dimensions.get('window').width * 0.51,
-    alignSelf: 'center',
   },
   Dot: {
     flexDirection: 'row',

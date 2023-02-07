@@ -2,12 +2,9 @@ import { StyleSheet, Dimensions } from 'react-native';
 
 export default StyleSheet.create({
   cardManage: {
-    height: 115,
+    height: 112,
     width: Dimensions.get('window').width * 0.9,
     borderRadius: 10,
-    borderBottomWidth: 2,
-    borderBottomEndRadius: 10,
-    borderEndColor: '#bfbebe',
     marginTop: 15,
     flexDirection: 'row',
     alignSelf: 'center',
@@ -23,6 +20,7 @@ export default StyleSheet.create({
     textAlign: 'left',
     justifyContent: 'center',
     fontWeight: 'bold',
+    fontSize: 16,
   },
   cardManageDetails: {
     marginHorizontal: 10,
@@ -30,8 +28,18 @@ export default StyleSheet.create({
     flexDirection: 'row',
     alignContent: 'space-around',
   },
+  cardManageLocation: {
+    marginHorizontal: 9,
+    marginTop: 7,
+    flexDirection: 'row',
+    alignContent: 'space-around',
+  },
   cardManageText: {
     fontSize: 12,
+  },
+  cardManageTextLocation: {
+    fontSize: 12,
+    marginLeft: 3,
   },
   CardInPersonal: {
     height: Dimensions.get('window').width * 0.58 + 5,

@@ -157,7 +157,8 @@ export default StyleSheet.create({
     height: 140,
   },
   removeBox2: {
+    flex: 1,
     width: 350,
-    height: 90,
+    height: 130,
   },
 });

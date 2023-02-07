@@ -100,7 +100,7 @@ function Personal({ navigation }) {
               borderRadius: Dimensions.get('window').width * 0.4,
               alignSelf: 'center',
               transform: [{ scaleX: 1.61 }],
-              marginTop: Platform.OS === 'ios' ? -Dimensions.get('window').width * 0.6 : -178,
+              marginTop: Platform.OS === 'ios' ? -Dimensions.get('window').width * 0.35 : -178,
             }}
           />
           <Box style={{ alignSelf: 'center', marginTop: 61, flexDirection: 'row' }}>
@@ -260,13 +260,13 @@ function Personal({ navigation }) {
                               {item.startTimeInNum}
                             </Text>
                           </Box>
-                          <Box style={styles.cardManageDetails}>
+                          <Box style={styles.cardManageLocation}>
                             <Ionicons
                               name="location-outline"
                               size={17}
                               color="black"
                             />
-                            <Text style={styles.cardManageText}>
+                            <Text style={styles.cardManageTextLocation}>
                               {'  '}
                               {item.place}
                             </Text>

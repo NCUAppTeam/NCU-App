@@ -1,4 +1,5 @@
 import React from 'react';
+import { Text, TextInput } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Add from './addActivity';
 import Edit from './editActivity';
@@ -16,6 +17,15 @@ import Search from './search';
 const Stack = createNativeStackNavigator();
 
 function EventStack() {
+  if (Text.defaultProps == null) {
+    Text.defaultProps = {};
+    Text.defaultProps.allowFontScaling = false;
+  }
+
+  if (TextInput.defaultProps == null) {
+    TextInput.defaultProps = {};
+    TextInput.defaultProps.allowFontScaling = false;
+  }
   return (
     <Stack.Navigator
       initialRouteName="list"

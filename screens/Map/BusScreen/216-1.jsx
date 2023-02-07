@@ -10,10 +10,8 @@ import {
 import BusController from '../../../controller/Bus';
 import Styles from '../Styles';
 
-function Separator() {
-  return <View style={Styles.separator} />;
-}
-function Bus9025A({ navigation }) {
+const Separator = () => <View style={Styles.separator} />;
+function Bus216({ navigation }) {
   const [item, setItems] = useState([]);
 
   const [start, setStart] = useState(true);
@@ -24,7 +22,7 @@ function Bus9025A({ navigation }) {
 
   const onRefresh = () => {
     setRefreshing(true);
-    BusController.afun9025({ dir: 1 }).then((res) => {
+    BusController.route({ id: 216, dir: 0 }).then((res) => {
       setItems(res);
       setRefreshing(false);
     });
@@ -32,7 +30,7 @@ function Bus9025A({ navigation }) {
 
   const onRefresh1 = () => {
     setRefreshing(true);
-    BusController.afun9025({ dir: 0 }).then((res) => {
+    BusController.route({ id: 216, dir: 1 }).then((res) => {
       setItems(res);
       setRefreshing(false);
     });
@@ -62,10 +60,10 @@ function Bus9025A({ navigation }) {
           textAlign: 'center', backgroundColor: '#28527A', color: 'white', height: 50, width: '100%', fontSize: 20, textAlignVertical: 'center', lineHeight: 50,
         }}
         >
-          9025A
+          216
         </Text>
         <TouchableOpacity
-          onPress={() => { navigation.navigate('List9025A'); }}
+          onPress={() => { navigation.navigate('List216'); }}
           style={{
             width: '25%',
             top: 15,
@@ -89,7 +87,7 @@ function Bus9025A({ navigation }) {
               textAlign: 'center', fontSize: 20, textAlignVertical: 'center', lineHeight: 50,
             }}
             >
-              往松山機場
+              往八德區公所
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -100,7 +98,7 @@ function Bus9025A({ navigation }) {
               textAlign: 'center', fontSize: 20, textAlignVertical: 'center', lineHeight: 50,
             }}
             >
-              往中壢公車站
+              往平鎮區公所
             </Text>
           </TouchableOpacity>
         </View>
@@ -111,13 +109,13 @@ function Bus9025A({ navigation }) {
           <View>
             <View style={{ flexDirection: 'row', height: 50 }}>
               <Text style={{
-                textAlign: 'center', width: '50%', backgroundColor: 'white', fontSize: 20, textAlignVertical: 'center', lineHeight: 50,
+                textAlign: 'center', width: '40%', backgroundColor: 'white', fontSize: 20, textAlignVertical: 'center', lineHeight: 50,
               }}
               >
                 {data.time}
               </Text>
               <Text style={{
-                width: '50%', backgroundColor: 'white', fontSize: 20, textAlignVertical: 'center', lineHeight: 50,
+                width: '60%', backgroundColor: 'white', fontSize: 20, textAlignVertical: 'center', lineHeight: 50,
               }}
               >
                 {data.state}
@@ -133,4 +131,4 @@ function Bus9025A({ navigation }) {
   );
 }
 
-export default Bus9025A;
+export default Bus216;

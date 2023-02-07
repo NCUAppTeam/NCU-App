@@ -48,7 +48,7 @@ function MoreHang({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <NativeBaseProvider>
-        <View style={styles.headerContainer}>
+        <Box style={styles.headerContainer}>
           <Box style={styles.headerArrowBox}>
             <AntDesign
               name="arrowleft"
@@ -57,12 +57,12 @@ function MoreHang({ navigation }) {
               onPress={() => { navigation.navigate('list'); }}
             />
           </Box>
-          <View style={styles.nameheader}>
+          <Box style={styles.nameheader}>
             <Text style={styles.name}>
               近期揪人
             </Text>
-          </View>
-          <View style={styles.headerCommentView}>
+          </Box>
+          <Box style={styles.headerCommentView}>
             <HStack>
               <FontAwesome5
                 name="comment"
@@ -72,17 +72,17 @@ function MoreHang({ navigation }) {
               />
               <Octicons name="dot-fill" size={16} color={Messagenum !== 0 ? '#EB6F6F' : 'transparent'} style={styles.readDot} />
             </HStack>
-          </View>
-          <View style={styles.headerPersonalView}>
+          </Box>
+          <Box style={styles.headerPersonalView}>
             <Feather
               name="user"
               size={26}
               color="#28527A"
               onPress={() => { navigation.navigate('personal'); }}
             />
-          </View>
-        </View>
-        <View style={styles.bodyContainer}>
+          </Box>
+        </Box>
+        <Box style={styles.bodyContainer}>
           <FlatList
             numColumns={2}
             data={active}
@@ -136,7 +136,7 @@ function MoreHang({ navigation }) {
               </Pressable>
             )}
           />
-        </View>
+        </Box>
       </NativeBaseProvider>
     </SafeAreaView>
   );

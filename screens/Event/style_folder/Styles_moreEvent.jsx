@@ -39,12 +39,13 @@ export default StyleSheet.create({
   },
   bodyContainer: {
     flex: 1,
+    flexDirection: 'column',
     alignItems: 'flex-start',
     marginHorizontal: Dimensions.get('window').width * 0.03,
     marginTop: 7,
   },
   CardInMore: {
-    height: Dimensions.get('window').width * 0.58,
+    height: Dimensions.get('window').width * 0.58 + 5,
     width: Dimensions.get('window').width * 0.42,
     borderRadius: 10,
     shadowColor: 'black',

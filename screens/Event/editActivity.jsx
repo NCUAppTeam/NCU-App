@@ -7,7 +7,9 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import {
   Dialog, Portal, Button, Provider,
 } from 'react-native-paper';
-import { AntDesign, MaterialCommunityIcons, Foundation } from '@expo/vector-icons';
+import {
+  AntDesign, MaterialCommunityIcons, Foundation,
+} from '@expo/vector-icons';
 import {
   NativeBaseProvider, Box, Divider, Heading, ZStack,
 } from 'native-base';
@@ -16,7 +18,7 @@ import * as ImagePicker from 'expo-image-picker';
 import styles from './style_folder/Styles_editActivity';
 import ActiveController from '../../controller/Active';
 
-function edit({ route, navigation }) {
+function Edit({ route, navigation }) {
   const Cd = route.params;
   const passedID = JSON.stringify(Cd).slice(7, -2);
   // 必填檢查參數
@@ -243,7 +245,7 @@ function edit({ route, navigation }) {
 
   return (
     <Provider>
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <SafeAreaView style={styles.container}>
           <NativeBaseProvider>
             <View style={{ flex: 0.1, flexDirection: 'column' }}>
@@ -366,14 +368,30 @@ function edit({ route, navigation }) {
                     style={styles.input}
                   >
                     {startText === undefined && (
-                    <Text style={[styles.text, {
-                      fontWeight: 'normal', color: '#ADADAD', textAlign: 'center', paddingTop: Dimensions.get('window').height * 0.1,
-                    }]}
+                    <Text style={{
+                      alignItems: 'center',
+                      fontWeight: 'bold',
+                      color: '#BEBEBE',
+                      textAlign: 'left',
+                      marginTop: Dimensions.get('window').height * 0.01,
+                      fontSize: 16,
+                    }}
                     >
                       開始時間
                     </Text>
                     )}
-                    <Text style={[styles.text, { fontWeight: 'normal', textAlign: 'center', paddingTop: Dimensions.get('window').height * 0.005 }]}>{startText}</Text>
+                    <Text style={{
+                      alignItems: 'center',
+                      fontWeight: 'bold',
+                      color: '#000',
+                      textAlign: 'left',
+                      marginTop: Dimensions.get('window').height * 0.01,
+                      fontSize: 16,
+                    }}
+                    >
+                      {startText}
+
+                    </Text>
                   </TouchableOpacity>
                   )}
                 </Box>
@@ -416,14 +434,30 @@ function edit({ route, navigation }) {
                     style={styles.input}
                   >
                     {endText === undefined && (
-                    <Text style={[styles.text, {
-                      fontWeight: 'normal', color: '#ADADAD', textAlign: 'center', paddingTop: Dimensions.get('window').height * 0.005,
-                    }]}
+                    <Text style={{
+                      alignItems: 'center',
+                      fontWeight: 'bold',
+                      color: '#BEBEBE',
+                      textAlign: 'left',
+                      marginTop: Dimensions.get('window').height * 0.01,
+                      fontSize: 16,
+                    }}
                     >
                       結束時間
                     </Text>
                     )}
-                    <Text style={[styles.text, { fontWeight: 'normal', textAlign: 'center', paddingTop: Dimensions.get('window').height * 0.005 }]}>{endText}</Text>
+                    <Text style={{
+                      alignItems: 'center',
+                      fontWeight: 'bold',
+                      color: '#000',
+                      textAlign: 'left',
+                      marginTop: Dimensions.get('window').height * 0.01,
+                      fontSize: 16,
+                    }}
+                    >
+                      {endText}
+
+                    </Text>
                   </TouchableOpacity>
                   )}
                 </Box>
@@ -615,8 +649,8 @@ function edit({ route, navigation }) {
                 )}
               </Box>
               <TouchableOpacity onPress={pickImage} style={styles.imageButton}>
-                <MaterialCommunityIcons name="cloud-upload-outline" size={24} color="white" style={{ marginLeft: 49 }} />
-                <Text style={styles.Cloudicon}>上傳</Text>
+                <MaterialCommunityIcons name="cloud-upload-outline" size={24} color="white" style={styles.Cloudicon} />
+                <Text style={styles.Cloudicontext}>上傳</Text>
               </TouchableOpacity>
             </Box>
             <Divider my={2} bg="#bfbebe" /* my=margin-top and margin-bottom */ />
@@ -815,4 +849,4 @@ function edit({ route, navigation }) {
   );
 }
 
-export default edit;
+export default Edit;

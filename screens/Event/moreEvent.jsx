@@ -4,15 +4,24 @@ import {
 } from 'react-native';
 import { Title } from 'react-native-paper';
 import {
-  Ionicons, FontAwesome5, AntDesign, Feather,
+  Ionicons, FontAwesome5, AntDesign, Feather, Octicons,
 } from '@expo/vector-icons';
 import {
-  NativeBaseProvider, Box, FlatList, VStack, Pressable,
+  NativeBaseProvider, Box, FlatList, VStack, Pressable, HStack,
 } from 'native-base';
 import styles from './style_folder/Styles_moreEvent';
 import ActiveController from '../../controller/Active';
+import MessageController from '../../controller/Message';
 
-function more({ navigation, route }) {
+function More({ navigation, route }) {
+  const [Messagenum, setMessageNum] = useState(0);
+  useEffect(() => {
+    MessageController.countUnreadMessage().then((num) => {
+      setMessageNum(num);
+    }).catch((err) => {
+      throw err;
+    });
+  }, []);
   const [active, setActive] = useState([]);
   useEffect(() => {
     ActiveController.getEventActive().then((res) => {
@@ -27,14 +36,19 @@ function more({ navigation, route }) {
     setRefreshing(true);
     ActiveController.getEventActive().then((res) => {
       setActive(res);
-      setRefreshing(false);
     });
+    MessageController.countUnreadMessage().then((num) => {
+      setMessageNum(num);
+    }).catch((err) => {
+      throw err;
+    });
+    setRefreshing(false);
   };
 
   return (
     <SafeAreaView style={styles.container}>
       <NativeBaseProvider>
-        <View style={styles.headerContainer}>
+        <Box style={styles.headerContainer}>
           <Box style={styles.headerArrowBox}>
             <AntDesign
               name="arrowleft"
@@ -43,33 +57,38 @@ function more({ navigation, route }) {
               onPress={() => { navigation.navigate('list'); }}
             />
           </Box>
-          <View style={styles.nameheader}>
+          <Box style={styles.nameheader}>
             <Text style={styles.name}>
               近期活動
             </Text>
-          </View>
-          <View style={styles.headerCommentView}>
-            <FontAwesome5
-              name="comment"
-              size={25}
-              color="#28527A"
-              onPress={() => { navigation.navigate('message'); }}
-            />
-          </View>
-          <View style={styles.headerPersonalView}>
+          </Box>
+          <Box style={styles.headerCommentView}>
+            <HStack>
+              <FontAwesome5
+                name="comment"
+                size={25}
+                color="#28527A"
+                onPress={() => { navigation.navigate('message'); }}
+              />
+              <Octicons name="dot-fill" size={16} color={Messagenum !== 0 ? '#EB6F6F' : 'transparent'} style={styles.readDot} />
+            </HStack>
+          </Box>
+          <Box style={styles.headerPersonalView}>
             <Feather
               name="user"
               size={26}
               color="#28527A"
               onPress={() => { navigation.navigate('personal'); }}
             />
-          </View>
-        </View>
-        <View style={styles.bodyContainer}>
+          </Box>
+        </Box>
+        <Box style={styles.bodyContainer}>
           <FlatList
             numColumns={2}
             data={active}
             keyExtractor={(item) => item.id}
+            showsVerticalScrollIndicator={false}
+            showsHorizontalScrollIndicator={false}
             refreshControl={(
               <RefreshControl
                 refreshing={refreshing}
@@ -118,10 +137,10 @@ function more({ navigation, route }) {
               </Pressable>
             )}
           />
-        </View>
+        </Box>
       </NativeBaseProvider>
     </SafeAreaView>
   );
 }
 
-export default more;
+export default More;

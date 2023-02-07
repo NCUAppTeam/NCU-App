@@ -18,13 +18,10 @@ import * as ImagePicker from 'expo-image-picker';
 import ActiveController from '../../controller/Active';
 import styles from './style_folder/Styles_addActivity';
 
-function add({ navigation }) {
+function Add({ navigation }) {
   const [data, setData] = useState({
     cost: '',
     link: '',
-    // hostName: '',
-    // hostPhone: '',
-    // hostMail: '',
   });
 
   const [genre, setGenre] = useState(false);
@@ -42,7 +39,7 @@ function add({ navigation }) {
 
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [1, 1],
       quality: 1,
@@ -216,7 +213,7 @@ function add({ navigation }) {
 
   return (
     <Provider>
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <SafeAreaView style={styles.container}>
           <NativeBaseProvider>
             <View style={{ flex: 0.1, flexDirection: 'column' }}>
@@ -328,14 +325,30 @@ function add({ navigation }) {
                     style={styles.input}
                   >
                     {startText === undefined && (
-                    <Text style={[styles.text, {
-                      fontWeight: 'normal', color: '#BEBEBE', textAlign: 'center', paddingTop: Dimensions.get('window').height * 0.01, fontSize: 16,
-                    }]}
+                    <Text style={{
+                      alignItems: 'center',
+                      fontWeight: 'bold',
+                      color: '#BEBEBE',
+                      textAlign: 'left',
+                      marginTop: Dimensions.get('window').height * 0.01,
+                      fontSize: 16,
+                    }}
                     >
                       開始時間
                     </Text>
                     )}
-                    <Text style={[styles.text, { fontWeight: 'normal', textAlign: 'center', paddingTop: Dimensions.get('window').height * 0.005 }]}>{startText}</Text>
+                    <Text style={{
+                      alignItems: 'center',
+                      fontWeight: 'bold',
+                      color: '#000',
+                      textAlign: 'left',
+                      marginTop: Dimensions.get('window').height * 0.01,
+                      fontSize: 16,
+                    }}
+                    >
+                      {startText}
+
+                    </Text>
                   </TouchableOpacity>
                   )}
                 </Box>
@@ -378,14 +391,30 @@ function add({ navigation }) {
                     style={styles.input}
                   >
                     {endText === undefined && (
-                    <Text style={[styles.text, {
-                      fontWeight: 'normal', color: '#BEBEBE', textAlign: 'center', paddingTop: Dimensions.get('window').height * 0.01, fontSize: 16,
-                    }]}
+                    <Text style={{
+                      alignItems: 'center',
+                      fontWeight: 'bold',
+                      color: '#BEBEBE',
+                      textAlign: 'left',
+                      marginTop: Dimensions.get('window').height * 0.01,
+                      fontSize: 16,
+                    }}
                     >
                       結束時間
                     </Text>
                     )}
-                    <Text style={[styles.text, { fontWeight: 'normal', textAlign: 'center', paddingTop: Dimensions.get('window').height * 0.005 }]}>{endText}</Text>
+                    <Text style={{
+                      alignItems: 'center',
+                      fontWeight: 'bold',
+                      color: '#000',
+                      textAlign: 'left',
+                      marginTop: Dimensions.get('window').height * 0.01,
+                      fontSize: 16,
+                    }}
+                    >
+                      {endText}
+
+                    </Text>
                   </TouchableOpacity>
                   )}
                 </Box>
@@ -566,8 +595,13 @@ function add({ navigation }) {
                 )}
               </Box>
               <TouchableOpacity onPress={pickImage} style={styles.imageButton}>
-                <MaterialCommunityIcons name="cloud-upload-outline" size={24} color="white" style={{ marginLeft: 49 }} />
-                <Text style={styles.Cloudicon}>上傳</Text>
+                <MaterialCommunityIcons
+                  name="cloud-upload-outline"
+                  size={24}
+                  color="white"
+                  style={styles.Cloudicon}
+                />
+                <Text style={styles.Cloudicontext}>上傳</Text>
               </TouchableOpacity>
             </Box>
             <Divider my={2} bg="#bfbebe" /* my=margin-top and margin-bottom */ />
@@ -754,4 +788,4 @@ function add({ navigation }) {
   );
 }
 
-export default add;
+export default Add;

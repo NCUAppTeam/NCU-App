@@ -6,7 +6,7 @@ export default StyleSheet.create({
   },
   btnPress: {
     height: 40,
-    width: 90,
+    width: 100,
     backgroundColor: '#28527A',
     justifyContent: 'center',
     borderRadius: 5,
@@ -14,7 +14,7 @@ export default StyleSheet.create({
   },
   btnNormal: {
     height: 40,
-    width: 90,
+    width: 100,
     justifyContent: 'center',
     borderRadius: 5,
     backgroundColor: '#E5EBF1',
@@ -31,6 +31,7 @@ export default StyleSheet.create({
     color: '#FBEEAC',
   },
   bodyforCostAndLimitnum: {
+    flex: 1,
     flexDirection: 'row',
   },
   CostTitle: {
@@ -56,7 +57,7 @@ export default StyleSheet.create({
     height: 35,
     borderRadius: 5,
     textAlign: 'left',
-    textAlignVertical: 'center',
+    marginTop: Dimensions.get('window').height * 0.01,
   },
   container: {
     flex: 1,
@@ -64,17 +65,15 @@ export default StyleSheet.create({
     alignContent: 'center',
     marginTop: 50,
     marginHorizontal: 15,
-    // marginHorizontal: Dimensions.get('window').width * 0.07,
   },
   categorybutton: {
     flexWrap: 'wrap',
     flexDirection: 'row',
   },
-  Cloudicon: {
-    marginTop: 9,
+  Cloudicontext: {
     color: 'white',
     fontSize: 14,
-    marginLeft: 8,
+    marginLeft: 5,
   },
   details: {
     height: 80,
@@ -101,6 +100,7 @@ export default StyleSheet.create({
     width: 160,
     height: 40,
     alignItems: 'center',
+    justifyContent: 'center',
     borderRadius: 4,
     marginTop: 5,
     flexDirection: 'row',
@@ -144,13 +144,12 @@ export default StyleSheet.create({
     borderColor: '#bfbebe',
     marginTop: 5,
     marginBottom: 20,
-    marginLeft: 50,
+    marginLeft: Dimensions.get('window').width * 0.13,
     borderRadius: 5,
   },
   name: {
     marginLeft: 45,
     fontSize: 24,
-    // fontWeight: 'bold',
     color: '#28527A',
   },
   nameheader: {
@@ -170,9 +169,10 @@ export default StyleSheet.create({
   unsentButton: {
     borderRadius: 30,
     width: 297,
-    height: 48,
+    height: 51,
     paddingVertical: 8,
-    marginVertical: 51,
+    marginTop: Dimensions.get('window').height * 0.004,
+    marginBottom: Dimensions.get('window').height * 0.02,
     backgroundColor: '#D4D4D4',
     elevation: 20,
     shadowColor: '#000',
@@ -186,9 +186,10 @@ export default StyleSheet.create({
   sentButton: {
     borderRadius: 30,
     width: 297,
-    height: 48,
+    height: 51,
     paddingVertical: 8,
-    marginVertical: 51,
+    marginTop: Dimensions.get('window').height * 0.004,
+    marginBottom: Dimensions.get('window').height * 0.02,
     elevation: 20,
     shadowColor: '#000',
   },

@@ -9,9 +9,7 @@ import {
   getDownloadURL,
   refFromURL,
 } from 'firebase/storage';
-// import { getMessaging, getToken } from 'firebase/messaging';
 import Fuse from 'fuse.js';
-// import storage from '@react-native-firebase/storage';
 
 const values = ['揪人共乘', '揪人運動', '揪人遊戲', '校園活動', '系上活動', '社團活動'];
 const defaultLinks = {
@@ -88,9 +86,6 @@ function dateToWeekday(t) {
   return check;
 }
 
-function sentMessage(message) {
-  console.log(message);
-}
 const firebaseConfig = {
   apiKey: 'AIzaSyA8GH6yj1i4gJM0H_ZTsurYG3Dqn4-nIS8',
   authDomain: 'ncu-app-test.firebaseapp.com',
@@ -102,17 +97,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const storage = getStorage(app);
 
-// const firebaseConfig = { //測試用firebase
-//   apiKey: 'AIzaSyAE1BMN-NymGGpNppqzqeOkQTfVZyrBXzo',
-//   authDomain: 'test-e75af.firebaseapp.com',
-//   projectId: 'test-e75af',
-//   storageBucket: 'test-e75af.appspot.com',
-//   messagingSenderId: '521591460213',
-//   appId: '1:521591460213:web:1e510d65b7c13ebe76833c',
-//   measurementId: 'G-T1RS72GEX1',
-// };
-
-//    測試用 output -- 顯示在手機上
 /**
  *
  * @param {*} rawdata
@@ -368,6 +352,39 @@ async function getAllActive() {
   // console.log(activeArray);
   console.log('getAllActive Successful');
   return activeArray;
+}
+
+async function getGenreActive(genre) {
+  const db = getFirestore(app);
+  const activesRef = query(collection(db, 'actives'));
+  const GenreArray = [];
+  const querySnapshot = await getDocs(activesRef, where('genre', '==', genre));
+
+  querySnapshot.forEach((doc) => {
+    GenreArray.push({
+      id: doc.id,
+      name: doc.data().name,
+      imageUri1: doc.data().imageUri1,
+      imageUri2: doc.data().imageUri2,
+      imageUri3: doc.data().imageUri3,
+      startTime: toDateString(doc.data().startTime),
+      endTime: toDateString(doc.data().endTime),
+      startTimeWeekday: dateToWeekday(doc.data().startTime),
+      endTimeWeekday: dateToWeekday(doc.data().endTime),
+      place: doc.data().place,
+      cost: doc.data().cost,
+      limitNum: doc.data().limitNum,
+      genre: doc.data().genre,
+      link: doc.data().link,
+      hostName: doc.data().hostName,
+      hostPhone: doc.data().hostPhone,
+      hostMail: doc.data().hostMail,
+      details: doc.data().details,
+    });
+  });
+  // console.log(GenreArray);
+  console.log('getGenreActive Successful');
+  return GenreArray;
 }
 
 async function getParticipatedActive() {
@@ -815,74 +832,13 @@ async function getAttendedOrNot(docID) { // 待測試
   return false;
 }
 
-async function addMessage(active) { // 待測試
-  const item = {
-    message: active.message,
-    from: active.from.trim(),
-    to: active.to.trim(),
-    uploadTime: active.uploadTime,
-  };
-  const db = getFirestore(app);
-  const messageRef = query(collection(db, 'message'));
-  messageRef.add(item);
-  console.log(item);
-}
-
-async function getMessage(fromData, toData) {
-  const db = getFirestore(app);
-  const activesRef = query(collection(db, 'message'));
-  const message = [];
-  const querySnapshot = await getDocs(activesRef, orderBy('uploadTime'));
-  querySnapshot.forEach((doc1) => {
-    if ((doc1.data().from === fromData && doc1.data().to === toData)
-    || (doc1.data().from === toData && doc1.data().to === fromData)) {
-      message.push({
-        id: doc1.id,
-        message: doc1.data().message,
-        from: doc1.data().from,
-        to: doc1.data().to,
-        uploadTime: doc1.data().uploadTime,
-      });
-    }
-  });
-  return message;
-}
-
-async function getRelativeMessage() { // 待測試
-  const user = '110501444';
-  const db = getFirestore(app);
-  const messageRef = query(collection(db, 'message'));
-  const message = [];
-  const querySnapshot1 = await getDocs(messageRef, where('send', '==', user));
-  querySnapshot1.forEach((doc1) => {
-    message.push({
-      id: doc1.id,
-      message: doc1.data().message,
-      send: doc1.data().send,
-      receive: doc1.data().receive,
-      sendTime: doc1.data().sendTime,
-    });
-  });
-  const querySnapshot2 = await getDocs(messageRef, where('receive', '==', user));
-  querySnapshot2.forEach((doc1) => {
-    message.push({
-      id: doc1.id,
-      message: doc1.data().message,
-      send: doc1.data().send,
-      receive: doc1.data().receive,
-      sendTime: doc1.data().sendTime,
-    });
-  });
-  // console.log(message);
-  message.sort((a, b) => a.sendTime - b.sendTime);
-  return message;
-}
 export default {
   firebaseConfig,
   toDateString,
   addActive,
   updateActive,
   getAllActive,
+  getGenreActive,
   getParticipatedActive,
   getHostedEvent,
   getFinishedActive,
@@ -892,7 +848,6 @@ export default {
   deleteEverySingleAttendee,
   getOneActive,
   fuseSearchName,
-  sentMessage,
   addUser,
   signUp,
   quitEvent,
@@ -901,7 +856,4 @@ export default {
   getTotalOfAttendees,
   removeAttendee,
   getAttendedOrNot,
-  addMessage,
-  getMessage,
-  getRelativeMessage,
 };

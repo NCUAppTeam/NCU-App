@@ -1,41 +1,49 @@
 import { StyleSheet, Dimensions } from 'react-native';
 
 export default StyleSheet.create({
-  Card3: {
-    height: 115,
+  cardManage: {
+    height: 112,
     width: Dimensions.get('window').width * 0.9,
-    marginHorizontal: 20,
     borderRadius: 10,
-    borderBottomWidth: 2,
-    borderBottomEndRadius: 10,
-    borderEndColor: '#bfbebe',
     marginTop: 15,
     flexDirection: 'row',
+    alignSelf: 'center',
   },
-  Card3pic: {
+  cardManagepic: {
     width: 115,
     height: 112,
     borderRadius: 10,
     backgroundColor: '#E0E0E0',
   },
-  Card3Title: {
+  cardManageTitle: {
     marginLeft: 10,
     textAlign: 'left',
     justifyContent: 'center',
     fontWeight: 'bold',
+    fontSize: 16,
   },
-  Card3Details: {
+  cardManageDetails: {
     marginHorizontal: 10,
     marginTop: 7,
     flexDirection: 'row',
     alignContent: 'space-around',
   },
-  Card3Text: {
+  cardManageLocation: {
+    marginHorizontal: 9,
+    marginTop: 7,
+    flexDirection: 'row',
+    alignContent: 'space-around',
+  },
+  cardManageText: {
     fontSize: 12,
   },
+  cardManageTextLocation: {
+    fontSize: 12,
+    marginLeft: 3,
+  },
   CardInPersonal: {
-    height: Dimensions.get('window').width * 0.6,
-    width: Dimensions.get('window').width * 0.43,
+    height: Dimensions.get('window').width * 0.58 + 5,
+    width: Dimensions.get('window').width * 0.42,
     borderRadius: 10,
     shadowColor: 'black',
     shadowOffset: {
@@ -45,7 +53,7 @@ export default StyleSheet.create({
     elevation: 4,
     marginVertical: 7,
     backgroundColor: 'white',
-    marginRight: Dimensions.get('window').width * 0.06,
+    marginRight: Dimensions.get('window').width * 0.03,
   },
   CardTitle: {
     textAlign: 'center',
@@ -55,11 +63,20 @@ export default StyleSheet.create({
     color: '#28527A',
     fontSize: 14,
   },
-  CardDetails: {
+  CardStartTime: {
     marginLeft: 7,
     flexDirection: 'row',
   },
-  CardText: {
+  CardTimeText: {
+    fontSize: 12,
+    color: 'rgba(40, 82, 122, 0.65)',
+    marginTop: -3,
+  },
+  CardPlace: {
+    marginLeft: 5,
+    flexDirection: 'row',
+  },
+  cardPlaceText: {
     fontSize: 12,
     color: 'rgba(40, 82, 122, 0.65)',
   },
@@ -123,5 +140,18 @@ export default StyleSheet.create({
     opacity: 0.5,
     textAlign: 'center',
     textAlignVertical: 'center',
+  },
+  num: {
+    minWidth: 16,
+    minHeight: 15,
+    marginLeft: Dimensions.get('window').width * 0.1,
+    marginTop: -40,
+    fontWeight: '400',
+    fontSize: 13,
+    color: '#fff',
+    backgroundColor: 'red',
+    borderRadius: 7.5,
+    alignSelf: 'center',
+    textAlign: 'center',
   },
 });

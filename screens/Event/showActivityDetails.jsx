@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Text, View, SafeAreaView, ScrollView, RefreshControl, Image, Dimensions, TouchableOpacity, Alert,
+  Text, View, SafeAreaView, ScrollView, Image, Dimensions, TouchableOpacity, Alert,
 } from 'react-native';
 import Dialog from 'react-native-popup-dialog';
-import { Button } from 'react-native-elements';
 import {
   Ionicons, FontAwesome5, AntDesign, MaterialCommunityIcons, Feather, Fontisto, Octicons,
 } from '@expo/vector-icons';
 import {
-  List, ListItem, NativeBaseProvider, Box, Divider, ZStack, Center, HStack, VStack,
+  NativeBaseProvider, Box, Divider, Center, HStack,
 } from 'native-base';
 import styles from './style_folder/Styles_showActivityDetails';
 import ActiveController from '../../controller/Active';

@@ -1,15 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
-  Text, Platform, View, SafeAreaView, TextInput,
-  ScrollView, TouchableOpacity, Alert, Dimensions, Image,
+  Text, View, SafeAreaView, TouchableOpacity,
 } from 'react-native';
 import {
   Searchbar,
 } from 'react-native-paper';
-// import Icon from 'react-native-vector-icons/FontAwesome';
-import { Ionicons, FontAwesome5, AntDesign } from '@expo/vector-icons';
+import { FontAwesome5 } from '@expo/vector-icons';
 import {
-  NativeBaseProvider, Box, Divider, Heading,
+  NativeBaseProvider, Box,
 } from 'native-base';
 import styles from './style_folder/Styles_search';
 

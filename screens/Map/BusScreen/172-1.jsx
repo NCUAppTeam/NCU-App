@@ -10,8 +10,9 @@ import {
 import BusController from '../../../controller/Bus';
 import Styles from '../Styles';
 
-
-const Separator = () => <View style={Styles.separator} />;
+function Separator() {
+  return <View style={Styles.separator} />;
+}
 function Bus172({ navigation }) {
   const [item, setItems] = useState([]);
 

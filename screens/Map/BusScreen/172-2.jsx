@@ -9,7 +9,9 @@ import {
 import { ScrollView } from 'react-native-gesture-handler';
 import Styles from '../Styles';
 
-const Separator = () => <View style={Styles.separator} />;
+function Separator() {
+  return <View style={Styles.separator} />;
+}
 function List172() {
   const [workDay, setWorkDay] = useState(true);
   return (

@@ -3,13 +3,9 @@ import {
   Text, View, SafeAreaView, TextInput, RefreshControl, Dimensions,
   ScrollView, TouchableOpacity, Image, TouchableHighlight,
 } from 'react-native';
-import {
-  Button, Provider, Card, Title,
-} from 'react-native-paper';
+import { Provider, Title } from 'react-native-paper';
 import Dialog, { DialogContent } from 'react-native-popup-dialog';
-import {
-  Ionicons, AntDesign, MaterialCommunityIcons, Feather, FontAwesome5,
-} from '@expo/vector-icons';
+import { AntDesign, Feather } from '@expo/vector-icons';
 import {
   NativeBaseProvider, Box, Divider, Heading, VStack, HStack, FlatList,
 } from 'native-base';

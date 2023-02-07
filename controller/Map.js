@@ -1,5 +1,5 @@
 import * as Location from 'expo-location';
-import * as firebase from 'firebase';
+import firebase from 'firebase/app';
 import 'firebase/firestore';
 import building from '../assets/building.json';
 

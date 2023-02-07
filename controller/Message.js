@@ -40,12 +40,12 @@ async function addMessage(messageData, userID) {
         item.image = '';
       } else if (messageData.image) {
         const imageAddress = `message/${imagePos(messageData.image)}`;
-        const storageRef = firebase.storage().ref().child(imageAddress);
+        const storageRef = ref(storage).child(imageAddress);
         const response = await fetch(messageData.image);
         const blob = await response.blob();
         const st = storageRef.put(blob);
         await st;
-        const uri = await storageRef.getDownloadURL();
+        const uri = await getDownloadURL(storageRef);
         if (uri !== undefined) {
           item.image = uri;
         } else {
@@ -55,8 +55,12 @@ async function addMessage(messageData, userID) {
       }
     const db = getFirestore(app);
     const messageRef = query(collection(db, 'message'));
-    messageRef.add(item);
-    console.log(item);
+    addDoc(messageRef, item).then(() => {
+      console.log('item');
+    })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   async function getRelativeMessage(user, other) {
@@ -179,7 +183,7 @@ async function addMessage(messageData, userID) {
     const db = getFirestore(app);
     const infoRef = query(collection(db, 'attendees'));
     const messageRef = query(collection(db, 'message'));
-    const eventInfo = getDoc(collection(db, `active/${eventID}`));
+    const eventInfo = await getDoc(collection(db, `active/${eventID}`));
 
     const querySnapshot = await getDocs(infoRef);
     const attendeeList = [];
@@ -188,7 +192,7 @@ async function addMessage(messageData, userID) {
       attendeeList.push(attendee.id);
     });
     for (let i = 0; i < attendeeList.length; i += 1) {
-      const result = await infoRef.doc(attendeeList[i]).collection('attendedEvent').get();
+      const result = await getDocs(infoRef, attendeeList[i], 'attendedEvent');
       result.forEach((event) => {
         if (event.id === eventInfo.id) {
           sendList.push(attendeeList[i]);

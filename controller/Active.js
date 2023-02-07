@@ -259,7 +259,7 @@ async function updateActive(oldID, NEWactive) {
       updateDoc(docRef, data);
     }
     const imageAddress = `actives/${imagePos(NEWactive.image2)}`;
-    const storageRef = firebase.storage().ref().child(imageAddress);
+    const storageRef = ref(storage).child(imageAddress);
     const response = await fetch(NEWactive.image2);
     const blob = await response.blob();
     const st2 = storageRef.put(blob);
@@ -443,7 +443,7 @@ async function getFinishedActive() {
     attendIDArray.push(attendID.id);
   });
   for (let i = 0; i < attendIDArray.length; i += 1) {
-    const result = await activesRef.doc(attendIDArray[i]).get();
+    const result = await getDoc(doc(db, 'actives', attendIDArray[i]));
     // console.log(attendIDArray[i], new Date(toDateString(result.data().endTime)), current);
     if (new Date(toDateString(result.data().endTime)) < current) {
       activeArray.push({

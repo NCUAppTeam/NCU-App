@@ -8,7 +8,7 @@ import {
   Title, Card,
 } from 'react-native-paper';
 import {
-  Ionicons, AntDesign, Feather, Octicons,
+  Ionicons, AntDesign, Feather, 
 } from '@expo/vector-icons';
 import {
   NativeBaseProvider, Box, ZStack, VStack, FlatList, Pressable,

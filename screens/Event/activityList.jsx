@@ -16,9 +16,10 @@ import ActiveController from '../../controller/Active';
 import MessageController from '../../controller/Message';
 
 function List({ navigation }) {
+  const user = '110501444';
   const [Messagenum, setMessageNum] = useState(0);
   useEffect(() => {
-    MessageController.countUnreadMessage().then((num) => {
+    MessageController.countUnreadMessage(user).then((num) => {
       setMessageNum(num);
     }).catch((err) => {
       throw err;
@@ -48,7 +49,7 @@ function List({ navigation }) {
     ActiveController.getEventActive().then((res) => {
       setActive2(res);
     });
-    MessageController.countUnreadMessage().then((num) => {
+    MessageController.countUnreadMessage(user).then((num) => {
       setMessageNum(num);
     }).catch((err) => {
       throw err;

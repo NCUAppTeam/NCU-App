@@ -1,18 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
-  Text, View, SafeAreaView, RefreshControl, Dimensions,
-  ScrollView, TouchableOpacity, Image, Button, TouchableHighlight, TextInput,
-  KeyboardAvoidingView,
+  Text, View, SafeAreaView, Dimensions,
+  ScrollView, Image, TouchableHighlight, TextInput,
   Platform,
 } from 'react-native';
 import { useKeyboard } from '@react-native-community/hooks';
 import {
-  Ionicons, FontAwesome5, AntDesign, Feather, Octicons, MaterialCommunityIcons,
+  FontAwesome5, AntDesign, Feather, Octicons, MaterialCommunityIcons,
 } from '@expo/vector-icons';
-import { Card, Title } from 'react-native-paper';
+import { Card } from 'react-native-paper';
 import Dialog, { DialogContent } from 'react-native-popup-dialog';
 import {
-  NativeBaseProvider, Box, Divider, VStack, HStack, FlatList,
+  NativeBaseProvider, Box, HStack, FlatList,
 } from 'native-base';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as ImagePicker from 'expo-image-picker';
@@ -91,7 +90,7 @@ function Send({ route, navigation }) {
       aspect: [1, 1],
       quality: 1,
     });
-    if (!result.cancelled) {
+    if (!result.canceled) {
       data.image = result.uri;
       data.sendTime = new Date();
       console.log(data);

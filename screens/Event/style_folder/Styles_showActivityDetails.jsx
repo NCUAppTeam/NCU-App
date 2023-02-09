@@ -1,24 +1,20 @@
-import { StyleSheet, Dimensions } from 'react-native';
+import { Platform, StyleSheet, Dimensions } from 'react-native';
 
 export default StyleSheet.create({
   avatar: {
     margin: 10,
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    borderBottomWidth: 2,
-    borderBottomEndRadius: 10,
-    borderEndColor: '#bfbebe',
+    width: Dimensions.get('window').width * 0.2,
+    height: Dimensions.get('window').width * 0.2,
+    borderRadius: Dimensions.get('window').width * 0.1,
     backgroundColor: '#bfbfbf',
   },
   bigpic: {
-    width: 300,
-    height: 300,
+    width: Dimensions.get('window').width / 2,
+    aspectRatio: 1,
     alignContent: 'center',
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#E0E0E0',
-    aspectRatio: 1,
   },
   CardTimeText: {
     fontSize: 12,
@@ -38,25 +34,38 @@ export default StyleSheet.create({
     alignItems: 'center',
     marginLeft: 10,
   },
-  name: {
-    marginLeft: 45,
-    fontSize: 24,
-    // fontWeight: 'bold',
-    color: '#28527A',
+  showActivityDetails_container: {
+    flex: 1,
+    alignContent: 'center',
+    backgroundColor: '#fafafa',
+  },
+  headerContainer: {
+    flexDirection: 'row',
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height * 0.04,
+    marginTop: Platform.OS === 'ios' ? Dimensions.get('window').height * 0.02 : 53,
+    marginBottom: 20,
+  },
+  headerArrowBox: {
+    flex: 1.9,
+    marginLeft: Dimensions.get('window').width * 0.05,
+    justifyContent: 'center',
   },
   nameheader: {
     flex: 9,
     alignItems: 'center',
-    width: 'auto',
-    borderRadius: 50,
     justifyContent: 'center',
   },
-  showActivityDetails_container: {
+  name: {
+    fontSize: 24,
+    color: '#28527A',
+  },
+  bodyContainer: {
     flex: 1,
     flexDirection: 'column',
-    alignContent: 'center',
-    paddingTop: 52.5,
-    backgroundColor: 'white',
+    alignItems: 'flex-start',
+    marginHorizontal: Dimensions.get('window').width * 0.1,
+    marginTop: 7,
   },
   imageDotNoHere: {
     color: '#C4C4C4',
@@ -85,8 +94,8 @@ export default StyleSheet.create({
   shareBox: {
     width: 300,
     height: 100,
-    marginTop: Dimensions.get('window').height * 0.02,
-    marginLeft: Dimensions.get('window').width * 0.04,
+    marginLeft: 20,
+    marginTop: 20,
   },
   reachLimitNum: {
     fontSize: 18,

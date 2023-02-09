@@ -387,8 +387,6 @@ async function getGenreActive(genre) {
   return GenreArray;
 }
 
-
-
 async function getParticipatedActive() {
   const user = '110501444';
   const db = getFirestore(app);
@@ -770,22 +768,25 @@ async function getHostInfo(docID) {
   const db = getFirestore(app);
   const infoRef = query(collection(db, 'attendees'));
   const querySnapshot = await getDocs(infoRef);
+
   const attendeeList = [];
   const IDlist = [];
   const info = [];
   querySnapshot.forEach((attendee) => {
     attendeeList.push(attendee.id);
   });
+
   for (let i = 0; i < attendeeList.length; i += 1) {
-    const result = await getDocs(infoRef, attendeeList[i], 'hostedEvent');
+    const result = await getDocs(collection(db, `attendees/${attendeeList[i]}/hostedEvent`));
     result.forEach((event) => {
       if (event.id === docID) {
         IDlist.push(attendeeList[i]);
       }
     });
   }
+
   for (let j = 0; j < IDlist.length; j += 1) {
-    const querySnapshot2 = await getDocs(infoRef, IDlist[j]);
+    const querySnapshot2 = await getDoc(doc(db, `attendees/${IDlist[j]}`));
     info.push(querySnapshot2.data());
   }
   // console.log(info);

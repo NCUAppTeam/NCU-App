@@ -31,8 +31,116 @@ const firebaseConfig = {
   appId: '1:739839700130:web:37591d0118a440488cfbfb',
 };
 const Tab = createBottomTabNavigator();
+function MainApp() {
+  const [selected, setSelected] = React.useState(1);
 
-function CustomTabBar({ state, descriptors, navigation }) {
+  const renderSelectedTab = () => {
+    switch (selected) {
+      case 0:
+        return <DashboardScreen />;
+        break;
+      case 1:
+        return <CalendarScreen />;
+        break;
+      case 2:
+        return <EventScreen />;
+        break;
+      case 3:
+        return <MapScreen />;
+        break;
+      case 4:
+        return <SaleScreen />;
+        break;
+      default:
+    }
+  };
+
+
+  // activeTintColor: '#E5EBF1',
+  //           inactiveTintColor: '#28527A',
+  //           activeBackgroundColor: '#28527A',
+  //           inactiveBackgroundColor: '#E5EBF1',
+  return (
+    <NativeBaseProvider>
+
+      <Box flex={1} bg="white" safeAreaTop width="100%" alignSelf="center">
+          <Center flex={1}>{renderSelectedTab()}</Center>
+        <HStack bg="#E5EBF1" alignItems="center" safeAreaBottom shadow={6}>
+          <Pressable py="2" flex={1} onPress={() => setSelected(0)} bg={selected === 0 ? '#28527A' : '#E5EBF1'}>
+            <Center>
+              <Icon
+                as={MaterialCommunityIcons}
+                name="home-outline"
+                color={selected === 0 ? '#E5EBF1' : '#28527A'}
+                size="sm"
+              />
+              <Text color={selected === 0 ? '#E5EBF1' : '#28527A'} fontSize="12">
+                首頁
+              </Text>
+            </Center>
+          </Pressable>
+          
+          <Pressable py="2" flex={1} onPress={() => setSelected(1)} bg={selected === 1 ? '#28527A' : '#E5EBF1'}>
+            <Center>
+              <Icon
+                as={MaterialCommunityIcons}
+                name="calendar-month"
+                color={selected === 1 ? '#E5EBF1' : '#28527A'}
+                
+                size="sm"
+              />
+              <Text color={selected === 1 ? '#E5EBF1' : '#28527A'} fontSize="12">
+                行事曆
+              </Text>
+            </Center>
+          </Pressable>
+          <Pressable py="2" flex={1} onPress={() => setSelected(2)} bg={selected === 2 ? '#28527A' : '#E5EBF1'}>
+            <Center>
+              <Icon
+                as={Ionicons}
+                name="game-controller-outline"
+                color={selected === 2 ? '#E5EBF1' : '#28527A'}
+                size="sm"
+              />
+              <Text color={selected === 2 ? '#E5EBF1' : '#28527A'} fontSize="12">
+                活動
+              </Text>
+            </Center>
+          </Pressable>
+          <Pressable py="2" flex={1} onPress={() => setSelected(3)} bg={selected === 3 ? '#28527A' : '#E5EBF1'}>
+            <Center>
+              <Icon
+                as={MaterialCommunityIcons}
+                name="map-outline"
+                color={selected === 3 ? '#E5EBF1' : '#28527A'}
+                size="sm"
+              />
+              <Text color={selected === 3 ? '#E5EBF1' : '#28527A'} fontSize="12">
+                地圖
+              </Text>
+            </Center>
+          </Pressable>
+          <Pressable py="2" flex={1} onPress={() => setSelected(4)} bg={selected === 4 ? '#28527A' : '#E5EBF1'}>
+            <Center>
+              <Icon
+                as={MaterialCommunityIcons}
+                name="cart-outline"
+                color={selected === 4 ? '#E5EBF1' : '#28527A'}
+                size="sm"
+              />
+              <Text color={selected === 4 ? '#E5EBF1' : '#28527A'} fontSize="12">
+                拍賣
+              </Text>
+            </Center>
+          </Pressable>
+        </HStack>
+      </Box>
+    </NativeBaseProvider>
+  );
+}
+
+const CustomTabBar = ({ state, descriptors, navigation }) => {
+  const [selected, setSelected] = React.useState(1);
   return (
     <HStack bg="#E5EBF1" alignItems="center" safeAreaBottom shadow={6}>
       {state.routes.map((route, index) => {
@@ -80,8 +188,8 @@ function CustomTabBar({ state, descriptors, navigation }) {
 
         );
       })}
-    </HStack>
-  );
+      </HStack>
+  )
 }
 
 export default function App() {

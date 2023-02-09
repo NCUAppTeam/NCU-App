@@ -1,20 +1,31 @@
 import React from 'react';
+import { Text, TextInput } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import add from './addActivity';
-import edit from './editActivity';
-import personal from './personal_manage';
-import manage from './manage';
-import list from './activityList';
-import more from './moreEvent';
-import moreHang from './moreHang';
-import message from './Message';
-import detailscreen from './showActivityDetails';
+import Add from './addActivity';
+import Edit from './editActivity';
+import Personal from './personal_manage';
+import Manage from './manage';
+import List from './activityList';
+import More from './moreEvent';
+import MoreHang from './moreHang';
+import Message from './Message';
+import Genre from './GenreEvent';
+import Detailscreen from './showActivityDetails';
 import Send from './Send';
-import search from './search';
+import Search from './search';
 
 const Stack = createNativeStackNavigator();
 
 function EventStack() {
+  if (Text.defaultProps == null) {
+    Text.defaultProps = {};
+    Text.defaultProps.allowFontScaling = false;
+  }
+
+  if (TextInput.defaultProps == null) {
+    TextInput.defaultProps = {};
+    TextInput.defaultProps.allowFontScaling = false;
+  }
   return (
     <Stack.Navigator
       initialRouteName="list"
@@ -22,17 +33,18 @@ function EventStack() {
         headerShown: false,
       }}
     >
-      <Stack.Screen name="list" component={list} />
-      <Stack.Screen name="more" component={more} />
-      <Stack.Screen name="moreHang" component={moreHang} />
-      <Stack.Screen name="add" component={add} />
-      <Stack.Screen name="edit" component={edit} />
-      <Stack.Screen name="personal" component={personal} />
-      <Stack.Screen name="manage" component={manage} />
-      <Stack.Screen name="details" component={detailscreen} />
-      <Stack.Screen name="search" component={search} />
-      <Stack.Screen name="message" component={message} />
-      <Stack.Screen name="Send" component={Send} />
+      <Stack.Screen name="list" component={List} />
+      <Stack.Screen name="more" component={More} />
+      <Stack.Screen name="moreHang" component={MoreHang} />
+      <Stack.Screen name="add" component={Add} />
+      <Stack.Screen name="edit" component={Edit} />
+      <Stack.Screen name="personal" component={Personal} />
+      <Stack.Screen name="manage" component={Manage} />
+      <Stack.Screen name="details" component={Detailscreen} />
+      <Stack.Screen name="search" component={Search} />
+      <Stack.Screen name="message" component={Message} />
+      <Stack.Screen name="send" component={Send} />
+      <Stack.Screen name="genre" component={Genre} />
     </Stack.Navigator>
   );
 }

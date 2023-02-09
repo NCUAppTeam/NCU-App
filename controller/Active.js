@@ -9,9 +9,7 @@ import {
   getDownloadURL,
   refFromURL,
 } from 'firebase/storage';
-// import { getMessaging, getToken } from 'firebase/messaging';
 import Fuse from 'fuse.js';
-// import storage from '@react-native-firebase/storage';
 
 const values = ['揪人共乘', '揪人運動', '揪人遊戲', '校園活動', '系上活動', '社團活動'];
 const defaultLinks = {
@@ -88,9 +86,6 @@ function dateToWeekday(t) {
   return check;
 }
 
-function sentMessage(message) {
-  console.log(message);
-}
 const firebaseConfig = {
   apiKey: 'AIzaSyA8GH6yj1i4gJM0H_ZTsurYG3Dqn4-nIS8',
   authDomain: 'ncu-app-test.firebaseapp.com',
@@ -102,17 +97,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const storage = getStorage(app);
 
-// const firebaseConfig = { //測試用firebase
-//   apiKey: 'AIzaSyAE1BMN-NymGGpNppqzqeOkQTfVZyrBXzo',
-//   authDomain: 'test-e75af.firebaseapp.com',
-//   projectId: 'test-e75af',
-//   storageBucket: 'test-e75af.appspot.com',
-//   messagingSenderId: '521591460213',
-//   appId: '1:521591460213:web:1e510d65b7c13ebe76833c',
-//   measurementId: 'G-T1RS72GEX1',
-// };
-
-//    測試用 output -- 顯示在手機上
 /**
  *
  * @param {*} rawdata
@@ -275,7 +259,7 @@ async function updateActive(oldID, NEWactive) {
       updateDoc(docRef, data);
     }
     const imageAddress = `actives/${imagePos(NEWactive.image2)}`;
-    const storageRef = firebase.storage().ref().child(imageAddress);
+    const storageRef = ref(storage).child(imageAddress);
     const response = await fetch(NEWactive.image2);
     const blob = await response.blob();
     const st2 = storageRef.put(blob);
@@ -370,6 +354,39 @@ async function getAllActive() {
   return activeArray;
 }
 
+async function getGenreActive(genre) {
+  const db = getFirestore(app);
+  const activesRef = query(collection(db, 'actives'));
+  const GenreArray = [];
+  const querySnapshot = await getDocs(activesRef, where('genre', '==', genre));
+
+  querySnapshot.forEach((doc) => {
+    GenreArray.push({
+      id: doc.id,
+      name: doc.data().name,
+      imageUri1: doc.data().imageUri1,
+      imageUri2: doc.data().imageUri2,
+      imageUri3: doc.data().imageUri3,
+      startTime: toDateString(doc.data().startTime),
+      endTime: toDateString(doc.data().endTime),
+      startTimeWeekday: dateToWeekday(doc.data().startTime),
+      endTimeWeekday: dateToWeekday(doc.data().endTime),
+      place: doc.data().place,
+      cost: doc.data().cost,
+      limitNum: doc.data().limitNum,
+      genre: doc.data().genre,
+      link: doc.data().link,
+      hostName: doc.data().hostName,
+      hostPhone: doc.data().hostPhone,
+      hostMail: doc.data().hostMail,
+      details: doc.data().details,
+    });
+  });
+  // console.log(GenreArray);
+  console.log('getGenreActive Successful');
+  return GenreArray;
+}
+
 async function getParticipatedActive() {
   const user = '110501444';
   const db = getFirestore(app);
@@ -381,6 +398,7 @@ async function getParticipatedActive() {
   querySnapshot.forEach((attendID) => {
     attendIDArray.push(attendID.id);
   });
+  console.log(attendIDArray);
 
   for (let i = 0; i < attendIDArray.length; i += 1) {
     const result = await getDoc(doc(db, 'actives', attendIDArray[i]));
@@ -479,7 +497,7 @@ async function getOneActive(id) {
   if (querySnapshot.data().imageUri3) {
     oneactive.imageUri3 = querySnapshot.data().imageUri3;
   }
-  console.log(oneactive);
+  // console.log(oneactive);
 
   console.log('getOneActive Successful');
 
@@ -520,7 +538,7 @@ async function getHangOutActive() {
     });
   });
   console.log('hangeout');
-  console.log(GenreArray);
+  // console.log(GenreArray);
   console.log('getHangOutActive Successful');
   return GenreArray;
 }
@@ -553,12 +571,12 @@ async function getEventActive() {
     });
   });
   console.log('event');
-  console.log(EventArray);
+  // console.log(EventArray);
   console.log('getEventActive Successful');
   return EventArray;
 }
 
-async function deleteOneActive(deleteDocId) { // 還未解決
+async function deleteOneActive(deleteDocId) {
   const db = getFirestore(app);
   const activesRef = query(collection(db, 'actives'));
   const deletedDoc = await getDocs(activesRef, deleteDocId);
@@ -631,7 +649,7 @@ async function getAllAttendees(docID) {
       }
     });
   }
-  console.log(IDlist);
+  // console.log(IDlist);
   for (let j = 0; j < IDlist.length; j += 1) {
     const querySnapshot2 = await getDocs(infoRef, IDlist[j]);
     info.push(querySnapshot2.data());
@@ -653,7 +671,7 @@ async function removeAttendee(docID, studentID) { // remove attendee
   const db = getFirestore(app);
   const activesRef = query(collection(db, `attendees/${studentID}/attendedEvent`));
   activesRef.doc(docID).delete();
-  console.log(docID, studentID);
+  // console.log(docID, studentID);
   console.log('delete successfully!');
   const result = await getDocs(activesRef);
   result.forEach((doc1) => console.log(doc1.id));
@@ -689,7 +707,7 @@ async function getHostedEvent() {
   querySnapshot.forEach((doc1) => {
     hostIDArray.push(doc1.id);
   });
-  console.log(hostIDArray);
+  // console.log(hostIDArray);
   for (let i = 0; i < hostIDArray.length; i += 1) {
     const result = await getDoc(doc(db, 'actives', hostIDArray[i]));
     const num = await getTotalOfAttendees(result.id);
@@ -731,7 +749,7 @@ async function signUp(docID) { // 待測試
   result.forEach((doc1) => console.log(doc1.id));
 }
 
-async function quitEvent(docID) { // 待測試
+async function quitEvent(docID) {
   const attendeesID = '110501444';
   const db = getFirestore(app);
   const Ref = doc(db, `attendees/${attendeesID}/attendedEvent/${docID}`);
@@ -746,33 +764,36 @@ async function quitEvent(docID) { // 待測試
   result.forEach((doc1) => console.log(doc1.id));
 }
 
-async function getHostInfo(docID) { // 待測試
+async function getHostInfo(docID) {
   const db = getFirestore(app);
   const infoRef = query(collection(db, 'attendees'));
   const querySnapshot = await getDocs(infoRef);
+
   const attendeeList = [];
   const IDlist = [];
   const info = [];
   querySnapshot.forEach((attendee) => {
     attendeeList.push(attendee.id);
   });
+
   for (let i = 0; i < attendeeList.length; i += 1) {
-    const result = await getDocs(infoRef, attendeeList[i], 'hostedEvent');
+    const result = await getDocs(collection(db, `attendees/${attendeeList[i]}/hostedEvent`));
     result.forEach((event) => {
       if (event.id === docID) {
         IDlist.push(attendeeList[i]);
       }
     });
   }
+
   for (let j = 0; j < IDlist.length; j += 1) {
-    const querySnapshot2 = await getDocs(infoRef, IDlist[j]);
+    const querySnapshot2 = await getDoc(doc(db, `attendees/${IDlist[j]}`));
     info.push(querySnapshot2.data());
   }
-  console.log(info);
+  // console.log(info);
   return info;
 }
 
-async function fuseSearchName(searchString) { // 待測試
+async function fuseSearchName(searchString) {
   const db = getFirestore(app);
   const activesRef = query(collection(db, 'actives'));
   const activeArray = [];
@@ -792,12 +813,12 @@ async function fuseSearchName(searchString) { // 待測試
 
   const fuse = new Fuse(activeArray, options);
   const result = fuse.search(searchString);
-  console.log(result);
+  // console.log(result);
   console.log('Search Successful');
   return result;
 }
 
-async function getAttendedOrNot(docID) { // 待測試
+async function getAttendedOrNot(docID) {
   const user = '110501444';
   const result = [];
   const db = getFirestore(app);
@@ -815,74 +836,13 @@ async function getAttendedOrNot(docID) { // 待測試
   return false;
 }
 
-async function addMessage(active) { // 待測試
-  const item = {
-    message: active.message,
-    from: active.from.trim(),
-    to: active.to.trim(),
-    uploadTime: active.uploadTime,
-  };
-  const db = getFirestore(app);
-  const messageRef = query(collection(db, 'message'));
-  messageRef.add(item);
-  console.log(item);
-}
-
-async function getMessage(fromData, toData) {
-  const db = getFirestore(app);
-  const activesRef = query(collection(db, 'message'));
-  const message = [];
-  const querySnapshot = await getDocs(activesRef, orderBy('uploadTime'));
-  querySnapshot.forEach((doc1) => {
-    if ((doc1.data().from === fromData && doc1.data().to === toData)
-    || (doc1.data().from === toData && doc1.data().to === fromData)) {
-      message.push({
-        id: doc1.id,
-        message: doc1.data().message,
-        from: doc1.data().from,
-        to: doc1.data().to,
-        uploadTime: doc1.data().uploadTime,
-      });
-    }
-  });
-  return message;
-}
-
-async function getRelativeMessage() { // 待測試
-  const user = '110501444';
-  const db = getFirestore(app);
-  const messageRef = query(collection(db, 'message'));
-  const message = [];
-  const querySnapshot1 = await getDocs(messageRef, where('send', '==', user));
-  querySnapshot1.forEach((doc1) => {
-    message.push({
-      id: doc1.id,
-      message: doc1.data().message,
-      send: doc1.data().send,
-      receive: doc1.data().receive,
-      sendTime: doc1.data().sendTime,
-    });
-  });
-  const querySnapshot2 = await getDocs(messageRef, where('receive', '==', user));
-  querySnapshot2.forEach((doc1) => {
-    message.push({
-      id: doc1.id,
-      message: doc1.data().message,
-      send: doc1.data().send,
-      receive: doc1.data().receive,
-      sendTime: doc1.data().sendTime,
-    });
-  });
-  // console.log(message);
-  message.sort((a, b) => a.sendTime - b.sendTime);
-  return message;
-}
 export default {
   firebaseConfig,
   toDateString,
   addActive,
   updateActive,
   getAllActive,
+  getGenreActive,
   getParticipatedActive,
   getHostedEvent,
   getFinishedActive,
@@ -892,7 +852,6 @@ export default {
   deleteEverySingleAttendee,
   getOneActive,
   fuseSearchName,
-  sentMessage,
   addUser,
   signUp,
   quitEvent,
@@ -901,7 +860,4 @@ export default {
   getTotalOfAttendees,
   removeAttendee,
   getAttendedOrNot,
-  addMessage,
-  getMessage,
-  getRelativeMessage,
 };

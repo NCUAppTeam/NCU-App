@@ -13,7 +13,8 @@ import styles from './style_folder/Styles_moreEvent';
 import ActiveController from '../../controller/Active';
 import MessageController from '../../controller/Message';
 
-function MoreHang({ navigation }) {
+function Genre({ navigation, route }) {
+  const { GenreName } = route.params;
   const [Messagenum, setMessageNum] = useState(0);
   useEffect(() => {
     MessageController.countUnreadMessage().then((num) => {
@@ -24,7 +25,7 @@ function MoreHang({ navigation }) {
   }, []);
   const [active, setActive] = useState([]);
   useEffect(() => {
-    ActiveController.getHangOutActive().then((res) => {
+    ActiveController.getGenreActive(GenreName).then((res) => {
       setActive(res);
     }).catch((err) => {
       throw err;
@@ -34,8 +35,10 @@ function MoreHang({ navigation }) {
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = () => {
     setRefreshing(true);
-    ActiveController.getHangOutActive('hangout').then((res) => {
+    ActiveController.getGenreActive(GenreName).then((res) => {
       setActive(res);
+    }).catch((err) => {
+      throw err;
     });
     MessageController.countUnreadMessage().then((num) => {
       setMessageNum(num);
@@ -54,12 +57,12 @@ function MoreHang({ navigation }) {
               name="arrowleft"
               size={28}
               color="#28527A"
-              onPress={() => { navigation.navigate('list'); }}
+              onPress={() => { navigation.navigate('search'); }}
             />
           </Box>
           <Box style={styles.nameheader}>
             <Text style={styles.name}>
-              近期揪人
+              {GenreName}
             </Text>
           </Box>
           <Box style={styles.headerCommentView}>
@@ -97,7 +100,7 @@ function MoreHang({ navigation }) {
             renderItem={({ item }) => (
               <Pressable
                 onPress={() => {
-                  navigation.navigate('details', { Cd: item.id, prepage: 'moreHang' });
+                  navigation.navigate('details', { Cd: item.id, prepage: 'more' });
                 }}
               >
                 <VStack style={styles.CardInMore}>
@@ -142,4 +145,4 @@ function MoreHang({ navigation }) {
   );
 }
 
-export default MoreHang;
+export default Genre;

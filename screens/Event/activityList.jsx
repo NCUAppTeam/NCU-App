@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   Text, SafeAreaView, ScrollView, RefreshControl, Image, Dimensions,
+  Pressable,
 } from 'react-native';
 import {
   Title, Card,
@@ -11,23 +12,23 @@ import {
 import {
   NativeBaseProvider, Box, Divider, ZStack, HStack, Button,
 } from 'native-base';
+import { getAuth, signOut } from 'firebase/auth';
 import styles from './style_folder/Styles_activityList';
 import ActiveController from '../../controller/Active';
 import MessageController from '../../controller/Message';
 
 function List({ navigation }) {
-  const user = '110501444';
+  const auth = getAuth();
   const [Messagenum, setMessageNum] = useState(0);
+  const [active1, setActive1] = useState([]);
+  const [active2, setActive2] = useState([]);
+
   useEffect(() => {
-    MessageController.countUnreadMessage(user).then((num) => {
+    MessageController.countUnreadMessage().then((num) => {
       setMessageNum(num);
     }).catch((err) => {
       throw err;
     });
-  }, []);
-  const [active1, setActive1] = useState([]);
-  const [active2, setActive2] = useState([]);
-  useEffect(() => {
     ActiveController.getHangOutActive().then((res) => {
       setActive1(res);
     }).then().catch((err) => {
@@ -43,14 +44,18 @@ function List({ navigation }) {
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = () => {
     setRefreshing(true);
+    MessageController.countUnreadMessage().then((num) => {
+      setMessageNum(num);
+    }).catch((err) => {
+      throw err;
+    });
     ActiveController.getHangOutActive().then((res) => {
       setActive1(res);
+    }).then().catch((err) => {
+      throw err;
     });
     ActiveController.getEventActive().then((res) => {
       setActive2(res);
-    });
-    MessageController.countUnreadMessage(user).then((num) => {
-      setMessageNum(num);
     }).catch((err) => {
       throw err;
     });
@@ -251,6 +256,23 @@ function List({ navigation }) {
                 </Box>
               </Box>
             </Box>
+            <Pressable
+              style={{
+                margin: 50, backgroundColor: 'yellow', height: 100, justifyContent: 'center',
+              }}
+              onPress={() => {
+                signOut(auth).then(() => {
+                  // Sign-out successful.
+                  console.log('Sign-out successful.');
+                }).catch((error) => {
+                  // An error happened.
+                });
+              }}
+            >
+              <Text style={{ alignSelf: 'center' }}>
+                登出
+              </Text>
+            </Pressable>
           </ScrollView>
         </Box>
       </NativeBaseProvider>

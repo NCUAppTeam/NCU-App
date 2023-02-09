@@ -8,7 +8,7 @@ import {
   Title, Card,
 } from 'react-native-paper';
 import {
-  Ionicons, AntDesign, Feather, 
+  Ionicons, AntDesign, Feather,
 } from '@expo/vector-icons';
 import {
   NativeBaseProvider, Box, ZStack, VStack, FlatList, Pressable,
@@ -213,13 +213,13 @@ function Personal({ navigation }) {
             </TouchableOpacity>
           </Box>
         </Box>
-        <Box style={{ flex: 1, alignSelf: 'center' }}>
+        <Box style={{ flex: 1 }}>
           {isPress === '管理活動' && (
             <FlatList
               data={showManage}
               keyExtractor={(item) => item.id}
               showsVerticalScrollIndicator={false}
-              style={{ marginBottom: 10 }}
+              style={{ marginBottom: 10, alignSelf: 'center' }}
               refreshControl={(
                 <RefreshControl
                   refreshing={refreshing}
@@ -306,7 +306,7 @@ function Personal({ navigation }) {
           )}
           {isPress === '參加中' && (
             <FlatList
-              style={{ widht: '100%', alignSelf: 'center' }}
+              style={{ widht: '100%' }}
               numColumns={2}
               data={showNow}
               keyExtractor={(item) => item.id}
@@ -358,57 +358,57 @@ function Personal({ navigation }) {
             />
           )}
           {isPress === '已結束' && (
-            <FlatList
-              style={{ widht: '100%', alignSelf: 'center' }}
-              numColumns={2}
-              data={showEnd}
-              keyExtractor={(item) => item.id}
-              showsVerticalScrollIndicator={false}
-              contentContainerStyle={{ marginLeft: Dimensions.get('window').width * 0.043, justifyContent: 'space-between' }}
-              refreshControl={(
-                <RefreshControl
-                  refreshing={refreshing}
-                  onRefresh={onRefresh}
-                />
+          <FlatList
+            style={{ widht: '100%' }}
+            numColumns={2}
+            data={showEnd}
+            keyExtractor={(item) => item.id}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{ marginLeft: Dimensions.get('window').width * 0.043, justifyContent: 'space-between' }}
+            refreshControl={(
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+              />
               )}
-              renderItem={({ item }) => (
-                <Pressable onPress={() => { navigation.navigate('details', { Cd: item.id, prepage: 'personal' }); }}>
-                  <VStack style={styles.CardInPersonal}>
-                    <Image
-                      style={styles.pic}
-                      source={{
-                        uri: item.imageUri1,
-                      }}
+            renderItem={({ item }) => (
+              <Pressable onPress={() => { navigation.navigate('details', { Cd: item.id, prepage: 'personal' }); }}>
+                <VStack style={styles.CardInPersonal}>
+                  <Image
+                    style={styles.pic}
+                    source={{
+                      uri: item.imageUri1,
+                    }}
+                  />
+                  <Title style={styles.CardTitle}>
+                    {item.name}
+                  </Title>
+                  <Box style={styles.CardStartTime}>
+                    <AntDesign
+                      name="clockcircleo"
+                      size={12}
+                      color="rgba(40, 82, 122, 0.65)"
                     />
-                    <Title style={styles.CardTitle}>
-                      {item.name}
-                    </Title>
-                    <Box style={styles.CardStartTime}>
-                      <AntDesign
-                        name="clockcircleo"
-                        size={12}
-                        color="rgba(40, 82, 122, 0.65)"
-                      />
-                      <Text style={styles.CardTimeText}>
-                        {'   '}
-                        {item.startTimeWeekday}
-                      </Text>
-                    </Box>
-                    <Box style={styles.CardPlace}>
-                      <Ionicons
-                        name="location-outline"
-                        size={15}
-                        color="rgba(40, 82, 122, 0.65)"
-                      />
-                      <Text style={styles.cardPlaceText}>
-                        {'  '}
-                        {item.place}
-                      </Text>
-                    </Box>
-                  </VStack>
-                </Pressable>
-              )}
-            />
+                    <Text style={styles.CardTimeText}>
+                      {'   '}
+                      {item.startTimeWeekday}
+                    </Text>
+                  </Box>
+                  <Box style={styles.CardPlace}>
+                    <Ionicons
+                      name="location-outline"
+                      size={15}
+                      color="rgba(40, 82, 122, 0.65)"
+                    />
+                    <Text style={styles.cardPlaceText}>
+                      {'  '}
+                      {item.place}
+                    </Text>
+                  </Box>
+                </VStack>
+              </Pressable>
+            )}
+          />
           )}
         </Box>
       </NativeBaseProvider>

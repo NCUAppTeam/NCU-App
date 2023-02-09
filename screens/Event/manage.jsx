@@ -1,26 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Text, View, SafeAreaView, TextInput, RefreshControl, Dimensions,
+  Text, View, SafeAreaView, TextInput, RefreshControl,
   ScrollView, TouchableOpacity, Image, TouchableHighlight,
-  Platform,
 } from 'react-native';
-import {
-  Button, Provider, Card, Title,
-} from 'react-native-paper';
+
 import Dialog, { DialogContent } from 'react-native-popup-dialog';
+import { AntDesign, Feather } from '@expo/vector-icons';
 import {
-  Ionicons, AntDesign, MaterialCommunityIcons, Feather, FontAwesome5,
-} from '@expo/vector-icons';
-import {
-  NativeBaseProvider, Box, Divider, Heading, VStack, HStack, FlatList, ZStack,
+  NativeBaseProvider, Box, Divider, Heading, VStack, HStack, FlatList,
 } from 'native-base';
 import { LinearGradient } from 'expo-linear-gradient';
 import ActiveController from '../../controller/Active';
 import MessageController from '../../controller/Message';
+import UserController from '../../controller/getStudentId';
 import styles from './style_folder/Styles_manage';
 
 function Manage({ route, navigation }) {
-  const user = '110501444';
+  const [user, setUser] = useState('');
   const [deletePerson, setDeletePerson] = useState({});
   const [showDialog1, setShowDialog1] = useState(false);
   const [showDialog2, setShowDialog2] = useState(false);
@@ -29,6 +25,7 @@ function Manage({ route, navigation }) {
   const [message, messageSent] = useState('');
   const [attendeesNum, setAttendeeNum] = useState();
   useEffect(() => {
+    setUser(UserController.getUid());
     ActiveController.getTotalOfAttendees(passedID).then((res) => {
       setAttendeeNum(res);
       // console.log(res);
@@ -58,6 +55,7 @@ function Manage({ route, navigation }) {
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = () => {
     setRefreshing(true);
+    setUser(UserController.getUid());
     ActiveController.getOneActive(passedID).then((res) => {
       setActive(res);
     }).catch((err) => {
@@ -374,7 +372,7 @@ function Manage({ route, navigation }) {
                           underlayColor="transparent"
                           onPress={() => {
                             setShowDialog2(true);
-                            setDeletePerson({ studentID: item.studentID, name: item.name });
+                            setDeletePerson({ studentID: item.uid, name: item.name });
                           }}
                         >
                           <Text style={styles.DeletebtnInManageText}>移除</Text>
@@ -525,8 +523,8 @@ function Manage({ route, navigation }) {
                             style={styles.MessagebtnInManageText}
                             onPress={() => {
                               navigation.navigate('send', {
-                                attendeeID: item.studentID,
-                                userID: '110501444',
+                                attendeeUid: item.uid,
+                                userUid: user,
                               });
                             }}
                           >

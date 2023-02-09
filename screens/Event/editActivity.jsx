@@ -87,17 +87,17 @@ function Edit({ route, navigation }) {
       quality: 1,
     });
 
-    NoPicLink = result.uri;
-    if (!result.cancelled) {
+    NoPicLink = result.assets[0].uri;
+    if (!result.assets[0].canceled) {
       if (image1 === undefined) {
-        setImage1(result.uri);
-        setNEWdata({ ...NEWdata, image1: result.uri });
+        setImage1(result.assets[0].uri);
+        setNEWdata({ ...NEWdata, image1: result.assets[0].uri });
       } else if (image2 === undefined) {
-        setImage2(result.uri);
-        setNEWdata({ ...NEWdata, image2: result.uri });
+        setImage2(result.assets[0].uri);
+        setNEWdata({ ...NEWdata, image2: result.assets[0].uri });
       } else if (image3 === undefined) {
-        setImage3(result.uri);
-        setNEWdata({ ...NEWdata, image3: result.uri });
+        setImage3(result.assets[0].uri);
+        setNEWdata({ ...NEWdata, image3: result.assets[0].uri });
       }
     }
   };

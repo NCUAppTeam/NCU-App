@@ -17,8 +17,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import * as ImagePicker from 'expo-image-picker';
 import styles from './style_folder/Styles_Message';
 import MessageController from '../../controller/Message';
-// set send: 110501444 陳似亭
-// receive: 111201512 沈思怡
+import UserController from '../../controller/getStudentId';
 
 function Send({ route, navigation }) {
   const scrollview = useRef();
@@ -36,28 +35,28 @@ function Send({ route, navigation }) {
     }
   };
   const [showDialog, setShowDialog] = useState(false);
-  const { attendeeID } = route.params;
-  const { userID } = route.params;
+  const { attendeeUid } = route.params;
+  const { userUid } = route.params;
   const keyboard = useKeyboard();
   const [attendeeINFO, setAttendeeInfo] = useState({});
   const [userIDINFO, setUserIDInfo] = useState({});
   const [data, setData] = useState({
-    send: userID,
-    receive: attendeeID,
+    send: userUid,
+    receive: attendeeUid,
   });
   const [getData, setGetData] = useState([]);
   useEffect(() => {
-    MessageController.getRelativeMessage(userID, attendeeID).then((res) => {
+    MessageController.getRelativeMessage(userUid, attendeeUid).then((res) => {
       setGetData(res);
     }).then().catch((err) => {
       throw err;
     });
-    MessageController.getINFO(userID).then((res) => {
+    UserController.getINFO(userUid).then((res) => {
       setUserIDInfo(res);
     }).then().catch((err) => {
       throw err;
     });
-    MessageController.getINFO(attendeeID).then((res) => {
+    UserController.getINFO(attendeeUid).then((res) => {
       setAttendeeInfo(res);
     }).then().catch((err) => {
       throw err;
@@ -66,17 +65,17 @@ function Send({ route, navigation }) {
   }, []);
 
   const onRefresh = () => {
-    MessageController.getRelativeMessage(userID, attendeeID).then((res) => {
+    MessageController.getRelativeMessage(userUid, attendeeUid).then((res) => {
       setGetData(res);
     }).then().catch((err) => {
       throw err;
     });
-    MessageController.getINFO(userID).then((res) => {
+    UserController.getINFO(userUid).then((res) => {
       setUserIDInfo(res);
     }).then().catch((err) => {
       throw err;
     });
-    MessageController.getINFO(attendeeID).then((res) => {
+    UserController.getINFO(attendeeUid).then((res) => {
       setAttendeeInfo(res);
     }).then().catch((err) => {
       throw err;
@@ -94,7 +93,7 @@ function Send({ route, navigation }) {
       data.image = result.uri;
       data.sendTime = new Date();
       console.log(data);
-      await MessageController.addMessage(data, userID);
+      await MessageController.addMessage(data, userUid);
       onRefresh();
       scrollview.current.scrollToEnd({ animated: true });
     }
@@ -149,14 +148,14 @@ function Send({ route, navigation }) {
               <Box style={styles.sendArea}>
                 <Box
                   style={[
-                    item.send === userID && { alignItems: 'flex-end' },
-                    item.receive === userID && { alignItems: 'flex-start' },
+                    item.send === userUid && { alignItems: 'flex-end' },
+                    item.receive === userUid && { alignItems: 'flex-start' },
                   ]}
                 >
                   <Box
                     style={[
-                      item.send === userID && { flexDirection: 'row' },
-                      item.receive === userID && { flexDirection: 'row-reverse' },
+                      item.send === userUid && { flexDirection: 'row' },
+                      item.receive === userUid && { flexDirection: 'row-reverse' },
                     ]}
                   >
                     <Box style={{ maxWidth: 180 }}>
@@ -275,7 +274,7 @@ function Send({ route, navigation }) {
                       </Card>
                     </Box>
                     <Box style={{ marginHorizontal: 12 }}>
-                      {item.send === userID
+                      {item.send === userUid
                         ? (
                           <Image
                             style={{ height: 36, width: 36, borderRadius: 18 }}
@@ -316,7 +315,7 @@ function Send({ route, navigation }) {
                     data.sendTime = new Date();
                     MessageController.addMessage({
                       ...data, message: '請問有什麼需要注意的嗎？', sendTime: data.sendTime, readForUser: true, readForOthers: false, image: '',
-                    }, userID);
+                    }, userUid);
                     onRefresh();
                   }}
                 >
@@ -332,7 +331,7 @@ function Send({ route, navigation }) {
                     data.sendTime = new Date();
                     MessageController.addMessage({
                       ...data, message: '請問有需要自行準備的東西嗎？', sendTime: data.sendTime, readForUser: true, readForOthers: false, image: '',
-                    }, userID);
+                    }, userUid);
                     onRefresh();
                   }}
                 >
@@ -394,7 +393,7 @@ function Send({ route, navigation }) {
                   if (!(data.message === '') || !(data.image === undefined)) {
                     data.sendTime = new Date();
                     // console.log(data);
-                    MessageController.addMessage(data, userID);
+                    MessageController.addMessage(data, userUid);
                     onRefresh();
                     setData({ ...data, message: '' });
                   }

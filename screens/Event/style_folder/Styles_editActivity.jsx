@@ -6,7 +6,7 @@ export default StyleSheet.create({
   },
   btnPress: {
     height: 40,
-    width: 90,
+    width: 100,
     backgroundColor: '#28527A',
     justifyContent: 'center',
     borderRadius: 5,
@@ -14,7 +14,7 @@ export default StyleSheet.create({
   },
   btnNormal: {
     height: 40,
-    width: 90,
+    width: 100,
     justifyContent: 'center',
     borderRadius: 5,
     backgroundColor: '#E5EBF1',
@@ -31,18 +31,7 @@ export default StyleSheet.create({
     color: '#FBEEAC',
   },
   bodyforCostAndLimitnum: {
-    flexDirection: 'row',
-  },
-  container: {
     flex: 1,
-    flexDirection: 'column',
-    alignContent: 'center',
-    marginTop: 50,
-    marginHorizontal: 15,
-    // marginHorizontal: Dimensions.get('window').width * 0.07,
-  },
-  categorybutton: {
-    flexWrap: 'wrap',
     flexDirection: 'row',
   },
   CostTitle: {
@@ -69,12 +58,23 @@ export default StyleSheet.create({
     borderRadius: 5,
     textAlign: 'left',
     textAlignVertical: 'center',
+    marginTop: Dimensions.get('window').height * 0.01,
   },
-  Cloudicon: {
-    marginTop: 9,
+  container: {
+    flex: 1,
+    flexDirection: 'column',
+    alignContent: 'center',
+    marginTop: 50,
+    marginHorizontal: 15,
+  },
+  categorybutton: {
+    flexWrap: 'wrap',
+    flexDirection: 'row',
+  },
+  Cloudicontext: {
     color: 'white',
     fontSize: 14,
-    marginLeft: 8,
+    marginLeft: 5,
   },
   details: {
     height: 80,
@@ -89,6 +89,23 @@ export default StyleSheet.create({
     alignItems: 'center',
     alignContent: 'center',
     justifyContent: 'center',
+  },
+  image: {
+    width: 85,
+    height: 85,
+    alignItems: 'center',
+    marginTop: 5,
+    backgroundColor: '#4169E1',
+  },
+  imageButton: {
+    width: 160,
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 4,
+    marginTop: 5,
+    flexDirection: 'row',
+    backgroundColor: '#28527A',
   },
   input: {
     width: '100%',
@@ -115,22 +132,6 @@ export default StyleSheet.create({
     textAlign: 'left',
     marginLeft: 5,
   },
-  image: {
-    width: 85,
-    height: 85,
-    alignItems: 'center',
-    marginTop: 5,
-    backgroundColor: '#4169E1',
-  },
-  imageButton: {
-    width: 160,
-    height: 40,
-    alignItems: 'center',
-    borderRadius: 4,
-    marginTop: 5,
-    flexDirection: 'row',
-    backgroundColor: '#28527A',
-  },
   LimitnumTitle: {
     flex: 1.3,
     fontSize: 16,
@@ -144,13 +145,12 @@ export default StyleSheet.create({
     borderColor: '#bfbebe',
     marginTop: 5,
     marginBottom: 20,
-    marginLeft: 50,
+    marginLeft: Dimensions.get('window').width * 0.13,
     borderRadius: 5,
   },
   name: {
     marginLeft: 45,
     fontSize: 24,
-    // fontWeight: 'bold',
     color: '#28527A',
   },
   nameheader: {
@@ -170,9 +170,10 @@ export default StyleSheet.create({
   unsentButton: {
     borderRadius: 30,
     width: 297,
-    height: 48,
+    height: 51,
     paddingVertical: 8,
-    marginVertical: 51,
+    marginTop: Dimensions.get('window').height * 0.004,
+    marginBottom: Dimensions.get('window').height * 0.02,
     backgroundColor: '#D4D4D4',
     elevation: 20,
     shadowColor: '#000',
@@ -186,9 +187,10 @@ export default StyleSheet.create({
   sentButton: {
     borderRadius: 30,
     width: 297,
-    height: 48,
+    height: 51,
     paddingVertical: 8,
-    marginVertical: 51,
+    marginTop: Dimensions.get('window').height * 0.004,
+    marginBottom: Dimensions.get('window').height * 0.02,
     elevation: 20,
     shadowColor: '#000',
   },

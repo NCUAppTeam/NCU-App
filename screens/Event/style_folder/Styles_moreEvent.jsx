@@ -1,45 +1,51 @@
-import { StyleSheet, Dimensions } from 'react-native';
+import { Platform, StyleSheet, Dimensions } from 'react-native';
 
 export default StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'column',
     alignContent: 'center',
-    paddingTop: 50,
     backgroundColor: '#fafafa',
-    // borderWidth: 1,
   },
   headerContainer: {
-    marginHorizontal: Dimensions.get('window').width * 0.07,
     flexDirection: 'row',
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height * 0.04,
+    marginTop: Platform.OS === 'ios' ? Dimensions.get('window').height * 0.02 : 53,
+    marginBottom: 20,
   },
   headerArrowBox: {
-    justifyContent: 'center', alignItems: 'flex-start',
+    flex: 1.9,
+    marginLeft: Dimensions.get('window').width * 0.05,
+    justifyContent: 'center',
   },
   nameheader: {
+    flex: 9,
     alignItems: 'center',
-    width: 'auto',
-    flex: 1,
     justifyContent: 'center',
   },
   name: {
-    marginLeft: 45,
     fontSize: 24,
     color: '#28527A',
   },
   headerCommentView: {
-    justifyContent: 'center', alignItems: 'flex-end',
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'flex-end',
   },
   headerPersonalView: {
-    justifyContent: 'center', alignItems: 'flex-end', marginLeft: 10,
+    justifyContent: 'center',
+    alignItems: 'flex-end',
+    marginHorizontal: Dimensions.get('window').width * 0.03,
   },
   bodyContainer: {
     flex: 1,
-    alignItems: 'center',
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    marginHorizontal: Dimensions.get('window').width * 0.03,
     marginTop: 7,
   },
   CardInMore: {
-    height: Dimensions.get('window').width * 0.58,
+    height: Dimensions.get('window').width * 0.58 + 5,
     width: Dimensions.get('window').width * 0.42,
     borderRadius: 10,
     shadowColor: 'black',

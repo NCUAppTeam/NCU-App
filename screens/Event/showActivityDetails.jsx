@@ -7,12 +7,13 @@ import {
   Ionicons, FontAwesome5, AntDesign, MaterialCommunityIcons, Feather, Fontisto, Octicons,
 } from '@expo/vector-icons';
 import {
-  NativeBaseProvider, Box, Divider, Center, HStack,
+  NativeBaseProvider, Box, Divider, Center, HStack, VStack,
 } from 'native-base';
 import styles from './style_folder/Styles_showActivityDetails';
 import ActiveController from '../../controller/Active';
 
-function detailscreen({ route, navigation }) {
+function Detailscreen({ route, navigation }) {
+  const user = '110501444';
   const Cd = route.params;
   const passedID = JSON.stringify(Cd).slice(7, 27);
   const prepage = JSON.stringify(Cd).slice(40, -2);
@@ -74,64 +75,49 @@ function detailscreen({ route, navigation }) {
   };
   const [showDialog, setShowDialog] = useState(false);
   return (
-
-    <NativeBaseProvider>
-      <SafeAreaView style={styles.showActivityDetails_container}>
+    <SafeAreaView style={styles.showActivityDetails_container}>
+      <NativeBaseProvider>
         {active.map(({ genre }) => (
-          <View style={{
-            flexDirection: 'row', width: 'auto',
-          }}
-          >
-            <View style={{
-              marginLeft: Dimensions.get('window').width * 0.0816,
-              zIndex: 2,
-              marginTop: 2,
-              position: 'absolute',
-            }}
-            >
+          <Box style={styles.headerContainer}>
+            <Box style={styles.headerArrowBox}>
               <AntDesign
                 name="arrowleft"
-                size={33}
+                size={28}
                 color="#28527A"
-                onPress={() => { navigation.navigate(prepage); }}
+                onPress={() => { navigation.navigate('list'); }}
               />
-            </View>
-            <View style={{
-              alignItems: 'center', flex: 1, zIndex: 1,
-            }}
-            >
-              <Text style={{ fontSize: 24, color: '#28527A' }}>
+            </Box>
+            <Box style={styles.nameheader}>
+              <Text style={styles.name}>
                 {genre}
               </Text>
-            </View>
-          </View>
+            </Box>
+            <Box style={{ flex: 2.5 }} />
+          </Box>
         ))}
         <ScrollView
           vertical
+          showsVerticalScrollIndicator={false}
           style={{ flexDirection: 'column', marginTop: 8.5 }}
         >
           {active.map(({
             id, name, imageUri1, startTimeWeekday, endTimeWeekday, place, limitNum, genre,
             cost, link, details, imageUri2, imageUri3,
           }) => (
-            <View>
+            <Box>
               <ScrollView
                 horizontal
                 onScroll={whenScrolling}
                 showsHorizontalScrollIndicator={false}
-                style={imageUri2 || imageUri3
-                  ? { marginLeft: Dimensions.get('window').width * 0.08 }
-                  : { marginLeft: Dimensions.get('window').width * 0.149 }}
+                style={{ width: Dimensions.get('window').width / 2, alignSelf: 'center' }}
               >
                 {(imageUri1) && (
-                  <View>
-                    <Image
-                      style={styles.bigpic}
-                      source={{
-                        uri: imageUri1,
-                      }}
-                    />
-                  </View>
+                  <Image
+                    style={styles.bigpic}
+                    source={{
+                      uri: imageUri1,
+                    }}
+                  />
                 )}
                 {(imageUri2) && (
                 <View style={imageUri3
@@ -149,7 +135,7 @@ function detailscreen({ route, navigation }) {
                 </View>
                 )}
                 {(imageUri3) && (
-                <View style={{ marginLeft: 10, marginRight: Dimensions.get('window').width * 0.07 }}>
+                <View style={{ marginLeft: 10 }}>
                   <Image
                     style={styles.bigpic}
                     source={{
@@ -159,7 +145,7 @@ function detailscreen({ route, navigation }) {
                 </View>
                 )}
               </ScrollView>
-              <View style={{
+              <Box style={{
                 marginTop: 12,
                 marginBottom: 18,
                 justifyContent: 'center',
@@ -193,25 +179,20 @@ function detailscreen({ route, navigation }) {
                     : (styles.imageDotNoHere)
                 }
                 />
-              </View>
-              <View style={{
-                paddingLeft: Dimensions.get('window').width * 0.08213,
-                paddingRight: Dimensions.get('window').width * 0.08377,
-              }}
-              >
-                <View style={{
+              </Box>
+              <Box style={styles.bodyContainer}>
+                <Box style={{
                   flexDirection: 'row',
-                  justifyContent: 'space-between',
                   marginBottom: 10,
                 }}
                 >
                   <Text style={{
-                    fontSize: 24, color: '#28527A', fontWeight: 'bold',
+                    fontSize: 24, color: '#28527A', fontWeight: 'bold', flex: 9,
                   }}
                   >
                     {name}
                   </Text>
-                  <View style={{ justifyContent: 'center' }}>
+                  <Box style={{ flex: 1 }}>
                     <Ionicons
                       name="share-social-outline"
                       size={28}
@@ -221,8 +202,8 @@ function detailscreen({ route, navigation }) {
                       }}
                     />
                     <Dialog
-                      width={Dimensions.get('window').width * 0.9}
-                      height={Dimensions.get('window').width}
+                      width={Dimensions.get('window').width * 0.8}
+                      height={400}
                       visible={showDialog}
                       dialogTitle={(
                         <NativeBaseProvider>
@@ -324,16 +305,16 @@ function detailscreen({ route, navigation }) {
                         setShowDialog(false);
                       }}
                     />
-                  </View>
-                </View>
-                <View style={{ flexDirection: 'row', marginBottom: 10 }}>
-                  <View style={{ justifyContent: 'center' }}>
+                  </Box>
+                </Box>
+                <Box style={{ flexDirection: 'row', marginBottom: 10 }}>
+                  <Box style={{ justifyContent: 'center' }}>
                     <AntDesign
                       name="clockcircleo"
                       size={16}
                       color="#28527A"
                     />
-                  </View>
+                  </Box>
                   <Text style={styles.CardTimeText}>
                     <Text style={{ color: '#BFBFBF' }}>
                   &emsp;&nbsp;從&nbsp;
@@ -345,8 +326,8 @@ function detailscreen({ route, navigation }) {
                     </Text>
                     {endTimeWeekday}
                   </Text>
-                </View>
-                <View style={{
+                </Box>
+                <Box style={{
                   flexDirection: 'row', marginLeft: -2, marginBottom: 10,
                 }}
                 >
@@ -359,8 +340,8 @@ function detailscreen({ route, navigation }) {
                   &emsp;
                     {place}
                   </Text>
-                </View>
-                <View style={{ flexDirection: 'row', marginLeft: -2 }}>
+                </Box>
+                <Box style={{ flexDirection: 'row', marginLeft: -2 }}>
                   <MaterialCommunityIcons
                     name="web"
                     size={20}
@@ -370,20 +351,20 @@ function detailscreen({ route, navigation }) {
                   &emsp;
                     {link}
                   </Text>
-                </View>
-              </View>
-              <View style={{ marginLeft: 25, marginRight: 15 }}>
-                <Divider bg="#d9d9d9" w={374}/* my=margin-top and margin-bottom */ />
-              </View>
-              <View style={{ flexDirection: 'row', marginLeft: Dimensions.get('window').width * 0.08 }}>
+                </Box>
+              </Box>
+              <Box style={{ marginHorizontal: 30 }}>
+                <Divider bg="#d9d9d9" w="99%"/* my=margin-top and margin-bottom */ />
+              </Box>
+              <Box style={{ marginLeft: Dimensions.get('window').width * 0.08 }}>
                 <HStack>
-                  <Box style={{ width: 155 }}>
+                  <Box style={{ flex: 1 }}>
                     <HStack>
                       <Ionicons
                         name="logo-usd"
                         size={22}
                         color="#28527A"
-                        style={{ marginTop: 10, marginLeft: -2 }}
+                        style={{ marginTop: 10 }}
                       />
                       {cost !== '免費free' && (
                       <Text style={{
@@ -410,9 +391,9 @@ function detailscreen({ route, navigation }) {
                     </HStack>
                   </Box>
                   <Center>
-                    <Divider my={2} marginLeft={5} marginRight={5} h={28} orientation="vertical" bg="#bfbebe" /* my=margin-top and margin-bottom */ />
+                    <Divider my={2} marginRight={5} h={28} orientation="vertical" bg="#bfbebe" /* my=margin-top and margin-bottom */ />
                   </Center>
-                  <Box>
+                  <Box style={{ flex: 1.1 }}>
                     <HStack>
                       <Feather
                         name="users"
@@ -444,11 +425,11 @@ function detailscreen({ route, navigation }) {
                     </HStack>
                   </Box>
                 </HStack>
-              </View>
-              <View style={{ marginLeft: 25, marginRight: 15 }}>
-                <Divider bg="#d9d9d9" w={374}/* my=margin-top and margin-bottom */ />
-              </View>
-              <View style={{ marginLeft: Dimensions.get('window').width * 0.07 }}>
+              </Box>
+              <Box style={{ marginHorizontal: 30 }}>
+                <Divider bg="#d9d9d9" w="99%"/* my=margin-top and margin-bottom */ />
+              </Box>
+              <Box style={{ marginLeft: Dimensions.get('window').width * 0.07 }}>
                 <Text style={{
                   color: 'black', fontSize: 16, fontWeight: 'bold', marginVertical: 10,
                 }}
@@ -458,24 +439,24 @@ function detailscreen({ route, navigation }) {
                 <Text>
                   {details}
                 </Text>
-              </View>
-              <View style={{ marginLeft: 25, marginRight: 15 }}>
-                <Divider bg="#d9d9d9" w={374} my={3}/* my=margin-top and margin-bottom */ />
-              </View>
-            </View>
+              </Box>
+              <Box style={{ marginHorizontal: 30 }}>
+                <Divider bg="#d9d9d9" w="99%" my={3}/* my=margin-top and margin-bottom */ />
+              </Box>
+            </Box>
           ))}
           {info.map(({
-            name, phone, email, avatar,
+            name, phone, email, avatar, studentID,
           }) => (
-            <View style={{ marginLeft: Dimensions.get('window').width * 0.08 }}>
+            <Box style={{ marginLeft: Dimensions.get('window').width * 0.07, marginBottom: 10 }}>
               <Text style={{
                 color: 'black', fontSize: 16, fontWeight: 'bold', marginVertical: 10,
               }}
               >
                 主辦人
               </Text>
-              <View style={{ flexDirection: 'row', marginLeft: Dimensions.get('window').width * 0.08, marginBottom: 5 }}>
-                <Box style={{ flex: 1.5, marginLeft: -Dimensions.get('window').width * 0.01, marginTop: Dimensions.get('window').width * 0.03 }}>
+              <Box style={{ flexDirection: 'row', marginLeft: Dimensions.get('window').width * 0.08, marginBottom: 5 }}>
+                <Box style={{ flex: 2, marginTop: Dimensions.get('window').width * 0.03 }}>
                   <Image
                     style={styles.avatar}
                     source={{
@@ -483,79 +464,74 @@ function detailscreen({ route, navigation }) {
                     }}
                   />
                 </Box>
-                <Box style={{ flex: 3 }}>
-                  <Text>
-                    <Box>
-                      <Feather
-                        name="user"
-                        size={20}
-                        color="#28527A"
-                        style={{ marginTop: 10 }}
-                      >
-                        <Text style={{ fontSize: 12, marginTop: 10 }}>
+                <Box style={{ flex: 3, alignSelf: 'center' }}>
+                  <VStack>
+                    <Feather
+                      name="user"
+                      size={20}
+                      color="#28527A"
+                      style={{ marginTop: 10 }}
+                    >
+                      <Text style={{ fontSize: 12 }}>
                   &emsp;
-                          {name}
-                        </Text>
-                      </Feather>
-                    </Box>
-                    {'\n'}
-                    <Box>
-                      <Feather
-                        name="phone"
-                        size={18}
-                        color="#28527A"
-                        style={{ marginTop: 10 }}
-                      >
-                        <Text style={{ fontSize: 12, textAlignVertical: 'center' }}>
+                        {name}
+                      </Text>
+                    </Feather>
+                    <Feather
+                      name="phone"
+                      size={18}
+                      color="#28527A"
+                      style={{ marginTop: 10 }}
+                    >
+                      <Text style={{ fontSize: 12, textAlignVertical: 'center' }}>
                     &emsp;
-                          {phone}
-                        </Text>
-                      </Feather>
-                    </Box>
-                    {'\n'}
-                    <Box>
-                      <Feather
-                        name="mail"
-                        size={18}
-                        color="#28527A"
-                        style={{ marginTop: 10 }}
-                      >
-                        <Text style={{ fontSize: 12, textAlignVertical: 'center' }}>
+                        {phone}
+                      </Text>
+                    </Feather>
+                    <Feather
+                      name="mail"
+                      size={18}
+                      color="#28527A"
+                      style={{ marginTop: 10 }}
+                    >
+                      <Text style={{ fontSize: 12, textAlignVertical: 'center' }}>
                       &emsp;
-                          {email}
-                        </Text>
-                      </Feather>
-                    </Box>
-                    {'\n'}
-                    <Box>
-                      <FontAwesome5
-                        name="comment"
-                        size={20}
-                        color="#28527A"
-                        style={{ marginTop: 10 }}
-                      >
-                        <Text style={{ fontSize: 12, marginTop: 10 }}>
-                          {'    '}
-                        </Text>
+                        {email}
+                      </Text>
+                    </Feather>
+                    <FontAwesome5
+                      name="comment"
+                      size={20}
+                      color="#28527A"
+                      style={{ marginTop: 10 }}
+                    >
+                      <Text style={{ fontSize: 12, marginTop: 10 }}>
+                        {'    '}
+                      </Text>
 
-                        <Text
-                          style={{ fontSize: 12, marginTop: 10, textDecorationLine: 'underline' }}
-                          onPress={() => {
-                            console.log('私訊功能仍在開發中');
-                          }}
-                        >
-                          私訊主辦人
-                        </Text>
-                      </FontAwesome5>
-                    </Box>
-                  </Text>
+                      <Text
+                        style={{ fontSize: 12, marginTop: 10, textDecorationLine: 'underline' }}
+                        onPress={() => {
+                          if (studentID !== '110501444') {
+                            navigation.navigate('send', {
+                              attendeeID: studentID,
+                              userID: '110501444',
+                            });
+                          }
+                        }}
+                      >
+                        私訊主辦人
+                      </Text>
+                    </FontAwesome5>
+                  </VStack>
                 </Box>
-              </View>
-              <View style={{ flexDirection: 'row', marginBottom: 20 }}>
+              </Box>
+              {user !== studentID && (
+              <Box style={{ flexDirection: 'row', marginBottom: 20 }}>
                 <TouchableOpacity
                   style={styles.sentMessage}
                   onPress={() => {
-                    console.log('報名功能仍在開發中');
+                  // console.log('報名功能仍在開發中');
                     if (!SignUp) {
                       Alert.alert(
                         '確認報名?',
@@ -598,17 +574,16 @@ function detailscreen({ route, navigation }) {
                     />
                     {SignUp ? '取消報名' : '報名候補'}
                   </Text>
-
                 </TouchableOpacity>
-              </View>
-            </View>
-
+              </Box>
+              )}
+            </Box>
           ))}
         </ScrollView>
-      </SafeAreaView>
-    </NativeBaseProvider>
+      </NativeBaseProvider>
+    </SafeAreaView>
 
   );
 }
 
-export default detailscreen;
+export default Detailscreen;

@@ -666,21 +666,19 @@ async function removeAttendee(docID, studentUid) { // remove attendee
   result.forEach((doc1) => console.log(doc1.id));
 }
 
-async function addUser() {
+async function addUser(uid, newUserInfo) {
   const db = getFirestore(app);
   const attendeeRef = query(collection(db, 'attendees'));
-  const memberInfo = {
-    studentID: '111201512',
-    name: '沈思怡',
-    major: '英美語文學系',
-    grade: 1,
-    phone: '0906666888',
-    email: 'jintong@4ever.com',
-    avatar: 'https://firebasestorage.googleapis.com/v0/b/ncu-app-test.appspot.com/o/avatar%2Fsee.jpg?alt=media&token=38cd1d0d-2b29-44cd-9461-5f9afa354f53',
-  };
-  const docRef = doc(db, 'attendees', '111201512');
+  const memberInfo = newUserInfo;
+  const imageAddress = `avatar/${imagePos(newUserInfo.avatar)}`;
+  const storageRef = ref(storage, imageAddress);
+  const response = await fetch(newUserInfo.avatar);
+  const blob = await response.blob();
+  const uploadTask = await uploadBytes(storageRef, blob);
+  memberInfo.avatar = await getDownloadURL(uploadTask.ref);
+  console.log(memberInfo);
 
-  setDoc(docRef, memberInfo, { merge: true })
+  setDoc(doc(db, 'attendees', `${uid}`), { memberInfo }, { merge: true })
     .then(console.log('succeed'));
   const result = await getDocs(attendeeRef);
   result.forEach((doc1) => console.log(doc1.data()));

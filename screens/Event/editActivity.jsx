@@ -590,7 +590,7 @@ function Edit({ route, navigation }) {
                           setImage1(image2);
                           NEWdata.image1 = image2;
                           setImage2(NoPicLink);
-                          setNEWdata({ ...NEWdata, image2: NoPicLink });
+                          setNEWdata({ ...NEWdata, image2: 'forward' });
                         }
                         if (image3) {
                           setImage1(image2);
@@ -598,7 +598,7 @@ function Edit({ route, navigation }) {
                           setImage2(image3);
                           NEWdata.image2 = image3;
                           setImage3(NoPicLink);
-                          setNEWdata({ ...NEWdata, image3: NoPicLink });
+                          setNEWdata({ ...NEWdata, image3: 'forward' });
                         }
                         if (!NEWdata.image1) {
                           setNEWdata({ ...NEWdata, image1: genreID });
@@ -619,11 +619,12 @@ function Edit({ route, navigation }) {
                       style={{ marginLeft: 68, marginTop: 6 }}
                       onPress={() => {
                         setImage2(NoPicLink);
+                        setNEWdata({ ...NEWdata, image2: 'removed' });
                         if (image3) {
                           setImage2(image3);
                           NEWdata.image2 = image3;
                           setImage3(NoPicLink);
-                          setNEWdata({ ...NEWdata, image3: NoPicLink });
+                          setNEWdata({ ...NEWdata, image3: 'forward' });
                         }
                       }}
                     />
@@ -641,7 +642,7 @@ function Edit({ route, navigation }) {
                       style={{ marginLeft: 68, marginTop: 6 }}
                       onPress={() => {
                         setImage3(NoPicLink);
-                        setNEWdata({ ...NEWdata, image3: NoPicLink });
+                        setNEWdata({ ...NEWdata, image3: 'removed' });
                       }}
                     />
                   </ZStack>

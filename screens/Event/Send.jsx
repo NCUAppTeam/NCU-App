@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import {
   Text, View, SafeAreaView, Dimensions,
   ScrollView, Image, TouchableHighlight, TextInput,
-  Platform,
+  Platform, RefreshControl,
 } from 'react-native';
 import { useKeyboard } from '@react-native-community/hooks';
 import {
@@ -63,8 +63,9 @@ function Send({ route, navigation }) {
     });
     scrollview.current.scrollToEnd({ animated: true });
   }, []);
-
+  const [refreshing, setRefreshing] = useState(false);
   const onRefresh = () => {
+    setRefreshing(true);
     MessageController.getRelativeMessage(userUid, attendeeUid).then((res) => {
       setGetData(res);
     }).then().catch((err) => {
@@ -81,6 +82,7 @@ function Send({ route, navigation }) {
       throw err;
     });
     scrollview.current.scrollToEnd({ animated: true });
+    setRefreshing(false);
   };
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -90,7 +92,7 @@ function Send({ route, navigation }) {
       quality: 1,
     });
     if (!result.canceled) {
-      data.image = result.uri;
+      data.image = result.assets[0].uri;
       data.sendTime = new Date();
       console.log(data);
       await MessageController.addMessage(data, userUid);
@@ -139,6 +141,18 @@ function Send({ route, navigation }) {
         </LinearGradient>
         <Box style={keyboard.keyboardShown ? { flex: 1 } : { flex: 5.3 }}>
           <FlatList
+            refreshControl={(
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={
+                  MessageController.getRelativeMessage(userUid, attendeeUid).then((res) => {
+                    setGetData(res);
+                  }).then().catch((err) => {
+                    throw err;
+                  })
+                }
+              />
+          )}
             data={getData}
             keyExtractor={(item) => item.id}
             showsVerticalScrollIndicator={false}

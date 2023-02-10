@@ -6,7 +6,7 @@ import {
   getStorage,
   ref,
   getDownloadURL,
-  refFromURL,
+  uploadBytes,
 } from 'firebase/storage';
 import UserController from './getStudentId';
 
@@ -40,12 +40,12 @@ async function addMessage(messageData, userUid) {
     item.image = '';
   } else if (messageData.image) {
     const imageAddress = `message/${imagePos(messageData.image)}`;
-    const storageRef = ref(storage).child(imageAddress);
+    const storageRef = ref(storage, imageAddress);
     const response = await fetch(messageData.image);
     const blob = await response.blob();
-    const st = storageRef.put(blob);
-    await st;
-    const uri = await getDownloadURL(storageRef);
+    const uploadTask = await uploadBytes(storageRef, blob);
+    const uri = await getDownloadURL(uploadTask.ref);
+
     if (uri !== undefined) {
       item.image = uri;
     } else {
@@ -56,7 +56,7 @@ async function addMessage(messageData, userUid) {
   const db = getFirestore(app);
   const messageRef = query(collection(db, 'message'));
   addDoc(messageRef, item).then(() => {
-    console.log('item');
+    console.log('message sent successfully!');
   })
     .catch((error) => {
       console.log(error);

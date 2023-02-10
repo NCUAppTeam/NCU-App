@@ -1,7 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import {
   getFirestore, collection, query, getDoc, getDocs, addDoc,
-  setDoc, updateDoc, doc, orderBy, where, deleteDoc, deleteField,
+  setDoc, doc, orderBy, where, deleteDoc, deleteField, updateDoc,
 } from 'firebase/firestore';
 import {
   getStorage,
@@ -97,7 +97,7 @@ const firebaseConfig = {
   appId: '1:739839700130:web:37591d0118a440488cfbfb',
 };
 const app = initializeApp(firebaseConfig);
-const storage = getStorage(app);
+const storage = getStorage();
 
 /**
  *
@@ -119,10 +119,6 @@ function imagePos(imageUri) {
  * @param {*} active
  */
 async function addActive(active) {
-  let uri1;
-  let uri2;
-  let uri3;
-
   const UserStudent = UserController.getUid();
   const item = {
     name: active.name,
@@ -192,9 +188,6 @@ async function addActive(active) {
  * @param {*} NEWactive
  */
 async function updateActive(oldID, NEWactive) {
-  let uri1;
-  let uri2;
-  let uri3;
   let defaultRef;
 
   const NEWitem = NEWactive;
@@ -202,67 +195,109 @@ async function updateActive(oldID, NEWactive) {
   const db = getFirestore(app);
   const activesRef = doc(db, `actives/${oldID}`);
   const querySnapshot = await getDoc(activesRef);
-
   if (NEWactive.genre) {
     defaultRef = defaultLinks[values.indexOf(NEWactive.genre)].link;
   } else {
     defaultRef = defaultLinks[values.indexOf(querySnapshot.data().genre)].link;
   }
 
+  // 狀況1: 主辦者沒有上傳新照片 && 換了分類 && 原本照片是上個分類的預設照片
   if (!NEWactive.image1 && NEWactive.genre && querySnapshot.data().imageUri1 === defaultLinks[values.indexOf(querySnapshot.data().genre)].link) {
-    console.log('new genre link');
+    console.log('status 1: new genre link');
     NEWitem.imageUri1 = defaultRef;
-  } else if (!NEWactive.image1 && !NEWactive.genre && querySnapshot.data().imageUri1 === defaultLinks[values.indexOf(querySnapshot.data().genre)].link) {
-    console.log('new genre link');
+    delete NEWitem.image1;
+  }
+  // 狀況2: 主辦者希望用預設照片
+  else if (NEWactive.image1 === values.indexOf(querySnapshot.data().genre) || NEWactive.image1 === values.indexOf(NEWactive.genre)) {
+    console.log('status 2: use default image');
     NEWitem.imageUri1 = defaultRef;
-  } else if (NEWactive.image1 === values.indexOf(querySnapshot.data().genre)) {
-    NEWitem.imageUri1 = defaultRef;
-  } else if (NEWactive.image1 === values.indexOf(NEWactive.genre)) {
-    NEWitem.imageUri1 = defaultRef;
-  } else if (NEWactive.image1) {
-    if (NEWactive.image1 === querySnapshot.data().imageUri2) {
+    delete NEWitem.image1;
+  }
+  // 狀況3: 主辦者第一張照片換了
+  else if (NEWactive.image1) {
+    if (NEWactive.image2 === 'forward') { // 如果是第二張照片往前補
+      delete NEWitem.image1;
+      delete NEWitem.image2;
       const docRef = doc(db, 'actives', oldID);
       const data = {
-        image2: deleteField(),
+        imageUri1: NEWactive.image1,
         imageUri2: deleteField(),
       };
       await updateDoc(docRef, data, { merge: true });
+    } else {
+      const imageAddress = `actives/${imagePos(NEWactive.image1)}`;
+      const storageRef = ref(storage, imageAddress);
+      const response = await fetch(NEWactive.image1);
+      const blob = await response.blob();
+      const uploadTask = await uploadBytes(storageRef, blob);
+      NEWitem.imageUri1 = await getDownloadURL(uploadTask.ref);
+      if (querySnapshot.data().imageUri1 !== defaultLinks[values.indexOf(querySnapshot.data().genre)].link) {
+        const deleteRef = ref(storage, `actives/${querySnapshot.data().imageUri1.substr(-94, 41)}`);
+        deleteObject(deleteRef).then(() => {
+          console.log('origin image1 has been deleted!');
+        }).catch((err) => {
+          console.log(err);
+        });
+      }
     }
-    const imageAddress = `actives/${imagePos(NEWactive.image1)}`;
-    const storageRef = ref(storage, imageAddress);
-    const response = await fetch(NEWactive.image1);
-    const blob = await response.blob();
-    const uploadTask = await uploadBytes(storageRef, blob);
-    NEWitem.imageUri1 = await getDownloadURL(uploadTask.ref);
+    delete NEWitem.image1;
+    console.log('status 3: image 1 changed');
   }
 
-  if (NEWactive.image2) {
-    if (NEWactive.image2 === querySnapshot.data().imageUri3) {
-      const docRef = doc(db, 'actives', oldID);
-      const data = {
-        image3: deleteField(),
-        imageUri3: deleteField(),
-      };
-      await updateDoc(docRef, data, { merge: true });
-    }
+  if (NEWactive.image2 === 'removed') {
+    delete NEWitem.image2;
+    const deleteRef = ref(storage, `actives/${querySnapshot.data().imageUri2.substr(-94, 41)}`);
+    deleteObject(deleteRef).then(() => {
+      console.log('origin image2 has been deleted!');
+    }).catch((err) => {
+      console.log(err);
+    });
+  } else if (NEWactive.image3 === 'forward') {
+    delete NEWitem.image2;
+    delete NEWitem.image3;
+    const docRef = doc(db, 'actives', oldID);
+    const data = {
+      imageUri2: NEWactive.image2,
+      imageUri3: deleteField(),
+    };
+    await updateDoc(docRef, data, { merge: true });
+  } else if (NEWactive.image2 !== undefined) {
     const imageAddress = `actives/${imagePos(NEWactive.image2)}`;
     const storageRef = ref(storage, imageAddress);
     const response = await fetch(NEWactive.image2);
     const blob = await response.blob();
     const uploadTask = await uploadBytes(storageRef, blob);
     NEWitem.imageUri2 = await getDownloadURL(uploadTask.ref);
-  } else {
+    const deleteRef = ref(storage, `actives/${querySnapshot.data().imageUri2.substr(-94, 41)}`);
+    deleteObject(deleteRef).then(() => {
+      console.log('origin image2 has been deleted!');
+    }).catch((err) => {
+      console.log(err);
+    });
     delete NEWitem.image2;
   }
 
-  if (NEWactive.image3) {
+  if (NEWactive.image3 === 'removed') {
+    delete NEWitem.image3;
+    const deleteRef = ref(storage, `actives/${querySnapshot.data().imageUri3.substr(-94, 41)}`);
+    deleteObject(deleteRef).then(() => {
+      console.log('origin image2 has been deleted!');
+    }).catch((err) => {
+      console.log(err);
+    });
+  } else if (NEWactive.image3 !== undefined) {
     const imageAddress = `actives/${imagePos(NEWactive.image3)}`;
     const storageRef = ref(storage, imageAddress);
     const response = await fetch(NEWactive.image3);
     const blob = await response.blob();
     const uploadTask = await uploadBytes(storageRef, blob);
     NEWitem.imageUri3 = await getDownloadURL(uploadTask.ref);
-  } else {
+    const deleteRef = ref(storage, `actives/${querySnapshot.data().imageUri3.substr(-94, 41)}`);
+    deleteObject(deleteRef).then(() => {
+      console.log('origin image2 has been deleted!');
+    }).catch((err) => {
+      console.log(err);
+    });
     delete NEWitem.image3;
   }
 
@@ -273,34 +308,6 @@ async function updateActive(oldID, NEWactive) {
   }
 
   console.log(NEWitem);
-  if (NEWitem.imageUri1) {
-    if (querySnapshot.data().imageUri1 !== defaultLinks[values.indexOf(querySnapshot.data().genre)].link) {
-      console.log('image 1 has been replaced, old image has been deleted');
-      const storageRef = ref(storage, `actives/${querySnapshot.data().imageUri1.substr(-94, 41)}`);
-      deleteObject(storageRef).then(() => {
-        console.log('Image 1 has been deleted!');
-      }).catch((err) => {
-        console.log(err);
-      });
-    }
-  }
-  if (NEWitem.imageUri2) {
-    const storageRef = ref(storage, `actives/${querySnapshot.data().imageUri2.substr(-94, 41)}`);
-    console.log(storageRef);
-    // deleteObject(querySnapshot.data().imageUri2).then(() => {
-    //   console.log('Image 2 has been deleted!');
-    // }).catch((err) => {
-    //   console.log(err);
-    // });
-  }
-  if (NEWitem.imageUri3) {
-    const storageRef = ref(storage, `actives/${querySnapshot.data().imageUri3.substr(-94, 41)}`);
-    deleteObject(storageRef).then(() => {
-      console.log('Image 3 has been deleted!');
-    }).catch((err) => {
-      console.log(err);
-    });
-  }
   if (NEWitem) {
     setDoc(activesRef, NEWitem, { merge: true })
       .then(() => { console.log('updateActive Successful'); });
@@ -758,7 +765,7 @@ async function getHostInfo(docID) {
 
   for (let j = 0; j < IDlist.length; j += 1) {
     const querySnapshot2 = await getDoc(doc(db, `attendees/${IDlist[j]}`));
-    info.push(querySnapshot2.data());
+    info.push({ uid: querySnapshot2.id, ...querySnapshot2.data() });
   }
   // console.log(info);
   return info;

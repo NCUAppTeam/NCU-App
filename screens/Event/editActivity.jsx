@@ -87,17 +87,17 @@ function Edit({ route, navigation }) {
       quality: 1,
     });
 
-    NoPicLink = result.uri;
-    if (!result.cancelled) {
+    NoPicLink = result.assets[0].uri;
+    if (!result.assets[0].canceled) {
       if (image1 === undefined) {
-        setImage1(result.uri);
-        setNEWdata({ ...NEWdata, image1: result.uri });
+        setImage1(result.assets[0].uri);
+        setNEWdata({ ...NEWdata, image1: result.assets[0].uri });
       } else if (image2 === undefined) {
-        setImage2(result.uri);
-        setNEWdata({ ...NEWdata, image2: result.uri });
+        setImage2(result.assets[0].uri);
+        setNEWdata({ ...NEWdata, image2: result.assets[0].uri });
       } else if (image3 === undefined) {
-        setImage3(result.uri);
-        setNEWdata({ ...NEWdata, image3: result.uri });
+        setImage3(result.assets[0].uri);
+        setNEWdata({ ...NEWdata, image3: result.assets[0].uri });
       }
     }
   };
@@ -590,7 +590,7 @@ function Edit({ route, navigation }) {
                           setImage1(image2);
                           NEWdata.image1 = image2;
                           setImage2(NoPicLink);
-                          setNEWdata({ ...NEWdata, image2: NoPicLink });
+                          setNEWdata({ ...NEWdata, image2: 'forward' });
                         }
                         if (image3) {
                           setImage1(image2);
@@ -598,7 +598,7 @@ function Edit({ route, navigation }) {
                           setImage2(image3);
                           NEWdata.image2 = image3;
                           setImage3(NoPicLink);
-                          setNEWdata({ ...NEWdata, image3: NoPicLink });
+                          setNEWdata({ ...NEWdata, image3: 'forward' });
                         }
                         if (!NEWdata.image1) {
                           setNEWdata({ ...NEWdata, image1: genreID });
@@ -619,11 +619,12 @@ function Edit({ route, navigation }) {
                       style={{ marginLeft: 68, marginTop: 6 }}
                       onPress={() => {
                         setImage2(NoPicLink);
+                        setNEWdata({ ...NEWdata, image2: 'removed' });
                         if (image3) {
                           setImage2(image3);
                           NEWdata.image2 = image3;
                           setImage3(NoPicLink);
-                          setNEWdata({ ...NEWdata, image3: NoPicLink });
+                          setNEWdata({ ...NEWdata, image3: 'forward' });
                         }
                       }}
                     />
@@ -641,7 +642,7 @@ function Edit({ route, navigation }) {
                       style={{ marginLeft: 68, marginTop: 6 }}
                       onPress={() => {
                         setImage3(NoPicLink);
-                        setNEWdata({ ...NEWdata, image3: NoPicLink });
+                        setNEWdata({ ...NEWdata, image3: 'removed' });
                       }}
                     />
                   </ZStack>

@@ -1,6 +1,13 @@
 import { StyleSheet, Dimensions } from 'react-native';
 
 export default StyleSheet.create({
+  bodyContainer: {
+    flex: 1,
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    marginHorizontal: Dimensions.get('window').width * 0.03,
+    marginTop: 7,
+  },
   cardManage: {
     height: 112,
     width: Dimensions.get('window').width * 0.9,

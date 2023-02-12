@@ -1,5 +1,4 @@
 import { Platform, StyleSheet, Dimensions } from 'react-native';
-import { useKeyboard } from '@react-native-community/hooks';
 
 export default StyleSheet.create({
   container: {

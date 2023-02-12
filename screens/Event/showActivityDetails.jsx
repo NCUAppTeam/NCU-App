@@ -11,9 +11,10 @@ import {
 } from 'native-base';
 import styles from './style_folder/Styles_showActivityDetails';
 import ActiveController from '../../controller/Active';
+import UserController from '../../controller/getStudentId';
 
 function Detailscreen({ route, navigation }) {
-  const user = '110501444';
+  const user = UserController.getUid();
   const Cd = route.params;
   const passedID = JSON.stringify(Cd).slice(7, 27);
   const prepage = JSON.stringify(Cd).slice(40, -2);
@@ -446,7 +447,7 @@ function Detailscreen({ route, navigation }) {
             </Box>
           ))}
           {info.map(({
-            name, phone, email, avatar, studentID,
+            uid, name, phone, email, avatar, studentID,
           }) => (
             <Box style={{ marginLeft: Dimensions.get('window').width * 0.07, marginBottom: 10 }}>
               <Text style={{
@@ -512,10 +513,10 @@ function Detailscreen({ route, navigation }) {
                       <Text
                         style={{ fontSize: 12, marginTop: 10, textDecorationLine: 'underline' }}
                         onPress={() => {
-                          if (studentID !== '110501444') {
+                          if (uid !== user) {
                             navigation.navigate('send', {
-                              attendeeID: studentID,
-                              userID: '110501444',
+                              attendeeUid: uid,
+                              userUid: user,
                             });
                           }
                         }}
@@ -526,7 +527,7 @@ function Detailscreen({ route, navigation }) {
                   </VStack>
                 </Box>
               </Box>
-              {user !== studentID && (
+              {user !== uid && (
               <Box style={{ flexDirection: 'row', marginBottom: 20 }}>
                 <TouchableOpacity
                   style={styles.sentMessage}

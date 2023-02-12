@@ -1,30 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Text, SafeAreaView, RefreshControl,
-  ScrollView, Image, TouchableHighlight,
+  Text, SafeAreaView, RefreshControl, Image, TouchableHighlight,
 } from 'react-native';
+import { FontAwesome5, AntDesign, Octicons } from '@expo/vector-icons';
+
 import {
-  Ionicons, FontAwesome5, AntDesign, Feather, Octicons,
-} from '@expo/vector-icons';
-import {
-  Card, List, TextInput, Title,
-} from 'react-native-paper';
-import {
-  NativeBaseProvider, Box, Divider, VStack, HStack, FlatList, Button, ZStack,
+  NativeBaseProvider, Box, VStack, HStack, FlatList, ZStack,
 } from 'native-base';
 import { LinearGradient } from 'expo-linear-gradient';
 import styles from './style_folder/Styles_Message';
-import ActiveController from '../../controller/Active';
+import UserController from '../../controller/getStudentId';
 import MessageController from '../../controller/Message';
 
 function Message({ navigation }) {
+  const user = UserController.getUid();
   const [attendeeINFO, setAttendeeInfo] = useState();
   const [newList, setNewList] = useState([]);
   useEffect(() => {
-    MessageController.getMessagePerson('110501444').then((res1) => {
+    MessageController.getMessagePerson(user).then((res1) => {
       setAttendeeInfo(res1);
+      console.log(res1);
       res1.forEach((res) => {
-        MessageController.getNewestMessage('110501444', res.studentID).then((result) => {
+        MessageController.getNewestMessage(user, res.othersUid).then((result) => {
           for (let i = 0; i <= res1.length; i += 1) {
             res.newMessage = result.message;
             setNewList(result.message);
@@ -35,19 +32,22 @@ function Message({ navigation }) {
       throw err;
     });
   }, []);
+
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = () => {
     setRefreshing(true);
-    MessageController.getMessagePerson('110501444').then((res1) => {
+    MessageController.getMessagePerson(user).then((res1) => {
       setAttendeeInfo(res1);
       res1.forEach((res) => {
-        MessageController.getNewestMessage('110501444', res.studentID).then((result) => {
+        MessageController.getNewestMessage(user, res.othersUid).then((result) => {
           for (let i = 0; i <= res1.length; i += 1) {
             res.newMessage = result.message;
             setNewList(result.message);
           }
         });
       });
+    }).catch((err) => {
+      throw err;
     });
     setRefreshing(false);
   };
@@ -95,7 +95,7 @@ function Message({ navigation }) {
           <FlatList
             style={{ marginTop: 20 }}
             data={attendeeINFO}
-            keyExtractor={(item) => item.studentID}
+            keyExtractor={(item) => item.othersUid}
             showsVerticalScrollIndicator={false}
             refreshControl={(
               <RefreshControl
@@ -110,8 +110,8 @@ function Message({ navigation }) {
                   underlayColor="#fff" // 切換時候的顏色
                   onPress={() => {
                     navigation.navigate('send', {
-                      attendeeID: item.studentID,
-                      userID: '110501444',
+                      attendeeUid: item.othersUid,
+                      userUid: user,
                     });
                   }}
                 >

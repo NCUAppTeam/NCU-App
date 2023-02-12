@@ -15,8 +15,8 @@ import {
   NativeBaseProvider, Box, Divider, Heading, ZStack,
 } from 'native-base';
 import * as ImagePicker from 'expo-image-picker';
-import ActiveController from '../../controller/Active';
 import styles from './style_folder/Styles_addActivity';
+import ActiveController from '../../controller/Active';
 
 function Add({ navigation }) {
   const [data, setData] = useState({
@@ -45,17 +45,17 @@ function Add({ navigation }) {
       quality: 1,
     });
 
-    NoPicLink = result.uri;
-    if (!result.cancelled) {
+    NoPicLink = result.assets[0].uri;
+    if (!result.assets[0].canceled) {
       if (image1 === undefined) {
-        setImage1(result.uri);
-        setData({ ...data, image1: result.uri });
+        setImage1(result.assets[0].uri);
+        setData({ ...data, image1: result.assets[0].uri });
       } else if (image2 === undefined) {
-        setImage2(result.uri);
-        setData({ ...data, image2: result.uri });
+        setImage2(result.assets[0].uri);
+        setData({ ...data, image2: result.assets[0].uri });
       } else if (image3 === undefined) {
-        setImage3(result.uri);
-        setData({ ...data, image3: result.uri });
+        setImage3(result.assets[0].uri);
+        setData({ ...data, image3: result.assets[0].uri });
       }
     }
   };
@@ -660,6 +660,7 @@ function Add({ navigation }) {
                       <TouchableOpacity
                         onPress={() => {
                           data.uploadTime = new Date();
+                          // console.log(data);
                           ActiveController.addActive(data);
                           navigation.navigate('list');
                         }}

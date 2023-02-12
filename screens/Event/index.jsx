@@ -27,6 +27,7 @@ function EventStack() {
     TextInput.defaultProps.allowFontScaling = false;
   }
   return (
+
     <Stack.Navigator
       initialRouteName="list"
       screenOptions={{

@@ -1,13 +1,14 @@
 import { initializeApp } from 'firebase/app';
 import {
-  getFirestore, collection, query, getDoc, getDocs, addDoc, where, doc,
+  getFirestore, collection, query, getDoc, getDocs, addDoc, where, setDoc, doc,
 } from 'firebase/firestore';
 import {
   getStorage,
   ref,
   getDownloadURL,
-  refFromURL,
+  uploadBytes,
 } from 'firebase/storage';
+import UserController from './getStudentId';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyA8GH6yj1i4gJM0H_ZTsurYG3Dqn4-nIS8',
@@ -24,13 +25,13 @@ function imagePos(imageUri) {
   return imageUri.split('/').pop();
 }
 
-async function addMessage(messageData, userID) {
+async function addMessage(messageData, userUid) {
   const item = {
     send: messageData.send.trim(),
     receive: messageData.receive.trim(),
     sendTime: messageData.sendTime,
   };
-  if (messageData.send.trim() === userID) {
+  if (messageData.send.trim() === userUid) {
     item.readForUser = true;
     item.readForOthers = false;
   }
@@ -39,12 +40,12 @@ async function addMessage(messageData, userID) {
     item.image = '';
   } else if (messageData.image) {
     const imageAddress = `message/${imagePos(messageData.image)}`;
-    const storageRef = ref(storage).child(imageAddress);
+    const storageRef = ref(storage, imageAddress);
     const response = await fetch(messageData.image);
     const blob = await response.blob();
-    const st = storageRef.put(blob);
-    await st;
-    const uri = await getDownloadURL(storageRef);
+    const uploadTask = await uploadBytes(storageRef, blob);
+    const uri = await getDownloadURL(uploadTask.ref);
+
     if (uri !== undefined) {
       item.image = uri;
     } else {
@@ -55,7 +56,7 @@ async function addMessage(messageData, userID) {
   const db = getFirestore(app);
   const messageRef = query(collection(db, 'message'));
   addDoc(messageRef, item).then(() => {
-    console.log('item');
+    console.log('message sent successfully!');
   })
     .catch((error) => {
       console.log(error);
@@ -84,9 +85,7 @@ async function getRelativeMessage(user, other) {
   const querySnapshot2 = await getDocs(messageRef, where('receive', '==', user));
   querySnapshot2.forEach((doc2) => {
     if (doc2.data().send === other) {
-      messageRef.doc(doc2.id).set({
-        readForOthers: true,
-      }, { merge: true });
+      setDoc(doc(db, 'message', `${doc2.id}`), { readForOthers: true }, { merge: true });
       message.push({
         id: doc2.id,
         image: doc2.data().image,
@@ -169,16 +168,17 @@ async function getMessagePerson(user) {
   const info = [];
   uniquePerson.forEach((one) => {
     querySnapshot.forEach((doc3) => {
-      if (doc3.data().studentID === one) {
-        info.push(doc3.data());
+      if (doc3.id === one) {
+        info.push({ othersUid: doc3.id, ...doc3.data() });
       }
     });
   });
+  console.log('person', info);
   return info;
 }
 
 async function Notification(notifymessage, eventID) {
-  const hostID = '110501444';
+  const UserStudent = UserController.getUid();
   const db = getFirestore(app);
   const infoRef = query(collection(db, 'attendees'));
   const messageRef = query(collection(db, 'message'));
@@ -200,7 +200,7 @@ async function Notification(notifymessage, eventID) {
   }
   for (let i = 0; i < sendList.length; i += 1) {
     const item = {
-      send: hostID,
+      send: UserStudent,
       receive: sendList[i],
       sendTime: new Date(),
       readForUser: true,
@@ -216,24 +216,6 @@ async function Notification(notifymessage, eventID) {
         console.log(error);
       });
   }
-}
-
-async function getINFO(ID) {
-  const db = getFirestore(app);
-  const infoDoc = doc(db, `attendees/${ID}`);
-
-  const querySnapshot = await getDoc(infoDoc);
-  const attendeeInfo = {
-    avatar: querySnapshot.data().avatar,
-    email: querySnapshot.data().email,
-    grade: querySnapshot.data().grade,
-    major: querySnapshot.data().major,
-    name: querySnapshot.data().name,
-    phone: querySnapshot.data().phone,
-    studentID: querySnapshot.data().studentID,
-  };
-  console.log(attendeeInfo);
-  return attendeeInfo;
 }
 
 async function deleteMessage(messageID) {
@@ -255,11 +237,12 @@ async function deleteMessage(messageID) {
   }
 }
 
-async function countUnreadMessage(user) {
+async function countUnreadMessage() {
+  const UserStudent = UserController.getUid();
   const db = getFirestore(app);
   const messageRef = query(collection(db, 'message'));
   const message = [];
-  const querySnapshot = await getDocs(messageRef, where('receive', '==', user));
+  const querySnapshot = await getDocs(messageRef, where('receive', '==', UserStudent));
   querySnapshot.forEach((doc1) => {
     if (doc1.data().readForUser === false) {
       message.push({
@@ -277,6 +260,7 @@ async function countUnreadMessage(user) {
   console.log('message quantity: ', message.length);
   return message.length;
 }
+
 export default {
   firebaseConfig,
   addMessage,
@@ -284,7 +268,6 @@ export default {
   getRelativeMessage,
   getMessagePerson,
   Notification,
-  getINFO,
   deleteMessage,
   countUnreadMessage,
 };

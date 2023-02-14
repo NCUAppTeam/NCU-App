@@ -678,7 +678,7 @@ async function addUser(uid, newUserInfo) {
   memberInfo.avatar = await getDownloadURL(uploadTask.ref);
   console.log(memberInfo);
 
-  setDoc(doc(db, 'attendees', `${uid}`), { memberInfo }, { merge: true })
+  setDoc(doc(db, 'attendees', `${uid}`), memberInfo, { merge: true })
     .then(console.log('succeed'));
   const result = await getDocs(attendeeRef);
   result.forEach((doc1) => console.log(doc1.data()));
@@ -746,7 +746,7 @@ async function getHostInfo(docID) {
   const querySnapshot = await getDocs(infoRef);
 
   const attendeeList = [];
-  const IDlist = [];
+  let hostID;
   const info = [];
   querySnapshot.forEach((attendee) => {
     attendeeList.push(attendee.id);
@@ -756,16 +756,13 @@ async function getHostInfo(docID) {
     const result = await getDocs(collection(db, `attendees/${attendeeList[i]}/hostedEvent`));
     result.forEach((event) => {
       if (event.id === docID) {
-        IDlist.push(attendeeList[i]);
+        hostID = attendeeList[i];
       }
     });
   }
-
-  for (let j = 0; j < IDlist.length; j += 1) {
-    const querySnapshot2 = await getDoc(doc(db, `attendees/${IDlist[j]}`));
-    info.push({ uid: querySnapshot2.id, ...querySnapshot2.data() });
-  }
-  // console.log(info);
+  const querySnapshot2 = await getDoc(doc(db, `attendees/${hostID}`));
+  info.push({ uid: querySnapshot2.id, ...querySnapshot2.data() });
+  console.log(info);
   return info;
 }
 

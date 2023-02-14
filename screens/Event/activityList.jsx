@@ -16,15 +16,18 @@ import { getAuth, signOut } from 'firebase/auth';
 import styles from './style_folder/Styles_activityList';
 import ActiveController from '../../controller/Active';
 import MessageController from '../../controller/Message';
+import UserController from '../../controller/getStudentId';
 
 function List({ navigation }) {
   const auth = getAuth();
+  const [uid, setUid] = useState();
   const [Messagenum, setMessageNum] = useState(0);
   const [active1, setActive1] = useState([]);
   const [active2, setActive2] = useState([]);
 
   useEffect(() => {
-    MessageController.countUnreadMessage().then((num) => {
+    setUid(UserController.getUid());
+    MessageController.countUnreadMessage(uid).then((num) => {
       setMessageNum(num);
     }).catch((err) => {
       throw err;
@@ -44,7 +47,8 @@ function List({ navigation }) {
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = () => {
     setRefreshing(true);
-    MessageController.countUnreadMessage().then((num) => {
+    setUid(UserController.getUid());
+    MessageController.countUnreadMessage(uid).then((num) => {
       setMessageNum(num);
     }).catch((err) => {
       throw err;

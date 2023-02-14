@@ -1,12 +1,13 @@
 import { initializeApp } from 'firebase/app';
 import {
-  getFirestore, collection, query, getDoc, getDocs, addDoc, where, setDoc, doc,
+  getFirestore, collection, query, getDoc, getDocs, addDoc, where, setDoc, doc, deleteDoc,
 } from 'firebase/firestore';
 import {
   getStorage,
   ref,
   getDownloadURL,
   uploadBytes,
+  deleteObject,
 } from 'firebase/storage';
 import UserController from './getStudentId';
 
@@ -32,8 +33,8 @@ async function addMessage(messageData, userUid) {
     sendTime: messageData.sendTime,
   };
   if (messageData.send.trim() === userUid) {
-    item.readForUser = true;
-    item.readForOthers = false;
+    item.readForSender = true;
+    item.readForReceiver = false;
   }
   if (messageData.message) {
     item.message = messageData.message;
@@ -65,33 +66,34 @@ async function addMessage(messageData, userUid) {
 
 async function getRelativeMessage(user, other) {
   const db = getFirestore(app);
-  const messageRef = query(collection(db, 'message'));
+  const messageRef1 = query(collection(db, 'message'), where('send', '==', user));
+  const messageRef2 = query(collection(db, 'message'), where('receive', '==', user));
   const message = [];
-  const querySnapshot1 = await getDocs(messageRef, where('send', '==', user));
+  const querySnapshot1 = await getDocs(messageRef1);
   querySnapshot1.forEach((doc1) => {
     if (doc1.data().receive === other) {
       message.push({
         id: doc1.id,
         image: doc1.data().image,
         message: doc1.data().message,
-        readForUser: doc1.data().readForUser,
-        readForOthers: doc1.data().readForOthers,
+        readForSender: doc1.data().readForSender,
+        readForReceiver: doc1.data().readForReceiver,
         send: doc1.data().send,
         receive: doc1.data().receive,
         sendTime: doc1.data().sendTime,
       });
     }
   });
-  const querySnapshot2 = await getDocs(messageRef, where('receive', '==', user));
+  const querySnapshot2 = await getDocs(messageRef2);
   querySnapshot2.forEach((doc2) => {
     if (doc2.data().send === other) {
-      setDoc(doc(db, 'message', `${doc2.id}`), { readForOthers: true }, { merge: true });
+      setDoc(doc(db, `message/${doc2.id}`), { readForReceiver: true }, { merge: true });
       message.push({
         id: doc2.id,
         image: doc2.data().image,
         message: doc2.data().message,
-        readForUser: doc2.data().readForUser,
-        readForOthers: doc2.data().readForOthers,
+        readForSender: doc2.data().readForSender,
+        readForReceiver: doc2.data().readForReceiver,
         send: doc2.data().send,
         receive: doc2.data().receive,
         sendTime: doc2.data().sendTime,
@@ -104,35 +106,41 @@ async function getRelativeMessage(user, other) {
 
 async function getNewestMessage(user, other) {
   const db = getFirestore(app);
-  const messageRef = query(collection(db, 'message'));
+  const otherRef = await getDoc(doc(db, `attendees/${other}`));
+  const messageRef1 = query(collection(db, 'message'), where('send', '==', user));
+  const messageRef2 = query(collection(db, 'message'), where('receive', '==', user));
   const message = [];
-  const querySnapshot1 = await getDocs(messageRef, where('send', '==', user));
+  const querySnapshot1 = await getDocs(messageRef1);
   querySnapshot1.forEach((doc1) => {
     if (doc1.data().receive === other) {
       message.push({
+        ...otherRef.data(),
         id: doc1.id,
         image: doc1.data().image,
         message: doc1.data().message,
-        readForUser: doc1.data().readForUser,
-        readForOthers: doc1.data().readForOthers,
+        readForSender: doc1.data().readForSender,
+        readForReceiver: doc1.data().readForReceiver,
         send: doc1.data().send,
         receive: doc1.data().receive,
         sendTime: doc1.data().sendTime,
+        read: true,
       });
     }
   });
-  const querySnapshot2 = await getDocs(messageRef, where('receive', '==', user));
+  const querySnapshot2 = await getDocs(messageRef2);
   querySnapshot2.forEach((doc2) => {
     if (doc2.data().send === other) {
       message.push({
+        ...otherRef.data(),
         id: doc2.id,
         image: doc2.data().image,
         message: doc2.data().message,
-        readForUser: doc2.data().readForUser,
-        readForOthers: doc2.data().readForOthers,
+        readForSender: doc2.data().readForSender,
+        readForReceiver: doc2.data().readForReceiver,
         send: doc2.data().send,
         receive: doc2.data().receive,
         sendTime: doc2.data().sendTime,
+        read: doc2.data().readForReceiver,
       });
     }
   });
@@ -141,24 +149,25 @@ async function getNewestMessage(user, other) {
   if (last.message === '' && last.image) {
     last.message = '他傳送了一張照片';
   }
-  console.log(last);
+  // console.log(last);
   return last;
 }
 
-async function getMessagePerson(user) {
+async function getMessagePerson(userUid) {
   const db = getFirestore(app);
-  const messageRef = query(collection(db, 'message'));
+  const messageRef1 = query(collection(db, 'message'), where('send', '==', userUid));
+  const messageRef2 = query(collection(db, 'message'), where('receive', '==', userUid));
   const infoRef = query(collection(db, 'attendees'));
   const person = [];
-  const querySnapshot1 = await getDocs(messageRef, where('send', '==', user));
+  const querySnapshot1 = await getDocs(messageRef1);
   querySnapshot1.forEach((doc1) => {
-    if (doc1.data().receive !== user) {
+    if (doc1.data().receive !== userUid) {
       person.push(doc1.data().receive);
     }
   });
-  const querySnapshot2 = await getDocs(messageRef, where('receive', '==', user));
+  const querySnapshot2 = await getDocs(messageRef2);
   querySnapshot2.forEach((doc2) => {
-    if (doc2.data().send !== user) {
+    if (doc2.data().send !== userUid) {
       person.push(doc2.data().send);
     }
   });
@@ -173,7 +182,7 @@ async function getMessagePerson(user) {
       }
     });
   });
-  console.log('person', info);
+  // console.log('person', info);
   return info;
 }
 
@@ -191,7 +200,8 @@ async function Notification(notifymessage, eventID) {
     attendeeList.push(attendee.id);
   });
   for (let i = 0; i < attendeeList.length; i += 1) {
-    const result = await getDocs(infoRef, attendeeList[i], 'attendedEvent');
+    const resultRef = query(collection(db, 'attendees', attendeeList[i], 'attendedEvent'));
+    const result = await getDocs(resultRef);
     result.forEach((event) => {
       if (event.id === eventInfo.id) {
         sendList.push(attendeeList[i]);
@@ -203,8 +213,8 @@ async function Notification(notifymessage, eventID) {
       send: UserStudent,
       receive: sendList[i],
       sendTime: new Date(),
-      readForUser: true,
-      readForOthers: false,
+      readForSender: true,
+      readForReceiver: false,
       message: notifymessage,
       image: '',
     };
@@ -223,42 +233,32 @@ async function deleteMessage(messageID) {
   const messageRef = query(collection(db, 'message'));
   const deletedDoc = await getDoc(collection(db, `message/${messageID}`));
   if (deletedDoc.data().image !== '') {
-    const image = refFromURL(deletedDoc.data().image);
-    image.delete().then(() => {
-      console.log('image has been deleted!');
+    const imageRef = ref(storage, `message/${deletedDoc.data().imageUri1.substr(-94, 41)}`);
+    deleteObject(imageRef).then(() => {
+      console.log('origin image1 has been deleted!');
     }).catch((err) => {
       console.log(err);
     });
-    messageRef.doc(messageID).delete();
+    await deleteDoc(doc(db, 'message', messageID));
     // console.log('deleteMessage Successful');
   } else {
-    messageRef.doc(messageID).delete();
+    await deleteDoc(doc(db, 'message', messageID));
     // console.log('deleteMessage Successful');
   }
 }
 
-async function countUnreadMessage() {
-  const UserStudent = UserController.getUid();
+async function countUnreadMessage(uid) {
   const db = getFirestore(app);
-  const messageRef = query(collection(db, 'message'));
-  const message = [];
-  const querySnapshot = await getDocs(messageRef, where('receive', '==', UserStudent));
+  const messageRef1 = query(collection(db, 'message'), where('receive', '==', uid));
+  let messagecount = 0;
+  const querySnapshot = await getDocs(messageRef1);
   querySnapshot.forEach((doc1) => {
-    if (doc1.data().readForUser === false) {
-      message.push({
-        id: doc1.id,
-        image: doc1.data().image,
-        message: doc1.data().message,
-        readForUser: doc1.data().readForUser,
-        readForOthers: doc1.data().readForOthers,
-        send: doc1.data().send,
-        receive: doc1.data().receive,
-        sendTime: doc1.data().sendTime,
-      });
+    if (doc1.data().readForReceiver === false) {
+      messagecount += 1;
     }
   });
-  console.log('message quantity: ', message.length);
-  return message.length;
+  // console.log(uid, 'message quantity:', messagecount);
+  return messagecount;
 }
 
 export default {

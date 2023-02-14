@@ -344,9 +344,9 @@ async function getAllActive() {
 
 async function getGenreActive(genre) {
   const db = getFirestore(app);
-  const activesRef = query(collection(db, 'actives'));
+  const activesRef = query(collection(db, 'actives'), where('genre', '==', genre));
   const GenreArray = [];
-  const querySnapshot = await getDocs(activesRef, where('genre', '==', genre));
+  const querySnapshot = await getDocs(activesRef);
 
   querySnapshot.forEach((doc1) => {
     GenreArray.push({
@@ -568,33 +568,36 @@ async function getEventActive() {
 
 async function deleteOneActive(deleteDocId) {
   const db = getFirestore(app);
-  const activesRef = query(collection(db, 'actives'));
-  const deletedDoc = await getDocs(activesRef, deleteDocId);
-  if (deletedDoc.data().imageUri1 !== defaultLinks[values.indexOf(deletedDoc.data().genre)].link) {
-    if (deletedDoc.data().imageUri1) {
-      deleteObject(deletedDoc.data().imageUri1).then(() => {
+  const activesRef = query(doc(db, 'actives', deleteDocId));
+  const dltDoc = await getDoc(activesRef);
+  if (dltDoc.data().imageUri1 !== defaultLinks[values.indexOf(dltDoc.data().genre)].link) {
+    if (dltDoc.data().imageUri1) {
+      const uriRef1 = ref(storage, `actives/${dltDoc.data().imageUri1.substr(-94, 41)}`);
+      deleteObject(uriRef1).then(() => {
         console.log('Image 1 has been deleted!');
       }).catch((err) => {
         console.log(err);
       });
     }
   }
-  if (deletedDoc.data().imageUri2) {
-    deleteObject(deletedDoc.data().imageUri2).then(() => {
+  if (dltDoc.data().imageUri2) {
+    const uriRef2 = ref(storage, `actives/${dltDoc.data().imageUri2.substr(-94, 41)}`);
+    deleteObject(uriRef2).then(() => {
       console.log('Image 2 has been deleted!');
     }).catch((err) => {
       console.log(err);
     });
   }
-  if (deletedDoc.data().imageUri3) {
-    deleteObject(deletedDoc.data().imageUri3).then(() => {
+  if (dltDoc.data().imageUri3) {
+    const uriRef3 = ref(storage, `actives/${dltDoc.data().imageUri3.substr(-94, 41)}`);
+    deleteObject(uriRef3).then(() => {
       console.log('Image 3 has been deleted!');
     }).catch((err) => {
       console.log(err);
     });
   }
 
-  await deleteDoc(doc(db, 'actives', deleteDoc));
+  await deleteDoc(doc(db, 'actives', deleteDocId));
   console.log('deleteOneActive Successful');
 }
 
@@ -659,7 +662,7 @@ async function deleteEverySingleAttendee(docID) {
 async function removeAttendee(docID, studentUid) { // remove attendee
   const db = getFirestore(app);
   const activesRef = query(collection(db, `attendees/${studentUid}/attendedEvent`));
-  activesRef.doc(docID).delete();
+  await deleteDoc(doc(db, 'attendees', studentUid, 'attendedEvent', docID));
   // console.log(docID, studentID);
   console.log('delete successfully!');
   const result = await getDocs(activesRef);

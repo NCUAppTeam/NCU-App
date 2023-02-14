@@ -496,8 +496,8 @@ function Manage({ route, navigation }) {
                                               send: user,
                                               receive: deletePerson.studentID,
                                               sendTime: new Date(),
-                                              readForUser: true,
-                                              readForOthers: false,
+                                              readForSender: true,
+                                              readForReceiver: false,
                                               image: '',
                                             }, user);
                                           });

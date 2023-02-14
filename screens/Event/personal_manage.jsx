@@ -16,46 +16,56 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import ActiveController from '../../controller/Active';
 import MessageController from '../../controller/Message';
+import UserController from '../../controller/getStudentId';
 import styles from './style_folder/Styles_personal_manage';
 
 function Personal({ navigation }) {
+  const [uid, setUid] = useState();
   const [Messagenum, setMessageNum] = useState(0);
+  const [showNow, setShowNow] = useState([]);
+  const [showManage, setShowManage] = useState([]);
+  const [showEnd, setShowEnd] = useState([]);
+  const [isPress, setIsPress] = useState('參加中');
+
   useEffect(() => {
-    MessageController.countUnreadMessage().then((num) => {
-      setMessageNum(num);
+    setUid(UserController.getUid());
+    MessageController.countUnreadMessage(uid).then((number) => {
+      setMessageNum(number);
+      console.log(number);
     }).catch((err) => {
       throw err;
     });
-  }, []);
-  const [showNow, setShowNow] = useState([]);
-  useEffect(() => {
     ActiveController.getParticipatedActive().then((res) => {
       setShowNow(res);
     }).catch((err) => {
       throw err;
     });
-  }, []);
-  const [showManage, setShowManage] = useState([]);
-  useEffect(() => {
     ActiveController.getHostedEvent().then((res) => {
       setShowManage(res);
     }).catch((err) => {
       throw err;
     });
-  }, []);
-  const [showEnd, setShowEnd] = useState([]);
-  useEffect(() => {
+    ActiveController.getHostedEvent().then((res) => {
+      setShowManage(res);
+    }).catch((err) => {
+      throw err;
+    });
     ActiveController.getFinishedActive().then((res) => {
       setShowEnd(res);
     }).catch((err) => {
       throw err;
     });
   }, []);
-  const [isPress, setIsPress] = useState('參加中');
 
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = async () => {
     setRefreshing(true);
+    setUid(UserController.getUid());
+    MessageController.countUnreadMessage(uid).then((number) => {
+      setMessageNum(number);
+    }).catch((err) => {
+      throw err;
+    });
     if (isPress === '參加中') {
       await ActiveController.getParticipatedActive().then((res) => {
         setShowNow(res);
@@ -75,11 +85,6 @@ function Personal({ navigation }) {
         throw err;
       });
     }
-    MessageController.countUnreadMessage().then((num) => {
-      setMessageNum(num);
-    }).catch((err) => {
-      throw err;
-    });
     setRefreshing(false);
   };
 
@@ -141,7 +146,7 @@ function Personal({ navigation }) {
                 &nbsp;私訊
                   </Text>
                 </TouchableOpacity>
-                {Messagenum !== 0 && (
+                {(Messagenum !== 0) && (
                 <Text style={styles.num}>
                   {Messagenum}
                 </Text>

@@ -328,7 +328,7 @@ function Send({ route, navigation }) {
                   onPress={() => {
                     data.sendTime = new Date();
                     MessageController.addMessage({
-                      ...data, message: '請問有什麼需要注意的嗎？', sendTime: data.sendTime, readForUser: true, readForOthers: false, image: '',
+                      ...data, message: '請問有什麼需要注意的嗎？', sendTime: data.sendTime, readForSender: true, readForReceiver: false, image: '',
                     }, userUid);
                     onRefresh();
                   }}
@@ -344,7 +344,7 @@ function Send({ route, navigation }) {
                   onPress={() => {
                     data.sendTime = new Date();
                     MessageController.addMessage({
-                      ...data, message: '請問有需要自行準備的東西嗎？', sendTime: data.sendTime, readForUser: true, readForOthers: false, image: '',
+                      ...data, message: '請問有需要自行準備的東西嗎？', sendTime: data.sendTime, readForSender: true, readForReceiver: false, image: '',
                     }, userUid);
                     onRefresh();
                   }}

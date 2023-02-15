@@ -20,14 +20,13 @@ import UserController from '../../controller/getStudentId';
 
 function List({ navigation }) {
   const auth = getAuth();
-  const [uid, setUid] = useState();
   const [Messagenum, setMessageNum] = useState(0);
   const [active1, setActive1] = useState([]);
   const [active2, setActive2] = useState([]);
 
   useEffect(() => {
-    setUid(UserController.getUid());
-    MessageController.countUnreadMessage(uid).then((num) => {
+    const userid = UserController.getUid();
+    MessageController.countUnreadMessage(userid).then((num) => {
       setMessageNum(num);
     }).catch((err) => {
       throw err;
@@ -47,8 +46,8 @@ function List({ navigation }) {
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = () => {
     setRefreshing(true);
-    setUid(UserController.getUid());
-    MessageController.countUnreadMessage(uid).then((num) => {
+    const userid = UserController.getUid();
+    MessageController.countUnreadMessage(userid).then((num) => {
       setMessageNum(num);
     }).catch((err) => {
       throw err;

@@ -124,6 +124,7 @@ async function getNewestMessage(user, other) {
         receive: doc1.data().receive,
         sendTime: doc1.data().sendTime,
         read: true,
+        othersUid: doc1.data().receive,
       });
     }
   });
@@ -141,6 +142,7 @@ async function getNewestMessage(user, other) {
         receive: doc2.data().receive,
         sendTime: doc2.data().sendTime,
         read: doc2.data().readForReceiver,
+        othersUid: doc2.data().send,
       });
     }
   });
@@ -149,7 +151,7 @@ async function getNewestMessage(user, other) {
   if (last.message === '' && last.image) {
     last.message = '他傳送了一張照片';
   }
-  // console.log(last);
+  console.log(last);
   return last;
 }
 
@@ -257,7 +259,7 @@ async function countUnreadMessage(uid) {
       messagecount += 1;
     }
   });
-  // console.log(uid, 'message quantity:', messagecount);
+  console.log(uid, 'unread message quantity:', messagecount);
   return messagecount;
 }
 

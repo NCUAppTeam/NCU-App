@@ -20,7 +20,6 @@ import UserController from '../../controller/getStudentId';
 import styles from './style_folder/Styles_personal_manage';
 
 function Personal({ navigation }) {
-  const [uid, setUid] = useState();
   const [Messagenum, setMessageNum] = useState(0);
   const [showNow, setShowNow] = useState([]);
   const [showManage, setShowManage] = useState([]);
@@ -28,10 +27,9 @@ function Personal({ navigation }) {
   const [isPress, setIsPress] = useState('參加中');
 
   useEffect(() => {
-    setUid(UserController.getUid());
-    MessageController.countUnreadMessage(uid).then((number) => {
-      setMessageNum(number);
-      console.log(number);
+    const userid = UserController.getUid();
+    MessageController.countUnreadMessage(userid).then((num) => {
+      setMessageNum(num);
     }).catch((err) => {
       throw err;
     });
@@ -60,9 +58,9 @@ function Personal({ navigation }) {
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = async () => {
     setRefreshing(true);
-    setUid(UserController.getUid());
-    MessageController.countUnreadMessage(uid).then((number) => {
-      setMessageNum(number);
+    const userid = UserController.getUid();
+    MessageController.countUnreadMessage(userid).then((num) => {
+      setMessageNum(num);
     }).catch((err) => {
       throw err;
     });
@@ -146,12 +144,8 @@ function Personal({ navigation }) {
                 &nbsp;私訊
                   </Text>
                 </TouchableOpacity>
-                {(Messagenum !== 0) && (
-                <Text style={styles.num}>
-                  {Messagenum}
-                </Text>
-                )}
               </ZStack>
+
             </LinearGradient>
             <LinearGradient
               colors={['#359DD9', '#1784B2']}
@@ -181,6 +175,13 @@ function Personal({ navigation }) {
             </LinearGradient>
           </Box>
         </ZStack>
+        {Messagenum !== 0 && (
+        <Box>
+          <Text style={styles.num}>
+            {Messagenum}
+          </Text>
+        </Box>
+        )}
         <Box style={{ marginTop: 192, alignItems: 'center', marginBottom: 10 }}>
           <Box style={{ flexDirection: 'row' }}>
             <TouchableOpacity

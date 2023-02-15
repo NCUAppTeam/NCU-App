@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   Text, SafeAreaView,
-  TouchableOpacity, Image, RefreshControl, Dimensions,
-  Platform,
+  TouchableOpacity, Image, RefreshControl, Dimensions, Platform,
 } from 'react-native';
 import {
   Title, Card,
@@ -98,14 +97,27 @@ function Personal({ navigation }) {
             start={[0.6497, 0.9972]}
             end={[0.1203, 0.6497]}
             style={{
-              width: Dimensions.get('window').width * 0.8,
-              height: Dimensions.get('window').width * 0.8,
-              borderRadius: Dimensions.get('window').width * 0.4,
+              flex: 1,
+              position: 'absolute',
+              width: Dimensions.get('window').width * 2,
+              height: Dimensions.get('window').width * 2,
+              borderRadius: Dimensions.get('window').width,
               alignSelf: 'center',
-              transform: [{ scaleX: 1.61 }],
-              marginTop: Platform.OS === 'ios' ? -Dimensions.get('window').width * 0.35 : -178,
+              marginTop: Platform.OS === 'android' ? -Dimensions.get('screen').height * 0.7 : -Dimensions.get('window').width * 1.8,
+              // transform: [{ scaleX: 1.2 }],
             }}
           />
+          {/* <Box
+            style={{
+              position: 'absolute',
+              width: Dimensions.get('window').width,
+              height: Dimensions.get('window').height * 0.05,
+              alignSelf: 'center',
+              marginTop: 0,
+              color: '#28527A',
+            }} */}
+          {/* /> */}
+
           <Box style={{ alignSelf: 'center', marginTop: 61, flexDirection: 'row' }}>
             <Feather name="user" size={24} color="white" style={{ marginTop: 5, marginRight: 15 }} onPress={() => { navigation.navigate('list'); }} />
             <Text style={{

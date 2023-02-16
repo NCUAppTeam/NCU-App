@@ -22,6 +22,56 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const storage = getStorage(app);
 
+function toDateString(time) {
+  const date = new Date(time * 1000);
+  const dateString = `${date.getFullYear().toString() - 1969}/${
+    (date.getMonth() + 1).toString().padStart(2, '0')}/${
+    date.getDate().toString().padStart(2, '0')}  ${
+    date.getHours().toString().padStart(2, '0')}:${
+    date.getMinutes().toString().padStart(2, '0')}`;
+  return dateString;
+}
+
+function getHoursMin(time) {
+  const date = new Date(time * 1000);
+  if (date.getHours().toString().padStart(2, '0') > 12) {
+    return `下午${
+      date.getHours().toString().padStart(2, '0')}:${
+      date.getMinutes().toString().padStart(2, '0')}`;
+  }
+  return `上午${
+    date.getHours().toString().padStart(2, '0')}:${
+    date.getMinutes().toString().padStart(2, '0')}`;
+}
+
+function newMessageTime(time) {
+  const date = new Date(time * 1000);
+  const current = new Date();
+  const dateString = `${date.getFullYear().toString() - 1969}/${
+    (date.getMonth() + 1).toString().padStart(2, '0')}/${
+    date.getDate().toString().padStart(2, '0')}  ${
+    date.getHours().toString().padStart(2, '0')}:${
+    date.getMinutes().toString().padStart(2, '0')}`;
+  if (current.getFullYear() > date.getFullYear() - 1969) { // 今年以前
+    return `${date.getFullYear().toString() - 1969}/${
+      (date.getMonth() + 1).toString().padStart(2, '0')}/${
+      date.getDate().toString().padStart(2, '0')}`;
+  } if (current.getDate() === date.getDate() && date.getMonth() === current.getMonth()) { // 今天
+    if (date.getHours().toString().padStart(2, '0') > 12) {
+      return `下午${
+        date.getHours().toString().padStart(2, '0')}:${
+        date.getMinutes().toString().padStart(2, '0')}`;
+    }
+    return `上午${
+      date.getHours().toString().padStart(2, '0')}:${
+      date.getMinutes().toString().padStart(2, '0')}`;
+  } if (current.getDate() - 1 === date.getDate() && date.getMonth() === current.getMonth()) { // 昨天
+    return '昨天';
+  }
+  return `${(date.getMonth() + 1).toString().padStart(2, '0')}/${
+    date.getDate().toString().padStart(2, '0')}`;
+}
+
 function imagePos(imageUri) {
   return imageUri.split('/').pop();
 }
@@ -104,6 +154,32 @@ async function getRelativeMessage(user, other) {
   return message;
 }
 
+async function getRelativeMessageTime(user, other) {
+  const db = getFirestore(app);
+  const messageRef1 = query(collection(db, 'message'), where('send', '==', user));
+  const messageRef2 = query(collection(db, 'message'), where('receive', '==', user));
+  const time = [];
+  const querySnapshot1 = await getDocs(messageRef1);
+  querySnapshot1.forEach((doc1) => {
+    if (doc1.data().receive === other) {
+      time.push({
+        sendTime: doc1.data().sendTime,
+      });
+    }
+  });
+  const querySnapshot2 = await getDocs(messageRef2);
+  querySnapshot2.forEach((doc2) => {
+    if (doc2.data().send === other) {
+      time.push({
+        sendTime: doc2.data().sendTime,
+      });
+    }
+  });
+  time.sort((a, b) => a.sendTime - b.sendTime);
+  const uniquetime = [...new Set(time)];
+  return uniquetime;
+}
+
 async function getNewestMessage(user, other) {
   const db = getFirestore(app);
   const otherRef = await getDoc(doc(db, `attendees/${other}`));
@@ -151,7 +227,6 @@ async function getNewestMessage(user, other) {
   if (last.message === '' && last.image) {
     last.message = '他傳送了一張照片';
   }
-  console.log(last);
   return last;
 }
 
@@ -193,7 +268,7 @@ async function Notification(notifymessage, eventID) {
   const db = getFirestore(app);
   const infoRef = query(collection(db, 'attendees'));
   const messageRef = query(collection(db, 'message'));
-  const eventInfo = await getDoc(collection(db, `active/${eventID}`));
+  const eventInfo = await getDoc(doc(db, `active/${eventID}`));
 
   const querySnapshot = await getDocs(infoRef);
   const attendeeList = [];
@@ -232,8 +307,7 @@ async function Notification(notifymessage, eventID) {
 
 async function deleteMessage(messageID) {
   const db = getFirestore(app);
-  const messageRef = query(collection(db, 'message'));
-  const deletedDoc = await getDoc(collection(db, `message/${messageID}`));
+  const deletedDoc = await getDoc(doc(db, `message/${messageID}`));
   if (deletedDoc.data().image !== '') {
     const imageRef = ref(storage, `message/${deletedDoc.data().imageUri1.substr(-94, 41)}`);
     deleteObject(imageRef).then(() => {
@@ -265,9 +339,13 @@ async function countUnreadMessage(uid) {
 
 export default {
   firebaseConfig,
+  getHoursMin,
+  newMessageTime,
+  toDateString,
   addMessage,
   getNewestMessage,
   getRelativeMessage,
+  getRelativeMessageTime,
   getMessagePerson,
   Notification,
   deleteMessage,

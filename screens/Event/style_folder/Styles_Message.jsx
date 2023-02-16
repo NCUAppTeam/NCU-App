@@ -84,6 +84,7 @@ export default StyleSheet.create({
     paddingTop: 15,
   },
   sendArea: {
+    width: Dimensions.get('window').width,
     marginBottom: 15,
     marginTop: 15,
   },
@@ -127,13 +128,24 @@ export default StyleSheet.create({
     fontSize: 10,
   },
   latest: {
-    width: Dimensions.get('window').width * 0.65,
+    width: Dimensions.get('window').width * 0.45,
     height: 30,
     marginTop: 2,
     textAlign: 'left',
     fontWeight: '400',
     fontSize: 10.5,
     color: '#BFBFBF',
+  },
+  sendTimeBox: {
+    flex: 1,
+    alignSelf: 'flex-end',
+
+  },
+  sendTime: {
+    color: '#b4b4b8',
+    textAlign: 'right',
+    marginRight: 5,
+    fontSize: 10,
   },
   sendPeople: {
     // marginTop: Dimensions.get('window').height * 0.011,

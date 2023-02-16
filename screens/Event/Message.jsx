@@ -119,16 +119,14 @@ function Message({ navigation }) {
                       }}
                     />
                     <VStack style={styles.messagePeople}>
-                      <HStack>
-                        <Text style={styles.name}>
-                          {item.name}
-                        </Text>
-                        {/* <Text style={styles.identity}>
+                      <Text style={styles.name}>
+                        {item.name}
+                      </Text>
+                      {/* <Text style={styles.identity}>
                         &ensp;#
                         {' '}
                         {item.identity}
                       </Text> */}
-                      </HStack>
                       {/* <HStack>
                       <Text style={{ textAlign: 'left', fontWeight: '400', fontSize: 10 }}>
                         {item.major}
@@ -138,6 +136,11 @@ function Message({ navigation }) {
                         {item.message}
                       </Text>
                     </VStack>
+                    <Box style={styles.sendTimeBox}>
+                      <Text style={styles.sendTime}>
+                        {MessageController.newMessageTime(item.sendTime)}
+                      </Text>
+                    </Box>
                   </HStack>
                 </TouchableHighlight>
                 <Box>

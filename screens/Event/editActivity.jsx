@@ -33,6 +33,7 @@ function Edit({ route, navigation }) {
   const [OLDdata, setOLDdata] = useState([]);
   const [NEWdata, setNEWdata] = useState([]);
   const [genreID, setgenreID] = useState();
+  const [host, setHost] = useState([]);
   let NoPicLink;
 
   const [image1, setImage1] = useState();
@@ -52,6 +53,9 @@ function Edit({ route, navigation }) {
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = () => {
     setRefreshing(true);
+    ActiveController.getHostinAdd().then((res) => {
+      setHost(res);
+    });
     ActiveController.getOneActive(passedID).then((res) => {
       setOLDdata(res[0]);
       setgenreID(values.indexOf(res[0].genre));
@@ -655,17 +659,15 @@ function Edit({ route, navigation }) {
               </TouchableOpacity>
             </Box>
             <Divider my={2} bg="#bfbebe" /* my=margin-top and margin-bottom */ />
-            <Heading style={styles.inputboxText}>以下可以留下更多聯絡資訊, 讓參加者更容易找到你喔!</Heading>
+            <Heading style={styles.inputboxText}>請確認以下聯絡資訊, 若有錯誤可至個人管理中心修改!</Heading>
             <Box style={styles.body}>
               <Heading style={styles.inputboxText}>活動聯絡人姓名</Heading>
               <Box style={styles.inputbox}>
                 <Box style={{ flexDirection: 'row' }}>
                   <TextInput
                     style={styles.input}
-                    placeholder="活動聯絡人姓名"
-                    defaultValue={OLDdata.hostName}
-                    value={NEWdata.hostName}
-                    onChangeText={(text) => setNEWdata({ ...NEWdata, hostName: text })}
+                    editable={false}
+                    value={host.name}
                     selectionColor="#ccc"
                   />
                 </Box>
@@ -677,10 +679,8 @@ function Edit({ route, navigation }) {
                 <Box style={{ flexDirection: 'row' }}>
                   <TextInput
                     style={styles.input}
-                    placeholder="連絡電話"
-                    defaultValue={OLDdata.hostPhone}
-                    value={NEWdata.hostPhone}
-                    onChangeText={(text) => setNEWdata({ ...NEWdata, hostPhone: text })}
+                    editable={false}
+                    value={host.phone}
                     selectionColor="#ccc"
                   />
                 </Box>
@@ -692,10 +692,8 @@ function Edit({ route, navigation }) {
                 <Box style={{ flexDirection: 'row' }}>
                   <TextInput
                     style={styles.input}
-                    placeholder="電子郵件"
-                    defaultValue={OLDdata.HostMail}
-                    value={NEWdata.hostMail}
-                    onChangeText={(text) => setNEWdata({ ...NEWdata, hostMail: text })}
+                    editable={false}
+                    value={host.email}
                     selectionColor="#ccc"
                   />
                 </Box>

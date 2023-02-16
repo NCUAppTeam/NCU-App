@@ -812,6 +812,17 @@ async function getAttendedOrNot(docID) {
   return false;
 }
 
+async function getHostinAdd() {
+  const Uid = UserController.getUid();
+  const db = getFirestore(app);
+  const infoRef = query(doc(db, `attendees/${Uid}`));
+  const querySnapshot = await getDoc(infoRef);
+
+  console.log(querySnapshot.data());
+
+  return querySnapshot.data();
+}
+
 export default {
   firebaseConfig,
   toDateString,
@@ -836,4 +847,5 @@ export default {
   getTotalOfAttendees,
   removeAttendee,
   getAttendedOrNot,
+  getHostinAdd,
 };

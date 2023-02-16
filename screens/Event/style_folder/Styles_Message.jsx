@@ -156,7 +156,7 @@ export default StyleSheet.create({
     textAlignVertical: 'center',
   },
   info: {
-    flex: 1,
+    flex: 0.7,
     color: '#000',
   },
   Dot: {

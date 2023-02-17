@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Text, Platform, View, SafeAreaView, TextInput,
   ScrollView, TouchableOpacity, Dimensions, Image, TouchableHighlight,
@@ -23,6 +23,12 @@ function Add({ navigation }) {
     cost: '',
     link: '',
   });
+  const [host, setHost] = useState([]);
+  useEffect(() => {
+    ActiveController.getHostinAdd().then((res) => {
+      setHost(res);
+    });
+  }, []);
 
   const [genre, setGenre] = useState(false);
   const [name, setName] = useState(false);
@@ -42,7 +48,7 @@ function Add({ navigation }) {
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [1, 1],
-      quality: 1,
+      quality: 0.2,
     });
 
     NoPicLink = result.assets[0].uri;
@@ -605,16 +611,15 @@ function Add({ navigation }) {
               </TouchableOpacity>
             </Box>
             <Divider my={2} bg="#bfbebe" /* my=margin-top and margin-bottom */ />
-            <Heading style={styles.inputboxText}>以下可以留下更多聯絡資訊, 讓參加者更容易找到你喔!</Heading>
+            <Heading style={styles.inputboxText}>請確認以下聯絡資訊, 若有錯誤可至個人管理中心修改!</Heading>
             <Box style={styles.body}>
               <Heading style={styles.inputboxText}>活動聯絡人姓名</Heading>
               <Box style={styles.inputbox}>
                 <Box style={{ flexDirection: 'row' }}>
                   <TextInput
                     style={styles.input}
-                    placeholder="活動聯絡人姓名"
-                    value={data.hostName}
-                    onChangeText={(text) => setData({ ...data, hostName: text })}
+                    editable={false}
+                    value={host.name}
                     selectionColor="#ccc"
                   />
                 </Box>
@@ -626,9 +631,8 @@ function Add({ navigation }) {
                 <Box style={{ flexDirection: 'row' }}>
                   <TextInput
                     style={styles.input}
-                    placeholder="連絡電話"
-                    value={data.hostPhone}
-                    onChangeText={(text) => setData({ ...data, hostPhone: text })}
+                    editable={false}
+                    value={host.phone}
                     selectionColor="#ccc"
                   />
                 </Box>
@@ -640,9 +644,8 @@ function Add({ navigation }) {
                 <Box style={{ flexDirection: 'row' }}>
                   <TextInput
                     style={styles.input}
-                    placeholder="電子郵件"
-                    value={data.hostMail}
-                    onChangeText={(text) => setData({ ...data, hostMail: text })}
+                    editable={false}
+                    value={host.email}
                     selectionColor="#ccc"
                   />
                 </Box>

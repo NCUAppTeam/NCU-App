@@ -44,12 +44,16 @@ function Send({ route, navigation }) {
     send: userUid,
     receive: attendeeUid,
   });
+  const [time, setTime] = useState();
   const [getData, setGetData] = useState([]);
   useEffect(() => {
     MessageController.getRelativeMessage(userUid, attendeeUid).then((res) => {
       setGetData(res);
     }).then().catch((err) => {
       throw err;
+    });
+    MessageController.getRelativeMessageTime(userUid, attendeeUid).then((res) => {
+      setTime(res);
     });
     UserController.getINFO(userUid).then((res) => {
       setUserIDInfo(res);
@@ -70,6 +74,9 @@ function Send({ route, navigation }) {
       setGetData(res);
     }).then().catch((err) => {
       throw err;
+    });
+    MessageController.getRelativeMessageTime(userUid, attendeeUid).then((res) => {
+      setTime(res);
     });
     UserController.getINFO(userUid).then((res) => {
       setUserIDInfo(res);
@@ -129,7 +136,7 @@ function Send({ route, navigation }) {
                 </Text>
               </HStack>
             </Box>
-            <Box style={{ flex: 7 }} />
+            <Box style={{ flex: 5 }} />
             <Box style={styles.info}>
               <Feather
                 name="info"
@@ -144,13 +151,7 @@ function Send({ route, navigation }) {
             refreshControl={(
               <RefreshControl
                 refreshing={refreshing}
-                onRefresh={
-                  MessageController.getRelativeMessage(userUid, attendeeUid).then((res) => {
-                    setGetData(res);
-                  }).then().catch((err) => {
-                    throw err;
-                  })
-                }
+                onRefresh={onRefresh}
               />
           )}
             data={getData}
@@ -160,6 +161,10 @@ function Send({ route, navigation }) {
             onContentSizeChange={() => scrollview.current.scrollToEnd({ animated: true })}
             renderItem={({ item }) => (
               <Box style={styles.sendArea}>
+                {/* per day 的 時間顯示還做不出來 */}
+                {/* <Box>
+                  <Text>{MessageController.toDateString(item.sendTime)}</Text>
+                </Box> */}
                 <Box
                   style={[
                     item.send === userUid && { alignItems: 'flex-end' },
@@ -172,122 +177,139 @@ function Send({ route, navigation }) {
                       item.receive === userUid && { flexDirection: 'row-reverse' },
                     ]}
                   >
+                    {item.send === userUid && (
+                    <Box style={{ alignSelf: 'flex-end' }}>
+                      <Text style={{ fontSize: 9, marginRight: 5 }}>
+                        {MessageController.getHoursMin(item.sendTime)}
+                      </Text>
+                    </Box>
+                    )}
                     <Box style={{ maxWidth: 180 }}>
-                      <Card
-                        key={item.id}
-                        style={{ backgroundColor: '#E5EBF1', borderRadius: 10 }}
-                        onLongPress={() => {
-                          setShowDialog(true);
-                          setDeleteMessageId(item.id);
-                        }}
-                      >
-                        <Dialog
-                          width={Dimensions.get('window').width * 0.6}
-                          height={Dimensions.get('window').width * 0.485}
-                          visible={showDialog}
-                          overlayBackgroundColor="transparent"
-                          onTouchOutside={() => {
-                            setShowDialog(false);
+                      <HStack>
+                        <Card
+                          key={item.id}
+                          style={{ backgroundColor: '#E5EBF1', borderRadius: 10 }}
+                          onLongPress={() => {
+                            setShowDialog(true);
+                            setDeleteMessageId(item.id);
                           }}
                         >
-                          <DialogContent style={{
-                            paddingBottom: 0,
-                            borderBottomWidth: 1,
-                            borderBottomColor: '#e5e5e5',
-                          }}
+                          <Dialog
+                            width={Dimensions.get('window').width * 0.6}
+                            height={Dimensions.get('window').width * 0.485}
+                            visible={showDialog}
+                            overlayBackgroundColor="transparent"
+                            onTouchOutside={() => {
+                              setShowDialog(false);
+                            }}
                           >
-                            <View style={{
-                              flexDirection: 'row',
-                              paddingBottom: 5,
-                              justifyContent: 'center',
+                            <DialogContent style={{
+                              paddingBottom: 0,
+                              borderBottomWidth: 1,
+                              borderBottomColor: '#e5e5e5',
                             }}
                             >
-                              <View style={styles.unsentTitle}>
-                                <Text style={{
-                                  color: '#1f2937',
-                                  fontSize: 17,
-                                  fontWeight: '400',
-                                }}
-                                >
-                                  收回訊息?&ensp;
+                              <View style={{
+                                flexDirection: 'row',
+                                paddingBottom: 5,
+                                justifyContent: 'center',
+                              }}
+                              >
+                                <View style={styles.unsentTitle}>
+                                  <Text style={{
+                                    color: '#1f2937',
+                                    fontSize: 17,
+                                    fontWeight: '400',
+                                  }}
+                                  >
+                                    收回訊息?&ensp;
+                                  </Text>
+                                </View>
+                              </View>
+                            </DialogContent>
+
+                            <DialogContent style={{ paddingTop: 10, paddingBottom: 10 }}>
+                              <View>
+                                <Text style={{ fontSize: 14, marginBottom: 5 }}>
+                                  訊息將被收回，但對方有可能已查閱過此訊息，仍然確定將訊息收回嗎?
                                 </Text>
                               </View>
-                            </View>
-                          </DialogContent>
-
-                          <DialogContent style={{ paddingTop: 10, paddingBottom: 10 }}>
-                            <View>
-                              <Text style={{ fontSize: 14, marginBottom: 5 }}>
-                                訊息將被收回，但對方有可能已查閱過此訊息，仍然確定將訊息收回嗎?
-                              </Text>
-                            </View>
-                          </DialogContent>
-                          <DialogContent style={{ paddingLeft: 0 }}>
-                            <View style={{
-                              height: 61,
-                              width: Dimensions.get('window').width * 0.9,
-                              backgroundColor: '#f3f4f6',
-                            }}
-                            >
-                              <View style={{ flexDirection: 'row' }}>
-                                <View
-                                  style={{ marginTop: 10 }}
-                                >
-                                  <Text
-                                    style={{
-                                      fontSize: 14, color: '#64748B', padding: 10, marginLeft: Dimensions.get('window').width * 0.3,
-                                    }}
-                                    onPress={() => {
-                                      setShowDialog(false);
-                                    }}
+                            </DialogContent>
+                            <DialogContent style={{ paddingLeft: 0 }}>
+                              <View style={{
+                                height: 61,
+                                width: Dimensions.get('window').width * 0.9,
+                                backgroundColor: '#f3f4f6',
+                              }}
+                              >
+                                <View style={{ flexDirection: 'row' }}>
+                                  <View
+                                    style={{ marginTop: 10 }}
                                   >
-                                    取消
-                                  </Text>
-                                </View>
-                                <View
-                                  style={{ marginTop: 10 }}
-                                >
-                                  <Text
-                                    style={{
-                                      color: '#ffffff', backgroundColor: '#ef4444', padding: 10, borderRadius: 4, marginLeft: 10,
-                                    }}
-                                    onPress={() => {
-                                      MessageController.deleteMessage(item.id).then(() => {
-                                        onRefresh();
+                                    <Text
+                                      style={{
+                                        fontSize: 14, color: '#64748B', padding: 10, marginLeft: Dimensions.get('window').width * 0.3,
+                                      }}
+                                      onPress={() => {
                                         setShowDialog(false);
-                                      });
-                                    }}
+                                      }}
+                                    >
+                                      取消
+                                    </Text>
+                                  </View>
+                                  <View
+                                    style={{ marginTop: 10 }}
                                   >
-                                    刪除
-                                  </Text>
+                                    <Text
+                                      style={{
+                                        color: '#ffffff', backgroundColor: '#ef4444', padding: 10, borderRadius: 4, marginLeft: 10,
+                                      }}
+                                      onPress={() => {
+                                        MessageController.deleteMessage(item.id).then(() => {
+                                          onRefresh();
+                                          setShowDialog(false);
+                                        });
+                                      }}
+                                    >
+                                      刪除
+                                    </Text>
+                                  </View>
                                 </View>
                               </View>
-                            </View>
-                          </DialogContent>
-                        </Dialog>
-                        <Card.Content style={{
-                          paddingBottom: 6,
-                          paddingHorizontal: 10,
-                        }}
-                        >
-                          {item.message
-                            ? (
-                              <Text style={{ marginTop: 6, fontSize: 14 }}>
-                                {item.message}
-                              </Text>
-                            )
-                            : (
-                              <Image
-                                style={{ height: 150, width: 150, marginTop: 6 }}
-                                source={{
-                                  uri: item.image,
-                                }}
-                              />
-                            )}
-                        </Card.Content>
-                      </Card>
+                            </DialogContent>
+                          </Dialog>
+                          <Card.Content style={{
+                            paddingBottom: 6,
+                            paddingHorizontal: 10,
+                          }}
+                          >
+
+                            {item.message
+                              ? (
+                                <Text style={{ marginTop: 6, fontSize: 14 }}>
+                                  {item.message}
+                                </Text>
+                              )
+                              : (
+                                <Image
+                                  style={{ height: 150, width: 150, marginTop: 6 }}
+                                  source={{
+                                    uri: item.image,
+                                  }}
+                                />
+                              )}
+                          </Card.Content>
+                        </Card>
+                        {item.receive === userUid && (
+                          <Box style={{ alignSelf: 'flex-end' }}>
+                            <Text style={{ fontSize: 9, marginLeft: 5 }}>
+                              {MessageController.getHoursMin(item.sendTime)}
+                            </Text>
+                          </Box>
+                        )}
+                      </HStack>
                     </Box>
-                    <Box style={{ marginHorizontal: 12 }}>
+                    <Box style={{ marginHorizontal: 12, alignSelf: 'center' }}>
                       {item.send === userUid
                         ? (
                           <Image
@@ -328,7 +350,7 @@ function Send({ route, navigation }) {
                   onPress={() => {
                     data.sendTime = new Date();
                     MessageController.addMessage({
-                      ...data, message: '請問有什麼需要注意的嗎？', sendTime: data.sendTime, readForUser: true, readForOthers: false, image: '',
+                      ...data, message: '請問有什麼需要注意的嗎？', sendTime: data.sendTime, readForSender: true, readForReceiver: false, image: '',
                     }, userUid);
                     onRefresh();
                   }}
@@ -344,7 +366,7 @@ function Send({ route, navigation }) {
                   onPress={() => {
                     data.sendTime = new Date();
                     MessageController.addMessage({
-                      ...data, message: '請問有需要自行準備的東西嗎？', sendTime: data.sendTime, readForUser: true, readForOthers: false, image: '',
+                      ...data, message: '請問有需要自行準備的東西嗎？', sendTime: data.sendTime, readForSender: true, readForReceiver: false, image: '',
                     }, userUid);
                     onRefresh();
                   }}

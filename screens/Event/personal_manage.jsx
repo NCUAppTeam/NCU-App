@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   Text, SafeAreaView,
-  TouchableOpacity, Image, RefreshControl, Dimensions,
-  Platform,
+  TouchableOpacity, Image, RefreshControl, Dimensions, Platform,
 } from 'react-native';
 import {
   Title, Card,
@@ -16,46 +15,54 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import ActiveController from '../../controller/Active';
 import MessageController from '../../controller/Message';
+import UserController from '../../controller/getStudentId';
 import styles from './style_folder/Styles_personal_manage';
 
 function Personal({ navigation }) {
   const [Messagenum, setMessageNum] = useState(0);
+  const [showNow, setShowNow] = useState([]);
+  const [showManage, setShowManage] = useState([]);
+  const [showEnd, setShowEnd] = useState([]);
+  const [isPress, setIsPress] = useState('參加中');
+
   useEffect(() => {
-    MessageController.countUnreadMessage().then((num) => {
+    const userid = UserController.getUid();
+    MessageController.countUnreadMessage(userid).then((num) => {
       setMessageNum(num);
     }).catch((err) => {
       throw err;
     });
-  }, []);
-  const [showNow, setShowNow] = useState([]);
-  useEffect(() => {
     ActiveController.getParticipatedActive().then((res) => {
       setShowNow(res);
     }).catch((err) => {
       throw err;
     });
-  }, []);
-  const [showManage, setShowManage] = useState([]);
-  useEffect(() => {
     ActiveController.getHostedEvent().then((res) => {
       setShowManage(res);
     }).catch((err) => {
       throw err;
     });
-  }, []);
-  const [showEnd, setShowEnd] = useState([]);
-  useEffect(() => {
+    ActiveController.getHostedEvent().then((res) => {
+      setShowManage(res);
+    }).catch((err) => {
+      throw err;
+    });
     ActiveController.getFinishedActive().then((res) => {
       setShowEnd(res);
     }).catch((err) => {
       throw err;
     });
   }, []);
-  const [isPress, setIsPress] = useState('參加中');
 
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = async () => {
     setRefreshing(true);
+    const userid = UserController.getUid();
+    MessageController.countUnreadMessage(userid).then((num) => {
+      setMessageNum(num);
+    }).catch((err) => {
+      throw err;
+    });
     if (isPress === '參加中') {
       await ActiveController.getParticipatedActive().then((res) => {
         setShowNow(res);
@@ -75,11 +82,6 @@ function Personal({ navigation }) {
         throw err;
       });
     }
-    MessageController.countUnreadMessage().then((num) => {
-      setMessageNum(num);
-    }).catch((err) => {
-      throw err;
-    });
     setRefreshing(false);
   };
 
@@ -95,14 +97,27 @@ function Personal({ navigation }) {
             start={[0.6497, 0.9972]}
             end={[0.1203, 0.6497]}
             style={{
-              width: Dimensions.get('window').width * 0.8,
-              height: Dimensions.get('window').width * 0.8,
-              borderRadius: Dimensions.get('window').width * 0.4,
+              flex: 1,
+              position: 'absolute',
+              width: Dimensions.get('window').width * 2,
+              height: Dimensions.get('window').width * 2,
+              borderRadius: Dimensions.get('window').width,
               alignSelf: 'center',
-              transform: [{ scaleX: 1.61 }],
-              marginTop: Platform.OS === 'ios' ? -Dimensions.get('window').width * 0.35 : -178,
+              marginTop: Platform.OS === 'android' ? -Dimensions.get('screen').height * 0.7 : -Dimensions.get('window').width * 1.8,
+              // transform: [{ scaleX: 1.2 }],
             }}
           />
+          {/* <Box
+            style={{
+              position: 'absolute',
+              width: Dimensions.get('window').width,
+              height: Dimensions.get('window').height * 0.05,
+              alignSelf: 'center',
+              marginTop: 0,
+              color: '#28527A',
+            }} */}
+          {/* /> */}
+
           <Box style={{ alignSelf: 'center', marginTop: 61, flexDirection: 'row' }}>
             <Feather name="user" size={24} color="white" style={{ marginTop: 5, marginRight: 15 }} onPress={() => { navigation.navigate('list'); }} />
             <Text style={{
@@ -141,12 +156,8 @@ function Personal({ navigation }) {
                 &nbsp;私訊
                   </Text>
                 </TouchableOpacity>
-                {Messagenum !== 0 && (
-                <Text style={styles.num}>
-                  {Messagenum}
-                </Text>
-                )}
               </ZStack>
+
             </LinearGradient>
             <LinearGradient
               colors={['#359DD9', '#1784B2']}
@@ -176,6 +187,13 @@ function Personal({ navigation }) {
             </LinearGradient>
           </Box>
         </ZStack>
+        {Messagenum !== 0 && (
+        <Box>
+          <Text style={styles.num}>
+            {Messagenum}
+          </Text>
+        </Box>
+        )}
         <Box style={{ marginTop: 192, alignItems: 'center', marginBottom: 10 }}>
           <Box style={{ flexDirection: 'row' }}>
             <TouchableOpacity

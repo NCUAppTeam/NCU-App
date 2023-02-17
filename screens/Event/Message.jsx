@@ -13,19 +13,17 @@ import UserController from '../../controller/getStudentId';
 import MessageController from '../../controller/Message';
 
 function Message({ navigation }) {
-  const user = UserController.getUid();
+  const userUid = UserController.getUid();
   const [attendeeINFO, setAttendeeInfo] = useState();
-  const [newList, setNewList] = useState([]);
+  const [newInfo, setNewInfo] = useState();
+  const Info = [];
   useEffect(() => {
-    MessageController.getMessagePerson(user).then((res1) => {
+    MessageController.getMessagePerson(userUid).then((res1) => {
       setAttendeeInfo(res1);
-      console.log(res1);
       res1.forEach((res) => {
-        MessageController.getNewestMessage(user, res.othersUid).then((result) => {
-          for (let i = 0; i <= res1.length; i += 1) {
-            res.newMessage = result.message;
-            setNewList(result.message);
-          }
+        MessageController.getNewestMessage(userUid, res.othersUid).then((result) => {
+          Info.push(result);
+          setNewInfo([...Info]);
         });
       });
     }).catch((err) => {
@@ -36,14 +34,12 @@ function Message({ navigation }) {
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = () => {
     setRefreshing(true);
-    MessageController.getMessagePerson(user).then((res1) => {
+    MessageController.getMessagePerson(userUid).then((res1) => {
       setAttendeeInfo(res1);
       res1.forEach((res) => {
-        MessageController.getNewestMessage(user, res.othersUid).then((result) => {
-          for (let i = 0; i <= res1.length; i += 1) {
-            res.newMessage = result.message;
-            setNewList(result.message);
-          }
+        MessageController.getNewestMessage(userUid, res.othersUid).then((result) => {
+          Info.push(result);
+          setNewInfo([...Info]);
         });
       });
     }).catch((err) => {
@@ -94,7 +90,7 @@ function Message({ navigation }) {
         <Box style={{ flex: 1, alignItems: 'center' }}>
           <FlatList
             style={{ marginTop: 20 }}
-            data={attendeeINFO}
+            data={newInfo}
             keyExtractor={(item) => item.othersUid}
             showsVerticalScrollIndicator={false}
             refreshControl={(
@@ -111,7 +107,7 @@ function Message({ navigation }) {
                   onPress={() => {
                     navigation.navigate('send', {
                       attendeeUid: item.othersUid,
-                      userUid: user,
+                      userUid,
                     });
                   }}
                 >
@@ -123,29 +119,32 @@ function Message({ navigation }) {
                       }}
                     />
                     <VStack style={styles.messagePeople}>
-                      <HStack>
-                        <Text style={styles.name}>
-                          {item.name}
-                        </Text>
-                        {/* <Text style={styles.identity}>
+                      <Text style={styles.name}>
+                        {item.name}
+                      </Text>
+                      {/* <Text style={styles.identity}>
                         &ensp;#
                         {' '}
                         {item.identity}
                       </Text> */}
-                      </HStack>
                       {/* <HStack>
                       <Text style={{ textAlign: 'left', fontWeight: '400', fontSize: 10 }}>
                         {item.major}
                       </Text>
                     </HStack> */}
                       <Text style={styles.latest}>
-                        {item.newMessage}
+                        {item.message}
                       </Text>
                     </VStack>
+                    <Box style={styles.sendTimeBox}>
+                      <Text style={styles.sendTime}>
+                        {MessageController.newMessageTime(item.sendTime)}
+                      </Text>
+                    </Box>
                   </HStack>
                 </TouchableHighlight>
                 <Box>
-                  <Octicons name="dot-fill" size={24} color={item.readForOthers ? '#EB6F6F' : 'transparent'} style={styles.readDot} />
+                  <Octicons name="dot-fill" size={24} color={item.read ? 'transparent' : '#EB6F6F'} style={styles.readDot} />
                 </Box>
               </ZStack>
             )}

@@ -35,24 +35,25 @@ function Send({ route, navigation }) {
     }
   };
   const [showDialog, setShowDialog] = useState(false);
+  const { chatroomId } = route.params;
   const { attendeeUid } = route.params;
   const { userUid } = route.params;
   const keyboard = useKeyboard();
   const [attendeeINFO, setAttendeeInfo] = useState({});
   const [userIDINFO, setUserIDInfo] = useState({});
   const [data, setData] = useState({
-    send: userUid,
-    receive: attendeeUid,
+    sender: userUid,
   });
   const [time, setTime] = useState();
   const [getData, setGetData] = useState([]);
   useEffect(() => {
-    MessageController.getRelativeMessage(userUid, attendeeUid).then((res) => {
+    MessageController.getRelativeMessage(chatroomId).then((res) => {
+      console.log(res);
       setGetData(res);
     }).then().catch((err) => {
       throw err;
     });
-    MessageController.getRelativeMessageTime(userUid, attendeeUid).then((res) => {
+    MessageController.getRelativeMessageTime(chatroomId).then((res) => {
       setTime(res);
     });
     UserController.getINFO(userUid).then((res) => {
@@ -70,12 +71,12 @@ function Send({ route, navigation }) {
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = () => {
     setRefreshing(true);
-    MessageController.getRelativeMessage(userUid, attendeeUid).then((res) => {
+    MessageController.getRelativeMessage(chatroomId).then((res) => {
       setGetData(res);
     }).then().catch((err) => {
       throw err;
     });
-    MessageController.getRelativeMessageTime(userUid, attendeeUid).then((res) => {
+    MessageController.getRelativeMessageTime(chatroomId).then((res) => {
       setTime(res);
     });
     UserController.getINFO(userUid).then((res) => {
@@ -167,17 +168,17 @@ function Send({ route, navigation }) {
                 </Box> */}
                 <Box
                   style={[
-                    item.send === userUid && { alignItems: 'flex-end' },
-                    item.receive === userUid && { alignItems: 'flex-start' },
+                    item.sender === userUid && { alignItems: 'flex-end' },
+                    item.sender !== userUid && { alignItems: 'flex-start' },
                   ]}
                 >
                   <Box
                     style={[
-                      item.send === userUid && { flexDirection: 'row' },
-                      item.receive === userUid && { flexDirection: 'row-reverse' },
+                      item.sender === userUid && { flexDirection: 'row' },
+                      item.sender !== userUid && { flexDirection: 'row-reverse' },
                     ]}
                   >
-                    {item.send === userUid && (
+                    {item.sender === userUid && (
                     <Box style={{ alignSelf: 'flex-end' }}>
                       <Text style={{ fontSize: 9, marginRight: 5 }}>
                         {MessageController.getHoursMin(item.sendTime)}
@@ -284,10 +285,10 @@ function Send({ route, navigation }) {
                           }}
                           >
 
-                            {item.message
+                            {item.data
                               ? (
                                 <Text style={{ marginTop: 6, fontSize: 14 }}>
-                                  {item.message}
+                                  {item.data}
                                 </Text>
                               )
                               : (
@@ -300,7 +301,7 @@ function Send({ route, navigation }) {
                               )}
                           </Card.Content>
                         </Card>
-                        {item.receive === userUid && (
+                        {item.sender !== userUid && (
                           <Box style={{ alignSelf: 'flex-end' }}>
                             <Text style={{ fontSize: 9, marginLeft: 5 }}>
                               {MessageController.getHoursMin(item.sendTime)}
@@ -310,7 +311,7 @@ function Send({ route, navigation }) {
                       </HStack>
                     </Box>
                     <Box style={{ marginHorizontal: 12, alignSelf: 'center' }}>
-                      {item.send === userUid
+                      {item.sender === userUid
                         ? (
                           <Image
                             style={{ height: 36, width: 36, borderRadius: 18 }}
@@ -350,7 +351,7 @@ function Send({ route, navigation }) {
                   onPress={() => {
                     data.sendTime = new Date();
                     MessageController.addMessage({
-                      ...data, message: '請問有什麼需要注意的嗎？', sendTime: data.sendTime, readForSender: true, readForReceiver: false, image: '',
+                      ...data, data: '請問有什麼需要注意的嗎？', sendTime: data.sendTime, type: 'text',
                     }, userUid);
                     onRefresh();
                   }}
@@ -366,7 +367,7 @@ function Send({ route, navigation }) {
                   onPress={() => {
                     data.sendTime = new Date();
                     MessageController.addMessage({
-                      ...data, message: '請問有需要自行準備的東西嗎？', sendTime: data.sendTime, readForSender: true, readForReceiver: false, image: '',
+                      ...data, data: '請問有需要自行準備的東西嗎？', sendTime: data.sendTime, type: 'text',
                     }, userUid);
                     onRefresh();
                   }}

@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import {
-  getFirestore, collection, query, getDoc, getDocs, addDoc, where, setDoc, doc, deleteDoc,
+  getFirestore, collection, query, getDoc, getDocs, addDoc, where, doc, deleteDoc,
 } from 'firebase/firestore';
 import {
   getStorage,
@@ -114,119 +114,119 @@ async function addMessage(messageData, userUid) {
     });
 }
 
-async function getRelativeMessage(user, other) {
+async function getRelativeMessage(chatId) {
+  const uid = UserController.getUid();
   const db = getFirestore(app);
-  const messageRef1 = query(collection(db, 'message'), where('send', '==', user));
-  const messageRef2 = query(collection(db, 'message'), where('receive', '==', user));
   const message = [];
-  const querySnapshot1 = await getDocs(messageRef1);
-  querySnapshot1.forEach((doc1) => {
-    if (doc1.data().receive === other) {
-      message.push({
-        id: doc1.id,
-        image: doc1.data().image,
-        message: doc1.data().message,
-        readForSender: doc1.data().readForSender,
-        readForReceiver: doc1.data().readForReceiver,
-        send: doc1.data().send,
-        receive: doc1.data().receive,
-        sendTime: doc1.data().sendTime,
-      });
+  let otherID;
+  const chatroom = await getDocs(collection(db, `chatroom/${chatId}/members`));
+  console.log(chatId);
+  chatroom.forEach((person) => {
+    if (person.id !== uid) {
+      otherID = person.id;
     }
   });
-  const querySnapshot2 = await getDocs(messageRef2);
-  querySnapshot2.forEach((doc2) => {
-    if (doc2.data().send === other) {
-      setDoc(doc(db, `message/${doc2.id}`), { readForReceiver: true }, { merge: true });
-      message.push({
-        id: doc2.id,
-        image: doc2.data().image,
-        message: doc2.data().message,
-        readForSender: doc2.data().readForSender,
-        readForReceiver: doc2.data().readForReceiver,
-        send: doc2.data().send,
-        receive: doc2.data().receive,
-        sendTime: doc2.data().sendTime,
-      });
-    }
+  // console.log(otherID);
+  const infoDoc = doc(db, `attendees/${otherID}`);
+
+  const querySnapshot = await getDoc(infoDoc);
+  const attendeeInfo = {
+    studentUid: querySnapshot.id,
+    avatar: querySnapshot.data().avatar,
+    email: querySnapshot.data().email,
+    grade: querySnapshot.data().grade,
+    major: querySnapshot.data().major,
+    name: querySnapshot.data().name,
+    phone: querySnapshot.data().phone,
+    studentID: querySnapshot.data().studentID,
+  };
+  const chatText = await getDocs(collection(db, `chatroom/${chatId}/messages`));
+  chatText.forEach((chat) => {
+    message.push({
+      ...attendeeInfo,
+      id: chat.id,
+      data: chat.data().data,
+      type: chat.data().type,
+      sendTime: chat.data().sendTime,
+      sender: chat.data().sender,
+      othersUid: otherID,
+    });
   });
+
   message.sort((a, b) => a.sendTime - b.sendTime);
   return message;
 }
 
-async function getRelativeMessageTime(user, other) {
+async function getRelativeMessageTime(chatId) {
   const db = getFirestore(app);
-  const messageRef1 = query(collection(db, 'message'), where('send', '==', user));
-  const messageRef2 = query(collection(db, 'message'), where('receive', '==', user));
-  const time = [];
-  const querySnapshot1 = await getDocs(messageRef1);
-  querySnapshot1.forEach((doc1) => {
-    if (doc1.data().receive === other) {
-      time.push({
-        sendTime: doc1.data().sendTime,
-      });
+  const uid = UserController.getUid();
+  let otherID;
+  const chatroom = await getDocs(collection(db, `chatroom/${chatId}/members`));
+
+  chatroom.forEach((person) => {
+    if (person.id !== uid) {
+      otherID = person.id;
     }
   });
-  const querySnapshot2 = await getDocs(messageRef2);
-  querySnapshot2.forEach((doc2) => {
-    if (doc2.data().send === other) {
-      time.push({
-        sendTime: doc2.data().sendTime,
-      });
-    }
+  // console.log(otherID);
+  const time = [];
+  const querySnapshot = await getDocs(collection(db, `chatroom/${chatId}/messages`));
+  querySnapshot.forEach((doc1) => {
+    time.push({
+      sendTime: doc1.data().sendTime,
+    });
   });
   time.sort((a, b) => a.sendTime - b.sendTime);
   const uniquetime = [...new Set(time)];
   return uniquetime;
 }
 
-async function getNewestMessage(user, other) {
+async function getNewestMessage(chatId) {
+  const uid = UserController.getUid();
   const db = getFirestore(app);
-  const otherRef = await getDoc(doc(db, `attendees/${other}`));
-  const messageRef1 = query(collection(db, 'message'), where('send', '==', user));
-  const messageRef2 = query(collection(db, 'message'), where('receive', '==', user));
   const message = [];
-  const querySnapshot1 = await getDocs(messageRef1);
-  querySnapshot1.forEach((doc1) => {
-    if (doc1.data().receive === other) {
-      message.push({
-        ...otherRef.data(),
-        id: doc1.id,
-        image: doc1.data().image,
-        message: doc1.data().message,
-        readForSender: doc1.data().readForSender,
-        readForReceiver: doc1.data().readForReceiver,
-        send: doc1.data().send,
-        receive: doc1.data().receive,
-        sendTime: doc1.data().sendTime,
-        read: true,
-        othersUid: doc1.data().receive,
-      });
+  let otherID;
+  const chatroom = await getDocs(collection(db, `chatroom/${chatId}/members`));
+
+  chatroom.forEach((person) => {
+    if (person.id !== uid) {
+      otherID = person.id;
     }
   });
-  const querySnapshot2 = await getDocs(messageRef2);
-  querySnapshot2.forEach((doc2) => {
-    if (doc2.data().send === other) {
-      message.push({
-        ...otherRef.data(),
-        id: doc2.id,
-        image: doc2.data().image,
-        message: doc2.data().message,
-        readForSender: doc2.data().readForSender,
-        readForReceiver: doc2.data().readForReceiver,
-        send: doc2.data().send,
-        receive: doc2.data().receive,
-        sendTime: doc2.data().sendTime,
-        read: doc2.data().readForReceiver,
-        othersUid: doc2.data().send,
-      });
-    }
+  // console.log(otherID);
+  const infoDoc = doc(db, `attendees/${otherID}`);
+
+  const querySnapshot = await getDoc(infoDoc);
+  const attendeeInfo = {
+    studentUid: querySnapshot.id,
+    avatar: querySnapshot.data().avatar,
+    email: querySnapshot.data().email,
+    grade: querySnapshot.data().grade,
+    major: querySnapshot.data().major,
+    name: querySnapshot.data().name,
+    phone: querySnapshot.data().phone,
+    studentID: querySnapshot.data().studentID,
+  };
+  const chatText = await getDocs(collection(db, `chatroom/${chatId}/messages`));
+  chatText.forEach((chat) => {
+    message.push({
+      ...attendeeInfo,
+      id: chatId,
+      data: chat.data().data,
+      type: chat.data().type,
+      sendTime: chat.data().sendTime,
+      sender: chat.data().sender,
+      othersUid: otherID,
+    });
   });
+
   message.sort((a, b) => a.sendTime - b.sendTime);
+  // console.log(message);
   const last = message.pop();
-  if (last.message === '' && last.image) {
-    last.message = '他傳送了一張照片';
+  if (last.type === 'image') {
+    last.data = '他傳送了一張照片';
   }
+  // console.log(last);
   return last;
 }
 
@@ -337,8 +337,33 @@ async function countUnreadMessage(uid) {
   return messagecount;
 }
 
+async function addText(userUid) {
+  // console.log('backend', userUid);
+  const otherList = [];
+  const chatIdList = [];
+  const newChat = [];
+  const db = getFirestore(app);
+  const chatroom = await getDocs(collection(db, 'chatroom'));
+  chatroom.forEach((chat) => {
+    chatIdList.push(chat.id);
+  });
+  // console.log('idlist', chatIdList);
+  for (let i = 0; i < chatIdList.length; i += 1) {
+    // console.log(chatIdList[i]);
+    const result = await getDocs(collection(db, `chatroom/${chatIdList[i]}/members`));
+    result.forEach((r) => {
+      if (r.id === userUid) {
+        newChat.push(chatIdList[i]);
+      }
+    });
+  }
+  console.log(newChat);
+  return newChat;
+}
+
 export default {
   firebaseConfig,
+  addText,
   getHoursMin,
   newMessageTime,
   toDateString,

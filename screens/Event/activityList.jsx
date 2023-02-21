@@ -12,14 +12,14 @@ import {
 import {
   NativeBaseProvider, Box, Divider, ZStack, HStack, Button,
 } from 'native-base';
-import { getAuth, signOut } from 'firebase/auth';
+import { signOut } from 'firebase/auth';
+import { auth } from '../../config';
 import styles from './style_folder/Styles_activityList';
 import ActiveController from '../../controller/Active';
 import MessageController from '../../controller/Message';
 import UserController from '../../controller/getStudentId';
 
 function List({ navigation }) {
-  const auth = getAuth();
   const [Messagenum, setMessageNum] = useState(0);
   const [active1, setActive1] = useState([]);
   const [active2, setActive2] = useState([]);

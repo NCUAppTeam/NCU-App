@@ -18,7 +18,8 @@ import * as ImagePicker from 'expo-image-picker';
 import styles from './style_folder/Styles_Message';
 import MessageController from '../../controller/Message';
 import UserController from '../../controller/getStudentId';
-
+import { initializeApp } from 'firebase/app';
+import {onSnapshot,collection,getFirestore,} from 'firebase/firestore';
 function Send({ route, navigation }) {
   const scrollview = useRef();
   const [deleteMessageId, setDeleteMessageId] = useState('');
@@ -42,21 +43,23 @@ function Send({ route, navigation }) {
   const [attendeeINFO, setAttendeeInfo] = useState({});
   const [userIDINFO, setUserIDInfo] = useState({});
   const [data, setData] = useState({
+    id:chatroomId,
     sender: userUid,
   });
-  const [time, setTime] = useState();
+  //const [time, setTime] = useState();
   const [getData, setGetData] = useState([]);
   useEffect(() => {
     MessageController.getRelativeMessage(chatroomId).then((res) => {
-      console.log(res);
+      console.log("res-getRelativeMessage",res);
       setGetData(res);
     }).then().catch((err) => {
       throw err;
     });
-    MessageController.getRelativeMessageTime(chatroomId).then((res) => {
-      setTime(res);
-    });
+    // MessageController.getRelativeMessageTime(chatroomId).then((res) => {
+    //   setTime(res);
+    // });
     UserController.getINFO(userUid).then((res) => {
+      console.log("res-getINFO",res);
       setUserIDInfo(res);
     }).then().catch((err) => {
       throw err;
@@ -76,22 +79,23 @@ function Send({ route, navigation }) {
     }).then().catch((err) => {
       throw err;
     });
-    MessageController.getRelativeMessageTime(chatroomId).then((res) => {
-      setTime(res);
-    });
-    UserController.getINFO(userUid).then((res) => {
-      setUserIDInfo(res);
-    }).then().catch((err) => {
-      throw err;
-    });
-    UserController.getINFO(attendeeUid).then((res) => {
-      setAttendeeInfo(res);
-    }).then().catch((err) => {
-      throw err;
-    });
+    // MessageController.getRelativeMessageTime(chatroomId).then((res) => {
+    //   setTime(res);
+    // });
+    // UserController.getINFO(userUid).then((res) => {
+    //   setUserIDInfo(res);
+    // }).then().catch((err) => {
+    //   throw err;
+    // });
+    // UserController.getINFO(attendeeUid).then((res) => {
+    //   setAttendeeInfo(res);
+    // }).then().catch((err) => {
+    //   throw err;
+    // });
     scrollview.current.scrollToEnd({ animated: true });
     setRefreshing(false);
   };
+
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -100,14 +104,46 @@ function Send({ route, navigation }) {
       quality: 1,
     });
     if (!result.canceled) {
-      data.image = result.assets[0].uri;
-      data.sendTime = new Date();
-      console.log(data);
+      setData({
+        ...data,
+        data:result.assets[0].uri,
+        sendTime:new Date(),
+        type:"image",
+      });
       await MessageController.addMessage(data, userUid);
-      onRefresh();
+      //onRefresh();
+
       scrollview.current.scrollToEnd({ animated: true });
     }
   };
+
+  const firebaseConfig = {
+    apiKey: 'AIzaSyA8GH6yj1i4gJM0H_ZTsurYG3Dqn4-nIS8',
+    authDomain: 'ncu-app-test.firebaseapp.com',
+    projectId: 'ncu-app-test',
+    storageBucket: 'ncu-app-test.appspot.com',
+    messagingSenderId: '739839700130',
+    appId: '1:739839700130:web:37591d0118a440488cfbfb',
+  };
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const dbRef=collection(db, `chatroom/${chatroomId}/messages`);
+  const message = [];
+  onSnapshot(dbRef, docsSnap => {
+    docsSnap.forEach(doc => {
+      if(doc.id!=="new"){
+        message.push({
+          id: doc.id,
+          data: doc.data().data,
+          type: doc.data().type,
+          sendTime: doc.data().sendTime,
+          sender: doc.data().sender,
+        })}
+    })
+    }).then(()=>{
+      message.sort((a, b) => a.sendTime - b.sendTime);
+      setGetData(message);});
+  //scrollview.current.scrollToEnd({ animated: true });
   return (
     <SafeAreaView style={styles.container}>
       <NativeBaseProvider>
@@ -267,7 +303,7 @@ function Send({ route, navigation }) {
                                       }}
                                       onPress={() => {
                                         MessageController.deleteMessage(item.id).then(() => {
-                                          onRefresh();
+                                          //onRefresh();
                                           setShowDialog(false);
                                         });
                                       }}
@@ -285,7 +321,7 @@ function Send({ route, navigation }) {
                           }}
                           >
 
-                            {item.data
+                            {item.type=="text"
                               ? (
                                 <Text style={{ marginTop: 6, fontSize: 14 }}>
                                   {item.data}
@@ -295,7 +331,7 @@ function Send({ route, navigation }) {
                                 <Image
                                   style={{ height: 150, width: 150, marginTop: 6 }}
                                   source={{
-                                    uri: item.image,
+                                    uri: item.data,
                                   }}
                                 />
                               )}
@@ -353,7 +389,7 @@ function Send({ route, navigation }) {
                     MessageController.addMessage({
                       ...data, data: '請問有什麼需要注意的嗎？', sendTime: data.sendTime, type: 'text',
                     }, userUid);
-                    onRefresh();
+                    //onRefresh();
                   }}
                 >
                   <Text style={styles.autoSend}>請問有什麼需要注意的嗎？</Text>
@@ -369,7 +405,7 @@ function Send({ route, navigation }) {
                     MessageController.addMessage({
                       ...data, data: '請問有需要自行準備的東西嗎？', sendTime: data.sendTime, type: 'text',
                     }, userUid);
-                    onRefresh();
+                    //onRefresh();
                   }}
                 >
                   <Text style={styles.autoSend}>請問有需要自行準備的東西嗎？</Text>
@@ -413,10 +449,14 @@ function Send({ route, navigation }) {
                 numberOfLines={4}
                 placeholder="請輸入你想問或回答的訊息"
                 placeholderTextColor="#718fab"
-                value={data.message}
+                value={(value)=>{
+                  if(data.type=="text"){
+                    value=data.data;
+                  }
+                }}
                 onChangeText={(text) => {
-                  setData({ ...data, message: text });
-                  onRefresh();
+                  setData({ ...data, data: text });
+                  //onRefresh();
                 }}
                 selectionColor="#ccc"
               />
@@ -427,12 +467,13 @@ function Send({ route, navigation }) {
                 size={26}
                 color="#28527A"
                 onPress={() => {
-                  if (!(data.message === '') || !(data.image === undefined)) {
+                  if (data.data !== '') {
                     data.sendTime = new Date();
+                    data.type = "text";
                     // console.log(data);
                     MessageController.addMessage(data, userUid);
-                    onRefresh();
-                    setData({ ...data, message: '' });
+                    //onRefresh();
+                    setData({ ...data, data:"" });
                   }
                 }}
               />

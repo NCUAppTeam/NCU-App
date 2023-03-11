@@ -174,7 +174,7 @@ async function addActive(active) {
   const querySnapshot = await getDocs(collection(db, 'actives'));
   querySnapshot.forEach((doc1) => {
     if (doc1.data().name === item.name) {
-      setDoc(doc(db, 'attendees', `${UserStudent}`, 'hostedEvent', `${doc1.id}`), {}, { merge: true });
+      setDoc(doc(db, 'attendees', `${UserStudent}`, 'hostedEvent', `${doc1.id}`), {}, { });
     }
   });
 

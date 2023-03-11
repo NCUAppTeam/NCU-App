@@ -11,6 +11,7 @@ import {
 } from 'native-base';
 import styles from './style_folder/Styles_showActivityDetails';
 import ActiveController from '../../controller/Active';
+import MessageController from '../../controller/Message';
 import UserController from '../../controller/getStudentId';
 
 function Detailscreen({ route, navigation }) {
@@ -514,12 +515,13 @@ function Detailscreen({ route, navigation }) {
                         style={{ fontSize: 12, marginTop: 10, textDecorationLine: 'underline' }}
                         onPress={() => {
                           if (uid !== user) {
-                            navigation.navigate('send', {
-                              attendeeUid: uid,
-                              userUid: user,
-                            });
-                          }
-                        }}
+                              MessageController.addChatroom(uid,user).then((res) => {
+                                navigation.navigate('send', {
+                                chatroomId:res,
+                                attendeeUid:uid,
+                                userUid:user,
+                              });});
+                        }}}
                       >
                         私訊主辦人
                       </Text>

@@ -18,8 +18,10 @@ import * as ImagePicker from 'expo-image-picker';
 import styles from './style_folder/Styles_Message';
 import MessageController from '../../controller/Message';
 import UserController from '../../controller/getStudentId';
+
 import { initializeApp } from 'firebase/app';
 import {onSnapshot,collection,getFirestore,} from 'firebase/firestore';
+
 function Send({ route, navigation }) {
   const scrollview = useRef();
   const [deleteMessageId, setDeleteMessageId] = useState('');
@@ -55,6 +57,11 @@ function Send({ route, navigation }) {
     }).then().catch((err) => {
       throw err;
     });
+    // MessageController.onSnap(chatroomId).then((res)=>{
+    //   setGetData(res);
+    // }).catch((err)=>{
+    //   throw err;
+    // });
     // MessageController.getRelativeMessageTime(chatroomId).then((res) => {
     //   setTime(res);
     // });
@@ -117,6 +124,7 @@ function Send({ route, navigation }) {
     }
   };
 
+  
   const firebaseConfig = {
     apiKey: 'AIzaSyA8GH6yj1i4gJM0H_ZTsurYG3Dqn4-nIS8',
     authDomain: 'ncu-app-test.firebaseapp.com',
@@ -127,9 +135,10 @@ function Send({ route, navigation }) {
   };
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
-  const dbRef=collection(db, `chatroom/${chatroomId}/messages`);
-  const message = [];
-  onSnapshot(dbRef, docsSnap => {
+  const dbRef = collection(db, `chatroom/${chatroomId}/messages`);
+  
+  onSnapshot(dbRef, docsSnap => {  
+    const message = [];
     docsSnap.forEach(doc => {
       if(doc.id!=="new"){
         message.push({
@@ -139,10 +148,12 @@ function Send({ route, navigation }) {
           sendTime: doc.data().sendTime,
           sender: doc.data().sender,
         })}
-    })
-    }).then(()=>{
-      message.sort((a, b) => a.sendTime - b.sendTime);
-      setGetData(message);});
+    });
+    message.sort((a, b) => a.sendTime - b.sendTime);
+    console.log(message);
+    setGetData(message);
+  });
+
   //scrollview.current.scrollToEnd({ animated: true });
   return (
     <SafeAreaView style={styles.container}>
@@ -389,7 +400,6 @@ function Send({ route, navigation }) {
                     MessageController.addMessage({
                       ...data, data: '請問有什麼需要注意的嗎？', sendTime: data.sendTime, type: 'text',
                     }, userUid);
-                    //onRefresh();
                   }}
                 >
                   <Text style={styles.autoSend}>請問有什麼需要注意的嗎？</Text>
@@ -405,7 +415,7 @@ function Send({ route, navigation }) {
                     MessageController.addMessage({
                       ...data, data: '請問有需要自行準備的東西嗎？', sendTime: data.sendTime, type: 'text',
                     }, userUid);
-                    //onRefresh();
+                    onRefresh();
                   }}
                 >
                   <Text style={styles.autoSend}>請問有需要自行準備的東西嗎？</Text>
@@ -470,9 +480,7 @@ function Send({ route, navigation }) {
                   if (data.data !== '') {
                     data.sendTime = new Date();
                     data.type = "text";
-                    // console.log(data);
                     MessageController.addMessage(data, userUid);
-                    //onRefresh();
                     setData({ ...data, data:"" });
                   }
                 }}

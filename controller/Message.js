@@ -1,6 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import {
-  getFirestore, collection, query, getDoc, getDocs, addDoc, where, doc, deleteDoc, setDoc,deleteField,updateDoc
+  getFirestore, collection, query, getDoc, getDocs, addDoc,
+  where, doc, deleteDoc, setDoc,deleteField,updateDoc,onSnapshot,
 } from 'firebase/firestore';
 import {
   getStorage,
@@ -104,8 +105,7 @@ async function addMessage(messageData, userUid) {
   const messageRef = query(collection(db, `chatroom/${chatroomId}/messages`));
   addDoc(messageRef, item).then(() => {
     console.log('message sent successfully!');
-  })
-    .catch((error) => {
+  }).catch((error) => {
       console.log(error);
     });
 }
@@ -412,6 +412,26 @@ async function addChatroom(other,user){
   return check;
 }
 
+async function onSnap(chatroomId){
+  const db = getFirestore(app);
+  const dbRef = collection(db, `chatroom/${chatroomId}/messages`);
+  const message = [];
+  onSnapshot(dbRef, docsSnap => {  
+    docsSnap.forEach(doc => {
+      if(doc.id!=="new"){
+        message.push({
+          id: doc.id,
+          data: doc.data().data,
+          type: doc.data().type,
+          sendTime: doc.data().sendTime,
+          sender: doc.data().sender,
+        })}
+    });
+    message.sort((a, b) => a.sendTime - b.sendTime);
+  });
+  return message;
+}
+
 export default {
   firebaseConfig,
   addText,
@@ -427,4 +447,5 @@ export default {
   deleteMessage,
   countUnreadMessage,
   addChatroom,
+  onSnap,
 };

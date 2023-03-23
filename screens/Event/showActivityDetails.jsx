@@ -515,13 +515,17 @@ function Detailscreen({ route, navigation }) {
                         style={{ fontSize: 12, marginTop: 10, textDecorationLine: 'underline' }}
                         onPress={() => {
                           if (uid !== user) {
-                              MessageController.addChatroom(uid,user).then((res) => {
-                                navigation.navigate('send', {
-                                chatroomId:res,
-                                attendeeUid:uid,
-                                userUid:user,
-                              });});
-                        }}}
+                            MessageController.addChatroom(uid, user).then((res) => {
+                              navigation.navigate('send', {
+                                chatroomId: res,
+                                attendeeUid: uid,
+                                userUid: user,
+                              });
+                            });
+                          } else {
+
+                          }
+                        }}
                       >
                         私訊主辦人
                       </Text>

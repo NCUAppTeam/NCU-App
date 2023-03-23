@@ -15,12 +15,11 @@ import {
 } from 'native-base';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as ImagePicker from 'expo-image-picker';
+import { getApp } from 'firebase/app';
+import { onSnapshot, collection, getFirestore } from 'firebase/firestore';
 import styles from './style_folder/Styles_Message';
 import MessageController from '../../controller/Message';
 import UserController from '../../controller/getStudentId';
-
-import { initializeApp } from 'firebase/app';
-import {onSnapshot,collection,getFirestore,} from 'firebase/firestore';
 
 function Send({ route, navigation }) {
   const scrollview = useRef();
@@ -45,28 +44,42 @@ function Send({ route, navigation }) {
   const [attendeeINFO, setAttendeeInfo] = useState({});
   const [userIDINFO, setUserIDInfo] = useState({});
   const [data, setData] = useState({
-    id:chatroomId,
+    id: chatroomId,
     sender: userUid,
   });
-  //const [time, setTime] = useState();
+
+  const db = getFirestore(getApp());
+  const dbRef = collection(db, `chatroom/${chatroomId}/messages`);
+
+  // const [time, setTime] = useState();
   const [getData, setGetData] = useState([]);
   useEffect(() => {
     MessageController.getRelativeMessage(chatroomId).then((res) => {
-      console.log("res-getRelativeMessage",res);
+      console.log('res-getRelativeMessage', res);
       setGetData(res);
+
+      onSnapshot(dbRef, (docsSnap) => {
+        const message = [];
+        docsSnap.forEach((doc) => {
+          if (doc.id !== 'new') {
+            message.push({
+              id: doc.id,
+              data: doc.data().data,
+              type: doc.data().type,
+              sendTime: doc.data().sendTime,
+              sender: doc.data().sender,
+            });
+          }
+        });
+        message.sort((a, b) => a.sendTime - b.sendTime);
+        console.log(message);
+        setGetData(message);
+      });
     }).then().catch((err) => {
       throw err;
     });
-    // MessageController.onSnap(chatroomId).then((res)=>{
-    //   setGetData(res);
-    // }).catch((err)=>{
-    //   throw err;
-    // });
-    // MessageController.getRelativeMessageTime(chatroomId).then((res) => {
-    //   setTime(res);
-    // });
     UserController.getINFO(userUid).then((res) => {
-      console.log("res-getINFO",res);
+      console.log('res-getINFO', res);
       setUserIDInfo(res);
     }).then().catch((err) => {
       throw err;
@@ -113,48 +126,18 @@ function Send({ route, navigation }) {
     if (!result.canceled) {
       setData({
         ...data,
-        data:result.assets[0].uri,
-        sendTime:new Date(),
-        type:"image",
+        data: result.assets[0].uri,
+        sendTime: new Date(),
+        type: 'image',
       });
       await MessageController.addMessage(data, userUid);
-      //onRefresh();
+      // onRefresh();
 
       scrollview.current.scrollToEnd({ animated: true });
     }
   };
 
-  
-  const firebaseConfig = {
-    apiKey: 'AIzaSyA8GH6yj1i4gJM0H_ZTsurYG3Dqn4-nIS8',
-    authDomain: 'ncu-app-test.firebaseapp.com',
-    projectId: 'ncu-app-test',
-    storageBucket: 'ncu-app-test.appspot.com',
-    messagingSenderId: '739839700130',
-    appId: '1:739839700130:web:37591d0118a440488cfbfb',
-  };
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-  const dbRef = collection(db, `chatroom/${chatroomId}/messages`);
-  
-  onSnapshot(dbRef, docsSnap => {  
-    const message = [];
-    docsSnap.forEach(doc => {
-      if(doc.id!=="new"){
-        message.push({
-          id: doc.id,
-          data: doc.data().data,
-          type: doc.data().type,
-          sendTime: doc.data().sendTime,
-          sender: doc.data().sender,
-        })}
-    });
-    message.sort((a, b) => a.sendTime - b.sendTime);
-    console.log(message);
-    setGetData(message);
-  });
-
-  //scrollview.current.scrollToEnd({ animated: true });
+  // scrollview.current.scrollToEnd({ animated: true });
   return (
     <SafeAreaView style={styles.container}>
       <NativeBaseProvider>
@@ -314,7 +297,7 @@ function Send({ route, navigation }) {
                                       }}
                                       onPress={() => {
                                         MessageController.deleteMessage(item.id).then(() => {
-                                          //onRefresh();
+                                          // onRefresh();
                                           setShowDialog(false);
                                         });
                                       }}
@@ -332,7 +315,7 @@ function Send({ route, navigation }) {
                           }}
                           >
 
-                            {item.type=="text"
+                            {item.type == 'text'
                               ? (
                                 <Text style={{ marginTop: 6, fontSize: 14 }}>
                                   {item.data}
@@ -459,14 +442,14 @@ function Send({ route, navigation }) {
                 numberOfLines={4}
                 placeholder="請輸入你想問或回答的訊息"
                 placeholderTextColor="#718fab"
-                value={(value)=>{
-                  if(data.type=="text"){
-                    value=data.data;
+                value={(value) => {
+                  if (data.type == 'text') {
+                    value = data.data;
                   }
                 }}
                 onChangeText={(text) => {
                   setData({ ...data, data: text });
-                  //onRefresh();
+                  // onRefresh();
                 }}
                 selectionColor="#ccc"
               />
@@ -479,9 +462,9 @@ function Send({ route, navigation }) {
                 onPress={() => {
                   if (data.data !== '') {
                     data.sendTime = new Date();
-                    data.type = "text";
+                    data.type = 'text';
                     MessageController.addMessage(data, userUid);
-                    setData({ ...data, data:"" });
+                    setData({ ...data, data: '' });
                   }
                 }}
               />

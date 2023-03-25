@@ -15,6 +15,8 @@ import {
 } from 'native-base';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as ImagePicker from 'expo-image-picker';
+import { getApp } from 'firebase/app';
+import { onSnapshot, collection, getFirestore } from 'firebase/firestore';
 import styles from './style_folder/Styles_Message';
 import MessageController from '../../controller/Message';
 import UserController from '../../controller/getStudentId';
@@ -35,27 +37,49 @@ function Send({ route, navigation }) {
     }
   };
   const [showDialog, setShowDialog] = useState(false);
+  const { chatroomId } = route.params;
   const { attendeeUid } = route.params;
   const { userUid } = route.params;
   const keyboard = useKeyboard();
   const [attendeeINFO, setAttendeeInfo] = useState({});
   const [userIDINFO, setUserIDInfo] = useState({});
   const [data, setData] = useState({
-    send: userUid,
-    receive: attendeeUid,
+    id: chatroomId,
+    sender: userUid,
   });
-  const [time, setTime] = useState();
+
+  const db = getFirestore(getApp());
+  const dbRef = collection(db, `chatroom/${chatroomId}/messages`);
+
+  // const [time, setTime] = useState();
   const [getData, setGetData] = useState([]);
   useEffect(() => {
-    MessageController.getRelativeMessage(userUid, attendeeUid).then((res) => {
+    MessageController.getRelativeMessage(chatroomId).then((res) => {
+      console.log('res-getRelativeMessage', res);
       setGetData(res);
+
+      onSnapshot(dbRef, (docsSnap) => {
+        const message = [];
+        docsSnap.forEach((doc) => {
+          if (doc.id !== 'new') {
+            message.push({
+              id: doc.id,
+              data: doc.data().data,
+              type: doc.data().type,
+              sendTime: doc.data().sendTime,
+              sender: doc.data().sender,
+            });
+          }
+        });
+        message.sort((a, b) => a.sendTime - b.sendTime);
+        console.log(message);
+        setGetData(message);
+      });
     }).then().catch((err) => {
       throw err;
     });
-    MessageController.getRelativeMessageTime(userUid, attendeeUid).then((res) => {
-      setTime(res);
-    });
     UserController.getINFO(userUid).then((res) => {
+      console.log('res-getINFO', res);
       setUserIDInfo(res);
     }).then().catch((err) => {
       throw err;
@@ -70,27 +94,28 @@ function Send({ route, navigation }) {
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = () => {
     setRefreshing(true);
-    MessageController.getRelativeMessage(userUid, attendeeUid).then((res) => {
+    MessageController.getRelativeMessage(chatroomId).then((res) => {
       setGetData(res);
     }).then().catch((err) => {
       throw err;
     });
-    MessageController.getRelativeMessageTime(userUid, attendeeUid).then((res) => {
-      setTime(res);
-    });
-    UserController.getINFO(userUid).then((res) => {
-      setUserIDInfo(res);
-    }).then().catch((err) => {
-      throw err;
-    });
-    UserController.getINFO(attendeeUid).then((res) => {
-      setAttendeeInfo(res);
-    }).then().catch((err) => {
-      throw err;
-    });
+    // MessageController.getRelativeMessageTime(chatroomId).then((res) => {
+    //   setTime(res);
+    // });
+    // UserController.getINFO(userUid).then((res) => {
+    //   setUserIDInfo(res);
+    // }).then().catch((err) => {
+    //   throw err;
+    // });
+    // UserController.getINFO(attendeeUid).then((res) => {
+    //   setAttendeeInfo(res);
+    // }).then().catch((err) => {
+    //   throw err;
+    // });
     scrollview.current.scrollToEnd({ animated: true });
     setRefreshing(false);
   };
+
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -99,14 +124,20 @@ function Send({ route, navigation }) {
       quality: 1,
     });
     if (!result.canceled) {
-      data.image = result.assets[0].uri;
-      data.sendTime = new Date();
-      console.log(data);
+      setData({
+        ...data,
+        data: result.assets[0].uri,
+        sendTime: new Date(),
+        type: 'image',
+      });
       await MessageController.addMessage(data, userUid);
-      onRefresh();
+      // onRefresh();
+
       scrollview.current.scrollToEnd({ animated: true });
     }
   };
+
+  // scrollview.current.scrollToEnd({ animated: true });
   return (
     <SafeAreaView style={styles.container}>
       <NativeBaseProvider>
@@ -167,17 +198,17 @@ function Send({ route, navigation }) {
                 </Box> */}
                 <Box
                   style={[
-                    item.send === userUid && { alignItems: 'flex-end' },
-                    item.receive === userUid && { alignItems: 'flex-start' },
+                    item.sender === userUid && { alignItems: 'flex-end' },
+                    item.sender !== userUid && { alignItems: 'flex-start' },
                   ]}
                 >
                   <Box
                     style={[
-                      item.send === userUid && { flexDirection: 'row' },
-                      item.receive === userUid && { flexDirection: 'row-reverse' },
+                      item.sender === userUid && { flexDirection: 'row' },
+                      item.sender !== userUid && { flexDirection: 'row-reverse' },
                     ]}
                   >
-                    {item.send === userUid && (
+                    {item.sender === userUid && (
                     <Box style={{ alignSelf: 'flex-end' }}>
                       <Text style={{ fontSize: 9, marginRight: 5 }}>
                         {MessageController.getHoursMin(item.sendTime)}
@@ -266,7 +297,7 @@ function Send({ route, navigation }) {
                                       }}
                                       onPress={() => {
                                         MessageController.deleteMessage(item.id).then(() => {
-                                          onRefresh();
+                                          // onRefresh();
                                           setShowDialog(false);
                                         });
                                       }}
@@ -284,23 +315,23 @@ function Send({ route, navigation }) {
                           }}
                           >
 
-                            {item.message
+                            {item.type == 'text'
                               ? (
                                 <Text style={{ marginTop: 6, fontSize: 14 }}>
-                                  {item.message}
+                                  {item.data}
                                 </Text>
                               )
                               : (
                                 <Image
                                   style={{ height: 150, width: 150, marginTop: 6 }}
                                   source={{
-                                    uri: item.image,
+                                    uri: item.data,
                                   }}
                                 />
                               )}
                           </Card.Content>
                         </Card>
-                        {item.receive === userUid && (
+                        {item.sender !== userUid && (
                           <Box style={{ alignSelf: 'flex-end' }}>
                             <Text style={{ fontSize: 9, marginLeft: 5 }}>
                               {MessageController.getHoursMin(item.sendTime)}
@@ -310,7 +341,7 @@ function Send({ route, navigation }) {
                       </HStack>
                     </Box>
                     <Box style={{ marginHorizontal: 12, alignSelf: 'center' }}>
-                      {item.send === userUid
+                      {item.sender === userUid
                         ? (
                           <Image
                             style={{ height: 36, width: 36, borderRadius: 18 }}
@@ -350,9 +381,8 @@ function Send({ route, navigation }) {
                   onPress={() => {
                     data.sendTime = new Date();
                     MessageController.addMessage({
-                      ...data, message: '請問有什麼需要注意的嗎？', sendTime: data.sendTime, readForSender: true, readForReceiver: false, image: '',
+                      ...data, data: '請問有什麼需要注意的嗎？', sendTime: data.sendTime, type: 'text',
                     }, userUid);
-                    onRefresh();
                   }}
                 >
                   <Text style={styles.autoSend}>請問有什麼需要注意的嗎？</Text>
@@ -366,7 +396,7 @@ function Send({ route, navigation }) {
                   onPress={() => {
                     data.sendTime = new Date();
                     MessageController.addMessage({
-                      ...data, message: '請問有需要自行準備的東西嗎？', sendTime: data.sendTime, readForSender: true, readForReceiver: false, image: '',
+                      ...data, data: '請問有需要自行準備的東西嗎？', sendTime: data.sendTime, type: 'text',
                     }, userUid);
                     onRefresh();
                   }}
@@ -412,10 +442,14 @@ function Send({ route, navigation }) {
                 numberOfLines={4}
                 placeholder="請輸入你想問或回答的訊息"
                 placeholderTextColor="#718fab"
-                value={data.message}
+                value={(value) => {
+                  if (data.type == 'text') {
+                    value = data.data;
+                  }
+                }}
                 onChangeText={(text) => {
-                  setData({ ...data, message: text });
-                  onRefresh();
+                  setData({ ...data, data: text });
+                  // onRefresh();
                 }}
                 selectionColor="#ccc"
               />
@@ -426,12 +460,11 @@ function Send({ route, navigation }) {
                 size={26}
                 color="#28527A"
                 onPress={() => {
-                  if (!(data.message === '') || !(data.image === undefined)) {
+                  if (data.data !== '') {
                     data.sendTime = new Date();
-                    // console.log(data);
+                    data.type = 'text';
                     MessageController.addMessage(data, userUid);
-                    onRefresh();
-                    setData({ ...data, message: '' });
+                    setData({ ...data, data: '' });
                   }
                 }}
               />

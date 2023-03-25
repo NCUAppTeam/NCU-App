@@ -276,6 +276,26 @@ function List({ navigation }) {
                 登出
               </Text>
             </Pressable>
+            <Pressable
+              style={{
+                margin: 50, backgroundColor: 'yellow', height: 100, justifyContent: 'center',
+              }}
+              onPress={() => {
+                const uid = UserController.getUid();
+                MessageController.getNewestMessage('4CmRkhwTswuq7gWEO61r').then((res) => {
+                  // console.log(res);
+                  // UserController.getINFO(res).then((person) => {
+                  //   console.log(person);
+                  // });
+                }).catch((error) => {
+                  // An error happened.
+                });
+              }}
+            >
+              <Text style={{ alignSelf: 'center' }}>
+                傳訊息
+              </Text>
+            </Pressable>
           </ScrollView>
         </Box>
       </NativeBaseProvider>

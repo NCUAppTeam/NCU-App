@@ -377,7 +377,6 @@ async function getGenreActive(genre) {
 
 async function getParticipatedActive() {
   const UserStudent = await UserController.getUid();
-  // console.log(UserStudent.studentID);
   const db = getFirestore(app);
   const attendRef = query(collection(db, `attendees/${UserStudent}/attendedEvent`));
   const attendIDArray = [];
@@ -392,7 +391,6 @@ async function getParticipatedActive() {
   for (let i = 0; i < attendIDArray.length; i += 1) {
     const refDoc = doc(db, `actives/${attendIDArray[i]}`);
     const result = await getDoc(refDoc);
-    // console.log(attendIDArray[i], new Date(toDateString(result.data().endTime)), current);
     if (new Date(toDateString(result.data().endTime)) > current) {
       activeArray.push({
         id: result.id,
@@ -420,9 +418,7 @@ async function getParticipatedActive() {
 async function getFinishedActive() {
   const UserStudent = UserController.getUid();
   const db = getFirestore(app);
-  // const attendRef = query(collection(`${db}/attendees/${user}/attendedEvent`));
   const attendRef = query(collection(db, `attendees/${UserStudent}/attendedEvent`));
-  // const attendDocs = query(collection(attendRef, 'attendedEvent'));
   const attendIDArray = [];
   const activeArray = [];
   const current = new Date();

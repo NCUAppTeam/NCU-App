@@ -18,10 +18,9 @@ function Message({ navigation }) {
   const [newInfo, setNewInfo] = useState();
   const Info = [];
   useEffect(() => {
-    MessageController.getMessagePerson(userUid).then((res1) => {
-      setAttendeeInfo(res1);
+    MessageController.addText(userUid).then((res1) => {
       res1.forEach((res) => {
-        MessageController.getNewestMessage(userUid, res.othersUid).then((result) => {
+        MessageController.getNewestMessage(res).then((result) => {
           Info.push(result);
           setNewInfo([...Info]);
         });
@@ -34,10 +33,9 @@ function Message({ navigation }) {
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = () => {
     setRefreshing(true);
-    MessageController.getMessagePerson(userUid).then((res1) => {
-      setAttendeeInfo(res1);
+    MessageController.addText(userUid).then((res1) => {
       res1.forEach((res) => {
-        MessageController.getNewestMessage(userUid, res.othersUid).then((result) => {
+        MessageController.getNewestMessage(res).then((result) => {
           Info.push(result);
           setNewInfo([...Info]);
         });
@@ -91,7 +89,7 @@ function Message({ navigation }) {
           <FlatList
             style={{ marginTop: 20 }}
             data={newInfo}
-            keyExtractor={(item) => item.othersUid}
+            keyExtractor={(item) => item.id}
             showsVerticalScrollIndicator={false}
             refreshControl={(
               <RefreshControl
@@ -106,6 +104,7 @@ function Message({ navigation }) {
                   underlayColor="#fff" // 切換時候的顏色
                   onPress={() => {
                     navigation.navigate('send', {
+                      chatroomId: item.id,
                       attendeeUid: item.othersUid,
                       userUid,
                     });
@@ -133,7 +132,7 @@ function Message({ navigation }) {
                       </Text>
                     </HStack> */}
                       <Text style={styles.latest}>
-                        {item.message}
+                        {item.data}
                       </Text>
                     </VStack>
                     <Box style={styles.sendTimeBox}>

@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React, { useState, useEffect } from 'react';
 import {
   Text, View, SafeAreaView, TextInput, RefreshControl,
@@ -28,17 +29,14 @@ function Manage({ route, navigation }) {
     setUser(UserController.getUid());
     ActiveController.getTotalOfAttendees(passedID).then((res) => {
       setAttendeeNum(res);
-      // console.log(res);
     }).catch((err) => {
       throw err;
     });
   }, []);
   const [active, setActive] = useState([]);
   useEffect(() => {
-    // console.log('get id from personal_manage: ', passedID);
     ActiveController.getOneActive(passedID).then((res) => {
       setActive(res);
-      // console.log(res);
     }).catch((err) => {
       throw err;
     });
@@ -63,13 +61,11 @@ function Manage({ route, navigation }) {
     });
     ActiveController.getTotalOfAttendees(passedID).then((res) => {
       setAttendeeNum(res);
-      // console.log(attendeesNum);
     }).catch((err) => {
       throw err;
     });
     ActiveController.getAllAttendees(passedID).then((res) => {
       setAttendeeInfo(res);
-      // console.log(attendeeINFO);
     }).catch((err) => {
       throw err;
     });
@@ -522,9 +518,12 @@ function Manage({ route, navigation }) {
                           <Text
                             style={styles.MessagebtnInManageText}
                             onPress={() => {
-                              navigation.navigate('send', {
-                                attendeeUid: item.uid,
-                                userUid: user,
+                              MessageController.addChatroom(item.uid, user).then((res) => {
+                                navigation.navigate('send', {
+                                  chatroomId: res,
+                                  attendeeUid: item.uid,
+                                  userUid: user,
+                                });
                               });
                             }}
                           >

@@ -53,40 +53,35 @@ function Send({ route, navigation }) {
 
   // const [time, setTime] = useState();
   const [getData, setGetData] = useState([]);
+
   useEffect(() => {
     MessageController.getRelativeMessage(chatroomId).then((res) => {
-      console.log('res-getRelativeMessage', res);
       setGetData(res);
-
-      onSnapshot(dbRef, (docsSnap) => {
-        const message = [];
-        docsSnap.forEach((doc) => {
-          if (doc.id !== 'new') {
-            message.push({
-              id: doc.id,
-              data: doc.data().data,
-              type: doc.data().type,
-              sendTime: doc.data().sendTime,
-              sender: doc.data().sender,
-            });
-          }
-        });
-        message.sort((a, b) => a.sendTime - b.sendTime);
-        console.log(message);
-        setGetData(message);
-      });
-    }).then().catch((err) => {
+    }).catch((err) => {
       throw err;
     });
+    onSnapshot(dbRef, (docsSnap) => {
+      const message = [];
+      docsSnap.forEach((doc) => {
+        message.push({
+          id: doc.id,
+          data: doc.data().data,
+          type: doc.data().type,
+          sendTime: doc.data().sendTime,
+          sender: doc.data().sender,
+        });
+      });
+      message.sort((a, b) => a.sendTime - b.sendTime);
+      setGetData(message);
+    });
     UserController.getINFO(userUid).then((res) => {
-      console.log('res-getINFO', res);
       setUserIDInfo(res);
-    }).then().catch((err) => {
+    }).catch((err) => {
       throw err;
     });
     UserController.getINFO(attendeeUid).then((res) => {
       setAttendeeInfo(res);
-    }).then().catch((err) => {
+    }).catch((err) => {
       throw err;
     });
     scrollview.current.scrollToEnd({ animated: true });
@@ -96,22 +91,9 @@ function Send({ route, navigation }) {
     setRefreshing(true);
     MessageController.getRelativeMessage(chatroomId).then((res) => {
       setGetData(res);
-    }).then().catch((err) => {
+    }).catch((err) => {
       throw err;
     });
-    // MessageController.getRelativeMessageTime(chatroomId).then((res) => {
-    //   setTime(res);
-    // });
-    // UserController.getINFO(userUid).then((res) => {
-    //   setUserIDInfo(res);
-    // }).then().catch((err) => {
-    //   throw err;
-    // });
-    // UserController.getINFO(attendeeUid).then((res) => {
-    //   setAttendeeInfo(res);
-    // }).then().catch((err) => {
-    //   throw err;
-    // });
     scrollview.current.scrollToEnd({ animated: true });
     setRefreshing(false);
   };
@@ -126,18 +108,16 @@ function Send({ route, navigation }) {
     if (!result.canceled) {
       setData({
         ...data,
-        data: result.assets[0].uri,
+        uri: result.assets[0].uri,
         sendTime: new Date(),
         type: 'image',
       });
-      await MessageController.addMessage(data, userUid);
-      // onRefresh();
+      await MessageController.addMessage(data);
 
       scrollview.current.scrollToEnd({ animated: true });
     }
   };
 
-  // scrollview.current.scrollToEnd({ animated: true });
   return (
     <SafeAreaView style={styles.container}>
       <NativeBaseProvider>
@@ -296,10 +276,10 @@ function Send({ route, navigation }) {
                                         color: '#ffffff', backgroundColor: '#ef4444', padding: 10, borderRadius: 4, marginLeft: 10,
                                       }}
                                       onPress={() => {
-                                        MessageController.deleteMessage(item.id).then(() => {
-                                          // onRefresh();
-                                          setShowDialog(false);
-                                        });
+                                        MessageController.deleteMessage(chatroomId, item.id)
+                                          .then(() => {
+                                            setShowDialog(false);
+                                          });
                                       }}
                                     >
                                       刪除
@@ -315,7 +295,7 @@ function Send({ route, navigation }) {
                           }}
                           >
 
-                            {item.type == 'text'
+                            {item.type === 'text'
                               ? (
                                 <Text style={{ marginTop: 6, fontSize: 14 }}>
                                   {item.data}
@@ -382,7 +362,7 @@ function Send({ route, navigation }) {
                     data.sendTime = new Date();
                     MessageController.addMessage({
                       ...data, data: '請問有什麼需要注意的嗎？', sendTime: data.sendTime, type: 'text',
-                    }, userUid);
+                    });
                   }}
                 >
                   <Text style={styles.autoSend}>請問有什麼需要注意的嗎？</Text>
@@ -397,8 +377,7 @@ function Send({ route, navigation }) {
                     data.sendTime = new Date();
                     MessageController.addMessage({
                       ...data, data: '請問有需要自行準備的東西嗎？', sendTime: data.sendTime, type: 'text',
-                    }, userUid);
-                    onRefresh();
+                    });
                   }}
                 >
                   <Text style={styles.autoSend}>請問有需要自行準備的東西嗎？</Text>
@@ -442,14 +421,9 @@ function Send({ route, navigation }) {
                 numberOfLines={4}
                 placeholder="請輸入你想問或回答的訊息"
                 placeholderTextColor="#718fab"
-                value={(value) => {
-                  if (data.type == 'text') {
-                    value = data.data;
-                  }
-                }}
+                value={data.data}
                 onChangeText={(text) => {
                   setData({ ...data, data: text });
-                  // onRefresh();
                 }}
                 selectionColor="#ccc"
               />
@@ -463,7 +437,7 @@ function Send({ route, navigation }) {
                   if (data.data !== '') {
                     data.sendTime = new Date();
                     data.type = 'text';
-                    MessageController.addMessage(data, userUid);
+                    MessageController.addMessage(data);
                     setData({ ...data, data: '' });
                   }
                 }}

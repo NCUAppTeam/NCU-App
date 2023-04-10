@@ -4,11 +4,11 @@ import { SafeAreaView } from 'react-native';
 import {
   Avatar, Box, Button, Heading, Input, Link, Text, Image,
 } from 'native-base';
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 import * as ImagePicker from 'expo-image-picker';
-import logo from '../assets/icon.png';
-import ActiveController from '../controller/Active';
-
+import logo from '../../assets/icon.png';
+import ActiveController from '../../controller/Active';
+import { auth } from '../../config';
 const supportedURL = 'https://ncuappteam.github.io/PRIVACY';
 
 function LoginScreen() {
@@ -16,7 +16,6 @@ function LoginScreen() {
   const [password, setPassword] = useState('');
 
   const login = () => {
-    const auth = getAuth();
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         // Signed in
@@ -59,7 +58,6 @@ function RegisterScreen() {
   };
 
   const register = () => {
-    const auth = getAuth();
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         // Signed in

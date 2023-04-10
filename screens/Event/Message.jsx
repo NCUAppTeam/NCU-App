@@ -15,11 +15,11 @@ import UserController from '../../controller/getStudentId';
 function Message({ navigation }) {
   const userUid = UserController.getUid();
   const [newInfo, setNewInfo] = useState();
-  const Info = [];
 
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = () => {
     setRefreshing(true);
+    const Info = [];
     MessageController.findRelateChatroom(userUid).then((res1) => {
       res1.forEach((res) => {
         MessageController.getNewestMessage(res).then((result) => {
@@ -34,6 +34,17 @@ function Message({ navigation }) {
   };
 
   useEffect(() => {
+    const Info = [];
+    MessageController.findRelateChatroom(userUid).then((res1) => {
+      res1.forEach((res) => {
+        MessageController.getNewestMessage(res).then((result) => {
+          Info.push(result);
+          setNewInfo([...Info]);
+        });
+      });
+    }).catch((err) => {
+      throw err;
+    });
     const focusHandler = navigation.addListener('focus', () => {
       onRefresh();
     });

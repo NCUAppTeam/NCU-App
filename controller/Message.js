@@ -122,6 +122,7 @@ async function getRelativeMessage(chatId) {
 
   const chatText = await getDocs(collection(db, `chatroom/${chatId}/messages`));
   chatText.forEach((chat) => {
+    console.log(chat.data().sender !== uid);
     if (chat.data().sender !== uid) {
       setDoc(doc(db, `chatroom/${chatId}/messages/${chat.id}`), { read: true }, { merge: true });
     }

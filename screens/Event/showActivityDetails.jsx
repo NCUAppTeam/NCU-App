@@ -18,9 +18,7 @@ function Detailscreen({ route, navigation }) {
   const user = UserController.getUid();
   const Cd = route.params;
   const passedID = JSON.stringify(Cd).slice(7, 27);
-  const prepage = JSON.stringify(Cd).slice(40, -2);
-  console.log(prepage);
-  // console.log('123', JSON.stringify(Cd).slice(6, -1));
+
   const [SignUp, setSignUp] = useState();
   useEffect(() => {
     ActiveController.getAttendedOrNot(passedID).then((res) => {
@@ -103,7 +101,7 @@ function Detailscreen({ route, navigation }) {
           style={{ flexDirection: 'column', marginTop: 8.5 }}
         >
           {active.map(({
-            id, name, imageUri1, startTimeWeekday, endTimeWeekday, place, limitNum, genre,
+            name, imageUri1, startTimeWeekday, endTimeWeekday, place, limitNum,
             cost, link, details, imageUri2, imageUri3,
           }) => (
             <Box>
@@ -289,7 +287,6 @@ function Detailscreen({ route, navigation }) {
                               color="#28527A"
                               style={{ marginLeft: 5 }}
                               onPress={() => {
-                                console.log('cancel');
                                 setShowDialog(false);
                               }}
                             >
@@ -448,7 +445,7 @@ function Detailscreen({ route, navigation }) {
             </Box>
           ))}
           {info.map(({
-            uid, name, phone, email, avatar, studentID,
+            uid, name, phone, email, avatar,
           }) => (
             <Box style={{ marginLeft: Dimensions.get('window').width * 0.07, marginBottom: 10 }}>
               <Text style={{
@@ -522,8 +519,6 @@ function Detailscreen({ route, navigation }) {
                                 userUid: user,
                               });
                             });
-                          } else {
-
                           }
                         }}
                       >
@@ -538,7 +533,6 @@ function Detailscreen({ route, navigation }) {
                 <TouchableOpacity
                   style={styles.sentMessage}
                   onPress={() => {
-                  // console.log('報名功能仍在開發中');
                     if (!SignUp) {
                       Alert.alert(
                         '確認報名?',
@@ -548,8 +542,6 @@ function Detailscreen({ route, navigation }) {
                             text: '確認報名',
                             onPress: () => (
                               ActiveController.signUp(passedID).then(() => setSignUp(true))
-
-                            // navigation.navigate('manage', { Cd: passedID })
                             ),
                           },
                         ],
@@ -564,7 +556,6 @@ function Detailscreen({ route, navigation }) {
                             text: '忍痛取消報名',
                             onPress: () => (
                               ActiveController.quitEvent(passedID).then(() => setSignUp(false))
-                            // navigation.navigate('manage', { Cd: passedID })
                             ),
                           },
                         ],

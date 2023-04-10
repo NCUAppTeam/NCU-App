@@ -179,7 +179,7 @@ async function getNewestMessage(chatId) {
           sender: chat.data().sender,
           read: chat.data().read,
         });
-      } else {
+      } else if (chat.data().type === 'text') {
         message.push({
           ...attendeeInfo,
           id: chatId,
@@ -198,7 +198,7 @@ async function getNewestMessage(chatId) {
   message.sort((a, b) => a.sendTime - b.sendTime);
   // Get the latest message.
   last = message.pop();
-  if (last.sender !== otherID) {
+  if (last !== undefined && last.sender !== otherID) {
     last.read = true;
   }
 
@@ -326,6 +326,19 @@ async function findRelateChatroom(userUid) {
       }
     });
   }
+  newChat.sort((x, y) => {
+    const reg = /[a-zA-Z0-9]/;
+    if (reg.test(x) || reg.test(y)) {
+      if (x > y) {
+        return 1;
+      }
+      if (x < y) {
+        return -1;
+      }
+      return 0;
+    }
+    return x.localeCompare(y, 'zh-CN');
+  });
   return newChat;
 }
 

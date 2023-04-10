@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Text, SafeAreaView, RefreshControl, Image, TouchableHighlight,
+  Text, SafeAreaView, RefreshControl, Image,
 } from 'react-native';
+import { Card } from 'react-native-paper';
 import { FontAwesome5, AntDesign, Octicons } from '@expo/vector-icons';
 
 import {
@@ -103,19 +104,19 @@ function Message({ navigation }) {
               />
                 )}
             renderItem={({ item }) => (
-              <ZStack>
-                <TouchableHighlight
-                  activeOpacity={0.5}
-                  underlayColor="#fff" // 切換時候的顏色
-                  onPress={() => {
-                    navigation.navigate('send', {
-                      chatroomId: item.id,
-                      attendeeUid: item.othersUid,
-                      userUid,
-                    });
-                  }}
-                >
-                  <HStack style={styles.cardForMessage}>
+              <Card
+                style={styles.cardForMessage}
+                key={item.id}
+                onPress={() => {
+                  navigation.navigate('send', {
+                    chatroomId: item.id,
+                    attendeeUid: item.othersUid,
+                    userUid,
+                  });
+                }}
+              >
+                <ZStack>
+                  <HStack>
                     <Image
                       style={styles.avatar}
                       source={{
@@ -146,11 +147,11 @@ function Message({ navigation }) {
                       </Text>
                     </Box>
                   </HStack>
-                </TouchableHighlight>
-                <Box>
-                  <Octicons name="dot-fill" size={24} color={item.read ? 'transparent' : '#EB6F6F'} style={styles.readDot} />
-                </Box>
-              </ZStack>
+                  <Box>
+                    <Octicons name="dot-fill" size={24} color={item.read ? 'transparent' : '#EB6F6F'} style={styles.readDot} />
+                  </Box>
+                </ZStack>
+              </Card>
             )}
           />
         </Box>

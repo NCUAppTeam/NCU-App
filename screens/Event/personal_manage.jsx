@@ -25,35 +25,6 @@ function Personal({ navigation }) {
   const [showEnd, setShowEnd] = useState([]);
   const [isPress, setIsPress] = useState('參加中');
 
-  useEffect(() => {
-    const userid = UserController.getUid();
-    MessageController.countUnreadMessage(userid).then((num) => {
-      setMessageNum(num);
-    }).catch((err) => {
-      throw err;
-    });
-    ActiveController.getParticipatedActive().then((res) => {
-      setShowNow(res);
-    }).catch((err) => {
-      throw err;
-    });
-    ActiveController.getHostedEvent().then((res) => {
-      setShowManage(res);
-    }).catch((err) => {
-      throw err;
-    });
-    ActiveController.getHostedEvent().then((res) => {
-      setShowManage(res);
-    }).catch((err) => {
-      throw err;
-    });
-    ActiveController.getFinishedActive().then((res) => {
-      setShowEnd(res);
-    }).catch((err) => {
-      throw err;
-    });
-  }, []);
-
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = async () => {
     setRefreshing(true);
@@ -84,6 +55,39 @@ function Personal({ navigation }) {
     }
     setRefreshing(false);
   };
+
+  useEffect(() => {
+    const userid = UserController.getUid();
+    MessageController.countUnreadMessage(userid).then((num) => {
+      setMessageNum(num);
+    }).catch((err) => {
+      throw err;
+    });
+    ActiveController.getParticipatedActive().then((res) => {
+      setShowNow(res);
+    }).catch((err) => {
+      throw err;
+    });
+    ActiveController.getHostedEvent().then((res) => {
+      setShowManage(res);
+    }).catch((err) => {
+      throw err;
+    });
+    ActiveController.getHostedEvent().then((res) => {
+      setShowManage(res);
+    }).catch((err) => {
+      throw err;
+    });
+    ActiveController.getFinishedActive().then((res) => {
+      setShowEnd(res);
+    }).catch((err) => {
+      throw err;
+    });
+    const focusHandler = navigation.addListener('focus', () => {
+      onRefresh();
+    });
+    return focusHandler;
+  }, [navigation]);
 
   return (
     <SafeAreaView style={{

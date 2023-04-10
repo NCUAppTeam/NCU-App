@@ -2,9 +2,7 @@ import { initializeApp } from 'firebase/app';
 import {
   getFirestore, getDoc, doc,
 } from 'firebase/firestore';
-import {
-  getStorage,
-} from 'firebase/storage';
+
 import { getAuth } from 'firebase/auth';
 
 const firebaseConfig = {
@@ -16,7 +14,6 @@ const firebaseConfig = {
   appId: '1:739839700130:web:37591d0118a440488cfbfb',
 };
 const app = initializeApp(firebaseConfig);
-const storage = getStorage(app);
 
 async function getINFO(UID) {
   const db = getFirestore(app);
@@ -33,7 +30,6 @@ async function getINFO(UID) {
     phone: querySnapshot.data().phone,
     studentID: querySnapshot.data().studentID,
   };
-    // console.log(attendeeInfo);
   return attendeeInfo;
 }
 
@@ -41,7 +37,7 @@ function getUid() {
   const auth = getAuth();
   const user = auth.currentUser;
   const { uid } = user;
-  console.log(uid);
+
   return uid;
 }
 

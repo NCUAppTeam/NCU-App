@@ -1,3 +1,8 @@
+/* eslint-disable no-console */
+/* eslint-disable brace-style */
+/* eslint-disable max-len */
+/* eslint-disable no-loop-func */
+/* eslint-disable no-await-in-loop */
 import { initializeApp } from 'firebase/app';
 import {
   getFirestore, collection, query, getDoc, getDocs, addDoc,
@@ -178,7 +183,6 @@ async function addActive(active) {
     }
   });
 
-  // console.log(item);
   console.log('addActive Successful');
 }
 
@@ -191,7 +195,6 @@ async function updateActive(oldID, NEWactive) {
   let defaultRef;
 
   const NEWitem = NEWactive;
-  console.log(NEWitem);
   const db = getFirestore(app);
   const activesRef = doc(db, `actives/${oldID}`);
   const querySnapshot = await getDoc(activesRef);
@@ -281,7 +284,7 @@ async function updateActive(oldID, NEWactive) {
     delete NEWitem.image3;
     const deleteRef = ref(storage, `actives/${querySnapshot.data().imageUri3.substr(-94, 41)}`);
     deleteObject(deleteRef).then(() => {
-      console.log('origin image2 has been deleted!');
+      console.log('origin image3 has been deleted!');
     }).catch((err) => {
       console.log(err);
     });
@@ -294,7 +297,7 @@ async function updateActive(oldID, NEWactive) {
     NEWitem.imageUri3 = await getDownloadURL(uploadTask.ref);
     const deleteRef = ref(storage, `actives/${querySnapshot.data().imageUri3.substr(-94, 41)}`);
     deleteObject(deleteRef).then(() => {
-      console.log('origin image2 has been deleted!');
+      console.log('origin image3 has been deleted!');
     }).catch((err) => {
       console.log(err);
     });
@@ -307,7 +310,6 @@ async function updateActive(oldID, NEWactive) {
     }
   }
 
-  console.log(NEWitem);
   if (NEWitem) {
     setDoc(activesRef, NEWitem, { merge: true })
       .then(() => { console.log('updateActive Successful'); });
@@ -337,8 +339,6 @@ async function getAllActive() {
       details: doc1.data().details,
     });
   });
-  // console.log(activeArray);
-  console.log('getAllActive Successful');
   return activeArray;
 }
 
@@ -370,8 +370,6 @@ async function getGenreActive(genre) {
       details: doc1.data().details,
     });
   });
-  // console.log(GenreArray);
-  console.log('getGenreActive Successful');
   return GenreArray;
 }
 
@@ -386,7 +384,6 @@ async function getParticipatedActive() {
   querySnapshot.forEach((attendID) => {
     attendIDArray.push(attendID.id);
   });
-  console.log(attendIDArray);
 
   for (let i = 0; i < attendIDArray.length; i += 1) {
     const refDoc = doc(db, `actives/${attendIDArray[i]}`);
@@ -410,8 +407,6 @@ async function getParticipatedActive() {
       });
     }
   }
-  // console.log(activeArray);
-  console.log('getParticipatedActive Successful');
   return activeArray;
 }
 
@@ -429,7 +424,6 @@ async function getFinishedActive() {
   for (let i = 0; i < attendIDArray.length; i += 1) {
     const refDoc = doc(db, `actives/${attendIDArray[i]}`);
     const result = await getDoc(refDoc);
-    // console.log(attendIDArray[i], new Date(toDateString(result.data().endTime)), current);
     if (new Date(toDateString(result.data().endTime)) < current) {
       activeArray.push({
         id: result.id,
@@ -449,8 +443,6 @@ async function getFinishedActive() {
       });
     }
   }
-  // console.log(activeArray);
-  console.log('getFinishedActive Successful');
   return activeArray;
 }
 
@@ -484,8 +476,6 @@ async function getOneActive(id) {
   if (querySnapshot.data().imageUri3) {
     oneactive.imageUri3 = querySnapshot.data().imageUri3;
   }
-  // console.log(oneactive);
-  console.log('getOneActive Successful');
 
   return [oneactive];
 }
@@ -523,9 +513,6 @@ async function getHangOutActive() {
       details: doc1.data().details,
     });
   });
-  console.log('hangeout');
-  // console.log(GenreArray);
-  console.log('getHangOutActive Successful');
   return GenreArray;
 }
 
@@ -556,9 +543,6 @@ async function getEventActive() {
       details: doc1.data().details,
     });
   });
-  console.log('event');
-  // console.log(EventArray);
-  console.log('getEventActive Successful');
   return EventArray;
 }
 
@@ -641,7 +625,6 @@ async function getAllAttendees(docID) {
     const querySnapshot2 = await getDoc(infoDoc);
     info.push({ uid: querySnapshot2.id, ...querySnapshot2.data() });
   }
-  console.log(info);
   return info;
 }
 async function deleteEverySingleAttendee(docID) {
@@ -659,7 +642,6 @@ async function removeAttendee(docID, studentUid) { // remove attendee
   const db = getFirestore(app);
   const activesRef = query(collection(db, `attendees/${studentUid}/attendedEvent`));
   await deleteDoc(doc(db, 'attendees', studentUid, 'attendedEvent', docID));
-  // console.log(docID, studentID);
   console.log('delete successfully!');
   const result = await getDocs(activesRef);
   result.forEach((doc1) => console.log(doc1.id));
@@ -693,7 +675,6 @@ async function getHostedEvent() {
   querySnapshot.forEach((doc1) => {
     hostIDArray.push(doc1.id);
   });
-  // console.log(hostIDArray);
   for (let i = 0; i < hostIDArray.length; i += 1) {
     const refDoc = doc(db, `actives/${hostIDArray[i]}`);
     const result = await getDoc(refDoc);
@@ -704,8 +685,6 @@ async function getHostedEvent() {
       num,
     });
   }
-  // console.log(eventArray);
-  console.log('getHostEvent Successfully');
   return eventArray;
 }
 
@@ -785,7 +764,6 @@ async function fuseSearchName(searchString) {
 
   const fuse = new Fuse(activeArray, options);
   const result = fuse.search(searchString);
-  // console.log(result);
   console.log('Search Successful');
   return result;
 }
@@ -802,7 +780,6 @@ async function getAttendedOrNot(docID) {
     }
   });
   if (result.length) {
-    console.log('getAttendedOrNot Successful');
     return true;
   }
   return false;
@@ -813,8 +790,6 @@ async function getHostinAdd() {
   const db = getFirestore(app);
   const infoRef = query(doc(db, `attendees/${Uid}`));
   const querySnapshot = await getDoc(infoRef);
-
-  console.log(querySnapshot.data());
 
   return querySnapshot.data();
 }

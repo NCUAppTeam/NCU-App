@@ -9,31 +9,18 @@ import {
 } from 'native-base';
 import { LinearGradient } from 'expo-linear-gradient';
 import styles from './style_folder/Styles_Message';
-import UserController from '../../controller/getStudentId';
 import MessageController from '../../controller/Message';
+import UserController from '../../controller/getStudentId';
 
 function Message({ navigation }) {
   const userUid = UserController.getUid();
-  const [attendeeINFO, setAttendeeInfo] = useState();
   const [newInfo, setNewInfo] = useState();
   const Info = [];
-  useEffect(() => {
-    MessageController.addText(userUid).then((res1) => {
-      res1.forEach((res) => {
-        MessageController.getNewestMessage(res).then((result) => {
-          Info.push(result);
-          setNewInfo([...Info]);
-        });
-      });
-    }).catch((err) => {
-      throw err;
-    });
-  }, []);
 
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = () => {
     setRefreshing(true);
-    MessageController.addText(userUid).then((res1) => {
+    MessageController.findRelateChatroom(userUid).then((res1) => {
       res1.forEach((res) => {
         MessageController.getNewestMessage(res).then((result) => {
           Info.push(result);
@@ -45,6 +32,13 @@ function Message({ navigation }) {
     });
     setRefreshing(false);
   };
+
+  useEffect(() => {
+    const focusHandler = navigation.addListener('focus', () => {
+      onRefresh();
+    });
+    return focusHandler;
+  }, [navigation]);
   return (
     <SafeAreaView style={styles.container}>
       <NativeBaseProvider>

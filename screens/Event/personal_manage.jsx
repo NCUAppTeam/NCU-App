@@ -57,6 +57,32 @@ function Personal({ navigation }) {
   };
 
   useEffect(() => {
+    const userid = UserController.getUid();
+    MessageController.countUnreadMessage(userid).then((num) => {
+      setMessageNum(num);
+    }).catch((err) => {
+      throw err;
+    });
+    ActiveController.getParticipatedActive().then((res) => {
+      setShowNow(res);
+    }).catch((err) => {
+      throw err;
+    });
+    ActiveController.getHostedEvent().then((res) => {
+      setShowManage(res);
+    }).catch((err) => {
+      throw err;
+    });
+    ActiveController.getHostedEvent().then((res) => {
+      setShowManage(res);
+    }).catch((err) => {
+      throw err;
+    });
+    ActiveController.getFinishedActive().then((res) => {
+      setShowEnd(res);
+    }).catch((err) => {
+      throw err;
+    });
     const focusHandler = navigation.addListener('focus', () => {
       onRefresh();
     });

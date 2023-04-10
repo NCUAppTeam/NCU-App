@@ -195,7 +195,6 @@ async function updateActive(oldID, NEWactive) {
   let defaultRef;
 
   const NEWitem = NEWactive;
-  console.log(NEWitem);
   const db = getFirestore(app);
   const activesRef = doc(db, `actives/${oldID}`);
   const querySnapshot = await getDoc(activesRef);
@@ -285,7 +284,7 @@ async function updateActive(oldID, NEWactive) {
     delete NEWitem.image3;
     const deleteRef = ref(storage, `actives/${querySnapshot.data().imageUri3.substr(-94, 41)}`);
     deleteObject(deleteRef).then(() => {
-      console.log('origin image2 has been deleted!');
+      console.log('origin image3 has been deleted!');
     }).catch((err) => {
       console.log(err);
     });
@@ -298,7 +297,7 @@ async function updateActive(oldID, NEWactive) {
     NEWitem.imageUri3 = await getDownloadURL(uploadTask.ref);
     const deleteRef = ref(storage, `actives/${querySnapshot.data().imageUri3.substr(-94, 41)}`);
     deleteObject(deleteRef).then(() => {
-      console.log('origin image2 has been deleted!');
+      console.log('origin image3 has been deleted!');
     }).catch((err) => {
       console.log(err);
     });
@@ -311,7 +310,6 @@ async function updateActive(oldID, NEWactive) {
     }
   }
 
-  console.log(NEWitem);
   if (NEWitem) {
     setDoc(activesRef, NEWitem, { merge: true })
       .then(() => { console.log('updateActive Successful'); });
@@ -782,7 +780,6 @@ async function getAttendedOrNot(docID) {
     }
   });
   if (result.length) {
-    console.log('getAttendedOrNot Successful');
     return true;
   }
   return false;
@@ -793,8 +790,6 @@ async function getHostinAdd() {
   const db = getFirestore(app);
   const infoRef = query(doc(db, `attendees/${Uid}`));
   const querySnapshot = await getDoc(infoRef);
-
-  console.log(querySnapshot.data());
 
   return querySnapshot.data();
 }

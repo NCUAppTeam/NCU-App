@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Text, View, SafeAreaView, ScrollView, Image, Dimensions, TouchableOpacity, Alert,
+  Text, View, SafeAreaView, ScrollView, Image, Dimensions,
+  TouchableOpacity, Alert,
 } from 'react-native';
 import Dialog from 'react-native-popup-dialog';
 import {
@@ -15,6 +16,16 @@ import MessageController from '../../controller/Message';
 import UserController from '../../controller/getStudentId';
 
 function Detailscreen({ route, navigation }) {
+// share link 處理
+  const linking = {
+    prefixes: ['ncuapp://'],
+    config: {
+      screens: {
+        Detailscreen: 'Detailscreen:activeId',
+      },
+    },
+  };
+
   const user = UserController.getUid();
   const Cd = route.params;
   const passedID = JSON.stringify(Cd).slice(7, 27);
@@ -75,7 +86,7 @@ function Detailscreen({ route, navigation }) {
   };
   const [showDialog, setShowDialog] = useState(false);
   return (
-    <SafeAreaView style={styles.showActivityDetails_container}>
+    <SafeAreaView style={styles.showActivityDetails_container} linking={linking}>
       <NativeBaseProvider>
         {active.map(({ genre }) => (
           <Box style={styles.headerContainer}>
@@ -222,6 +233,7 @@ function Detailscreen({ route, navigation }) {
                               color="#28527A"
                               onPress={() => {
                                 console.log('Link Copied');
+                                setShowDialog(false);
                               }}
                             >
                               <Text style={{
@@ -238,6 +250,7 @@ function Detailscreen({ route, navigation }) {
                               color="#28527A"
                               onPress={() => {
                                 console.log('share to fb');
+                                setShowDialog(false);
                               }}
                             >
                               <Text style={{
@@ -254,6 +267,7 @@ function Detailscreen({ route, navigation }) {
                               color="#28527A"
                               onPress={() => {
                                 console.log('share to messenger');
+                                setShowDialog(false);
                               }}
                             >
                               <Text style={{
@@ -271,6 +285,7 @@ function Detailscreen({ route, navigation }) {
                               style={{ marginLeft: 2 }}
                               onPress={() => {
                                 console.log('share to discord');
+                                setShowDialog(false);
                               }}
                             >
                               <Text style={{

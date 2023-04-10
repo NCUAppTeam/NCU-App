@@ -24,25 +24,6 @@ function List({ navigation }) {
   const [active1, setActive1] = useState([]);
   const [active2, setActive2] = useState([]);
 
-  useEffect(() => {
-    const userid = UserController.getUid();
-    MessageController.countUnreadMessage(userid).then((num) => {
-      setMessageNum(num);
-    }).catch((err) => {
-      throw err;
-    });
-    ActiveController.getHangOutActive().then((res) => {
-      setActive1(res);
-    }).then().catch((err) => {
-      throw err;
-    });
-    ActiveController.getEventActive().then((res) => {
-      setActive2(res);
-    }).catch((err) => {
-      throw err;
-    });
-  }, []);
-
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = () => {
     setRefreshing(true);
@@ -64,6 +45,13 @@ function List({ navigation }) {
     });
     setRefreshing(false);
   };
+
+  useEffect(() => {
+    const focusHandler = navigation.addListener('focus', () => {
+      onRefresh();
+    });
+    return focusHandler;
+  }, [navigation]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -274,26 +262,6 @@ function List({ navigation }) {
             >
               <Text style={{ alignSelf: 'center' }}>
                 登出
-              </Text>
-            </Pressable>
-            <Pressable
-              style={{
-                margin: 50, backgroundColor: 'yellow', height: 100, justifyContent: 'center',
-              }}
-              onPress={() => {
-                const uid = UserController.getUid();
-                MessageController.getNewestMessage('4CmRkhwTswuq7gWEO61r').then((res) => {
-                  // console.log(res);
-                  // UserController.getINFO(res).then((person) => {
-                  //   console.log(person);
-                  // });
-                }).catch((error) => {
-                  // An error happened.
-                });
-              }}
-            >
-              <Text style={{ alignSelf: 'center' }}>
-                傳訊息
               </Text>
             </Pressable>
           </ScrollView>

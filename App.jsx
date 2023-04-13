@@ -1,15 +1,13 @@
 import React from 'react';
+import { NativeBaseProvider } from 'native-base';
 import { RootNavigator } from './navigation/RootNavigator';
 import { AuthenticatedUserProvider } from './providers';
-
-
-import { NativeBaseProvider } from 'native-base';
 
 export default function App() {
   return (
     <NativeBaseProvider>
       <AuthenticatedUserProvider>
-          <RootNavigator />
+        <RootNavigator />
       </AuthenticatedUserProvider>
     </NativeBaseProvider>
   );

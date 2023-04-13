@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Text, SafeAreaView, RefreshControl, Image, TouchableHighlight,
+  Text, SafeAreaView, RefreshControl, Image,
 } from 'react-native';
+import { Card } from 'react-native-paper';
 import { FontAwesome5, AntDesign, Octicons } from '@expo/vector-icons';
 
 import {
@@ -15,11 +16,11 @@ import UserController from '../../controller/getStudentId';
 function Message({ navigation }) {
   const userUid = UserController.getUid();
   const [newInfo, setNewInfo] = useState();
-  const Info = [];
 
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = () => {
     setRefreshing(true);
+    const Info = [];
     MessageController.findRelateChatroom(userUid).then((res1) => {
       res1.forEach((res) => {
         MessageController.getNewestMessage(res).then((result) => {
@@ -34,6 +35,17 @@ function Message({ navigation }) {
   };
 
   useEffect(() => {
+    const Info = [];
+    MessageController.findRelateChatroom(userUid).then((res1) => {
+      res1.forEach((res) => {
+        MessageController.getNewestMessage(res).then((result) => {
+          Info.push(result);
+          setNewInfo([...Info]);
+        });
+      });
+    }).catch((err) => {
+      throw err;
+    });
     const focusHandler = navigation.addListener('focus', () => {
       onRefresh();
     });
@@ -92,19 +104,19 @@ function Message({ navigation }) {
               />
                 )}
             renderItem={({ item }) => (
-              <ZStack>
-                <TouchableHighlight
-                  activeOpacity={0.5}
-                  underlayColor="#fff" // 切換時候的顏色
-                  onPress={() => {
-                    navigation.navigate('send', {
-                      chatroomId: item.id,
-                      attendeeUid: item.othersUid,
-                      userUid,
-                    });
-                  }}
-                >
-                  <HStack style={styles.cardForMessage}>
+              <Card
+                style={styles.cardForMessage}
+                key={item.id}
+                onPress={() => {
+                  navigation.navigate('send', {
+                    chatroomId: item.id,
+                    attendeeUid: item.othersUid,
+                    userUid,
+                  });
+                }}
+              >
+                <ZStack>
+                  <HStack>
                     <Image
                       style={styles.avatar}
                       source={{
@@ -135,11 +147,11 @@ function Message({ navigation }) {
                       </Text>
                     </Box>
                   </HStack>
-                </TouchableHighlight>
-                <Box>
-                  <Octicons name="dot-fill" size={24} color={item.read ? 'transparent' : '#EB6F6F'} style={styles.readDot} />
-                </Box>
-              </ZStack>
+                  <Box>
+                    <Octicons name="dot-fill" size={24} color={item.read ? 'transparent' : '#EB6F6F'} style={styles.readDot} />
+                  </Box>
+                </ZStack>
+              </Card>
             )}
           />
         </Box>

@@ -276,7 +276,7 @@ function Send({ route, navigation }) {
                                         color: '#ffffff', backgroundColor: '#ef4444', padding: 10, borderRadius: 4, marginLeft: 10,
                                       }}
                                       onPress={() => {
-                                        MessageController.deleteMessage(chatroomId, item.id)
+                                        MessageController.deleteMessage(chatroomId, deleteMessageId)
                                           .then(() => {
                                             setShowDialog(false);
                                           });

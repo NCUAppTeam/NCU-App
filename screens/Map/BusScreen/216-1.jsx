@@ -10,18 +10,23 @@ import {
 import BusController from '../../../controller/Bus';
 import Styles from '../Styles';
 
-const Separator = () => <View style={Styles.separator} />;
+function Separator() {
+  return <View style={Styles.separator} />;
+}
 function Bus216({ navigation }) {
   const [item, setItems] = useState([]);
 
   const [start, setStart] = useState(true);
 
-  const [direction, setDirection] = useState(1);
+  const [direction, setDirection] = useState(0);
 
   const [refreshing, setRefreshing] = useState(false);
 
+  const [selection, setSelection] = useState(0);
+
   const onRefresh = () => {
     setRefreshing(true);
+    setSelection(1);
     BusController.route({ id: 216, dir: 0 }).then((res) => {
       setItems(res);
       setRefreshing(false);
@@ -30,6 +35,7 @@ function Bus216({ navigation }) {
 
   const onRefresh1 = () => {
     setRefreshing(true);
+    setSelection(0);
     BusController.route({ id: 216, dir: 1 }).then((res) => {
       setItems(res);
       setRefreshing(false);
@@ -57,7 +63,7 @@ function Bus216({ navigation }) {
     >
       <View>
         <Text style={{
-          textAlign: 'center', backgroundColor: '#28527A', color: 'white', height: 50, width: '100%', fontSize: 20, textAlignVertical: 'center', lineHeight: 50,
+          textAlign: 'center', backgroundColor: '#28527A', color: 'white', width: '100%', fontSize: 20, textAlignVertical: 'center', lineHeight: 50,
         }}
         >
           216
@@ -78,13 +84,13 @@ function Bus216({ navigation }) {
       </View>
 
       <View>
-        <View style={{ flexDirection: 'row', height: 50 }}>
+        <View style={{ flexDirection: 'row' }}>
           <TouchableOpacity
             onPress={() => { setStart(true); setDirection(0); }}
             style={{ width: '50%', backgroundColor: 'white' }}
           >
             <Text style={{
-              textAlign: 'center', fontSize: 20, textAlignVertical: 'center', lineHeight: 50,
+              textAlign: 'center', fontSize: 20, textAlignVertical: 'center', lineHeight: 50, color: selection === 0 ? 'black' : '#BFBFBF', borderBottomWidth: selection === 0 ? 3 : 0, marginHorizontal: selection === 0 ? 15 : 0,
             }}
             >
               往八德區公所
@@ -95,7 +101,7 @@ function Bus216({ navigation }) {
             style={{ width: '50%', backgroundColor: 'white' }}
           >
             <Text style={{
-              textAlign: 'center', fontSize: 20, textAlignVertical: 'center', lineHeight: 50,
+              textAlign: 'center', fontSize: 20, textAlignVertical: 'center', lineHeight: 50, color: selection === 1 ? 'black' : '#BFBFBF', borderBottomWidth: selection === 1 ? 3 : 0, marginHorizontal: selection === 1 ? 15 : 0,
             }}
             >
               往平鎮區公所

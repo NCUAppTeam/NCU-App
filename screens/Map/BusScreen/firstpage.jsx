@@ -15,9 +15,9 @@ function First({ navigation }) {
   return (
     <SafeAreaView style={Styles.background}>
       <ScrollView>
-        <View style={{ flexDirection: 'row' }}>
+        <View>
           <Text style={{
-            textAlign: 'center', backgroundColor: '#28527A', color: 'white', height: 50, width: '100%', fontSize: 20, textAlignVertical: 'center', lineHeight: 50,
+            textAlign: 'center', backgroundColor: '#28527A', color: 'white', width: '100%', fontSize: 20, textAlignVertical: 'center', lineHeight: 50,
           }}
           >
             公車動態
@@ -40,12 +40,12 @@ function First({ navigation }) {
             onPress={() => navigation.navigate('Bus132')}
             style={{ width: '100%', backgroundColor: 'white' }}
           >
-            <View style={{ flexDirection: 'row' }}>
+            <View>
               <Text style={{
-                textAlign: 'center', top: 15, fontSize: 28, color: '#28527A',
+                top: 15, left: 15, fontSize: 28, color: '#28527A',
               }}
               >
-                {'   '}132
+                132
               </Text>
             </View>
             <Text style={{ fontSize: 10 }}>{'\n'}</Text>
@@ -55,12 +55,12 @@ function First({ navigation }) {
             onPress={() => navigation.navigate('Bus133')}
             style={{ width: '100%', backgroundColor: 'white' }}
           >
-            <View style={{ flexDirection: 'row' }}>
+            <View>
               <Text style={{
-                textAlign: 'center', top: 15, fontSize: 28, color: '#28527A',
+                top: 15, left: 15, fontSize: 28, color: '#28527A',
               }}
               >
-                {'   '}133
+                133
               </Text>
             </View>
             <Text style={{ fontSize: 10 }}>{'\n'}</Text>
@@ -70,12 +70,12 @@ function First({ navigation }) {
             onPress={() => navigation.navigate('Bus172')}
             style={{ width: '100%', backgroundColor: 'white' }}
           >
-            <View style={{ flexDirection: 'row' }}>
+            <View>
               <Text style={{
-                textAlign: 'center', top: 15, fontSize: 28, color: '#28527A',
+                top: 15, left: 15, fontSize: 28, color: '#28527A',
               }}
               >
-                {'   '}172
+                172
               </Text>
             </View>
             <Text style={{ fontSize: 10 }}>{'\n'}</Text>
@@ -85,12 +85,12 @@ function First({ navigation }) {
             onPress={() => navigation.navigate('Bus173')}
             style={{ width: '100%', backgroundColor: 'white' }}
           >
-            <View style={{ flexDirection: 'row' }}>
+            <View>
               <Text style={{
-                textAlign: 'center', top: 15, fontSize: 28, color: '#28527A',
+                top: 15, left: 15, fontSize: 28, color: '#28527A',
               }}
               >
-                {'   '}173
+                173
               </Text>
             </View>
             <Text style={{ fontSize: 10 }}>{'\n'}</Text>
@@ -100,12 +100,12 @@ function First({ navigation }) {
             onPress={() => navigation.navigate('Bus216')}
             style={{ width: '100%', backgroundColor: 'white' }}
           >
-            <View style={{ flexDirection: 'row' }}>
+            <View>
               <Text style={{
-                textAlign: 'center', top: 15, fontSize: 28, color: '#28527A',
+                top: 15, left: 15, fontSize: 28, color: '#28527A',
               }}
               >
-                {'   '}216
+                216
               </Text>
             </View>
             <Text style={{ fontSize: 10 }}>{'\n'}</Text>
@@ -115,12 +115,12 @@ function First({ navigation }) {
             onPress={() => navigation.navigate('Bus9025A')}
             style={{ width: '100%', backgroundColor: 'white' }}
           >
-            <View style={{ flexDirection: 'row' }}>
+            <View>
               <Text style={{
-                textAlign: 'center', top: 15, fontSize: 28, color: '#28527A',
+                top: 15, left: 15, fontSize: 28, color: '#28527A',
               }}
               >
-                {'   '}9025A
+                9025A
               </Text>
             </View>
             <Text style={{ fontSize: 10 }}>{'\n'}</Text>
@@ -130,12 +130,12 @@ function First({ navigation }) {
             onPress={() => navigation.navigate('UST')}
             style={{ width: '100%', backgroundColor: 'white' }}
           >
-            <View style={{ flexDirection: 'row' }}>
+            <View>
               <Text style={{
-                textAlign: 'center', top: 15, fontSize: 28, color: '#28527A',
+                top: 15, left: 15, fontSize: 28, color: '#28527A',
               }}
               >
-                {'   '}台聯大專車
+                台聯大專車
               </Text>
             </View>
             <Text style={{ fontSize: 10 }}>{'\n'}</Text>

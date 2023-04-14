@@ -32,12 +32,12 @@ function Search({ navigation }) {
           <ZStack style={styles.SearchArea}>
             <Box style={styles.SearchBar}>
               <HStack>
-                <AntDesign name="search1" size={24} color="#28527A" style={styles.searchIcon} />
+                <AntDesign name="search1" size={24} color="primary.600" style={styles.searchIcon} />
                 <TextInput
                   style={styles.searchtext}
                   placeholder="搜尋"
                   numberOfLines={1}
-                  placeholderTextColor="#28527A"
+                  placeholderTextColor="primary.600"
                   value={searchQuery}
                   onChangeText={(text) => {
                     setSearchQuery(text);

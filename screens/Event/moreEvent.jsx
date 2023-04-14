@@ -53,7 +53,7 @@ function More({ navigation, route }) {
             <AntDesign
               name="arrowleft"
               size={28}
-              color="#28527A"
+              color="primary.600"
               onPress={() => { navigation.navigate('list'); }}
             />
           </Box>
@@ -67,7 +67,7 @@ function More({ navigation, route }) {
               <FontAwesome5
                 name="comment"
                 size={25}
-                color="#28527A"
+                color="primary.600"
                 onPress={() => { navigation.navigate('message'); }}
               />
               <Octicons name="dot-fill" size={16} color={Messagenum !== 0 ? '#EB6F6F' : 'transparent'} style={styles.readDot} />
@@ -77,7 +77,7 @@ function More({ navigation, route }) {
             <Feather
               name="user"
               size={26}
-              color="#28527A"
+              color="primary.600"
               onPress={() => { navigation.navigate('personal'); }}
             />
           </Box>

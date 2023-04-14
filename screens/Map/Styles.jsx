@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-const colorDarkBlue = '#28527A';
+const colorDarkBlue = 'primary.600';
 
 export default StyleSheet.create({
   background: {
@@ -34,7 +34,7 @@ export default StyleSheet.create({
     zIndex: 1000,
   },
   headerSearchBarView: {
-    backgroundColor: '#E5EBF1',
+    backgroundColor: 'primary.100',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-around',
@@ -47,7 +47,7 @@ export default StyleSheet.create({
     padding: 10,
     width: '85%',
     fontSize: 18,
-    color: '#28527A',
+    color: 'primary.600',
   },
 });
 

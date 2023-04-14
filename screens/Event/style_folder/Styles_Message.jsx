@@ -100,7 +100,7 @@ export default StyleSheet.create({
   typeArea: {
     flex: 1,
     borderRadius: 20,
-    backgroundColor: '#E5EBF1',
+    backgroundColor: 'primary.100',
     paddingHorizontal: 12,
     height: 35,
     marginTop: 5,
@@ -178,7 +178,7 @@ export default StyleSheet.create({
     marginRight: Dimensions.get('window').width * 0.01,
   },
   autoMessage: {
-    backgroundColor: '#E5EBF1',
+    backgroundColor: 'primary.100',
     borderRadius: 5,
     marginTop: 10,
     marginBottom: 5,
@@ -189,7 +189,7 @@ export default StyleSheet.create({
     marginVertical: 5,
     fontWeight: '400',
     fontSize: 14,
-    color: '#28527A',
+    color: 'primary.600',
   },
   unsentTitle: {
     marginTop: 17,

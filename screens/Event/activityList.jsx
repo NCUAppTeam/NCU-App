@@ -63,7 +63,7 @@ function List({ navigation }) {
               onPress={() => { navigation.navigate('search'); }}
             />
             <HStack>
-              <AntDesign name="search1" size={24} color="#28527A" style={styles.searchIcon} onPress={() => { navigation.navigate('search'); }} />
+              <AntDesign name="search1" size={24} color="primary.600" style={styles.searchIcon} onPress={() => { navigation.navigate('search'); }} />
               <Box style={styles.searchtextBox}>
                 <Text style={styles.searchtext} onPress={() => { navigation.navigate('search'); }}>搜尋</Text>
               </Box>
@@ -72,7 +72,7 @@ function List({ navigation }) {
           <FontAwesome5
             name="comment"
             size={25}
-            color="#28527A"
+            color="primary.600"
             onPress={() => { navigation.navigate('message', { prepage: 'list' }); }}
             style={styles.comment}
           />
@@ -80,7 +80,7 @@ function List({ navigation }) {
           <Feather
             name="user"
             size={26}
-            color="#28527A"
+            color="primary.600"
             onPress={() => { navigation.navigate('personal'); }}
             style={styles.user}
           />

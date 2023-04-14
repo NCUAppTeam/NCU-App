@@ -80,7 +80,7 @@ function Manage({ route, navigation }) {
             <AntDesign
               name="arrowleft"
               size={28}
-              color="#28527A"
+              color="primary.600"
               style={{ justifyContent: 'center' }}
               onPress={() => { navigation.navigate('personal'); }}
             />
@@ -94,7 +94,7 @@ function Manage({ route, navigation }) {
             <Feather
               name="trash-2"
               size={25}
-              color="#28527A"
+              color="primary.600"
               onPress={() => {
                 setShowDialog1(true);
               }}
@@ -220,7 +220,7 @@ function Manage({ route, navigation }) {
             <Feather
               name="edit"
               size={24}
-              color="#28527A"
+              color="primary.600"
               onPress={() => {
                 navigation.navigate('edit', { Cd: passedID });
               }}
@@ -245,7 +245,7 @@ function Manage({ route, navigation }) {
                   selectionColor="#ccc"
                 />
                 <LinearGradient
-                  colors={['#1784B2', '#1D74A0', '#28527A']}
+                  colors={['#1784B2', '#1D74A0', 'primary.600']}
                   start={[0.6497, 0.9972]}
                   end={[0.1203, 0.6497]}
                   style={styles.manageSendMessagebtn}

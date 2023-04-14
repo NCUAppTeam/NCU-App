@@ -55,7 +55,7 @@ function Message({ navigation }) {
     <SafeAreaView style={styles.container}>
       <NativeBaseProvider>
         <LinearGradient
-          colors={['#1784B2', '#28527A']}
+          colors={['#1784B2', 'primary.600']}
           start={[1, 2]}
           end={[1, 0]}
         >

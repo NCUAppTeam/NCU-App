@@ -122,7 +122,7 @@ function Send({ route, navigation }) {
     <SafeAreaView style={styles.container}>
       <NativeBaseProvider>
         <LinearGradient
-          colors={['#1784B2', '#28527A']}
+          colors={['#1784B2', 'primary.600']}
           start={[1, 2]}
           end={[1, 0]}
         >
@@ -199,7 +199,7 @@ function Send({ route, navigation }) {
                       <HStack>
                         <Card
                           key={item.id}
-                          style={{ backgroundColor: '#E5EBF1', borderRadius: 10 }}
+                          style={{ backgroundColor: 'primary.100', borderRadius: 10 }}
                           onLongPress={() => {
                             setShowDialog(true);
                             setDeleteMessageId(item.id);
@@ -357,7 +357,7 @@ function Send({ route, navigation }) {
                 <TouchableHighlight
                   style={styles.autoMessage}
                   activeOpacity={0.5} // 不透明度
-                  underlayColor="#E5EBF1"
+                  underlayColor="primary.100"
                   onPress={() => {
                     data.sendTime = new Date();
                     MessageController.addMessage({
@@ -372,7 +372,7 @@ function Send({ route, navigation }) {
                 <TouchableHighlight
                   style={styles.autoMessage}
                   activeOpacity={0.5} // 不透明度
-                  underlayColor="#E5EBF1"
+                  underlayColor="primary.100"
                   onPress={() => {
                     data.sendTime = new Date();
                     MessageController.addMessage({
@@ -410,7 +410,7 @@ function Send({ route, navigation }) {
               <FontAwesome5
                 name="image"
                 size={26}
-                color="#28527A"
+                color="primary.600"
                 onPress={pickImage}
               />
             </Box>
@@ -432,7 +432,7 @@ function Send({ route, navigation }) {
               <Octicons
                 name="paper-airplane"
                 size={26}
-                color="#28527A"
+                color="primary.600"
                 onPress={() => {
                   if (data.data !== '') {
                     data.sendTime = new Date();

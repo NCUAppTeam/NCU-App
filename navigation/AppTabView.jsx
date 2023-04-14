@@ -24,7 +24,7 @@ const Tab = createBottomTabNavigator();
 function CustomTabBar({ state, descriptors, navigation }) {
   const [selected, setSelected] = React.useState(1);
   return (
-    <HStack bg="#E5EBF1" alignItems="center" safeAreaBottom shadow={6}>
+    <HStack bg="primary.100" alignItems="center" safeAreaBottom shadow={6}>
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key];
         const label = options.tabBarLabel !== undefined
@@ -55,15 +55,15 @@ function CustomTabBar({ state, descriptors, navigation }) {
 
         return (
 
-          <Pressable py="2" flex={1} onPress={onPress} bg={isFocused ? '#28527A' : '#E5EBF1'}>
+          <Pressable py="2" flex={1} onPress={onPress} bg={isFocused ? 'primary.600' : 'primary.100'}>
             <Center>
               <Icon
                 as={label === '活動' ? Ionicons : MaterialCommunityIcons}
                 name={icon_name[label]}
-                color={isFocused ? '#E5EBF1' : '#28527A'}
+                color={isFocused ? 'primary.100' : 'primary.600'}
                 size="sm"
               />
-              <Text color={isFocused ? '#E5EBF1' : '#28527A'} fontSize="12">
+              <Text color={isFocused ? 'primary.100' : 'primary.600'} fontSize="12">
                 {label}
               </Text>
             </Center>
@@ -89,6 +89,6 @@ export const AppTabView = () => {
       <Tab.Screen name="行事曆" component={CalendarScreen} />
       <Tab.Screen name="活動" component={EventScreen} />
       <Tab.Screen name="地圖" component={MapScreen} />
-        </Tab.Navigator>
+    </Tab.Navigator>
   );
 };

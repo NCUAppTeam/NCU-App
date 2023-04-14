@@ -12,6 +12,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import styles from './style_folder/Styles_Message';
 import MessageController from '../../controller/Message';
 import UserController from '../../controller/getStudentId';
+import { BaseTheme } from '../../theme';
 
 function Message({ navigation }) {
   const userUid = UserController.getUid();
@@ -53,9 +54,9 @@ function Message({ navigation }) {
   }, [navigation]);
   return (
     <SafeAreaView style={styles.container}>
-      <NativeBaseProvider>
+      
         <LinearGradient
-          colors={['#1784B2', 'primary.600']}
+          colors={['#1784B2', '#476685']}
           start={[1, 2]}
           end={[1, 0]}
         >
@@ -155,7 +156,7 @@ function Message({ navigation }) {
             )}
           />
         </Box>
-      </NativeBaseProvider>
+      
     </SafeAreaView>
   );
 }

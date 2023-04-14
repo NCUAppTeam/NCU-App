@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Text, SafeAreaView, TextInput,
+  SafeAreaView, TextInput,
 } from 'react-native';
 import { Title } from 'react-native-paper';
 import {
   Ionicons, FontAwesome5, FontAwesome, AntDesign, MaterialCommunityIcons, MaterialIcons,
 } from '@expo/vector-icons';
 import {
-  NativeBaseProvider, Box, HStack, VStack, ZStack, FlatList, Pressable,
+  NativeBaseProvider, Box, HStack, VStack, ZStack, FlatList, Pressable, Icon, Input, Center, Text
 } from 'native-base';
 import { LinearGradient } from 'expo-linear-gradient';
 import styles from './style_folder/Styles_search';
@@ -26,43 +26,36 @@ function Search({ navigation }) {
     });
   }, []);
   return (
-    <SafeAreaView style={styles.container}>
-      <NativeBaseProvider>
-        <HStack>
-          <ZStack style={styles.SearchArea}>
-            <Box style={styles.SearchBar}>
-              <HStack>
-                <AntDesign name="search1" size={24} color="primary.600" style={styles.searchIcon} />
-                <TextInput
-                  style={styles.searchtext}
-                  placeholder="搜尋"
-                  numberOfLines={1}
-                  placeholderTextColor="primary.600"
-                  value={searchQuery}
-                  onChangeText={(text) => {
-                    setSearchQuery(text);
-                    ActiveController.fuseSearchName(text).then((query) => {
-                      setData(query);
-                    });
-                  }}
-                  selectionColor="#ccc"
-                />
-              </HStack>
-            </Box>
-          </ZStack>
-          <Box style={styles.cancelBox}>
-            <Text style={styles.cancelText} onPress={() => navigation.navigate('list')}>取消</Text>
-          </Box>
-        </HStack>
+    <Box safeArea>
+        <Center>
+          <Input placeholder="搜尋" size="lg" m="2" mt="4" variant="filled" width="90%" height="40px"borderRadius="10" bg="#E5EBF1" py="1" px="2"
+            InputLeftElement={<Icon  ml="2" size="6"  as={AntDesign} name="search1" color="#476685" ></Icon>} 
+            isFocused="true"
+            value={searchQuery}
+            onChangeText={(text) => {
+              setSearchQuery(text);
+              ActiveController.fuseSearchName(text).then((query) => {
+                setData(query);
+              });
+            }}  
+            _focus={{backgroundColor: "#E5EBF1"}}
+            
+            InputRightElement={
+                <Text mr="4" color="#476685" onPress={() => navigation.navigate('list')}>取消</Text>
+            }
+          />
+        </Center>
+
         {searchQuery === '' && (
         <Box style={styles.btnArea}>
           <FlatList
+
             numColumns={2}
             data={genreName}
             keyExtractor={(item) => item.id}
             showsVerticalScrollIndicator={false}
             renderItem={({ item }) => (
-              <Box>
+              <Box flex="1">
                 <LinearGradient
                   colors={['#D2E6EA26', '#8AC4D026', '#0A6B7E26']}
                   start={[0.6, 0.0]}
@@ -138,8 +131,8 @@ function Search({ navigation }) {
           </Box>
         )}
 
-      </NativeBaseProvider>
-    </SafeAreaView>
+      
+    </Box>
   );
 }
 

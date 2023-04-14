@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Text, SafeAreaView, ScrollView, RefreshControl, Image, Dimensions,
+  SafeAreaView, ScrollView, RefreshControl, Image, Dimensions,
   Pressable,
 } from 'react-native';
 import {
@@ -10,13 +10,14 @@ import {
   Ionicons, FontAwesome5, AntDesign, Feather, Octicons,
 } from '@expo/vector-icons';
 import {
-  NativeBaseProvider, Box, Divider, ZStack, HStack, Button,
+  NativeBaseProvider, Box, Divider, ZStack, HStack, Button, Center, Text, Input, Icon
 } from 'native-base';
 import { getAuth, signOut } from 'firebase/auth';
 import styles from './style_folder/Styles_activityList';
 import ActiveController from '../../controller/Active';
 import MessageController from '../../controller/Message';
 import UserController from '../../controller/getStudentId';
+import { BaseTheme } from '../../theme';
 
 function List({ navigation }) {
   const auth = getAuth();
@@ -55,36 +56,44 @@ function List({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <NativeBaseProvider>
-        <HStack style={styles.header}>
-          <ZStack style={styles.SearchArea}>
-            <Button
-              style={styles.SearchBar}
+      
+      
+          <Pressable
+              bg="black"
               onPress={() => { navigation.navigate('search'); }}
+            >
+              <Center>
+          <Input placeholder="搜尋" size="lg" m="2" mt="4" variant="filled" width="90%" height="40px"borderRadius="10" bg="#E5EBF1" py="1" px="2"
+            InputLeftElement={<Icon  ml="2" size="6"  as={AntDesign} name="search1" color="#476685" ></Icon>} 
+            pointerEvents="none"
+            InputRightElement={
+              <HStack>
+              <FontAwesome5
+              name="comment"
+              size={25}
+              color="#476685"
+              onPress={() => { navigation.navigate('message', { prepage: 'list' }); }}
+              style={styles.comment}
             />
-            <HStack>
-              <AntDesign name="search1" size={24} color="primary.600" style={styles.searchIcon} onPress={() => { navigation.navigate('search'); }} />
-              <Box style={styles.searchtextBox}>
-                <Text style={styles.searchtext} onPress={() => { navigation.navigate('search'); }}>搜尋</Text>
-              </Box>
+            <Octicons name="dot-fill" size={16} color={Messagenum !== 0 ? '#EB6F6F' : 'transparent'} style={styles.readDot} />
+            <Feather
+              name="user"
+              size={26}
+              color="#476685"
+              onPress={() => { navigation.navigate('personal'); }}
+              style={styles.user}
+            />
             </HStack>
-          </ZStack>
-          <FontAwesome5
-            name="comment"
-            size={25}
-            color="primary.600"
-            onPress={() => { navigation.navigate('message', { prepage: 'list' }); }}
-            style={styles.comment}
+            }
+        
           />
-          <Octicons name="dot-fill" size={16} color={Messagenum !== 0 ? '#EB6F6F' : 'transparent'} style={styles.readDot} />
-          <Feather
-            name="user"
-            size={26}
-            color="primary.600"
-            onPress={() => { navigation.navigate('personal'); }}
-            style={styles.user}
-          />
-        </HStack>
+          </Center>
+        </Pressable>
+        
+  
+
+
+
         <Box style={styles.body}>
           <ScrollView
             showsVerticalScrollIndicator={false}
@@ -266,7 +275,7 @@ function List({ navigation }) {
             </Pressable>
           </ScrollView>
         </Box>
-      </NativeBaseProvider>
+      
     </SafeAreaView>
   );
 }

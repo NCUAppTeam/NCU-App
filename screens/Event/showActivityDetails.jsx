@@ -87,14 +87,14 @@ function Detailscreen({ route, navigation }) {
   const [showDialog, setShowDialog] = useState(false);
   return (
     <SafeAreaView style={styles.showActivityDetails_container} linking={linking}>
-      <NativeBaseProvider>
+      
         {active.map(({ genre }) => (
           <Box style={styles.headerContainer}>
             <Box style={styles.headerArrowBox}>
               <AntDesign
                 name="arrowleft"
                 size={28}
-                color="primary.600"
+                color="#476685"
                 onPress={() => { navigation.navigate('list'); }}
               />
             </Box>
@@ -198,7 +198,7 @@ function Detailscreen({ route, navigation }) {
                 }}
                 >
                   <Text style={{
-                    fontSize: 24, color: 'primary.600', fontWeight: 'bold', flex: 9,
+                    fontSize: 24, color: '#476685', fontWeight: 'bold', flex: 9,
                   }}
                   >
                     {name}
@@ -207,7 +207,7 @@ function Detailscreen({ route, navigation }) {
                     <Ionicons
                       name="share-social-outline"
                       size={28}
-                      color="primary.600"
+                      color="#476685"
                       onPress={() => {
                         setShowDialog(true);
                       }}
@@ -217,7 +217,7 @@ function Detailscreen({ route, navigation }) {
                       height={400}
                       visible={showDialog}
                       dialogTitle={(
-                        <NativeBaseProvider>
+                        <Box>
                           <Box>
                             <Text style={{
                               textAlign: 'center', color: '#71717A', fontSize: 24, fontWeight: '400', marginTop: 30,
@@ -230,7 +230,7 @@ function Detailscreen({ route, navigation }) {
                             <Fontisto
                               name="link"
                               size={25}
-                              color="primary.600"
+                              color="#476685"
                               onPress={() => {
                                 console.log('Link Copied');
                                 setShowDialog(false);
@@ -247,7 +247,7 @@ function Detailscreen({ route, navigation }) {
                             <FontAwesome5
                               name="facebook"
                               size={25}
-                              color="primary.600"
+                              color="#476685"
                               onPress={() => {
                                 console.log('share to fb');
                                 setShowDialog(false);
@@ -264,7 +264,7 @@ function Detailscreen({ route, navigation }) {
                             <FontAwesome5
                               name="facebook-messenger"
                               size={25}
-                              color="primary.600"
+                              color="#476685"
                               onPress={() => {
                                 console.log('share to messenger');
                                 setShowDialog(false);
@@ -281,7 +281,7 @@ function Detailscreen({ route, navigation }) {
                             <FontAwesome5
                               name="discord"
                               size={25}
-                              color="primary.600"
+                              color="#476685"
                               style={{ marginLeft: 2 }}
                               onPress={() => {
                                 console.log('share to discord');
@@ -299,7 +299,7 @@ function Detailscreen({ route, navigation }) {
                             <Octicons
                               name="x"
                               size={28}
-                              color="primary.600"
+                              color="#476685"
                               style={{ marginLeft: 5 }}
                               onPress={() => {
                                 setShowDialog(false);
@@ -313,7 +313,7 @@ function Detailscreen({ route, navigation }) {
                               </Text>
                             </Octicons>
                           </Box>
-                        </NativeBaseProvider>
+                        </Box>
                     )}
                       onTouchOutside={() => {
                         setShowDialog(false);
@@ -326,7 +326,7 @@ function Detailscreen({ route, navigation }) {
                     <AntDesign
                       name="clockcircleo"
                       size={16}
-                      color="primary.600"
+                      color="#476685"
                     />
                   </Box>
                   <Text style={styles.CardTimeText}>
@@ -348,7 +348,7 @@ function Detailscreen({ route, navigation }) {
                   <Ionicons
                     name="location-outline"
                     size={20}
-                    color="primary.600"
+                    color="#476685"
                   />
                   <Text style={{ fontSize: 16, marginLeft: -2 }}>
                   &emsp;
@@ -359,7 +359,7 @@ function Detailscreen({ route, navigation }) {
                   <MaterialCommunityIcons
                     name="web"
                     size={20}
-                    color="primary.600"
+                    color="#476685"
                   />
                   <Text style={{ fontSize: 16, marginBottom: 15 }}>
                   &emsp;
@@ -377,7 +377,7 @@ function Detailscreen({ route, navigation }) {
                       <Ionicons
                         name="logo-usd"
                         size={22}
-                        color="primary.600"
+                        color="#476685"
                         style={{ marginTop: 10 }}
                       />
                       {cost !== '免費free' && (
@@ -412,7 +412,7 @@ function Detailscreen({ route, navigation }) {
                       <Feather
                         name="users"
                         size={22}
-                        color="primary.600"
+                        color="#476685"
                         style={{ marginTop: 10 }}
                       />
                       {limitNum !== '0' && (
@@ -483,7 +483,7 @@ function Detailscreen({ route, navigation }) {
                     <Feather
                       name="user"
                       size={20}
-                      color="primary.600"
+                      color="#476685"
                       style={{ marginTop: 10 }}
                     >
                       <Text style={{ fontSize: 12 }}>
@@ -494,7 +494,7 @@ function Detailscreen({ route, navigation }) {
                     <Feather
                       name="phone"
                       size={18}
-                      color="primary.600"
+                      color="#476685"
                       style={{ marginTop: 10 }}
                     >
                       <Text style={{ fontSize: 12, textAlignVertical: 'center' }}>
@@ -505,7 +505,7 @@ function Detailscreen({ route, navigation }) {
                     <Feather
                       name="mail"
                       size={18}
-                      color="primary.600"
+                      color="#476685"
                       style={{ marginTop: 10 }}
                     >
                       <Text style={{ fontSize: 12, textAlignVertical: 'center' }}>
@@ -516,7 +516,7 @@ function Detailscreen({ route, navigation }) {
                     <FontAwesome5
                       name="comment"
                       size={20}
-                      color="primary.600"
+                      color="#476685"
                       style={{ marginTop: 10 }}
                     >
                       <Text style={{ fontSize: 12, marginTop: 10 }}>
@@ -593,7 +593,7 @@ function Detailscreen({ route, navigation }) {
             </Box>
           ))}
         </ScrollView>
-      </NativeBaseProvider>
+      
     </SafeAreaView>
 
   );

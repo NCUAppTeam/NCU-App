@@ -58,7 +58,7 @@ export default StyleSheet.create({
   },
   name: {
     fontSize: 24,
-    color: 'primary.600',
+    color: '#476685',
   },
   bodyContainer: {
     flex: 1,
@@ -81,7 +81,7 @@ export default StyleSheet.create({
     height: 38,
     paddingVertical: 4,
     marginVertical: 51,
-    backgroundColor: 'primary.600',
+    backgroundColor: '#476685',
     marginLeft: Dimensions.get('window').width * 0.336,
   },
   sentButtonText: {

@@ -61,7 +61,7 @@ export default StyleSheet.create({
     width: 200,
     height: 40,
     borderWidth: 1,
-    borderColor: 'primary.600',
+    borderColor: '#476685',
     marginTop: 10,
     alignItems: 'center',
     elevation: 10,
@@ -90,7 +90,7 @@ export default StyleSheet.create({
   },
   name: {
     fontSize: 24,
-    color: 'primary.600',
+    color: '#476685',
   },
   nameheader: {
     flex: 9,

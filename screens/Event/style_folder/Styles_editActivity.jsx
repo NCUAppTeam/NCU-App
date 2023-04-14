@@ -7,7 +7,7 @@ export default StyleSheet.create({
   btnPress: {
     height: 40,
     width: 100,
-    backgroundColor: 'primary.600',
+    backgroundColor: '#476685',
     justifyContent: 'center',
     borderRadius: 5,
     margin: 10,
@@ -17,13 +17,13 @@ export default StyleSheet.create({
     width: 100,
     justifyContent: 'center',
     borderRadius: 5,
-    backgroundColor: 'primary.100',
+    backgroundColor: '#E5EBF1',
     margin: 10,
   },
   btnText: {
     textAlign: 'center',
     fontSize: 16,
-    color: 'primary.600',
+    color: '#476685',
   },
   btnPText: {
     textAlign: 'center',
@@ -105,7 +105,7 @@ export default StyleSheet.create({
     borderRadius: 4,
     marginTop: 5,
     flexDirection: 'row',
-    backgroundColor: 'primary.600',
+    backgroundColor: '#476685',
   },
   input: {
     width: '100%',
@@ -151,7 +151,7 @@ export default StyleSheet.create({
   name: {
     marginLeft: 45,
     fontSize: 24,
-    color: 'primary.600',
+    color: '#476685',
   },
   nameheader: {
     flex: 9,

@@ -12,6 +12,7 @@ import {
 import styles from './style_folder/Styles_moreEvent';
 import ActiveController from '../../controller/Active';
 import MessageController from '../../controller/Message';
+import { BaseTheme } from '../../theme';
 
 function Genre({ navigation, route }) {
   const { GenreName } = route.params;
@@ -50,13 +51,13 @@ function Genre({ navigation, route }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <NativeBaseProvider>
+      
         <Box style={styles.headerContainer}>
           <Box style={styles.headerArrowBox}>
             <AntDesign
               name="arrowleft"
               size={28}
-              color="primary.600"
+              color="#476685"
               onPress={() => { navigation.navigate('search'); }}
             />
           </Box>
@@ -70,7 +71,7 @@ function Genre({ navigation, route }) {
               <FontAwesome5
                 name="comment"
                 size={25}
-                color="primary.600"
+                color="#476685"
                 onPress={() => { navigation.navigate('message'); }}
               />
               <Octicons name="dot-fill" size={16} color={Messagenum !== 0 ? '#EB6F6F' : 'transparent'} style={styles.readDot} />
@@ -80,7 +81,7 @@ function Genre({ navigation, route }) {
             <Feather
               name="user"
               size={26}
-              color="primary.600"
+              color="#476685"
               onPress={() => { navigation.navigate('personal'); }}
             />
           </Box>
@@ -140,7 +141,7 @@ function Genre({ navigation, route }) {
             )}
           />
         </Box>
-      </NativeBaseProvider>
+      
     </SafeAreaView>
   );
 }

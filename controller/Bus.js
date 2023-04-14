@@ -4,7 +4,7 @@ import qs from 'qs';
 
 async function getAuthorizationHeader() {
   const parameter = {
-    grant_type: 'client_credentials',
+    grantType: 'client_credentials',
     client_id: '110502542-f4ef0225-f7f3-49d7',
     client_secret: 'b8ba09f0-1be8-4a1f-abc3-f944c69b89ce',
   };
@@ -19,24 +19,24 @@ async function getAuthorizationHeader() {
 	  });
 	  const accesstoken = res.data;
 	  return {
-      authorization: `Bearer ${accesstoken.access_token}`,
+      authorization: `Bearer ${accesstoken.accessToken}`,
 	  };
   } catch (err) {
 	  return err;
   }
 }
 
-function get_busTime(data) {
+function getBusTime(data) {
   let busTime;
-  const now_h = new Date().getHours();
-  const now_m = new Date().getMinutes();
-  const now = now_h * 60 + now_m;
-  const data_time = now - ((data.UpdateTime[11] - '0') * 600 + (data.UpdateTime[12] - '0') * 60 + (data.UpdateTime[14] - '0') * 10 + (data.UpdateTime[15] - '0'));
-  // console.log(data_time);
+  const nowHour = new Date().getHours();
+  const nowMinute = new Date().getMinutes();
+  const now = nowHour * 60 + nowMinute;
+  const dataTime = now - ((data.UpdateTime[11] - '0') * 600 + (data.UpdateTime[12] - '0') * 60 + (data.UpdateTime[14] - '0') * 10 + (data.UpdateTime[15] - '0'));
+  // console.log(dataTime);
   if (data.EstimateTime != null) {
     if (data.EstimateTime === 120) busTime = '即將進站';
     else if (data.EstimateTime <= 60) busTime = '進站中';
-    else busTime = `${Math.floor((data.EstimateTime - data_time) / 60)}分鐘後`;
+    else busTime = `${Math.floor((data.EstimateTime - dataTime) / 60)}分鐘後`;
   } else if (data.StopStatus === 2) busTime = '不停靠';
   else if (data.StopStatus === 3 || data.NextBusTime === undefined) busTime = '末班駛離';
   else if (data.StopStatus === 1) {
@@ -49,10 +49,10 @@ function get_busTime(data) {
 
 const chart = [[0, 0, 3, 4, 8, 18, 21, 32, 72, 77, 82], [0, 0, 2, 6, 40, 47, 47, 51, 52, 53, 54]];
 
-function busTime_9025(StopSequence, Direction) {
-  const now_h = new Date().getHours();
-  const now_m = new Date().getMinutes();
-  const now = now_h * 60 + now_m;
+function busTime9025(StopSequence, Direction) {
+  const nowHour = new Date().getHours();
+  const nowMinute = new Date().getMinutes();
+  const now = nowHour * 60 + nowMinute;
   const today = new Date().getDay();
   let busTime;
   if (Direction === 0) {
@@ -81,7 +81,7 @@ function busTime_9025(StopSequence, Direction) {
   return busTime;
 }
 
-function state_9025(StopSequence, Direction) {
+function state9025(StopSequence, Direction) {
   if (Direction === 1) {
     if (StopSequence === 1) return '松山機場';
     if (StopSequence === 2) return '臺北大學(臺北校區)';
@@ -109,16 +109,16 @@ function state_9025(StopSequence, Direction) {
 function fun9025(parame, response) {
   let i; let j;
   const output = [];
-  const now_h = new Date().getHours();
-  const now_m = new Date().getMinutes();
-  const now = now_h * 60 + now_m;
+  const nowHour = new Date().getHours();
+  const nowMinute = new Date().getMinutes();
+  const now = nowHour * 60 + nowMinute;
   let num; let busTime; let departTime = -1; let departState = 0; const l = response.data.length;
   for (i = 0; i < l; i += 1) {
     num = response.data[i].StopSequence;
     if (num === departState) continue;
     for (j = departState + 1; j < num; j += 1) {
       if (departTime === -1) {
-        busTime = busTime_9025(j, parame.dir);
+        busTime = busTime9025(j, parame.dir);
       } else {
         let time = chart[parame.dir][j] - chart[parame.dir][departState] - (now - ((departTime[11] - '0') * 600 + (departTime[12] - '0') * 60 + (departTime[14] - '0') * 10 + (departTime[15] - '0')));
         if (time < chart[parame.dir][j] - chart[parame.dir][departState + 1]) {
@@ -128,7 +128,7 @@ function fun9025(parame, response) {
         else busTime = `${time}分鐘後`;
       }
       output.push({
-        state: state_9025(j, parame.dir),
+        state: state9025(j, parame.dir),
         time: busTime,
       });
     }
@@ -136,7 +136,7 @@ function fun9025(parame, response) {
     if (response.data[i].A2EventType === 1 && !(num === 10 && stay > 1)) {
       busTime = '進站中';
     } else if (departTime === -1) {
-      busTime = busTime_9025(num, parame.dir);
+      busTime = busTime9025(num, parame.dir);
     } else {
       let time = chart[parame.dir][num] - chart[parame.dir][departState] - (now - ((departTime[11] - '0') * 600 + (departTime[12] - '0') * 60 + (departTime[14] - '0') * 10 + (departTime[15] - '0')));
       if (time < chart[parame.dir][num] - chart[parame.dir][departState + 1]) {
@@ -145,7 +145,7 @@ function fun9025(parame, response) {
       if (time <= 2) busTime = '即將進站';
       else busTime = `${time}分鐘後`;
     } output.push({
-      state: state_9025(num, parame.dir),
+      state: state9025(num, parame.dir),
       time: busTime,
     });
     departTime = response.data[i].GPSTime;
@@ -154,7 +154,7 @@ function fun9025(parame, response) {
 
   for (j = departState + 1; j <= 10; j += 1) {
     if (departTime === -1) {
-      busTime = busTime_9025(j, parame.dir);
+      busTime = busTime9025(j, parame.dir);
     } else {
       let time = chart[parame.dir][j] - chart[parame.dir][departState] - (now - ((departTime[11] - '0') * 600 + (departTime[12] - '0') * 60 + (departTime[14] - '0') * 10 + (departTime[15] - '0')));
       if (time < chart[parame.dir][j] - chart[parame.dir][departState + 1]) {
@@ -163,7 +163,7 @@ function fun9025(parame, response) {
       if (time <= 2) busTime = '即將進站';
       else busTime = `${time}分鐘後`;
     }output.push({
-      state: state_9025(j, parame.dir),
+      state: state9025(j, parame.dir),
       time: busTime,
     });
   }
@@ -204,9 +204,9 @@ async function route(parame) {
   });
   console.log(response.data);
   response.data.forEach((doc) => {
-    const busTime = get_busTime(doc);
+    const busTime = getBusTime(doc);
     output.push({
-	  	state: doc.StopName.Zh_tw,
+	  	state: doc.StopName.ZhTw,
 	  	time: busTime,
     });
   });

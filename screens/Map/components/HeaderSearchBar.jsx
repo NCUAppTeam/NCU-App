@@ -11,6 +11,7 @@ import {
 import { Icon, NativeBaseProvider } from 'native-base';
 import { Ionicons } from '@expo/vector-icons/';
 import Styles, { colorDarkBlue } from '../Styles';
+import { BaseTheme} from '../../../theme';
 
 export default function HeaderSearchBar({
   searchResultsViewFadeAnim,
@@ -23,7 +24,7 @@ export default function HeaderSearchBar({
 }) {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <NativeBaseProvider>
+      
         <View
           onLayout={(event) => {
             const { layout } = event.nativeEvent;
@@ -92,7 +93,7 @@ export default function HeaderSearchBar({
                   }).start();
                 }}
               >
-                <Text style={{ color: 'primary.600', fontSize: 18 }}>取消</Text>
+                <Text style={{ color: '#476685', fontSize: 18 }}>取消</Text>
               </TouchableOpacity>
             </Animated.View>
 
@@ -104,7 +105,7 @@ export default function HeaderSearchBar({
               as={Ionicons}
               name="chatbubble-outline"
               size="6"
-              color="primary.600"
+              color="#476685"
             />
           </TouchableOpacity>
           <TouchableOpacity>
@@ -112,11 +113,11 @@ export default function HeaderSearchBar({
               as={Ionicons}
               name="person-outline"
               size="6"
-              color="primary.600"
+              color="#476685"
             />
           </TouchableOpacity> */}
         </View>
-      </NativeBaseProvider>
+      
     </TouchableWithoutFeedback>
   );
 }

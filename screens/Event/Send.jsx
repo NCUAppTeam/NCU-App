@@ -20,6 +20,7 @@ import { onSnapshot, collection, getFirestore } from 'firebase/firestore';
 import styles from './style_folder/Styles_Message';
 import MessageController from '../../controller/Message';
 import UserController from '../../controller/getStudentId';
+import { BaseTheme } from '../../theme';
 
 function Send({ route, navigation }) {
   const scrollview = useRef();
@@ -120,9 +121,9 @@ function Send({ route, navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <NativeBaseProvider>
+      
         <LinearGradient
-          colors={['#1784B2', 'primary.600']}
+          colors={['#1784B2', '#476685']}
           start={[1, 2]}
           end={[1, 0]}
         >
@@ -199,7 +200,7 @@ function Send({ route, navigation }) {
                       <HStack>
                         <Card
                           key={item.id}
-                          style={{ backgroundColor: 'primary.100', borderRadius: 10 }}
+                          style={{ backgroundColor: '#E5EBF1', borderRadius: 10 }}
                           onLongPress={() => {
                             setShowDialog(true);
                             setDeleteMessageId(item.id);
@@ -357,7 +358,7 @@ function Send({ route, navigation }) {
                 <TouchableHighlight
                   style={styles.autoMessage}
                   activeOpacity={0.5} // 不透明度
-                  underlayColor="primary.100"
+                  underlayColor="#E5EBF1"
                   onPress={() => {
                     data.sendTime = new Date();
                     MessageController.addMessage({
@@ -372,7 +373,7 @@ function Send({ route, navigation }) {
                 <TouchableHighlight
                   style={styles.autoMessage}
                   activeOpacity={0.5} // 不透明度
-                  underlayColor="primary.100"
+                  underlayColor="#E5EBF1"
                   onPress={() => {
                     data.sendTime = new Date();
                     MessageController.addMessage({
@@ -410,7 +411,7 @@ function Send({ route, navigation }) {
               <FontAwesome5
                 name="image"
                 size={26}
-                color="primary.600"
+                color="#476685"
                 onPress={pickImage}
               />
             </Box>
@@ -432,7 +433,7 @@ function Send({ route, navigation }) {
               <Octicons
                 name="paper-airplane"
                 size={26}
-                color="primary.600"
+                color="#476685"
                 onPress={() => {
                   if (data.data !== '') {
                     data.sendTime = new Date();
@@ -445,7 +446,7 @@ function Send({ route, navigation }) {
             </Box>
           </Box>
         </Box>
-      </NativeBaseProvider>
+      
     </SafeAreaView>
   );
 }

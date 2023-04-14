@@ -17,6 +17,7 @@ import ActiveController from '../../controller/Active';
 import MessageController from '../../controller/Message';
 import UserController from '../../controller/getStudentId';
 import styles from './style_folder/Styles_personal_manage';
+import { BaseTheme } from '../../theme';
 
 function Personal({ navigation }) {
   const [Messagenum, setMessageNum] = useState(0);
@@ -94,10 +95,10 @@ function Personal({ navigation }) {
       flex: 1, flexDirection: 'column', alignSelf: 'center',
     }}
     >
-      <NativeBaseProvider>
+      
         <ZStack>
           <LinearGradient
-            colors={['#1784B2', '#1D74A0', 'primary.600']}
+            colors={['#1784B2', '#1D74A0', '#476685']}
             start={[0.6497, 0.9972]}
             end={[0.1203, 0.6497]}
             style={{
@@ -118,7 +119,7 @@ function Personal({ navigation }) {
               height: Dimensions.get('window').height * 0.05,
               alignSelf: 'center',
               marginTop: 0,
-              color: 'primary.600',
+              color: '#476685',
             }} */}
           {/* /> */}
 
@@ -433,7 +434,7 @@ function Personal({ navigation }) {
           />
           )}
         </Box>
-      </NativeBaseProvider>
+      
     </SafeAreaView>
   );
 }

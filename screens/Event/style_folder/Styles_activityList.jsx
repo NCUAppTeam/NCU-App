@@ -15,14 +15,14 @@ export default StyleSheet.create({
   },
   SearchArea: {
     flex: 10,
-    backgroundColor: 'primary.100',
+    backgroundColor: '#E5EBF1',
     borderRadius: 18,
     marginLeft: Dimensions.get('window').width * 0.05,
     height: 36,
   },
   SearchBar: {
     width: '100%',
-    backgroundColor: 'primary.100',
+    backgroundColor: '#E5EBF1',
     borderRadius: 18,
     height: 36,
   },
@@ -35,7 +35,7 @@ export default StyleSheet.create({
   },
   searchtext: {
     paddingTop: 6,
-    color: 'primary.600',
+    color: '#476685',
     fontSize: 18,
   },
   comment: {
@@ -62,12 +62,12 @@ export default StyleSheet.create({
   },
   title: {
     flex: 10,
-    color: 'primary.600',
+    color: '#476685',
     fontSize: 18,
   },
   showMore: {
     marginRight: Dimensions.get('window').width * 0.002,
-    color: 'primary.600',
+    color: '#476685',
     fontSize: 12,
     alignSelf: 'center',
   },
@@ -89,7 +89,7 @@ export default StyleSheet.create({
   CardTitle: {
     textAlign: 'center',
     justifyContent: 'center',
-    color: 'primary.600',
+    color: '#476685',
     marginTop: -5,
     fontSize: 14,
   },

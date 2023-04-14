@@ -15,7 +15,7 @@ function List132() {
     <SafeAreaView style={Styles.background}>
       <View>
         <Text style={{
-          textAlign: 'center', backgroundColor: 'primary.600', color: 'white', height: 50, width: '100%', fontSize: 20, textAlignVertical: 'center', lineHeight: 50,
+          textAlign: 'center', backgroundColor: '#476685', color: 'white', height: 50, width: '100%', fontSize: 20, textAlignVertical: 'center', lineHeight: 50,
         }}
         >
           132公車時刻表

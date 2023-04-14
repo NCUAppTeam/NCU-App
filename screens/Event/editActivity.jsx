@@ -261,7 +261,7 @@ function Edit({ route, navigation }) {
                   <AntDesign
                     name="arrowleft"
                     size={28}
-                    color="#28527A"
+                    color="primary.600"
                     style={{ justifyContent: 'center' }}
                     onPress={() => {
                       Alert.alert(
@@ -297,7 +297,7 @@ function Edit({ route, navigation }) {
                   <TouchableHighlight
                     key={value}
                     activeOpacity={0.5} // 不透明度
-                    underlayColor="#28527A" // 切換時候的顏色
+                    underlayColor="primary.600" // 切換時候的顏色
                     onPress={() => {
                       setIsPress(value);
                       setgenreID(values.indexOf(value));
@@ -703,7 +703,7 @@ function Edit({ route, navigation }) {
               {(genre === true && name === true && start === true && end === true
                   && limitNum === true && place === true && detail === true) ? (
                     <LinearGradient
-                      colors={['#28527A', '#1784B2']}
+                      colors={['primary.600', '#1784B2']}
                       start={[0, 0]}
                       end={[1, 0]}
                       style={styles.sentButton}

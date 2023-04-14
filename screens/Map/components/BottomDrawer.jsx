@@ -48,16 +48,16 @@ export default function BottomDrawer({
       index={-1}
       snapPoints={snapPoints}
       onChange={handleSheetChanges}
-      handleIndicatorStyle={{ backgroundColor: bottomDrawerState === 2 ? '#E5EBF1' : '#c4c4c4', width: '8%', borderRadius: 50 }}
+      handleIndicatorStyle={{ backgroundColor: bottomDrawerState === 2 ? 'primary.100' : '#c4c4c4', width: '8%', borderRadius: 50 }}
       handleStyle={{
-        backgroundColor: '#E5EBF1',
+        backgroundColor: 'primary.100',
         borderTopRightRadius: bottomDrawerState === 2 ? 0 : 15,
         borderTopLeftRadius: bottomDrawerState === 2 ? 0 : 15,
         height: 20,
       }}
     >
       <View style={{
-        backgroundColor: '#E5EBF1',
+        backgroundColor: 'primary.100',
         width: '100%',
         height: 60,
         flexDirection: 'row',
@@ -76,7 +76,7 @@ export default function BottomDrawer({
           <Text
             numberOfLines={1}
             style={{
-              color: '#28527A',
+              color: 'primary.600',
               fontSize: 23,
               fontWeight: '700',
               width: '47%',

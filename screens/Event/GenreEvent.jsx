@@ -56,7 +56,7 @@ function Genre({ navigation, route }) {
             <AntDesign
               name="arrowleft"
               size={28}
-              color="#28527A"
+              color="primary.600"
               onPress={() => { navigation.navigate('search'); }}
             />
           </Box>
@@ -70,7 +70,7 @@ function Genre({ navigation, route }) {
               <FontAwesome5
                 name="comment"
                 size={25}
-                color="#28527A"
+                color="primary.600"
                 onPress={() => { navigation.navigate('message'); }}
               />
               <Octicons name="dot-fill" size={16} color={Messagenum !== 0 ? '#EB6F6F' : 'transparent'} style={styles.readDot} />
@@ -80,7 +80,7 @@ function Genre({ navigation, route }) {
             <Feather
               name="user"
               size={26}
-              color="#28527A"
+              color="primary.600"
               onPress={() => { navigation.navigate('personal'); }}
             />
           </Box>

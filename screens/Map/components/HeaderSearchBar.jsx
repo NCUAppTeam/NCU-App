@@ -92,7 +92,7 @@ export default function HeaderSearchBar({
                   }).start();
                 }}
               >
-                <Text style={{ color: '#28527A', fontSize: 18 }}>取消</Text>
+                <Text style={{ color: 'primary.600', fontSize: 18 }}>取消</Text>
               </TouchableOpacity>
             </Animated.View>
 
@@ -104,7 +104,7 @@ export default function HeaderSearchBar({
               as={Ionicons}
               name="chatbubble-outline"
               size="6"
-              color="#28527A"
+              color="primary.600"
             />
           </TouchableOpacity>
           <TouchableOpacity>
@@ -112,7 +112,7 @@ export default function HeaderSearchBar({
               as={Ionicons}
               name="person-outline"
               size="6"
-              color="#28527A"
+              color="primary.600"
             />
           </TouchableOpacity> */}
         </View>

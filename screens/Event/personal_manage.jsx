@@ -97,7 +97,7 @@ function Personal({ navigation }) {
       <NativeBaseProvider>
         <ZStack>
           <LinearGradient
-            colors={['#1784B2', '#1D74A0', '#28527A']}
+            colors={['#1784B2', '#1D74A0', 'primary.600']}
             start={[0.6497, 0.9972]}
             end={[0.1203, 0.6497]}
             style={{
@@ -118,7 +118,7 @@ function Personal({ navigation }) {
               height: Dimensions.get('window').height * 0.05,
               alignSelf: 'center',
               marginTop: 0,
-              color: '#28527A',
+              color: 'primary.600',
             }} */}
           {/* /> */}
 

@@ -39,13 +39,12 @@ export default StyleSheet.create({
     fontSize: 18,
   },
   comment: {
-    alignSelf: 'center',
-    marginLeft: Dimensions.get('window').width * 0.05,
-    marginTop: 0,
+    // alignSelf: 'center',
+    // marginLeft: Dimensions.get('window').width * 0.05,
   },
   user: {
     alignSelf: 'center',
-    marginHorizontal: Dimensions.get('window').width * 0.03,
+    // marginHorizontal: Dimensions.get('window').width * 0.03,
   },
   body: {
     flex: 2,

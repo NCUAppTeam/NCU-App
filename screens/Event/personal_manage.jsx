@@ -95,212 +95,202 @@ function Personal({ navigation }) {
       flex: 1, flexDirection: 'column', alignSelf: 'center',
     }}
     >
-      
-        <ZStack>
+
+      <ZStack>
+        <LinearGradient
+          colors={['#1784B2', '#1D74A0', '#476685']}
+          start={[0.6497, 0.9972]}
+          end={[0.1203, 0.6497]}
+          style={{
+            // flex: 1,
+            position: 'absolute',
+            width: Dimensions.get('window').width,
+            height: Dimensions.get('window').width,
+            borderRadius: Dimensions.get('window').width,
+            alignSelf: 'center',
+            marginTop: 118+53/2, // 私訊按鈕的marginTop + Height/2
+            transform: [{translateY: -Dimensions.get('window').width}],
+          }}
+        />
+
+        <Box style={{ alignSelf: 'center', marginTop: 61, flexDirection: 'row' }}>
+          <Feather name="user" size={24} color="white" style={{ marginTop: 5, marginRight: 15 }} onPress={() => { navigation.navigate('list'); }} />
+          <Text style={{
+            fontWeight: 'bold', fontSize: 24, color: 'white',
+          }}
+          >
+            活動中心
+          </Text>
+        </Box>
+        <Box style={{ alignSelf: 'center', flexDirection: 'row' }}>
           <LinearGradient
-            colors={['#1784B2', '#1D74A0', '#476685']}
-            start={[0.6497, 0.9972]}
-            end={[0.1203, 0.6497]}
+            colors={['#359DD9', '#1784B2']}
+            start={[0, 0.5]}
             style={{
-              flex: 1,
-              position: 'absolute',
-              width: Dimensions.get('window').width * 2,
-              height: Dimensions.get('window').width * 2,
-              borderRadius: Dimensions.get('window').width,
-              alignSelf: 'center',
-              marginTop: Platform.OS === 'android' ? -Dimensions.get('screen').height * 0.7 : -Dimensions.get('window').width * 1.8,
-              // transform: [{ scaleX: 1.2 }],
+              marginTop: 118,
+              width: 82,
+              height: 53,
+              borderRadius: 25,
+              backgroundColor: '#1784B2',
+              flexDirection: 'row',
+              paddingLeft: 16,
+              paddingVertical: 16,
+              alignContent: 'center',
+              elevation: 10,
+              shadowColor: '#000',
+              marginRight: 10,
             }}
-          />
-          {/* <Box
-            style={{
-              position: 'absolute',
-              width: Dimensions.get('window').width,
-              height: Dimensions.get('window').height * 0.05,
-              alignSelf: 'center',
-              marginTop: 0,
-              color: '#476685',
-            }} */}
-          {/* /> */}
-
-          <Box style={{ alignSelf: 'center', marginTop: 61, flexDirection: 'row' }}>
-            <Feather name="user" size={24} color="white" style={{ marginTop: 5, marginRight: 15 }} onPress={() => { navigation.navigate('list'); }} />
-            <Text style={{
-              fontWeight: 'bold', fontSize: 24, color: 'white',
-            }}
-            >
-              活動中心
-            </Text>
-          </Box>
-          <Box style={{ alignSelf: 'center', flexDirection: 'row' }}>
-            <LinearGradient
-              colors={['#359DD9', '#1784B2']}
-              start={[0, 0.5]}
-              style={{
-                marginTop: 118,
-                width: 82,
-                height: 53,
-                borderRadius: 25,
-                backgroundColor: '#1784B2',
-                flexDirection: 'row',
-                paddingLeft: 16,
-                paddingVertical: 16,
-                alignContent: 'center',
-                elevation: 10,
-                shadowColor: '#000',
-                marginRight: 10,
-              }}
-            >
-              <ZStack>
-                <TouchableOpacity
-                  style={{ flexDirection: 'row' }}
-                  onPress={() => navigation.navigate('message', { prepage: 'personal' })}
-                >
-                  <Feather name="message-circle" size={14} color="white" style={{ marginTop: 3 }} />
-                  <Text style={{ color: 'white', fontSize: 14, fontWeight: 'bold' }}>
-                &nbsp;私訊
-                  </Text>
-                </TouchableOpacity>
-              </ZStack>
-
-            </LinearGradient>
-            <LinearGradient
-              colors={['#359DD9', '#1784B2']}
-              start={[0, 0.5]}
-              style={{
-                marginTop: 118,
-                width: 82,
-                height: 53,
-                borderRadius: 25,
-                backgroundColor: '#1784B2',
-                flexDirection: 'row',
-                padding: 16,
-                alignContent: 'center',
-                elevation: 10,
-                shadowColor: '#000',
-              }}
-            >
+          >
+            <ZStack>
               <TouchableOpacity
                 style={{ flexDirection: 'row' }}
-                onPress={() => navigation.navigate('add')}
+                onPress={() => navigation.navigate('message', { prepage: 'personal' })}
               >
-                <Ionicons name="add" size={14} color="white" style={{ marginTop: 3 }} />
+                <Feather name="message-circle" size={14} color="white" style={{ marginTop: 3 }} />
                 <Text style={{ color: 'white', fontSize: 14, fontWeight: 'bold' }}>
-                &nbsp;新增
+                  &nbsp;私訊
                 </Text>
               </TouchableOpacity>
-            </LinearGradient>
-          </Box>
-        </ZStack>
-        {Messagenum !== 0 && (
+            </ZStack>
+
+          </LinearGradient>
+          <LinearGradient
+            colors={['#359DD9', '#1784B2']}
+            start={[0, 0.5]}
+            style={{
+              marginTop: 118,
+              width: 82,
+              height: 53,
+              borderRadius: 25,
+              backgroundColor: '#1784B2',
+              flexDirection: 'row',
+              padding: 16,
+              alignContent: 'center',
+              elevation: 10,
+              shadowColor: '#000',
+            }}
+          >
+            <TouchableOpacity
+              style={{ flexDirection: 'row' }}
+              onPress={() => navigation.navigate('add')}
+            >
+              <Ionicons name="add" size={14} color="white" style={{ marginTop: 3 }} />
+              <Text style={{ color: 'white', fontSize: 14, fontWeight: 'bold' }}>
+                &nbsp;新增
+              </Text>
+            </TouchableOpacity>
+          </LinearGradient>
+        </Box>
+      </ZStack>
+      {Messagenum !== 0 && (
         <Box>
           <Text style={styles.num}>
             {Messagenum}
           </Text>
         </Box>
-        )}
-        <Box style={{ marginTop: 192, alignItems: 'center', marginBottom: 10 }}>
-          <Box style={{ flexDirection: 'row' }}>
-            <TouchableOpacity
-              style={isPress === '參加中' ? styles.personalbtnPress : styles.personalbtn}
-              onPress={() => {
-                setIsPress('參加中');
-                ActiveController.getParticipatedActive();
-              }}
-            >
-              <Text style={isPress === '參加中' ? styles.personalbtnPressText : styles.personalbtnText}>
-                &nbsp;參加中
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={isPress === '管理活動' ? styles.personalbtnPress : styles.personalbtn}
-              onPress={() => {
-                setIsPress('管理活動');
-                ActiveController.getHostedEvent();
-              }}
-            >
-              <Text style={isPress === '管理活動' ? styles.personalmanagebtnPressText : styles.personalmanagebtnText}>
-                &nbsp;管理活動
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={isPress === '已結束' ? styles.personalbtnPress : styles.personalbtn}
-              onPress={() => {
-                setIsPress('已結束');
-                ActiveController.getFinishedActive();
-              }}
-            >
-              <Text style={isPress === '已結束' ? styles.personalbtnPressText : styles.personalbtnText}>
+      )}
+      <Box style={{ marginTop: 192, alignItems: 'center', marginBottom: 10 }}>
+        <Box style={{ flexDirection: 'row' }}>
+          <TouchableOpacity
+            style={isPress === '參加中' ? styles.personalbtnPress : styles.personalbtn}
+            onPress={() => {
+              setIsPress('參加中');
+              ActiveController.getParticipatedActive();
+            }}
+          >
+            <Text style={isPress === '參加中' ? styles.personalbtnPressText : styles.personalbtnText}>
+              &nbsp;參加中
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={isPress === '管理活動' ? styles.personalbtnPress : styles.personalbtn}
+            onPress={() => {
+              setIsPress('管理活動');
+              ActiveController.getHostedEvent();
+            }}
+          >
+            <Text style={isPress === '管理活動' ? styles.personalmanagebtnPressText : styles.personalmanagebtnText}>
+              &nbsp;管理活動
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={isPress === '已結束' ? styles.personalbtnPress : styles.personalbtn}
+            onPress={() => {
+              setIsPress('已結束');
+              ActiveController.getFinishedActive();
+            }}
+          >
+            <Text style={isPress === '已結束' ? styles.personalbtnPressText : styles.personalbtnText}>
               &nbsp;已結束
-              </Text>
-            </TouchableOpacity>
-          </Box>
+            </Text>
+          </TouchableOpacity>
         </Box>
-        <Box style={{ flex: 1 }}>
-          {isPress === '管理活動' && (
-            <FlatList
-              data={showManage}
-              keyExtractor={(item) => item.id}
-              showsVerticalScrollIndicator={false}
-              style={{ marginBottom: 10, alignSelf: 'center' }}
-              refreshControl={(
-                <RefreshControl
-                  refreshing={refreshing}
-                  onRefresh={onRefresh}
-                />
-                )}
-              renderItem={({ item }) => (
-                <Box style={{ flexDirection: 'column' }}>
-                  <Card
-                    key={item.id}
-                    style={styles.cardManage}
-                    onPress={() => {
-                      navigation.navigate('manage', { Cd: item.id });
-                    }}
-                  >
-                    <Card.Content style={{ padding: 0 }}>
-                      <Box style={{ flexDirection: 'row', margin: -15 }}>
-                        <Box style={{ aspectRatio: 1 }}>
-                          <Image
-                            style={styles.cardManagepic}
-                            source={{
-                              uri: item.imageUri1,
-                            }}
+      </Box>
+      <Box style={{ flex: 1 }}>
+        {isPress === '管理活動' && (
+          <FlatList
+            data={showManage}
+            keyExtractor={(item) => item.id}
+            showsVerticalScrollIndicator={false}
+            style={{ marginBottom: 10, alignSelf: 'center' }}
+            refreshControl={(
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+              />
+            )}
+            renderItem={({ item }) => (
+              <Box style={{ flexDirection: 'column' }}>
+                <Card
+                  key={item.id}
+                  style={styles.cardManage}
+                  onPress={() => {
+                    navigation.navigate('manage', { Cd: item.id });
+                  }}
+                >
+                  <Card.Content style={{ padding: 0 }}>
+                    <Box style={{ flexDirection: 'row', margin: -15 }}>
+                      <Box style={{ aspectRatio: 1 }}>
+                        <Image
+                          style={styles.cardManagepic}
+                          source={{
+                            uri: item.imageUri1,
+                          }}
+                        />
+                      </Box>
+                      <Box style={{ flexDirection: 'column' }}>
+                        <Title style={styles.cardManageTitle}>
+                          {item.name}
+                        </Title>
+                        <Box style={styles.cardManageDetails}>
+                          <AntDesign
+                            name="clockcircleo"
+                            size={15}
+                            style={{ justifyContent: 'center' }}
                           />
+                          <Text style={styles.cardManageText}>
+                            {'   開始 ：'}
+                            {item.startTimeInNum}
+                          </Text>
                         </Box>
-                        <Box style={{ flexDirection: 'column' }}>
-                          <Title style={styles.cardManageTitle}>
-                            {item.name}
-                          </Title>
-                          <Box style={styles.cardManageDetails}>
-                            <AntDesign
-                              name="clockcircleo"
-                              size={15}
-                              style={{ justifyContent: 'center' }}
-                            />
-                            <Text style={styles.cardManageText}>
-                              {'   開始 ：'}
-                              {item.startTimeInNum}
-                            </Text>
-                          </Box>
-                          <Box style={styles.cardManageLocation}>
-                            <Ionicons
-                              name="location-outline"
-                              size={17}
-                              color="black"
-                            />
-                            <Text style={styles.cardManageTextLocation}>
-                              {'  '}
-                              {item.place}
-                            </Text>
-                          </Box>
-                          <Box style={styles.cardManageDetails}>
-                            <Feather
-                              name="users"
-                              size={16}
-                              color="black"
-                            />
-                            {item.limitNum !== '0' && (
+                        <Box style={styles.cardManageLocation}>
+                          <Ionicons
+                            name="location-outline"
+                            size={17}
+                            color="black"
+                          />
+                          <Text style={styles.cardManageTextLocation}>
+                            {'  '}
+                            {item.place}
+                          </Text>
+                        </Box>
+                        <Box style={styles.cardManageDetails}>
+                          <Feather
+                            name="users"
+                            size={16}
+                            color="black"
+                          />
+                          {item.limitNum !== '0' && (
                             <Text style={styles.cardManageText}>
                               {'   '}
                               {item.num}
@@ -308,83 +298,30 @@ function Personal({ navigation }) {
                               {item.limitNum}
                               人
                             </Text>
-                            )}
-                            {item.limitNum === '0' && (
+                          )}
+                          {item.limitNum === '0' && (
                             <Text style={styles.cardManageText}>
                               {'   '}
                               {item.num}
                               &ensp;
                               (無上限)
                             </Text>
-                            )}
+                          )}
 
-                          </Box>
                         </Box>
                       </Box>
-                    </Card.Content>
-                  </Card>
-                </Box>
-              )}
-            />
-          )}
-          {isPress === '參加中' && (
-            <FlatList
-              style={{ widht: '100%' }}
-              numColumns={2}
-              data={showNow}
-              keyExtractor={(item) => item.id}
-              showsVerticalScrollIndicator={false}
-              contentContainerStyle={{ marginLeft: Dimensions.get('window').width * 0.043, justifyContent: 'space-between' }}
-              refreshControl={(
-                <RefreshControl
-                  refreshing={refreshing}
-                  onRefresh={onRefresh}
-                />
-              )}
-              renderItem={({ item }) => (
-                <Pressable onPress={() => { navigation.navigate('details', { Cd: item.id, prepage: 'personal' }); }}>
-                  <VStack style={styles.CardInPersonal}>
-                    <Image
-                      style={styles.pic}
-                      source={{
-                        uri: item.imageUri1,
-                      }}
-                    />
-                    <Title style={styles.CardTitle}>
-                      {item.name}
-                    </Title>
-                    <Box style={styles.CardStartTime}>
-                      <AntDesign
-                        name="clockcircleo"
-                        size={12}
-                        color="rgba(40, 82, 122, 0.65)"
-                      />
-                      <Text style={styles.CardTimeText}>
-                        {'   '}
-                        {item.startTimeWeekday}
-                      </Text>
                     </Box>
-                    <Box style={styles.CardPlace}>
-                      <Ionicons
-                        name="location-outline"
-                        size={15}
-                        color="rgba(40, 82, 122, 0.65)"
-                      />
-                      <Text style={styles.cardPlaceText}>
-                        {'  '}
-                        {item.place}
-                      </Text>
-                    </Box>
-                  </VStack>
-                </Pressable>
-              )}
-            />
-          )}
-          {isPress === '已結束' && (
+                  </Card.Content>
+                </Card>
+              </Box>
+            )}
+          />
+        )}
+        {isPress === '參加中' && (
           <FlatList
             style={{ widht: '100%' }}
             numColumns={2}
-            data={showEnd}
+            data={showNow}
             keyExtractor={(item) => item.id}
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{ marginLeft: Dimensions.get('window').width * 0.043, justifyContent: 'space-between' }}
@@ -393,7 +330,7 @@ function Personal({ navigation }) {
                 refreshing={refreshing}
                 onRefresh={onRefresh}
               />
-              )}
+            )}
             renderItem={({ item }) => (
               <Pressable onPress={() => { navigation.navigate('details', { Cd: item.id, prepage: 'personal' }); }}>
                 <VStack style={styles.CardInPersonal}>
@@ -432,9 +369,62 @@ function Personal({ navigation }) {
               </Pressable>
             )}
           />
-          )}
-        </Box>
-      
+        )}
+        {isPress === '已結束' && (
+          <FlatList
+            style={{ widht: '100%' }}
+            numColumns={2}
+            data={showEnd}
+            keyExtractor={(item) => item.id}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{ marginLeft: Dimensions.get('window').width * 0.043, justifyContent: 'space-between' }}
+            refreshControl={(
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+              />
+            )}
+            renderItem={({ item }) => (
+              <Pressable onPress={() => { navigation.navigate('details', { Cd: item.id, prepage: 'personal' }); }}>
+                <VStack style={styles.CardInPersonal}>
+                  <Image
+                    style={styles.pic}
+                    source={{
+                      uri: item.imageUri1,
+                    }}
+                  />
+                  <Title style={styles.CardTitle}>
+                    {item.name}
+                  </Title>
+                  <Box style={styles.CardStartTime}>
+                    <AntDesign
+                      name="clockcircleo"
+                      size={12}
+                      color="rgba(40, 82, 122, 0.65)"
+                    />
+                    <Text style={styles.CardTimeText}>
+                      {'   '}
+                      {item.startTimeWeekday}
+                    </Text>
+                  </Box>
+                  <Box style={styles.CardPlace}>
+                    <Ionicons
+                      name="location-outline"
+                      size={15}
+                      color="rgba(40, 82, 122, 0.65)"
+                    />
+                    <Text style={styles.cardPlaceText}>
+                      {'  '}
+                      {item.place}
+                    </Text>
+                  </Box>
+                </VStack>
+              </Pressable>
+            )}
+          />
+        )}
+      </Box>
+
     </SafeAreaView>
   );
 }

@@ -78,8 +78,8 @@ export default StyleSheet.create({
     borderRadius: 10,
     shadowColor: 'black',
     shadowOffset: {
-      width: 0,
-      height: -4,
+      width: +1,
+      height: 2,
     },
     elevation: 4,
     backgroundColor: 'white',

@@ -13,10 +13,75 @@ import {
 import styles from './style_folder/Styles_search';
 import ActiveController from '../../controller/Active';
 
+const CategoryItem = ({ item, navigation }) => {
+  return (
+    <Box
+      flex={1} space={2} my={3} mx={2} height="130px"
+      bg={{
+        linearGradient: {
+          colors: ['#D2E6EA26', '#0A6B7E26'],
+          start: [0, 0],
+          end: [1, 1]
+        }
+      }}
+      rounded="xl"
+
+    >
+      <Pressable
+        onPress={() => {
+          navigation.navigate('genre', { GenreName: item.name });
+        }}
+      >
+
+        <ZStack height="100%" alignItems="center" justifyContent="center">
+          {(item.name === '揪人共乘') && (
+            <FontAwesome name="taxi" size={80} color="#ccc8c8" />
+          )}
+          {(item.name === '揪人運動') && (
+            <MaterialIcons name="sports-volleyball" size={100} color="#ccc8c8" />
+          )}
+          {(item.name === '揪人遊戲') && (
+            <Ionicons name="ios-game-controller" size={100} color="#ccc8c8" />
+          )}
+          {(item.name === '校園活動') && (
+            <FontAwesome5 name="school" size={80} color="#ccc8c8" />
+          )}
+          {(item.name === '社團活動') && (
+            <MaterialCommunityIcons name="drama-masks" size={100} color="#ccc8c8" />
+          )}
+          {(item.name === '系上活動') && (
+            <FontAwesome5 name="trophy" size={80} color="#ccc8c8" />
+          )}
+          <Text textAlign="center">
+            {item.name}
+          </Text>
+
+        </ZStack>
+
+      </Pressable>
+    </Box>)
+}
+const CategoryList = ({ navigation }) => {
+
+  const renderItem = ({ item }) => (
+    <CategoryItem item={item} navigation={navigation} />
+  );
+  const genreName = [{ id: 0, name: '揪人共乘' }, { id: 1, name: '校園活動' }, { id: 2, name: '揪人運動' }, { id: 3, name: '系上活動' }, { id: 4, name: '揪人遊戲' }, { id: 5, name: '社團活動' }];
+
+  return (
+    <FlatList
+      numColumns={2}
+      data={genreName}
+      keyExtractor={(item) => item.id}
+      showsVerticalScrollIndicator={false}
+      renderItem={renderItem}
+    />
+  )
+}
 
 
 function Search({ navigation }) {
-  const genreName = [{ id: 0, name: '揪人共乘' }, { id: 1, name: '校園活動' }, { id: 2, name: '揪人運動' }, { id: 3, name: '系上活動' }, { id: 4, name: '揪人遊戲' }, { id: 5, name: '社團活動' }];
+
   const [searchQuery, setSearchQuery] = useState('');
   const [data, setData] = useState({});
   useEffect(() => {
@@ -50,63 +115,7 @@ function Search({ navigation }) {
 
       {searchQuery === '' && (
         <Box style={styles.btnArea}>
-          <FlatList
-            numColumns={2}
-            data={genreName}
-            keyExtractor={(item) => item.id}
-            showsVerticalScrollIndicator={false}
-
-            // columnWrapperStyle={{ justifyContent: 'space-between' }}
-            // contentContainerStyle={{ paddingBottom: 80 }}
-
-            renderItem={({ item }) => (
-              <Box
-              flex={1} space={2} my={3} mx={2} height="130px"
-                bg={{
-                  linearGradient: {
-                    colors: ['#D2E6EA26', '#0A6B7E26'],
-                    start: [0, 0],
-                    end: [1, 1]
-                  }
-                }}
-                rounded="xl"
-                
-              >
-                <Pressable
-                  onPress={() => {
-                    navigation.navigate('genre', { GenreName: item.name });
-                  }}
-                >
-                  
-                  <ZStack height="100%" alignItems="center" justifyContent="center">
-                    {(item.name === '揪人共乘') && (
-                        <FontAwesome name="taxi" size={80} color="#ccc8c8"/>
-                    )}
-                    {(item.name === '揪人運動') && (
-                        <MaterialIcons name="sports-volleyball" size={100} color="#ccc8c8"/>
-                    )}
-                    {(item.name === '揪人遊戲') && (
-                        <Ionicons name="ios-game-controller" size={100} color="#ccc8c8"/>
-                    )}
-                    {(item.name === '校園活動') && (
-                        <FontAwesome5 name="school" size={80} color="#ccc8c8"/>
-                    )}
-                    {(item.name === '社團活動') && (
-                        <MaterialCommunityIcons name="drama-masks" size={100} color="#ccc8c8"/>
-                    )}
-                    {(item.name === '系上活動') && (
-                        <FontAwesome5 name="trophy" size={80} color="#ccc8c8"/>
-                    )}
-                    <Text textAlign="center">
-                      {item.name}
-                    </Text>
-                
-                  </ZStack>
-                  
-                </Pressable>
-              </Box>
-          )}
-          />
+          <CategoryList navigation={navigation} />
         </Box>
       )}
       {searchQuery !== '' && (

@@ -55,7 +55,6 @@ export default StyleSheet.create({
   },
   btnArea: {
     marginTop: 35,
-    justifyContent: 'flex-start',
     marginHorizontal: Dimensions.get('window').width * 0.04,
   },
   icon: {

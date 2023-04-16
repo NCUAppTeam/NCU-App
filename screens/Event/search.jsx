@@ -7,7 +7,7 @@ import {
   Ionicons, FontAwesome5, FontAwesome, AntDesign, MaterialCommunityIcons, MaterialIcons,
 } from '@expo/vector-icons';
 import {
-  NativeBaseProvider, Box, HStack, VStack, ZStack, FlatList, Pressable, Icon, Input, Center, Text
+  NativeBaseProvider, Box, HStack, VStack, ZStack, FlatList, Pressable, Icon, Input, Center, Text, Flex
 } from 'native-base';
 
 import styles from './style_folder/Styles_search';
@@ -93,52 +93,52 @@ function Search({ navigation }) {
     });
   }, []);
   return (
-    <Box safeArea>
-      <Center>
-        <Input placeholder="搜尋" size="lg" m="2" mt="4" variant="filled" width="90%" height="40px" borderRadius="10" bg="#E5EBF1" py="1" px="2"
-          InputLeftElement={<Icon ml="2" size="6" as={AntDesign} name="search1" color="#476685" ></Icon>}
-          isFocused="true"
-          value={searchQuery}
-          onChangeText={(text) => {
-            setSearchQuery(text);
-            ActiveController.fuseSearchName(text).then((query) => {
-              setData(query);
-            });
-          }}
-          _focus={{ backgroundColor: "#E5EBF1" }}
+    <Box safeArea flex={1} flexGrow={1}>
+      
+        <Center>
+          <Input placeholder="搜尋" size="lg" m="2" mt="4" variant="filled" width="90%" height="40px" borderRadius="10" bg="#E5EBF1" py="1" px="2"
+            InputLeftElement={<Icon ml="2" size="6" as={AntDesign} name="search1" color="#476685" ></Icon>}
+            value={searchQuery}
+            onChangeText={(text) => {
+              setSearchQuery(text);
+              ActiveController.fuseSearchName(text).then((query) => {
+                setData(query);
+              });
+            }}
+            _focus={{ backgroundColor: "#E5EBF1" }}
 
-          InputRightElement={
-            <Text mr="4" color="#476685" onPress={() => navigation.navigate('list')}>取消</Text>
-          }
-        />
-      </Center>
-
-      {searchQuery === '' && (
-        <Box style={styles.btnArea}>
-          <CategoryList navigation={navigation} />
-        </Box>
-      )}
-      {searchQuery !== '' && (
-        <Box style={styles.keywordArea}>
-          <FlatList
-            data={data}
-            keyExtractor={(item) => item.id}
-            showsVerticalScrollIndicator={false}
-            renderItem={({ item }) => (
-              <Box>
-                <Pressable
-                  style={styles.keywordBox}
-                  onPress={() => {
-                    navigation.navigate('details', { Cd: item.item.id, prepage: 'search' });
-                  }}
-                >
-                  <Text style={styles.keywordBoxText}>{item.item.name}</Text>
-                </Pressable>
-              </Box>
-            )}
+            InputRightElement={
+              <Text mr="4" color="#476685" onPress={() => navigation.navigate('list')}>取消</Text>
+            }
           />
-        </Box>
-      )}
+        </Center>
+
+        {searchQuery === '' && (
+          <Box style={styles.btnArea} flex={1}>
+            <CategoryList navigation={navigation} />
+          </Box>
+        )}
+        {searchQuery !== '' && (
+          <Box style={styles.keywordArea}>
+            <FlatList
+              data={data}
+              keyExtractor={(item) => item.id}
+              showsVerticalScrollIndicator={false}
+              renderItem={({ item }) => (
+                <Box>
+                  <Pressable
+                    style={styles.keywordBox}
+                    onPress={() => {
+                      navigation.navigate('details', { Cd: item.item.id, prepage: 'search' });
+                    }}
+                  >
+                    <Text style={styles.keywordBoxText}>{item.item.name}</Text>
+                  </Pressable>
+                </Box>
+              )}
+            />
+          </Box>
+        )}
 
 
     </Box>

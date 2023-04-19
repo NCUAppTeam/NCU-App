@@ -17,6 +17,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import * as ImagePicker from 'expo-image-picker';
 import styles from './style_folder/Styles_editActivity';
 import ActiveController from '../../controller/Active';
+import { BaseTheme } from '../../theme';
 
 function Edit({ route, navigation }) {
   const Cd = route.params;
@@ -251,7 +252,7 @@ function Edit({ route, navigation }) {
     <Provider>
       <ScrollView showsVerticalScrollIndicator={false}>
         <SafeAreaView style={styles.container}>
-          <NativeBaseProvider>
+          
             <View style={{ flex: 0.1, flexDirection: 'column' }}>
               <View style={{ flexDirection: 'row' }}>
                 <Box style={{
@@ -261,7 +262,7 @@ function Edit({ route, navigation }) {
                   <AntDesign
                     name="arrowleft"
                     size={28}
-                    color="#28527A"
+                    color="#476685"
                     style={{ justifyContent: 'center' }}
                     onPress={() => {
                       Alert.alert(
@@ -297,7 +298,7 @@ function Edit({ route, navigation }) {
                   <TouchableHighlight
                     key={value}
                     activeOpacity={0.5} // 不透明度
-                    underlayColor="#28527A" // 切換時候的顏色
+                    underlayColor="#476685" // 切換時候的顏色
                     onPress={() => {
                       setIsPress(value);
                       setgenreID(values.indexOf(value));
@@ -703,7 +704,7 @@ function Edit({ route, navigation }) {
               {(genre === true && name === true && start === true && end === true
                   && limitNum === true && place === true && detail === true) ? (
                     <LinearGradient
-                      colors={['#28527A', '#1784B2']}
+                      colors={['#476685', '#1784B2']}
                       start={[0, 0]}
                       end={[1, 0]}
                       style={styles.sentButton}
@@ -841,7 +842,7 @@ function Edit({ route, navigation }) {
               </Dialog>
             </Portal>
             )}
-          </NativeBaseProvider>
+          
         </SafeAreaView>
       </ScrollView>
     </Provider>

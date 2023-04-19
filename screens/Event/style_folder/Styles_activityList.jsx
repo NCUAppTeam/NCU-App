@@ -35,17 +35,16 @@ export default StyleSheet.create({
   },
   searchtext: {
     paddingTop: 6,
-    color: '#28527A',
+    color: '#476685',
     fontSize: 18,
   },
   comment: {
-    alignSelf: 'center',
-    marginLeft: Dimensions.get('window').width * 0.05,
-    marginTop: 0,
+    // alignSelf: 'center',
+    // marginLeft: Dimensions.get('window').width * 0.05,
   },
   user: {
     alignSelf: 'center',
-    marginHorizontal: Dimensions.get('window').width * 0.03,
+    // marginHorizontal: Dimensions.get('window').width * 0.03,
   },
   body: {
     flex: 2,
@@ -62,12 +61,12 @@ export default StyleSheet.create({
   },
   title: {
     flex: 10,
-    color: '#28527a',
+    color: '#476685',
     fontSize: 18,
   },
   showMore: {
     marginRight: Dimensions.get('window').width * 0.002,
-    color: '#28527a',
+    color: '#476685',
     fontSize: 12,
     alignSelf: 'center',
   },
@@ -78,8 +77,8 @@ export default StyleSheet.create({
     borderRadius: 10,
     shadowColor: 'black',
     shadowOffset: {
-      width: 0,
-      height: -4,
+      width: +1,
+      height: 2,
     },
     elevation: 4,
     backgroundColor: 'white',
@@ -89,7 +88,7 @@ export default StyleSheet.create({
   CardTitle: {
     textAlign: 'center',
     justifyContent: 'center',
-    color: '#28527A',
+    color: '#476685',
     marginTop: -5,
     fontSize: 14,
   },

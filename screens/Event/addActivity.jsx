@@ -17,6 +17,7 @@ import {
 import * as ImagePicker from 'expo-image-picker';
 import styles from './style_folder/Styles_addActivity';
 import ActiveController from '../../controller/Active';
+import { BaseTheme } from '../../theme';
 
 function Add({ navigation }) {
   const [data, setData] = useState({
@@ -221,7 +222,7 @@ function Add({ navigation }) {
     <Provider>
       <ScrollView showsVerticalScrollIndicator={false}>
         <SafeAreaView style={styles.container}>
-          <NativeBaseProvider>
+          
             <View style={{ flex: 0.1, flexDirection: 'column' }}>
               <View style={{
                 flexDirection: 'row',
@@ -235,7 +236,7 @@ function Add({ navigation }) {
                   <AntDesign
                     name="arrowleft"
                     size={28}
-                    color="#28527A"
+                    color="#476685"
                     style={{ justifyContent: 'center' }}
                     onPress={() => { navigation.navigate('personal'); }}
                   />
@@ -258,7 +259,7 @@ function Add({ navigation }) {
                   <TouchableHighlight
                     key={value}
                     activeOpacity={0.5} // 不透明度
-                    underlayColor="#28527A" // 切換時候的顏色
+                    underlayColor="#476685" // 切換時候的顏色
                     onPress={() => {
                       setIsPress(value);
                       setData({ ...data, genre: value });
@@ -655,7 +656,7 @@ function Add({ navigation }) {
               {(genre === true && name === true && start === true && end === true
                   && limitNum === true && place === true && detail === true) ? (
                     <LinearGradient
-                      colors={['#28527A', '#1784B2']}
+                      colors={['#476685', '#1784B2']}
                       start={[0, 0]}
                       end={[1, 0]}
                       style={styles.sentButton}
@@ -785,7 +786,7 @@ function Add({ navigation }) {
               </Dialog>
             </Portal>
             )}
-          </NativeBaseProvider>
+          
         </SafeAreaView>
       </ScrollView>
     </Provider>

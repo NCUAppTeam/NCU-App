@@ -42,7 +42,7 @@ function EventStack() {
       <Stack.Screen name="personal" component={Personal} />
       <Stack.Screen name="manage" component={Manage} />
       <Stack.Screen name="details" component={Detailscreen} />
-      <Stack.Screen name="search" component={Search} />
+      <Stack.Screen name="search" options={{animation: 'none'}} component={Search} />
       <Stack.Screen name="message" component={Message} />
       <Stack.Screen name="send" component={Send} />
       <Stack.Screen name="genre" component={Genre} />

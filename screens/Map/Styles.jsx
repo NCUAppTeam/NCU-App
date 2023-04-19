@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-const colorDarkBlue = '#28527A';
+const colorDarkBlue = '#476685';
 
 export default StyleSheet.create({
   background: {
@@ -47,7 +47,7 @@ export default StyleSheet.create({
     padding: 10,
     width: '85%',
     fontSize: 18,
-    color: '#28527A',
+    color: '#476685',
   },
 });
 

@@ -20,6 +20,7 @@ import { onSnapshot, collection, getFirestore } from 'firebase/firestore';
 import styles from './style_folder/Styles_Message';
 import MessageController from '../../controller/Message';
 import UserController from '../../controller/getStudentId';
+import { BaseTheme } from '../../theme';
 
 function Send({ route, navigation }) {
   const scrollview = useRef();
@@ -120,9 +121,9 @@ function Send({ route, navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <NativeBaseProvider>
+      
         <LinearGradient
-          colors={['#1784B2', '#28527A']}
+          colors={['#1784B2', '#476685']}
           start={[1, 2]}
           end={[1, 0]}
         >
@@ -410,7 +411,7 @@ function Send({ route, navigation }) {
               <FontAwesome5
                 name="image"
                 size={26}
-                color="#28527A"
+                color="#476685"
                 onPress={pickImage}
               />
             </Box>
@@ -432,7 +433,7 @@ function Send({ route, navigation }) {
               <Octicons
                 name="paper-airplane"
                 size={26}
-                color="#28527A"
+                color="#476685"
                 onPress={() => {
                   if (data.data !== '') {
                     data.sendTime = new Date();
@@ -445,7 +446,7 @@ function Send({ route, navigation }) {
             </Box>
           </Box>
         </Box>
-      </NativeBaseProvider>
+      
     </SafeAreaView>
   );
 }

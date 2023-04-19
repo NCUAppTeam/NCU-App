@@ -3,7 +3,7 @@ import {
   getFirestore, getDoc, doc,
 } from 'firebase/firestore';
 
-import { getAuth } from 'firebase/auth';
+import { auth } from '../config';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyA8GH6yj1i4gJM0H_ZTsurYG3Dqn4-nIS8',
@@ -34,7 +34,6 @@ async function getINFO(UID) {
 }
 
 function getUid() {
-  const auth = getAuth();
   const user = auth.currentUser;
   const { uid } = user;
 

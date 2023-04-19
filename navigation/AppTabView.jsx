@@ -55,15 +55,15 @@ function CustomTabBar({ state, descriptors, navigation }) {
 
         return (
 
-          <Pressable py="2" flex={1} onPress={onPress} bg={isFocused ? '#28527A' : '#E5EBF1'}>
+          <Pressable py="2" flex={1} onPress={onPress} bg={isFocused ? '#476685' : '#E5EBF1'}>
             <Center>
               <Icon
                 as={label === '活動' ? Ionicons : MaterialCommunityIcons}
                 name={icon_name[label]}
-                color={isFocused ? '#E5EBF1' : '#28527A'}
+                color={isFocused ? '#E5EBF1' : '#476685'}
                 size="sm"
               />
-              <Text color={isFocused ? '#E5EBF1' : '#28527A'} fontSize="12">
+              <Text color={isFocused ? '#E5EBF1' : '#476685'} fontSize="12">
                 {label}
               </Text>
             </Center>
@@ -89,6 +89,6 @@ export const AppTabView = () => {
       <Tab.Screen name="行事曆" component={CalendarScreen} />
       <Tab.Screen name="活動" component={EventScreen} />
       <Tab.Screen name="地圖" component={MapScreen} />
-        </Tab.Navigator>
+    </Tab.Navigator>
   );
 };

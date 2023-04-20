@@ -3,7 +3,7 @@
 /* eslint-disable max-len */
 /* eslint-disable no-loop-func */
 /* eslint-disable no-await-in-loop */
-import { initializeApp } from 'firebase/app';
+import { getApp } from 'firebase/app';
 import {
   getFirestore, collection, query, getDoc, getDocs, addDoc,
   setDoc, doc, orderBy, where, deleteDoc, deleteField, updateDoc,
@@ -93,15 +93,7 @@ function dateToWeekday(t) {
   return check;
 }
 
-const firebaseConfig = {
-  apiKey: 'AIzaSyA8GH6yj1i4gJM0H_ZTsurYG3Dqn4-nIS8',
-  authDomain: 'ncu-app-test.firebaseapp.com',
-  projectId: 'ncu-app-test',
-  storageBucket: 'ncu-app-test.appspot.com',
-  messagingSenderId: '739839700130',
-  appId: '1:739839700130:web:37591d0118a440488cfbfb',
-};
-const app = initializeApp(firebaseConfig);
+const app = getApp();
 const storage = getStorage();
 
 /**
@@ -619,7 +611,6 @@ async function getAllAttendees(docID) {
       }
     });
   }
-  console.log(IDlist);
   for (let j = 0; j < IDlist.length; j += 1) {
     const infoDoc = doc(db, `attendees/${IDlist[j]}`);
     const querySnapshot2 = await getDoc(infoDoc);
@@ -795,7 +786,6 @@ async function getHostinAdd() {
 }
 
 export default {
-  firebaseConfig,
   toDateString,
   addActive,
   updateActive,

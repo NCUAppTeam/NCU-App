@@ -189,7 +189,7 @@ export default StyleSheet.create({
     marginVertical: 5,
     fontWeight: '400',
     fontSize: 14,
-    color: '#28527A',
+    color: '#476685',
   },
   unsentTitle: {
     marginTop: 17,

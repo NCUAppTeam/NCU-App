@@ -25,7 +25,7 @@ export default StyleSheet.create({
   },
   name: {
     fontSize: 24,
-    color: '#28527A',
+    color: '#476685',
   },
   headerCommentView: {
     flex: 1,
@@ -69,7 +69,7 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignContent: 'center',
     alignItems: 'center',
-    color: '#28527A',
+    color: '#476685',
     fontSize: 14,
   },
   CardStartTime: {

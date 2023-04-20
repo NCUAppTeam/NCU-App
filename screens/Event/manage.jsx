@@ -15,6 +15,7 @@ import ActiveController from '../../controller/Active';
 import MessageController from '../../controller/Message';
 import UserController from '../../controller/getStudentId';
 import styles from './style_folder/Styles_manage';
+import { BaseTheme } from '../../theme';
 
 function Manage({ route, navigation }) {
   const [user, setUser] = useState('');
@@ -70,13 +71,13 @@ function Manage({ route, navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <NativeBaseProvider>
+      
         <Box style={styles.headerContainer}>
           <Box style={styles.headerArrowBox}>
             <AntDesign
               name="arrowleft"
               size={28}
-              color="#28527A"
+              color="#476685"
               style={{ justifyContent: 'center' }}
               onPress={() => { navigation.navigate('personal'); }}
             />
@@ -90,7 +91,7 @@ function Manage({ route, navigation }) {
             <Feather
               name="trash-2"
               size={25}
-              color="#28527A"
+              color="#476685"
               onPress={() => {
                 setShowDialog1(true);
               }}
@@ -216,7 +217,7 @@ function Manage({ route, navigation }) {
             <Feather
               name="edit"
               size={24}
-              color="#28527A"
+              color="#476685"
               onPress={() => {
                 navigation.navigate('edit', { Cd: passedID });
               }}
@@ -241,7 +242,7 @@ function Manage({ route, navigation }) {
                   selectionColor="#ccc"
                 />
                 <LinearGradient
-                  colors={['#1784B2', '#1D74A0', '#28527A']}
+                  colors={['#1784B2', '#1D74A0', '#476685']}
                   start={[0.6497, 0.9972]}
                   end={[0.1203, 0.6497]}
                   style={styles.manageSendMessagebtn}
@@ -374,7 +375,7 @@ function Manage({ route, navigation }) {
                           height={240}
                           visible={showDialog2}
                           dialogTitle={(
-                            <NativeBaseProvider>
+                            <Box>
                               <HStack style={{
                                 flexDirection: 'row',
                                 paddingBottom: 5,
@@ -502,7 +503,7 @@ function Manage({ route, navigation }) {
                                   </HStack>
                                 </Box>
                               </Box>
-                            </NativeBaseProvider>
+                            </Box>
                           )}
                           onTouchOutside={() => {
                             setShowDialog2(false);
@@ -534,7 +535,7 @@ function Manage({ route, navigation }) {
             />
           </Box>
         </Box>
-      </NativeBaseProvider>
+      
     </SafeAreaView>
   );
 }

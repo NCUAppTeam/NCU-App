@@ -30,7 +30,7 @@ export default StyleSheet.create({
     height: 36,
   },
   SearchBar: {
-    backgroundColor: '#E5EBF1',
+    // backgroundColor: '#E5EBF1',
     borderRadius: 18,
     width: Dimensions.get('window').width * 0.77,
     height: 36,
@@ -49,14 +49,12 @@ export default StyleSheet.create({
     flex: 1,
   },
   cancelText: {
-    color: '#28527A',
+    
     fontWeight: '400',
     fontSize: 17,
-    marginTop: 6,
   },
   btnArea: {
     marginTop: 35,
-    justifyContent: 'flex-start',
     marginHorizontal: Dimensions.get('window').width * 0.04,
   },
   icon: {

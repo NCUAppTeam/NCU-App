@@ -5,15 +5,15 @@ import { AuthScreen } from '../screens/Auth/Login';
 
 const Stack = createStackNavigator();
 
-export const AuthStack = () => {
+export function AuthStack() {
   return (
     <Stack.Navigator
-      initialRouteName='Login'
+      initialRouteName="Login"
       screenOptions={{ headerShown: false }}
     >
-      <Stack.Screen name='Login' component={AuthScreen} />
+      <Stack.Screen name="Login" component={AuthScreen} />
       {/* <Stack.Screen name='Signup' component={SignupScreen} />
       <Stack.Screen name='ForgotPassword' component={ForgotPasswordScreen} /> */}
     </Stack.Navigator>
   );
-};
+}

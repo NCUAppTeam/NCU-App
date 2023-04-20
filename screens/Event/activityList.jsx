@@ -7,32 +7,24 @@ import {
   Title, Card,
 } from 'react-native-paper';
 import {
-  Ionicons, FontAwesome5, AntDesign, Feather, Octicons,
+  Ionicons, AntDesign,
 } from '@expo/vector-icons';
 import {
-  NativeBaseProvider, Box, Divider, ZStack, HStack, Button, Center, Text, Input, Icon
+  Box, Divider, HStack, Text,
 } from 'native-base';
 import { getAuth, signOut } from 'firebase/auth';
 import styles from './style_folder/Styles_activityList';
 import ActiveController from '../../controller/Active';
-import MessageController from '../../controller/Message';
-import UserController from '../../controller/getStudentId';
+import { SearchHeader } from './components/SearchHeader';
 
 function List({ navigation }) {
   const auth = getAuth();
-  const [Messagenum, setMessageNum] = useState(0);
   const [active1, setActive1] = useState([]);
   const [active2, setActive2] = useState([]);
-
+  const SearchBarHeader = () => SearchHeader({ navigation });
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = () => {
     setRefreshing(true);
-    const userid = UserController.getUid();
-    MessageController.countUnreadMessage(userid).then((num) => {
-      setMessageNum(num);
-    }).catch((err) => {
-      throw err;
-    });
     ActiveController.getHangOutActive().then((res) => {
       setActive1(res);
     }).then().catch((err) => {
@@ -52,63 +44,9 @@ function List({ navigation }) {
     });
     return focusHandler;
   }, [navigation]);
-
-  const SearchBarHeader = () => (
-    <Center>
-      <HStack mt="4" m="2" width="90%" alignItems="center" justifyContent="center">
-        <Pressable
-          onPress={() => { navigation.navigate('search'); }}
-          flex={1}
-        >
-          <Center>
-            <Input placeholder="搜尋" size="lg" variant="filled" height="40px" borderRadius="10" bg="#E5EBF1" py="1" px="2"
-              InputLeftElement={<Icon ml="2" size="6" as={AntDesign} name="search1" color="#476685" ></Icon>}
-              pointerEvents="none"
-            />
-          </Center>
-        </Pressable>
-        <Pressable
-          onPress={() => { navigation.navigate('message', { prepage: 'list' }); }}
-        >
-          <Center>
-            <ZStack size={25} ml={3} alignItems="center" justifyContent="center">
-              <Box>
-                <Octicons name="dot-fill" size={16} color={Messagenum !== 0 ? '#EB6F6F' : 'transparent'}
-                  style={{
-                    transform: [{ translateX: 10}, {translateY: -10 }]
-                  }}
-                />
-              </Box>
-              <Box>
-                <FontAwesome5
-                  name="comment"
-                  size={25}
-                  color="#476685"
-                // style={styles.comment}
-                />
-              </Box>
-
-              {/* // 要記得變0 */}
-            </ZStack>
-          </Center>
-        </Pressable>
-        <Pressable
-          onPress={() => { navigation.navigate('personal'); }}
-
-        >
-          <Box size={26} mx={3}>
-            <Feather name="user" size={26} color="#476685"
-            />
-          </Box>
-        </Pressable>
-      </HStack>
-      </Center>
-  );
-
   return (
     <SafeAreaView style={styles.container}>
-      <SearchBarHeader/>
-
+      <SearchBarHeader />
 
       <Box style={styles.body}>
         <ScrollView
@@ -281,7 +219,7 @@ function List({ navigation }) {
                 // Sign-out successful.
                 console.log('Sign-out successful.');
               }).catch((error) => {
-                // An error happened.
+                throw error;
               });
             }}
           >

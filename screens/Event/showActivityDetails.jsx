@@ -82,7 +82,7 @@ function Detailscreen({ route, navigation }) {
     }
   };
   return (
-    <SafeAreaView style={styles.showActivityDetails_container} linking={linking}>
+    <SafeAreaView style={styles.showActivityDetails_container}>
 
       {active.map(({ genre }) => (
         <Box style={styles.headerContainer}>
@@ -215,100 +215,100 @@ function Detailscreen({ route, navigation }) {
                     dialogTitle={(
                       <Box>
                         <Box>
+                          <Text style={{
+                            textAlign: 'center', color: '#71717A', fontSize: 24, fontWeight: '400', marginTop: 30,
+                          }}
+                          >
+                            分享活動
+                          </Text>
+                        </Box>
+                        <Box style={styles.shareBox}>
+                          <Fontisto
+                            name="link"
+                            size={25}
+                            color="#476685"
+                            onPress={() => {
+                              console.log('Link Copied');
+                              setShowDialog(false);
+                            }}
+                          >
                             <Text style={{
-                              textAlign: 'center', color: '#71717A', fontSize: 24, fontWeight: '400', marginTop: 30,
+                              color: '#1f2937', fontSize: 20, fontWeight: '300',
                             }}
                             >
-                              分享活動
+                              {activeUrl || 'still processing...'}
                             </Text>
-                          </Box>
-                        <Box style={styles.shareBox}>
-                            <Fontisto
-                              name="link"
-                              size={25}
-                              color="#476685"
-                              onPress={() => {
-                                console.log('Link Copied');
-                                setShowDialog(false);
-                              }}
+                          </Fontisto>
+                          <Box style={{ marginVertical: 20 }} />
+                          <FontAwesome5
+                            name="facebook"
+                            size={25}
+                            color="#476685"
+                            onPress={() => {
+                              console.log('share to fb');
+                              setShowDialog(false);
+                            }}
+                          >
+                            <Text style={{
+                              color: '#1f2937', fontSize: 20, fontWeight: '400',
+                            }}
                             >
-                              <Text style={{
-                                color: '#1f2937', fontSize: 20, fontWeight: '300',
-                              }}
-                              >
-                                {activeUrl || 'still processing...'}
-                              </Text>
-                            </Fontisto>
-                            <Box style={{ marginVertical: 20 }} />
-                            <FontAwesome5
-                              name="facebook"
-                              size={25}
-                              color="#476685"
-                              onPress={() => {
-                                console.log('share to fb');
-                                setShowDialog(false);
-                              }}
-                            >
-                              <Text style={{
-                                color: '#1f2937', fontSize: 20, fontWeight: '400',
-                              }}
-                              >
                               &ensp;分享到 Facebook
-                              </Text>
-                            </FontAwesome5>
-                            <Box style={{ marginVertical: 20 }} />
-                            <FontAwesome5
-                              name="facebook-messenger"
-                              size={25}
-                              color="#476685"
-                              onPress={() => {
-                                console.log('share to messenger');
-                                setShowDialog(false);
-                              }}
+                            </Text>
+                          </FontAwesome5>
+                          <Box style={{ marginVertical: 20 }} />
+                          <FontAwesome5
+                            name="facebook-messenger"
+                            size={25}
+                            color="#476685"
+                            onPress={() => {
+                              console.log('share to messenger');
+                              setShowDialog(false);
+                            }}
+                          >
+                            <Text style={{
+                              color: '#1f2937', fontSize: 20, fontWeight: '400',
+                            }}
                             >
-                              <Text style={{
-                                color: '#1f2937', fontSize: 20, fontWeight: '400',
-                              }}
-                              >
                               &ensp;分享到 Messenger
-                              </Text>
-                            </FontAwesome5>
-                            <Box style={{ marginVertical: 20 }} />
-                            <FontAwesome5
-                              name="discord"
-                              size={25}
-                              color="#476685"
-                              style={{ marginLeft: 2 }}
-                              onPress={() => {
-                                console.log('share to discord');
-                                setShowDialog(false);
-                              }}
+                            </Text>
+                          </FontAwesome5>
+                          <Box style={{ marginVertical: 20 }} />
+                          <FontAwesome5
+                            name="discord"
+                            size={25}
+                            color="#476685"
+                            style={{ marginLeft: 2 }}
+                            onPress={() => {
+                              console.log('share to discord');
+                              setShowDialog(false);
+                            }}
+                          >
+                            <Text style={{
+                              color: '#1f2937', fontSize: 20, fontWeight: '400',
+                            }}
                             >
-                              <Text style={{
-                                color: '#1f2937', fontSize: 20, fontWeight: '400',
-                              }}
-                              >
                               &ensp;分享到 Discord
-                              </Text>
-                            </FontAwesome5>
-                            <Box style={{ marginVertical: 20 }} />
-                            <Octicons
-                              name="x"
-                              size={28}
-                              color="#476685"
-                              style={{ marginLeft: 5 }}
-                              onPress={() => {
-                                setShowDialog(false);
-                              }}
+                            </Text>
+                          </FontAwesome5>
+                          <Box style={{ marginVertical: 20 }} />
+                          <Octicons
+                            name="x"
+                            size={28}
+                            color="#476685"
+                            style={{ marginLeft: 5 }}
+                            onPress={() => {
+                              setShowDialog(false);
+                            }}
+                          >
+                            <Text style={{
+                              color: '#1f2937', fontSize: 20, fontWeight: '400',
+                            }}
                             >
-                              <Text style={{
-                                color: '#1f2937', fontSize: 20, fontWeight: '400',
-                              }}
-                              >
                               &nbsp;&ensp;取消
-                              </Text>
-                            </Octicons>
-                          </Box>
+                            </Text>
+                          </Octicons>
+                        </Box>
                       </Box>
                     )}
                     onTouchOutside={() => {

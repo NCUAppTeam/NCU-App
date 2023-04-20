@@ -1,12 +1,12 @@
+/* eslint-disable max-len */
 /* eslint-disable no-console */
 /* eslint-disable no-loop-func */
 /* eslint-disable consistent-return */
 /* eslint-disable no-await-in-loop */
 /* eslint-disable prefer-destructuring */
-import { initializeApp } from 'firebase/app';
 import {
   getFirestore, collection, query, getDoc, getDocs,
-  addDoc, doc, deleteDoc, setDoc, onSnapshot,
+  addDoc, doc, deleteDoc, setDoc, onSnapshot, where, orderBy, limit,
 } from 'firebase/firestore';
 import {
   getStorage,
@@ -15,17 +15,10 @@ import {
   uploadBytes,
   deleteObject,
 } from 'firebase/storage';
+import { getApp } from 'firebase/app';
 import UserController from './getStudentId';
 
-const firebaseConfig = {
-  apiKey: 'AIzaSyA8GH6yj1i4gJM0H_ZTsurYG3Dqn4-nIS8',
-  authDomain: 'ncu-app-test.firebaseapp.com',
-  projectId: 'ncu-app-test',
-  storageBucket: 'ncu-app-test.appspot.com',
-  messagingSenderId: '739839700130',
-  appId: '1:739839700130:web:37591d0118a440488cfbfb',
-};
-const app = initializeApp(firebaseConfig);
+const app = getApp();
 const storage = getStorage(app);
 
 function toDateString(time) {
@@ -84,6 +77,8 @@ function imagePos(imageUri) {
 
 async function addMessage(messageData) {
   const chatroomId = messageData.id;
+  const db = getFirestore(app);
+  const messageRef = query(collection(db, `chatroom/${chatroomId}/messages`));
   const item = {
     sender: messageData.sender,
     type: messageData.type,
@@ -105,8 +100,6 @@ async function addMessage(messageData) {
     item.data = messageData.data.trim();
   }
 
-  const db = getFirestore(app);
-  const messageRef = query(collection(db, `chatroom/${chatroomId}/messages`));
   addDoc(messageRef, item).then(() => {
     console.log('message sent successfully!');
   }).catch((error) => {
@@ -114,45 +107,16 @@ async function addMessage(messageData) {
   });
 }
 
-// 獲得某聊天室所有訊息
-async function getRelativeMessage(chatId) {
-  const db = getFirestore(app);
-  const uid = UserController.getUid();
-  const message = [];
-
-  const chatText = await getDocs(collection(db, `chatroom/${chatId}/messages`));
-  chatText.forEach((chat) => {
-    console.log(chat.data().sender !== uid);
-    if (chat.data().sender !== uid) {
-      setDoc(doc(db, `chatroom/${chatId}/messages/${chat.id}`), { read: true }, { merge: true });
-    }
-    message.push({
-      id: chat.id,
-      data: chat.data().data,
-      type: chat.data().type,
-      sendTime: chat.data().sendTime,
-      sender: chat.data().sender,
-    });
-  });
-  message.sort((a, b) => a.sendTime - b.sendTime);
-  return message;
-}
-
 // 獲得使用者各聊天室最新消息
-async function getNewestMessage(chatId) {
+async function getNewestMessage(chatroom) {
   const uid = UserController.getUid();
   const db = getFirestore(app);
-  const message = [];
-  let otherID;
-  let last;
-
-  const chatroom = await getDocs(collection(db, `chatroom/${chatId}/members`));
-
-  chatroom.forEach((person) => {
-    if (person.id !== uid) {
-      otherID = person.id;
-    }
+  let otherID = null;
+  const members = await chatroom.members;
+  members.forEach((id) => {
+    if (uid !== id) otherID = id;
   });
+  let last;
 
   // 獲取other的資料
   const infoDoc = doc(db, `attendees/${otherID}`);
@@ -162,133 +126,54 @@ async function getNewestMessage(chatId) {
     name: querySnapshot.data().name,
   };
 
-  // 獲取所有消息
-  const chatTextRef = query(collection(db, `chatroom/${chatId}/messages`));
-  const chatText = await getDocs(chatTextRef);
-  chatText.forEach((chat) => {
-    // Push bunch of chat messages into array.
+  // 獲取最後一則消息 limit(1)
+  const q = query(collection(db, `chatroom/${chatroom.id}/messages`), orderBy('sendTime', 'desc'), limit(1));
+  (await getDocs(q)).forEach((chat) => {
     if (chat.data() !== null) {
       if (chat.data().type === 'image') {
-        message.push({
+        last = {
           ...attendeeInfo,
-          id: chatId,
-          data: '他傳送了一張照片',
-          type: chat.data().type,
+          id: chatroom.id,
           sendTime: chat.data().sendTime,
           othersUid: otherID,
           sender: chat.data().sender,
           read: chat.data().read,
-        });
+        };
+        if (last.sender === uid) {
+          last.data = '我傳送了一張照片';
+        } else {
+          last.data = '對方傳送了一張照片';
+        }
       } else if (chat.data().type === 'text') {
-        message.push({
+        last = {
           ...attendeeInfo,
-          id: chatId,
+          id: chatroom.id,
           data: chat.data().data,
-          type: chat.data().type,
           sendTime: chat.data().sendTime,
           othersUid: otherID,
           sender: chat.data().sender,
           read: chat.data().read,
-        });
+        };
       }
+    }
+    // sender 是自己 && 對方未已讀 => 需要將read手動設成true(因為read紀錄的是對方是否已讀)
+    if (last.sender === uid && last.read === false) {
+      last.read = true;
     }
   });
 
-  // Sort messages from oldest to newest.
-  message.sort((a, b) => a.sendTime - b.sendTime);
-  // Get the latest message.
-  last = message.pop();
-  if (last !== undefined && last.sender !== otherID) {
-    last.read = true;
-  }
-
-  // if chatroom exist, but no previous message
+  // if chatroom exist, but no previous message, set value of read true
   if (last === undefined) {
     last = {
       ...attendeeInfo,
-      id: chatId,
+      id: chatroom.id,
       data: '',
-      type: '',
       sendTime: '',
       othersUid: otherID,
       read: true,
     };
   }
   return last;
-}
-
-async function Notification(notifymessage, eventID) {
-  const UserStudent = UserController.getUid();
-  const db = getFirestore(app);
-  const infoDocs = await getDocs(collection(db, 'attendees'));
-  const sendList = [];
-
-  // 訊息內容
-  const item = {
-    sender: UserStudent,
-    sendTime: new Date(),
-    data: notifymessage,
-    type: 'text',
-    read: false,
-  };
-
-  // 所有參加者
-  infoDocs.forEach(async (attendee) => {
-    const resultRef = query(collection(db, `attendees/${attendee.id}/attendedEvent`));
-    const result = await getDocs(resultRef);
-    result.forEach((event) => {
-      if (event.id === eventID) {
-        sendList.push(attendee.id);
-      }
-    });
-  });
-
-  // 檢查現有
-  const chatIdList = [];
-  const chatroom = await getDocs(collection(db, 'chatroom'));
-  let count;
-  let existedChat;
-  const addNew = [];
-  let exist = false;
-  chatroom.forEach((c) => {
-    chatIdList.push(c.id);
-  });
-
-  // 傳送消息
-  for (let i = 0; i < sendList.length; i += 1) {
-    for (let j = 0; j < chatIdList.length; j += 1) {
-      count = 0;
-      existedChat = chatIdList[j];
-      const result = await getDocs(collection(db, `chatroom/${existedChat}/members`));
-      result.forEach((r) => {
-        if (r.id === UserStudent || r.id === sendList[i]) {
-          count += 1;
-        }
-      });
-      if (count === 2) {
-        console.log(existedChat);
-        addDoc(collection(db, `chatroom/${existedChat}/messages`), item, { merge: true });
-        exist = true;
-        break;
-      }
-    }
-    if (exist === false) {
-      addNew.push(sendList[i]);
-    }
-  }
-  const add = [...new Set(addNew)];
-
-  // 全部檢查完沒有的話
-  for (let k = 0; k < add.length; k += 1) {
-    const newRef = doc(collection(db, 'chatroom'));
-    const snapshot = await getDoc(newRef);
-    setDoc(doc(db, `chatroom/${snapshot.id}/members/${UserStudent}`), {}, { merge: true });
-    setDoc(doc(db, `chatroom/${snapshot.id}/members/${add[k]}`), {}, { merge: true });
-    setDoc(doc(db, `chatroom/${snapshot.id}`), {}, { merge: true });
-    addDoc(collection(db, `chatroom/${snapshot.id}/messages`), item, { merge: true }).catch((error) => {
-      console.log(error);
-    });
-  }
 }
 
 async function deleteMessage(chatroomId, messageID) {
@@ -299,7 +184,7 @@ async function deleteMessage(chatroomId, messageID) {
   if (deletedDoc.data().type === 'image') {
     const imageRef = ref(storage, `message/${deletedDoc.data().data.substr(-94, 41)}`);
     deleteObject(imageRef).then(() => {
-      console.log('origin image1 has been deleted!');
+      console.log('the image you sent has been deleted!');
     }).catch((err) => {
       console.log(err);
     });
@@ -309,70 +194,51 @@ async function deleteMessage(chatroomId, messageID) {
   }
 }
 
-// 找跟user有關的chatroom的chatroom id
+// 找跟user有關的chatroom的最後一條訊息
 async function findRelateChatroom(userUid) {
-  const chatIdList = [];
-  const newChat = [];
+  const rooms = [];
   const db = getFirestore(app);
-  const chatroom = await getDocs(collection(db, 'chatroom'));
-  chatroom.forEach((chat) => {
-    chatIdList.push(chat.id);
-  });
-  for (let i = 0; i < chatIdList.length; i += 1) {
-    const result = await getDocs(collection(db, `chatroom/${chatIdList[i]}/members`));
-    result.forEach((r) => {
-      if (r.id === userUid) {
-        newChat.push(chatIdList[i]);
-      }
+  const q = query(collection(db, 'chatroom'), where('members', 'array-contains', userUid));
+  (await getDocs(q)).forEach((chatroom) => {
+    rooms.push({
+      id: chatroom.id,
+      members: chatroom.data().members,
     });
-  }
-  newChat.sort((x, y) => {
-    const reg = /[a-zA-Z0-9]/;
-    if (reg.test(x) || reg.test(y)) {
-      if (x > y) {
-        return 1;
-      }
-      if (x < y) {
-        return -1;
-      }
-      return 0;
-    }
-    return x.localeCompare(y, 'zh-CN');
   });
-  return newChat;
+  rooms.sort((a, b) => ((a.id - b.id)));
+  const lastMsgs = await Promise.all(rooms.map((chatroom) => getNewestMessage(chatroom)));
+
+  return lastMsgs;
 }
 
 // 新增聊天室
 async function addChatroom(other, user) {
   const db = getFirestore(app);
   let returnID;
-  let count;
+  const relate = [];
 
   // 檢查現有
-  const relate = await findRelateChatroom(user);
-  let exist = false;
-  for (let i = 0; i < relate.length; i += 1) {
-    count = 0;
-    const result = await getDocs(collection(db, `chatroom/${relate[i]}/members`));
-    result.forEach((r) => {
-      if (r.id === user || r.id === other) {
-        count += 1;
-      }
+  const q = query(collection(db, 'chatroom'), where('members', 'array-contains', user));
+  (await getDocs(q)).forEach((chatroom) => {
+    relate.push({
+      id: chatroom.id,
+      members: chatroom.data().members,
     });
-    if (count === 2) {
-      returnID = relate[i];
+  });
+
+  let exist = false;
+  relate.map((chatroom) => chatroom.members.forEach((memberID) => {
+    if (other === memberID) {
+      returnID = chatroom.id;
       exist = true;
-      break;
     }
-  }
+  }));
 
   // 如果沒有, 就新增一個聊天室
   if (exist === false) {
     const newRef = doc(collection(db, 'chatroom'));
     const snapshot = await getDoc(newRef);
-    setDoc(doc(db, `chatroom/${snapshot.id}/members/${user}`), {}, { merge: true });
-    setDoc(doc(db, `chatroom/${snapshot.id}/members/${other}`), {}, { merge: true });
-    setDoc(doc(db, `chatroom/${snapshot.id}`), {}, { merge: true });
+    setDoc(doc(db, `chatroom/${snapshot.id}`), { members: [user, other] }, { merge: true });
     returnID = snapshot.id;
   }
   return returnID;
@@ -400,34 +266,89 @@ async function onSnap(chatroomId) {
   return message;
 }
 
-// 計算未讀訊息
+// 獲取未讀訊息id
 async function countUnreadMessage(uid) {
   const db = getFirestore(app);
-  const relate = await findRelateChatroom(uid);
-  const messagecount = [];
+  const relate = [];
+
+  const q = query(collection(db, 'chatroom'), where('members', 'array-contains', uid));
+  (await getDocs(q)).forEach((chatroom) => {
+    relate.push(chatroom.id);
+  });
+  const count = [];
   for (let i = 0; i < relate.length; i += 1) {
-    const messageRef = await getDocs(query(collection(db, `chatroom/${relate[i]}/messages`)));
-    messageRef.forEach((result) => {
+    const messageRef = query(collection(db, `chatroom/${relate[i]}/messages`));
+    (await getDocs(messageRef)).forEach((result) => {
       if (result.data().read === false && result.data().sender !== uid.trim()) {
-        messagecount.push(result.id);
+        count.push(result.id);
       }
     });
   }
-  return messagecount.length;
+  return count.length;
+}
+
+async function readMessage(uid, chatroomID) {
+  const db = getFirestore(app);
+  const messageRef = query(collection(db, `chatroom/${chatroomID}/messages`));
+
+  (await getDocs(messageRef)).forEach((result) => {
+    if (result.data().read === false && result.data().sender !== uid) {
+      setDoc(doc(db, `chatroom/${chatroomID}/messages/${result.id}`), { read: true }, { merge: true });
+    }
+  });
+}
+
+async function Notification(notifymessage, eventID) {
+  const UserStudent = UserController.getUid();
+  const db = getFirestore(app);
+  const infoDocs = await getDocs(collection(db, 'attendees'));
+  const IDlist = [];
+  const sendList = [];
+  const attend = false;
+
+  // 訊息內容
+  const item = {
+    sender: UserStudent,
+    sendTime: new Date(),
+    data: notifymessage,
+    type: 'text',
+    read: false,
+  };
+
+  // 所有參加者
+  infoDocs.forEach((attendee) => {
+    IDlist.push(attendee.id);
+  });
+
+  for (let i = 0; i < IDlist.length; i += 1) {
+    const resultRef = query(collection(db, `attendees/${IDlist[i]}/attendedEvent`));
+    const result = await getDocs(resultRef);
+    result.forEach((event) => {
+      if (event.id === eventID) {
+        sendList.push(IDlist[i]);
+      }
+    });
+  }
+
+  // 傳送消息
+  for (let i = 0; i < sendList.length; i += 1) {
+    addChatroom(sendList[i], UserStudent).then((returnID) => {
+      addDoc(collection(db, `chatroom/${returnID}/messages`), item, { merge: true }).then(console.log('notify eveyone succeed'));
+    });
+  }
 }
 
 export default {
-  firebaseConfig,
   findRelateChatroom,
   getHoursMin,
   newMessageTime,
   toDateString,
   addMessage,
   getNewestMessage,
-  getRelativeMessage,
   Notification,
   deleteMessage,
   countUnreadMessage,
+  readMessage,
   addChatroom,
   onSnap,
 };

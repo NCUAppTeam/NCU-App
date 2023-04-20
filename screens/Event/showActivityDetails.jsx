@@ -14,57 +14,54 @@ import styles from './style_folder/Styles_showActivityDetails';
 import ActiveController from '../../controller/Active';
 import MessageController from '../../controller/Message';
 import UserController from '../../controller/getStudentId';
+import UrlCreator from '../../controller/createUrl';
 
 function Detailscreen({ route, navigation }) {
-// share link 處理
-  const linking = {
-    prefixes: ['ncuapp://'],
-    config: {
-      screens: {
-        Detailscreen: 'Detailscreen:activeId',
-      },
-    },
-  };
+  const [showDialog, setShowDialog] = useState(false);
+  const [activeUrl, setActiveUrl] = useState(null);
+  const [totalAttended, setTotal] = useState();
+  const [info, setInfo] = useState([]);
+  const [active, setActive] = useState([]);
 
   const user = UserController.getUid();
+  const [userAvatar, setUserAvatar] = useState();
   const Cd = route.params;
   const passedID = JSON.stringify(Cd).slice(7, 27);
 
   const [SignUp, setSignUp] = useState();
   useEffect(() => {
+    UserController.getINFO(user).then((res) => {
+      setUserAvatar(res.avatar);
+    }).catch((err) => {
+      throw err;
+    });
+    UrlCreator.useInitialURL().then((res) => {
+      setActiveUrl(res);
+    }).catch((err) => {
+      throw err;
+    });
     ActiveController.getAttendedOrNot(passedID).then((res) => {
       setSignUp(res);
     }).catch((err) => {
       throw err;
     });
-  });
-
-  const [totalAttended, setTotal] = useState();
-  useEffect(() => {
     ActiveController.getTotalOfAttendees(passedID).then((res) => {
       setTotal(res);
     }).catch((err) => {
       throw err;
     });
-  });
-
-  const [info, setInfo] = useState([]);
-  useEffect(() => {
     ActiveController.getHostInfo(passedID).then((res) => {
       setInfo(res);
     }).catch((err) => {
       throw err;
     });
-  }, []);
-
-  const [active, setActive] = useState([]);
-  useEffect(() => {
     ActiveController.getOneActive(passedID).then((res) => {
       setActive(res);
     }).catch((err) => {
       throw err;
     });
   }, []);
+
   const [slideDot1, setSlideDot1] = useState(true);
   const [slideDot2, setSlideDot2] = useState(false);
   const [slideDot3, setSlideDot3] = useState(false);
@@ -84,9 +81,8 @@ function Detailscreen({ route, navigation }) {
       setSlideDot3(true);
     }
   };
-  const [showDialog, setShowDialog] = useState(false);
   return (
-    <SafeAreaView style={styles.showActivityDetails_container} linking={linking}>
+    <SafeAreaView style={styles.showActivityDetails_container}>
       <NativeBaseProvider>
         {active.map(({ genre }) => (
           <Box style={styles.headerContainer}>
@@ -240,7 +236,7 @@ function Detailscreen({ route, navigation }) {
                                 color: '#1f2937', fontSize: 20, fontWeight: '300',
                               }}
                               >
-                              &ensp;https://helloworld
+                                {activeUrl || 'still processing...'}
                               </Text>
                             </Fontisto>
                             <Box style={{ marginVertical: 20 }} />
@@ -529,6 +525,9 @@ function Detailscreen({ route, navigation }) {
                           if (uid !== user) {
                             MessageController.addChatroom(uid, user).then((res) => {
                               navigation.navigate('send', {
+                                userAvatar,
+                                attendeeName: name,
+                                attendeeAvatar: avatar,
                                 chatroomId: res,
                                 attendeeUid: uid,
                                 userUid: user,

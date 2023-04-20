@@ -1,19 +1,11 @@
-import { initializeApp } from 'firebase/app';
 import {
   getFirestore, getDoc, doc,
 } from 'firebase/firestore';
+import { getApp } from 'firebase/app';
 
-import { getAuth } from 'firebase/auth';
+import { auth } from '../config';
 
-const firebaseConfig = {
-  apiKey: 'AIzaSyA8GH6yj1i4gJM0H_ZTsurYG3Dqn4-nIS8',
-  authDomain: 'ncu-app-test.firebaseapp.com',
-  projectId: 'ncu-app-test',
-  storageBucket: 'ncu-app-test.appspot.com',
-  messagingSenderId: '739839700130',
-  appId: '1:739839700130:web:37591d0118a440488cfbfb',
-};
-const app = initializeApp(firebaseConfig);
+const app = getApp();
 
 async function getINFO(UID) {
   const db = getFirestore(app);
@@ -34,10 +26,9 @@ async function getINFO(UID) {
 }
 
 function getUid() {
-  const auth = getAuth();
   const user = auth.currentUser;
   const { uid } = user;
-
+  // console.log(uid);
   return uid;
 }
 

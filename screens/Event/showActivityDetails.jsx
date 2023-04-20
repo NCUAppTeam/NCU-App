@@ -8,7 +8,7 @@ import {
   Ionicons, FontAwesome5, AntDesign, MaterialCommunityIcons, Feather, Fontisto, Octicons,
 } from '@expo/vector-icons';
 import {
-  NativeBaseProvider, Box, Divider, Center, HStack, VStack,
+  Box, Divider, Center, HStack, VStack,
 } from 'native-base';
 import styles from './style_folder/Styles_showActivityDetails';
 import ActiveController from '../../controller/Active';
@@ -82,51 +82,51 @@ function Detailscreen({ route, navigation }) {
     }
   };
   return (
-    <SafeAreaView style={styles.showActivityDetails_container}>
-      <NativeBaseProvider>
-        {active.map(({ genre }) => (
-          <Box style={styles.headerContainer}>
-            <Box style={styles.headerArrowBox}>
-              <AntDesign
-                name="arrowleft"
-                size={28}
-                color="#28527A"
-                onPress={() => { navigation.navigate('list'); }}
-              />
-            </Box>
-            <Box style={styles.nameheader}>
-              <Text style={styles.name}>
-                {genre}
-              </Text>
-            </Box>
-            <Box style={{ flex: 2.5 }} />
+    <SafeAreaView style={styles.showActivityDetails_container} linking={linking}>
+
+      {active.map(({ genre }) => (
+        <Box style={styles.headerContainer}>
+          <Box style={styles.headerArrowBox}>
+            <AntDesign
+              name="arrowleft"
+              size={28}
+              color="#476685"
+              onPress={() => { navigation.navigate('list'); }}
+            />
           </Box>
-        ))}
-        <ScrollView
-          vertical
-          showsVerticalScrollIndicator={false}
-          style={{ flexDirection: 'column', marginTop: 8.5 }}
-        >
-          {active.map(({
-            name, imageUri1, startTimeWeekday, endTimeWeekday, place, limitNum,
-            cost, link, details, imageUri2, imageUri3,
-          }) => (
-            <Box>
-              <ScrollView
-                horizontal
-                onScroll={whenScrolling}
-                showsHorizontalScrollIndicator={false}
-                style={{ width: Dimensions.get('window').width / 2, alignSelf: 'center' }}
-              >
-                {(imageUri1) && (
-                  <Image
-                    style={styles.bigpic}
-                    source={{
-                      uri: imageUri1,
-                    }}
-                  />
-                )}
-                {(imageUri2) && (
+          <Box style={styles.nameheader}>
+            <Text style={styles.name}>
+              {genre}
+            </Text>
+          </Box>
+          <Box style={{ flex: 2.5 }} />
+        </Box>
+      ))}
+      <ScrollView
+        vertical
+        showsVerticalScrollIndicator={false}
+        style={{ flexDirection: 'column', marginTop: 8.5 }}
+      >
+        {active.map(({
+          name, imageUri1, startTimeWeekday, endTimeWeekday, place, limitNum,
+          cost, link, details, imageUri2, imageUri3,
+        }) => (
+          <Box>
+            <ScrollView
+              horizontal
+              onScroll={whenScrolling}
+              showsHorizontalScrollIndicator={false}
+              style={{ width: Dimensions.get('window').width / 2, alignSelf: 'center' }}
+            >
+              {(imageUri1) && (
+              <Image
+                style={styles.bigpic}
+                source={{
+                  uri: imageUri1,
+                }}
+              />
+              )}
+              {(imageUri2) && (
                 <View style={imageUri3
                   ? { marginLeft: 10 }
                   : { marginLeft: 10, marginRight: Dimensions.get('window').width * 0.07 }}
@@ -140,8 +140,8 @@ function Detailscreen({ route, navigation }) {
                     />
                   </View>
                 </View>
-                )}
-                {(imageUri3) && (
+              )}
+              {(imageUri3) && (
                 <View style={{ marginLeft: 10 }}>
                   <Image
                     style={styles.bigpic}
@@ -150,71 +150,71 @@ function Detailscreen({ route, navigation }) {
                     }}
                   />
                 </View>
-                )}
-              </ScrollView>
-              <Box style={{
-                marginTop: 12,
-                marginBottom: 18,
-                justifyContent: 'center',
-                flexDirection: 'row',
-              }}
-              >
-                <MaterialCommunityIcons
-                  name="circle"
-                  size={5}
-                  style={
+              )}
+            </ScrollView>
+            <Box style={{
+              marginTop: 12,
+              marginBottom: 18,
+              justifyContent: 'center',
+              flexDirection: 'row',
+            }}
+            >
+              <MaterialCommunityIcons
+                name="circle"
+                size={5}
+                style={
                   slideDot1 === true
                     ? (styles.imageDotIsHere)
                     : (styles.imageDotNoHere)
                 }
-                />
-                <MaterialCommunityIcons
-                  name="circle"
-                  size={5}
-                  style={
+              />
+              <MaterialCommunityIcons
+                name="circle"
+                size={5}
+                style={
                   slideDot2 === true
                     ? (styles.imageDotIsHere)
                     : (styles.imageDotNoHere)
                 }
-                />
-                <MaterialCommunityIcons
-                  name="circle"
-                  size={5}
-                  style={
+              />
+              <MaterialCommunityIcons
+                name="circle"
+                size={5}
+                style={
                   slideDot3 === true
                     ? (styles.imageDotIsHere)
                     : (styles.imageDotNoHere)
                 }
-                />
-              </Box>
-              <Box style={styles.bodyContainer}>
-                <Box style={{
-                  flexDirection: 'row',
-                  marginBottom: 10,
+              />
+            </Box>
+            <Box style={styles.bodyContainer}>
+              <Box style={{
+                flexDirection: 'row',
+                marginBottom: 10,
+              }}
+              >
+                <Text style={{
+                  fontSize: 24, color: '#476685', fontWeight: 'bold', flex: 9,
                 }}
                 >
-                  <Text style={{
-                    fontSize: 24, color: '#28527A', fontWeight: 'bold', flex: 9,
-                  }}
-                  >
-                    {name}
-                  </Text>
-                  <Box style={{ flex: 1 }}>
-                    <Ionicons
-                      name="share-social-outline"
-                      size={28}
-                      color="#28527A"
-                      onPress={() => {
-                        setShowDialog(true);
-                      }}
-                    />
-                    <Dialog
-                      width={Dimensions.get('window').width * 0.8}
-                      height={400}
-                      visible={showDialog}
-                      dialogTitle={(
-                        <NativeBaseProvider>
-                          <Box>
+                  {name}
+                </Text>
+                <Box style={{ flex: 1 }}>
+                  <Ionicons
+                    name="share-social-outline"
+                    size={28}
+                    color="#476685"
+                    onPress={() => {
+                      setShowDialog(true);
+                    }}
+                  />
+                  <Dialog
+                    width={Dimensions.get('window').width * 0.8}
+                    height={400}
+                    visible={showDialog}
+                    dialogTitle={(
+                      <Box>
+                        <Box>
                             <Text style={{
                               textAlign: 'center', color: '#71717A', fontSize: 24, fontWeight: '400', marginTop: 30,
                             }}
@@ -222,11 +222,11 @@ function Detailscreen({ route, navigation }) {
                               分享活動
                             </Text>
                           </Box>
-                          <Box style={styles.shareBox}>
+                        <Box style={styles.shareBox}>
                             <Fontisto
                               name="link"
                               size={25}
-                              color="#28527A"
+                              color="#476685"
                               onPress={() => {
                                 console.log('Link Copied');
                                 setShowDialog(false);
@@ -243,7 +243,7 @@ function Detailscreen({ route, navigation }) {
                             <FontAwesome5
                               name="facebook"
                               size={25}
-                              color="#28527A"
+                              color="#476685"
                               onPress={() => {
                                 console.log('share to fb');
                                 setShowDialog(false);
@@ -260,7 +260,7 @@ function Detailscreen({ route, navigation }) {
                             <FontAwesome5
                               name="facebook-messenger"
                               size={25}
-                              color="#28527A"
+                              color="#476685"
                               onPress={() => {
                                 console.log('share to messenger');
                                 setShowDialog(false);
@@ -277,7 +277,7 @@ function Detailscreen({ route, navigation }) {
                             <FontAwesome5
                               name="discord"
                               size={25}
-                              color="#28527A"
+                              color="#476685"
                               style={{ marginLeft: 2 }}
                               onPress={() => {
                                 console.log('share to discord');
@@ -295,7 +295,7 @@ function Detailscreen({ route, navigation }) {
                             <Octicons
                               name="x"
                               size={28}
-                              color="#28527A"
+                              color="#476685"
                               style={{ marginLeft: 5 }}
                               onPress={() => {
                                 setShowDialog(false);
@@ -309,74 +309,74 @@ function Detailscreen({ route, navigation }) {
                               </Text>
                             </Octicons>
                           </Box>
-                        </NativeBaseProvider>
+                      </Box>
                     )}
-                      onTouchOutside={() => {
-                        setShowDialog(false);
-                      }}
-                    />
-                  </Box>
+                    onTouchOutside={() => {
+                      setShowDialog(false);
+                    }}
+                  />
                 </Box>
-                <Box style={{ flexDirection: 'row', marginBottom: 10 }}>
-                  <Box style={{ justifyContent: 'center' }}>
-                    <AntDesign
-                      name="clockcircleo"
-                      size={16}
-                      color="#28527A"
-                    />
-                  </Box>
-                  <Text style={styles.CardTimeText}>
-                    <Text style={{ color: '#BFBFBF' }}>
+              </Box>
+              <Box style={{ flexDirection: 'row', marginBottom: 10 }}>
+                <Box style={{ justifyContent: 'center' }}>
+                  <AntDesign
+                    name="clockcircleo"
+                    size={16}
+                    color="#476685"
+                  />
+                </Box>
+                <Text style={styles.CardTimeText}>
+                  <Text style={{ color: '#BFBFBF' }}>
                   &emsp;&nbsp;從&nbsp;
-                    </Text>
-                    {startTimeWeekday}
-                    {'\n'}
-                    <Text style={{ color: '#BFBFBF' }}>
+                  </Text>
+                  {startTimeWeekday}
+                  {'\n'}
+                  <Text style={{ color: '#BFBFBF' }}>
                   &emsp;&nbsp;到&nbsp;
-                    </Text>
-                    {endTimeWeekday}
                   </Text>
-                </Box>
-                <Box style={{
-                  flexDirection: 'row', marginLeft: -2, marginBottom: 10,
-                }}
-                >
-                  <Ionicons
-                    name="location-outline"
-                    size={20}
-                    color="#28527A"
-                  />
-                  <Text style={{ fontSize: 16, marginLeft: -2 }}>
-                  &emsp;
-                    {place}
-                  </Text>
-                </Box>
-                <Box style={{ flexDirection: 'row', marginLeft: -2 }}>
-                  <MaterialCommunityIcons
-                    name="web"
-                    size={20}
-                    color="#28527A"
-                  />
-                  <Text style={{ fontSize: 16, marginBottom: 15 }}>
-                  &emsp;
-                    {link}
-                  </Text>
-                </Box>
+                  {endTimeWeekday}
+                </Text>
               </Box>
-              <Box style={{ marginHorizontal: 30 }}>
-                <Divider bg="#d9d9d9" w="99%"/* my=margin-top and margin-bottom */ />
+              <Box style={{
+                flexDirection: 'row', marginLeft: -2, marginBottom: 10,
+              }}
+              >
+                <Ionicons
+                  name="location-outline"
+                  size={20}
+                  color="#476685"
+                />
+                <Text style={{ fontSize: 16, marginLeft: -2 }}>
+                  &emsp;
+                  {place}
+                </Text>
               </Box>
-              <Box style={{ marginLeft: Dimensions.get('window').width * 0.08 }}>
-                <HStack>
-                  <Box style={{ flex: 1 }}>
-                    <HStack>
-                      <Ionicons
-                        name="logo-usd"
-                        size={22}
-                        color="#28527A"
-                        style={{ marginTop: 10 }}
-                      />
-                      {cost !== '免費free' && (
+              <Box style={{ flexDirection: 'row', marginLeft: -2 }}>
+                <MaterialCommunityIcons
+                  name="web"
+                  size={20}
+                  color="#476685"
+                />
+                <Text style={{ fontSize: 16, marginBottom: 15 }}>
+                  &emsp;
+                  {link}
+                </Text>
+              </Box>
+            </Box>
+            <Box style={{ marginHorizontal: 30 }}>
+              <Divider bg="#d9d9d9" w="99%"/* my=margin-top and margin-bottom */ />
+            </Box>
+            <Box style={{ marginLeft: Dimensions.get('window').width * 0.08 }}>
+              <HStack>
+                <Box style={{ flex: 1 }}>
+                  <HStack>
+                    <Ionicons
+                      name="logo-usd"
+                      size={22}
+                      color="#476685"
+                      style={{ marginTop: 10 }}
+                    />
+                    {cost !== '免費free' && (
                       <Text style={{
                         fontSize: 16,
                         color: 'black',
@@ -386,8 +386,8 @@ function Detailscreen({ route, navigation }) {
                       >
                         {cost}
                       </Text>
-                      )}
-                      {cost === '免費free' && (
+                    )}
+                    {cost === '免費free' && (
                       <Text style={{
                         fontSize: 16,
                         color: 'black',
@@ -397,21 +397,21 @@ function Detailscreen({ route, navigation }) {
                       >
                         {cost}
                       </Text>
-                      )}
-                    </HStack>
-                  </Box>
-                  <Center>
-                    <Divider my={2} marginRight={5} h={28} orientation="vertical" bg="#bfbebe" /* my=margin-top and margin-bottom */ />
-                  </Center>
-                  <Box style={{ flex: 1.1 }}>
-                    <HStack>
-                      <Feather
-                        name="users"
-                        size={22}
-                        color="#28527A"
-                        style={{ marginTop: 10 }}
-                      />
-                      {limitNum !== '0' && (
+                    )}
+                  </HStack>
+                </Box>
+                <Center>
+                  <Divider my={2} marginRight={5} h={28} orientation="vertical" bg="#bfbebe" /* my=margin-top and margin-bottom */ />
+                </Center>
+                <Box style={{ flex: 1.1 }}>
+                  <HStack>
+                    <Feather
+                      name="users"
+                      size={22}
+                      color="#476685"
+                      style={{ marginTop: 10 }}
+                    />
+                    {limitNum !== '0' && (
                       <Text style={totalAttended >= limitNum
                         ? styles.reachLimitNum
                         : styles.underLimitNum}
@@ -424,125 +424,125 @@ function Detailscreen({ route, navigation }) {
                         {' '}
                         人
                       </Text>
-                      )}
-                      {limitNum === '0' && (
+                    )}
+                    {limitNum === '0' && (
                       <Text style={styles.NoLimitNum}>
                         {totalAttended}
                         &ensp;
                         (無上限)
                       </Text>
-                      )}
-                    </HStack>
-                  </Box>
-                </HStack>
-              </Box>
-              <Box style={{ marginHorizontal: 30 }}>
-                <Divider bg="#d9d9d9" w="99%"/* my=margin-top and margin-bottom */ />
-              </Box>
-              <Box style={{ marginLeft: Dimensions.get('window').width * 0.07 }}>
-                <Text style={{
-                  color: 'black', fontSize: 16, fontWeight: 'bold', marginVertical: 10,
-                }}
-                >
-                  詳細資訊
-                </Text>
-                <Text>
-                  {details}
-                </Text>
-              </Box>
-              <Box style={{ marginHorizontal: 30 }}>
-                <Divider bg="#d9d9d9" w="99%" my={3}/* my=margin-top and margin-bottom */ />
-              </Box>
+                    )}
+                  </HStack>
+                </Box>
+              </HStack>
             </Box>
-          ))}
-          {info.map(({
-            uid, name, phone, email, avatar,
-          }) => (
-            <Box style={{ marginLeft: Dimensions.get('window').width * 0.07, marginBottom: 10 }}>
+            <Box style={{ marginHorizontal: 30 }}>
+              <Divider bg="#d9d9d9" w="99%"/* my=margin-top and margin-bottom */ />
+            </Box>
+            <Box style={{ marginLeft: Dimensions.get('window').width * 0.07 }}>
               <Text style={{
                 color: 'black', fontSize: 16, fontWeight: 'bold', marginVertical: 10,
               }}
               >
-                主辦人
+                詳細資訊
               </Text>
-              <Box style={{ flexDirection: 'row', marginLeft: Dimensions.get('window').width * 0.08, marginBottom: 5 }}>
-                <Box style={{ flex: 2, marginTop: Dimensions.get('window').width * 0.03 }}>
-                  <Image
-                    style={styles.avatar}
-                    source={{
-                      uri: avatar,
-                    }}
-                  />
-                </Box>
-                <Box style={{ flex: 3, alignSelf: 'center' }}>
-                  <VStack>
-                    <Feather
-                      name="user"
-                      size={20}
-                      color="#28527A"
-                      style={{ marginTop: 10 }}
-                    >
-                      <Text style={{ fontSize: 12 }}>
-                  &emsp;
-                        {name}
-                      </Text>
-                    </Feather>
-                    <Feather
-                      name="phone"
-                      size={18}
-                      color="#28527A"
-                      style={{ marginTop: 10 }}
-                    >
-                      <Text style={{ fontSize: 12, textAlignVertical: 'center' }}>
-                    &emsp;
-                        {phone}
-                      </Text>
-                    </Feather>
-                    <Feather
-                      name="mail"
-                      size={18}
-                      color="#28527A"
-                      style={{ marginTop: 10 }}
-                    >
-                      <Text style={{ fontSize: 12, textAlignVertical: 'center' }}>
-                      &emsp;
-                        {email}
-                      </Text>
-                    </Feather>
-                    <FontAwesome5
-                      name="comment"
-                      size={20}
-                      color="#28527A"
-                      style={{ marginTop: 10 }}
-                    >
-                      <Text style={{ fontSize: 12, marginTop: 10 }}>
-                        {'    '}
-                      </Text>
-
-                      <Text
-                        style={{ fontSize: 12, marginTop: 10, textDecorationLine: 'underline' }}
-                        onPress={() => {
-                          if (uid !== user) {
-                            MessageController.addChatroom(uid, user).then((res) => {
-                              navigation.navigate('send', {
-                                userAvatar,
-                                attendeeName: name,
-                                attendeeAvatar: avatar,
-                                chatroomId: res,
-                                attendeeUid: uid,
-                                userUid: user,
-                              });
-                            });
-                          }
-                        }}
-                      >
-                        私訊主辦人
-                      </Text>
-                    </FontAwesome5>
-                  </VStack>
-                </Box>
+              <Text>
+                {details}
+              </Text>
+            </Box>
+            <Box style={{ marginHorizontal: 30 }}>
+              <Divider bg="#d9d9d9" w="99%" my={3}/* my=margin-top and margin-bottom */ />
+            </Box>
+          </Box>
+        ))}
+        {info.map(({
+          uid, name, phone, email, avatar,
+        }) => (
+          <Box style={{ marginLeft: Dimensions.get('window').width * 0.07, marginBottom: 10 }}>
+            <Text style={{
+              color: 'black', fontSize: 16, fontWeight: 'bold', marginVertical: 10,
+            }}
+            >
+              主辦人
+            </Text>
+            <Box style={{ flexDirection: 'row', marginLeft: Dimensions.get('window').width * 0.08, marginBottom: 5 }}>
+              <Box style={{ flex: 2, marginTop: Dimensions.get('window').width * 0.03 }}>
+                <Image
+                  style={styles.avatar}
+                  source={{
+                    uri: avatar,
+                  }}
+                />
               </Box>
-              {user !== uid && (
+              <Box style={{ flex: 3, alignSelf: 'center' }}>
+                <VStack>
+                  <Feather
+                    name="user"
+                    size={20}
+                    color="#476685"
+                    style={{ marginTop: 10 }}
+                  >
+                    <Text style={{ fontSize: 12 }}>
+                  &emsp;
+                      {name}
+                    </Text>
+                  </Feather>
+                  <Feather
+                    name="phone"
+                    size={18}
+                    color="#476685"
+                    style={{ marginTop: 10 }}
+                  >
+                    <Text style={{ fontSize: 12, textAlignVertical: 'center' }}>
+                    &emsp;
+                      {phone}
+                    </Text>
+                  </Feather>
+                  <Feather
+                    name="mail"
+                    size={18}
+                    color="#476685"
+                    style={{ marginTop: 10 }}
+                  >
+                    <Text style={{ fontSize: 12, textAlignVertical: 'center' }}>
+                      &emsp;
+                      {email}
+                    </Text>
+                  </Feather>
+                  <FontAwesome5
+                    name="comment"
+                    size={20}
+                    color="#476685"
+                    style={{ marginTop: 10 }}
+                  >
+                    <Text style={{ fontSize: 12, marginTop: 10 }}>
+                      {'    '}
+                    </Text>
+
+                    <Text
+                      style={{ fontSize: 12, marginTop: 10, textDecorationLine: 'underline' }}
+                      onPress={() => {
+                        if (uid !== user) {
+                          MessageController.addChatroom(uid, user).then((res) => {
+                            navigation.navigate('send', {
+                              userAvatar,
+                              attendeeName: name,
+                              attendeeAvatar: avatar,
+                              chatroomId: res,
+                              attendeeUid: uid,
+                              userUid: user,
+                            });
+                          });
+                        }
+                      }}
+                    >
+                      私訊主辦人
+                    </Text>
+                  </FontAwesome5>
+                </VStack>
+              </Box>
+            </Box>
+            {user !== uid && (
               <Box style={{ flexDirection: 'row', marginBottom: 20 }}>
                 <TouchableOpacity
                   style={styles.sentMessage}
@@ -588,11 +588,11 @@ function Detailscreen({ route, navigation }) {
                   </Text>
                 </TouchableOpacity>
               </Box>
-              )}
-            </Box>
-          ))}
-        </ScrollView>
-      </NativeBaseProvider>
+            )}
+          </Box>
+        ))}
+      </ScrollView>
+
     </SafeAreaView>
 
   );

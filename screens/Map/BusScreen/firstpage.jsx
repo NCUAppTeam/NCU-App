@@ -17,7 +17,7 @@ function First({ navigation }) {
       <ScrollView>
         <View style={{ flexDirection: 'row' }}>
           <Text style={{
-            textAlign: 'center', backgroundColor: '#28527A', color: 'white', height: 50, width: '100%', fontSize: 20, textAlignVertical: 'center', lineHeight: 50,
+            textAlign: 'center', backgroundColor: '#476685', color: 'white', height: 50, width: '100%', fontSize: 20, textAlignVertical: 'center', lineHeight: 50,
           }}
           >
             公車動態
@@ -42,7 +42,7 @@ function First({ navigation }) {
           >
             <View style={{ flexDirection: 'row' }}>
               <Text style={{
-                textAlign: 'center', top: 15, fontSize: 28, color: '#28527A',
+                textAlign: 'center', top: 15, fontSize: 28, color: '#476685',
               }}
               >
                 {'   '}132
@@ -57,7 +57,7 @@ function First({ navigation }) {
           >
             <View style={{ flexDirection: 'row' }}>
               <Text style={{
-                textAlign: 'center', top: 15, fontSize: 28, color: '#28527A',
+                textAlign: 'center', top: 15, fontSize: 28, color: '#476685',
               }}
               >
                 {'   '}133
@@ -72,7 +72,7 @@ function First({ navigation }) {
           >
             <View style={{ flexDirection: 'row' }}>
               <Text style={{
-                textAlign: 'center', top: 15, fontSize: 28, color: '#28527A',
+                textAlign: 'center', top: 15, fontSize: 28, color: '#476685',
               }}
               >
                 {'   '}172
@@ -87,7 +87,7 @@ function First({ navigation }) {
           >
             <View style={{ flexDirection: 'row' }}>
               <Text style={{
-                textAlign: 'center', top: 15, fontSize: 28, color: '#28527A',
+                textAlign: 'center', top: 15, fontSize: 28, color: '#476685',
               }}
               >
                 {'   '}173
@@ -102,7 +102,7 @@ function First({ navigation }) {
           >
             <View style={{ flexDirection: 'row' }}>
               <Text style={{
-                textAlign: 'center', top: 15, fontSize: 28, color: '#28527A',
+                textAlign: 'center', top: 15, fontSize: 28, color: '#476685',
               }}
               >
                 {'   '}216
@@ -117,7 +117,7 @@ function First({ navigation }) {
           >
             <View style={{ flexDirection: 'row' }}>
               <Text style={{
-                textAlign: 'center', top: 15, fontSize: 28, color: '#28527A',
+                textAlign: 'center', top: 15, fontSize: 28, color: '#476685',
               }}
               >
                 {'   '}9025A
@@ -132,7 +132,7 @@ function First({ navigation }) {
           >
             <View style={{ flexDirection: 'row' }}>
               <Text style={{
-                textAlign: 'center', top: 15, fontSize: 28, color: '#28527A',
+                textAlign: 'center', top: 15, fontSize: 28, color: '#476685',
               }}
               >
                 {'   '}台聯大專車

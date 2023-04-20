@@ -12,6 +12,7 @@ import {
 import styles from './style_folder/Styles_moreEvent';
 import ActiveController from '../../controller/Active';
 import MessageController from '../../controller/Message';
+import { BaseTheme } from '../../theme';
 
 function MoreHang({ navigation }) {
   const [Messagenum, setMessageNum] = useState(0);
@@ -47,13 +48,13 @@ function MoreHang({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <NativeBaseProvider>
+      
         <Box style={styles.headerContainer}>
           <Box style={styles.headerArrowBox}>
             <AntDesign
               name="arrowleft"
               size={28}
-              color="#28527A"
+              color="#476685"
               onPress={() => { navigation.navigate('list'); }}
             />
           </Box>
@@ -67,7 +68,7 @@ function MoreHang({ navigation }) {
               <FontAwesome5
                 name="comment"
                 size={25}
-                color="#28527A"
+                color="#476685"
                 onPress={() => { navigation.navigate('message'); }}
               />
               <Octicons name="dot-fill" size={16} color={Messagenum !== 0 ? '#EB6F6F' : 'transparent'} style={styles.readDot} />
@@ -77,7 +78,7 @@ function MoreHang({ navigation }) {
             <Feather
               name="user"
               size={26}
-              color="#28527A"
+              color="#476685"
               onPress={() => { navigation.navigate('personal'); }}
             />
           </Box>
@@ -137,7 +138,7 @@ function MoreHang({ navigation }) {
             )}
           />
         </Box>
-      </NativeBaseProvider>
+      
     </SafeAreaView>
   );
 }

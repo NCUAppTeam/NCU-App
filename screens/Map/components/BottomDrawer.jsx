@@ -76,7 +76,7 @@ export default function BottomDrawer({
           <Text
             numberOfLines={1}
             style={{
-              color: '#28527A',
+              color: '#476685',
               fontSize: 23,
               fontWeight: '700',
               width: '47%',

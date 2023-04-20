@@ -4,22 +4,22 @@ import qs from 'qs';
 
 async function getAuthorizationHeader() {
   const parameter = {
-    grantType: 'client_credentials',
+    grant_type: 'client_credentials',
     client_id: '110502542-f4ef0225-f7f3-49d7',
     client_secret: 'b8ba09f0-1be8-4a1f-abc3-f944c69b89ce',
   };
 
-  const auth_url = 'https://tdx.transportdata.tw/auth/realms/TDXConnect/protocol/openid-connect/token';
+  const authUrl = 'https://tdx.transportdata.tw/auth/realms/TDXConnect/protocol/openid-connect/token';
   try {
 	  const res = await axios({
       method: 'POST',
-      url: auth_url,
+      url: authUrl,
       data: qs.stringify(parameter),
       headers: { 'content-type': 'application/x-www-form-urlencoded' },
 	  });
 	  const accesstoken = res.data;
 	  return {
-      authorization: `Bearer ${accesstoken.accessToken}`,
+      authorization: `Bearer ${accesstoken.access_token}`,
 	  };
   } catch (err) {
 	  return err;
@@ -28,11 +28,10 @@ async function getAuthorizationHeader() {
 
 function getBusTime(data) {
   let busTime;
-  const nowHour = new Date().getHours();
-  const nowMinute = new Date().getMinutes();
-  const now = nowHour * 60 + nowMinute;
+  const nowH = new Date().getHours();
+  const nowM = new Date().getMinutes();
+  const now = nowH * 60 + nowM;
   const dataTime = now - ((data.UpdateTime[11] - '0') * 600 + (data.UpdateTime[12] - '0') * 60 + (data.UpdateTime[14] - '0') * 10 + (data.UpdateTime[15] - '0'));
-  // console.log(dataTime);
   if (data.EstimateTime != null) {
     if (data.EstimateTime === 120) busTime = '即將進站';
     else if (data.EstimateTime <= 60) busTime = '進站中';
@@ -50,9 +49,9 @@ function getBusTime(data) {
 const chart = [[0, 0, 3, 4, 8, 18, 21, 32, 72, 77, 82], [0, 0, 2, 6, 40, 47, 47, 51, 52, 53, 54]];
 
 function busTime9025(StopSequence, Direction) {
-  const nowHour = new Date().getHours();
-  const nowMinute = new Date().getMinutes();
-  const now = nowHour * 60 + nowMinute;
+  const nowH = new Date().getHours();
+  const nowM = new Date().getMinutes();
+  const now = nowH * 60 + nowM;
   const today = new Date().getDay();
   let busTime;
   if (Direction === 0) {
@@ -109,9 +108,9 @@ function state9025(StopSequence, Direction) {
 function fun9025(parame, response) {
   let i; let j;
   const output = [];
-  const nowHour = new Date().getHours();
-  const nowMinute = new Date().getMinutes();
-  const now = nowHour * 60 + nowMinute;
+  const nowH = new Date().getHours();
+  const nowM = new Date().getMinutes();
+  const now = nowH * 60 + nowM;
   let num; let busTime; let departTime = -1; let departState = 0; const l = response.data.length;
   for (i = 0; i < l; i += 1) {
     num = response.data[i].StopSequence;
@@ -206,7 +205,7 @@ async function route(parame) {
   response.data.forEach((doc) => {
     const busTime = getBusTime(doc);
     output.push({
-	  	state: doc.StopName.ZhTw,
+	  	state: doc.StopName.Zh_tw,
 	  	time: busTime,
     });
   });

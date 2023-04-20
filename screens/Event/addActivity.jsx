@@ -12,12 +12,11 @@ import {
 } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import {
-  NativeBaseProvider, Box, Divider, Heading, ZStack,
+  Box, Divider, Heading, ZStack,
 } from 'native-base';
 import * as ImagePicker from 'expo-image-picker';
 import styles from './style_folder/Styles_addActivity';
 import ActiveController from '../../controller/Active';
-import { BaseTheme } from '../../theme';
 
 function Add({ navigation }) {
   const [data, setData] = useState({
@@ -222,84 +221,84 @@ function Add({ navigation }) {
     <Provider>
       <ScrollView showsVerticalScrollIndicator={false}>
         <SafeAreaView style={styles.container}>
-          
-            <View style={{ flex: 0.1, flexDirection: 'column' }}>
-              <View style={{
-                flexDirection: 'row',
-                marginBottom: 44,
+
+          <View style={{ flex: 0.1, flexDirection: 'column' }}>
+            <View style={{
+              flexDirection: 'row',
+              marginBottom: 44,
+            }}
+            >
+              <Box style={{
+                flex: 0.8, justifyContent: 'center', alignItems: 'flex-start',
               }}
               >
-                <Box style={{
-                  flex: 0.8, justifyContent: 'center', alignItems: 'flex-start',
-                }}
-                >
-                  <AntDesign
-                    name="arrowleft"
-                    size={28}
-                    color="#476685"
-                    style={{ justifyContent: 'center' }}
-                    onPress={() => { navigation.navigate('personal'); }}
-                  />
-                </Box>
-                <View style={styles.nameheader}>
-                  <Text style={styles.name}>
-                    新增活動
-                  </Text>
-                </View>
-                <View style={{
-                  flex: 2, justifyContent: 'center', alignItems: 'flex-end',
-                }}
+                <AntDesign
+                  name="arrowleft"
+                  size={28}
+                  color="#476685"
+                  style={{ justifyContent: 'center' }}
+                  onPress={() => { navigation.navigate('personal'); }}
                 />
+              </Box>
+              <View style={styles.nameheader}>
+                <Text style={styles.name}>
+                  新增活動
+                </Text>
               </View>
+              <View style={{
+                flex: 2, justifyContent: 'center', alignItems: 'flex-end',
+              }}
+              />
             </View>
-            <Box style={styles.body}>
-              <Heading style={styles.inputboxText}>活動分類(必選一個)</Heading>
-              <Box style={styles.categorybutton}>
-                {values.map((value) => (
-                  <TouchableHighlight
-                    key={value}
-                    activeOpacity={0.5} // 不透明度
-                    underlayColor="#476685" // 切換時候的顏色
-                    onPress={() => {
-                      setIsPress(value);
-                      setData({ ...data, genre: value });
-                      setGenre(true);
-                    }}
-                    style={isPress === value ? styles.btnPress : styles.btnNormal}
-                  >
-                    <Text style={isPress === value ? styles.btnPText : styles.btnText}>
-                      {value}
-                    </Text>
-                  </TouchableHighlight>
-                ))}
+          </View>
+          <Box style={styles.body}>
+            <Heading style={styles.inputboxText}>活動分類(必選一個)</Heading>
+            <Box style={styles.categorybutton}>
+              {values.map((value) => (
+                <TouchableHighlight
+                  key={value}
+                  activeOpacity={0.5} // 不透明度
+                  underlayColor="#476685" // 切換時候的顏色
+                  onPress={() => {
+                    setIsPress(value);
+                    setData({ ...data, genre: value });
+                    setGenre(true);
+                  }}
+                  style={isPress === value ? styles.btnPress : styles.btnNormal}
+                >
+                  <Text style={isPress === value ? styles.btnPText : styles.btnText}>
+                    {value}
+                  </Text>
+                </TouchableHighlight>
+              ))}
+            </Box>
+          </Box>
+          <Box style={styles.body}>
+            <Heading style={styles.inputboxText}>活動名稱(必填)</Heading>
+            <Box style={styles.inputbox}>
+              <Box style={{ flexDirection: 'row' }}>
+                <TextInput
+                  style={styles.input}
+                  maxLength={10}
+                  placeholder="請輸入活動名稱(上限十字)"
+                  value={data.name}
+                  onChangeText={(text) => {
+                    setData({ ...data, name: text });
+                    setName(true);
+                    if (text === '') {
+                      setName(false);
+                    }
+                  }}
+                  selectionColor="#ccc"
+                />
               </Box>
             </Box>
-            <Box style={styles.body}>
-              <Heading style={styles.inputboxText}>活動名稱(必填)</Heading>
-              <Box style={styles.inputbox}>
-                <Box style={{ flexDirection: 'row' }}>
-                  <TextInput
-                    style={styles.input}
-                    maxLength={10}
-                    placeholder="請輸入活動名稱(上限十字)"
-                    value={data.name}
-                    onChangeText={(text) => {
-                      setData({ ...data, name: text });
-                      setName(true);
-                      if (text === '') {
-                        setName(false);
-                      }
-                    }}
-                    selectionColor="#ccc"
-                  />
-                </Box>
-              </Box>
-            </Box>
-            <Box style={styles.body}>
-              <Heading style={styles.inputboxText}>開始時間(必填)</Heading>
-              <Box style={styles.inputbox}>
-                <Box style={{ flexDirection: 'row' }}>
-                  {Platform.OS === 'android' && (
+          </Box>
+          <Box style={styles.body}>
+            <Heading style={styles.inputboxText}>開始時間(必填)</Heading>
+            <Box style={styles.inputbox}>
+              <Box style={{ flexDirection: 'row' }}>
+                {Platform.OS === 'android' && (
                   <TouchableOpacity
                     onPress={() => {
                       showDialog1();
@@ -313,8 +312,8 @@ function Add({ navigation }) {
                       editable={false}
                     />
                   </TouchableOpacity>
-                  )}
-                  {(Platform.OS === 'android' && show1) && (
+                )}
+                {(Platform.OS === 'android' && show1) && (
                   <DateTimePicker
                     testID="dateTimePicker1"
                     value={date1}
@@ -322,9 +321,9 @@ function Add({ navigation }) {
                     display="default"
                     onChange={onStartChange}
                   />
-                  )}
+                )}
 
-                  {Platform.OS === 'ios' && (
+                {Platform.OS === 'ios' && (
                   <TouchableOpacity
                     onPress={() => {
                       showDialog1();
@@ -357,15 +356,15 @@ function Add({ navigation }) {
 
                     </Text>
                   </TouchableOpacity>
-                  )}
-                </Box>
+                )}
               </Box>
             </Box>
-            <Box style={styles.body}>
-              <Heading style={styles.inputboxText}>結束時間(必填)</Heading>
-              <Box style={styles.inputbox}>
-                <Box style={{ flexDirection: 'row' }}>
-                  {Platform.OS === 'android' && (
+          </Box>
+          <Box style={styles.body}>
+            <Heading style={styles.inputboxText}>結束時間(必填)</Heading>
+            <Box style={styles.inputbox}>
+              <Box style={{ flexDirection: 'row' }}>
+                {Platform.OS === 'android' && (
                   <TouchableOpacity
                     onPress={() => {
                       showDialog2();
@@ -379,8 +378,8 @@ function Add({ navigation }) {
                       editable={false}
                     />
                   </TouchableOpacity>
-                  )}
-                  {(Platform.OS === 'android' && show2) && (
+                )}
+                {(Platform.OS === 'android' && show2) && (
                   <DateTimePicker
                     testID="dateTimePicker2"
                     value={date2}
@@ -388,9 +387,9 @@ function Add({ navigation }) {
                     display="default"
                     onChange={onEndChange}
                   />
-                  )}
+                )}
 
-                  {Platform.OS === 'ios' && (
+                {Platform.OS === 'ios' && (
                   <TouchableOpacity
                     onPress={() => {
                       showDialog2();
@@ -423,115 +422,115 @@ function Add({ navigation }) {
 
                     </Text>
                   </TouchableOpacity>
-                  )}
-                </Box>
+                )}
               </Box>
             </Box>
-            <Box style={styles.body}>
-              <Heading style={styles.inputboxText}>活動地點(必填)</Heading>
-              <Box style={styles.inputbox}>
-                <Box style={{ flexDirection: 'row' }}>
-                  <TextInput
-                    style={styles.input}
-                    placeholder="活動地點"
-                    value={data.place}
-                    onChangeText={(text) => {
-                      setData({ ...data, place: text });
-                      setPlace(true);
-                      if (text === '') {
-                        setPlace(false);
-                      }
-                    }}
-                    selectionColor="#ccc"
-                  />
-                </Box>
-              </Box>
-            </Box>
-            <Box style={styles.bodyforCostAndLimitnum}>
-              <Heading style={styles.CostTitle}>
-                參加費用
-              </Heading>
-              <Heading style={styles.LimitnumTitle}>
-                人數上限(必填)
-              </Heading>
-            </Box>
-            <Box style={styles.bodyforCostAndLimitnum}>
-              <Box style={styles.CostBox}>
-                <Box style={{ flexDirection: 'row' }}>
-                  <TextInput
-                    style={styles.input}
-                    maxLength={5}
-                    keyboardType="number-pad"
-                    placeholder="NT$"
-                    value={data.cost}
-                    onChangeText={(text) => setData({ ...data, cost: text })}
-                    selectionColor="#ccc"
-                  />
-                  <Text style={styles.CostAndLimitnumText}>元</Text>
-                </Box>
-              </Box>
-              <Box style={styles.LimitnumBox}>
-                <Box style={{ flexDirection: 'row' }}>
-                  <TextInput
-                    style={styles.input}
-                    maxLength={3}
-                    keyboardType="number-pad"
-                    placeholder="不限填0"
-                    value={data.limitNum}
-                    onChangeText={(text) => {
-                      setData({ ...data, limitNum: text });
-                      setLimitNum(true);
-                      if (text === '') {
-                        setLimitNum(false);
-                      }
-                    }}
-                    selectionColor="#ccc"
-                  />
-                  <Text style={styles.CostAndLimitnumText}>人</Text>
-                </Box>
-              </Box>
-            </Box>
-            <Box style={styles.body}>
-              <Heading style={styles.inputboxText}>活動連結</Heading>
-              <Box style={styles.inputbox}>
-                <Box style={{ flexDirection: 'row' }}>
-                  <TextInput
-                    style={styles.input}
-                    placeholder="活動連結"
-                    value={data.link}
-                    onChangeText={(text) => setData({ ...data, link: text })}
-                    selectionColor="#ccc"
-                  />
-                </Box>
-              </Box>
-            </Box>
-            <Box style={styles.body}>
-              <Heading style={styles.inputboxText}>詳細資訊(必填)</Heading>
-              <Box style={styles.details}>
-                <Box style={{ flexDirection: 'row' }}>
-                  <TextInput
-                    style={styles.input}
-                    multiline
-                    numberOfLines={15}
-                    maxLength={450}
-                    placeholder="請簡單描述一下你的活動內容吧!"
-                    value={data.details}
-                    onChangeText={(text) => {
-                      setData({ ...data, details: text });
-                      setDetail(true);
-                      if (text === '') {
-                        setDetail(false);
-                      }
-                    }}
-                    selectionColor="#ccc"
-                  />
-                </Box>
-              </Box>
-            </Box>
-            <Box style={styles.body}>
-              <Heading style={styles.inputboxText}>活動照片(最多可以上傳3張, 第一章預設為縮圖照片)</Heading>
+          </Box>
+          <Box style={styles.body}>
+            <Heading style={styles.inputboxText}>活動地點(必填)</Heading>
+            <Box style={styles.inputbox}>
               <Box style={{ flexDirection: 'row' }}>
-                {image1 && (
+                <TextInput
+                  style={styles.input}
+                  placeholder="活動地點"
+                  value={data.place}
+                  onChangeText={(text) => {
+                    setData({ ...data, place: text });
+                    setPlace(true);
+                    if (text === '') {
+                      setPlace(false);
+                    }
+                  }}
+                  selectionColor="#ccc"
+                />
+              </Box>
+            </Box>
+          </Box>
+          <Box style={styles.bodyforCostAndLimitnum}>
+            <Heading style={styles.CostTitle}>
+              參加費用
+            </Heading>
+            <Heading style={styles.LimitnumTitle}>
+              人數上限(必填)
+            </Heading>
+          </Box>
+          <Box style={styles.bodyforCostAndLimitnum}>
+            <Box style={styles.CostBox}>
+              <Box style={{ flexDirection: 'row' }}>
+                <TextInput
+                  style={styles.input}
+                  maxLength={5}
+                  keyboardType="number-pad"
+                  placeholder="NT$"
+                  value={data.cost}
+                  onChangeText={(text) => setData({ ...data, cost: text })}
+                  selectionColor="#ccc"
+                />
+                <Text style={styles.CostAndLimitnumText}>元</Text>
+              </Box>
+            </Box>
+            <Box style={styles.LimitnumBox}>
+              <Box style={{ flexDirection: 'row' }}>
+                <TextInput
+                  style={styles.input}
+                  maxLength={3}
+                  keyboardType="number-pad"
+                  placeholder="不限填0"
+                  value={data.limitNum}
+                  onChangeText={(text) => {
+                    setData({ ...data, limitNum: text });
+                    setLimitNum(true);
+                    if (text === '') {
+                      setLimitNum(false);
+                    }
+                  }}
+                  selectionColor="#ccc"
+                />
+                <Text style={styles.CostAndLimitnumText}>人</Text>
+              </Box>
+            </Box>
+          </Box>
+          <Box style={styles.body}>
+            <Heading style={styles.inputboxText}>活動連結</Heading>
+            <Box style={styles.inputbox}>
+              <Box style={{ flexDirection: 'row' }}>
+                <TextInput
+                  style={styles.input}
+                  placeholder="活動連結"
+                  value={data.link}
+                  onChangeText={(text) => setData({ ...data, link: text })}
+                  selectionColor="#ccc"
+                />
+              </Box>
+            </Box>
+          </Box>
+          <Box style={styles.body}>
+            <Heading style={styles.inputboxText}>詳細資訊(必填)</Heading>
+            <Box style={styles.details}>
+              <Box style={{ flexDirection: 'row' }}>
+                <TextInput
+                  style={styles.input}
+                  multiline
+                  numberOfLines={15}
+                  maxLength={450}
+                  placeholder="請簡單描述一下你的活動內容吧!"
+                  value={data.details}
+                  onChangeText={(text) => {
+                    setData({ ...data, details: text });
+                    setDetail(true);
+                    if (text === '') {
+                      setDetail(false);
+                    }
+                  }}
+                  selectionColor="#ccc"
+                />
+              </Box>
+            </Box>
+          </Box>
+          <Box style={styles.body}>
+            <Heading style={styles.inputboxText}>活動照片(最多可以上傳3張, 第一章預設為縮圖照片)</Heading>
+            <Box style={{ flexDirection: 'row' }}>
+              {image1 && (
                 <Box style={{ marginRight: 12 }}>
                   <ZStack style={{ marginBottom: 65 }}>
                     <Image source={{ uri: image1 }} style={styles.image} />
@@ -559,101 +558,101 @@ function Add({ navigation }) {
                     />
                   </ZStack>
                 </Box>
-                )}
-                {image2 && (
-                  <Box style={{ marginRight: 12 }}>
-                    <ZStack style={{ marginBottom: 65 }}>
-                      <Image source={{ uri: image2 }} style={styles.image} />
-                      <Foundation
-                        name="minus-circle"
-                        size={18}
-                        color="white"
-                        style={{ marginLeft: 68, marginTop: 6 }}
-                        onPress={() => {
-                          setImage2(NoPicLink);
-                          setData({ ...data, image2: NoPicLink });
-                          if (image3) {
-                            setImage2(image3);
-                            setData({ ...data, image2: image3 });
-                            setImage3(NoPicLink);
-                            setData({ ...data, image3: NoPicLink });
-                          }
-                        }}
-                      />
-                    </ZStack>
-                  </Box>
-                )}
-                {image3 && (
-                  <Box style={{ marginRight: 12 }}>
-                    <ZStack style={{ marginBottom: 65 }}>
-                      <Image source={{ uri: image3 }} style={styles.image} />
-                      <Foundation
-                        name="minus-circle"
-                        size={18}
-                        color="white"
-                        style={{ marginLeft: 68, marginTop: 6 }}
-                        onPress={() => {
-                          setImage3(NoPicLink);
-                          setData({ ...data, image3: NoPicLink });
-                        }}
-                      />
-                    </ZStack>
-                  </Box>
-                )}
+              )}
+              {image2 && (
+              <Box style={{ marginRight: 12 }}>
+                <ZStack style={{ marginBottom: 65 }}>
+                  <Image source={{ uri: image2 }} style={styles.image} />
+                  <Foundation
+                    name="minus-circle"
+                    size={18}
+                    color="white"
+                    style={{ marginLeft: 68, marginTop: 6 }}
+                    onPress={() => {
+                      setImage2(NoPicLink);
+                      setData({ ...data, image2: NoPicLink });
+                      if (image3) {
+                        setImage2(image3);
+                        setData({ ...data, image2: image3 });
+                        setImage3(NoPicLink);
+                        setData({ ...data, image3: NoPicLink });
+                      }
+                    }}
+                  />
+                </ZStack>
               </Box>
-              <TouchableOpacity onPress={pickImage} style={styles.imageButton}>
-                <MaterialCommunityIcons
-                  name="cloud-upload-outline"
-                  size={24}
-                  color="white"
-                  style={styles.Cloudicon}
+              )}
+              {image3 && (
+              <Box style={{ marginRight: 12 }}>
+                <ZStack style={{ marginBottom: 65 }}>
+                  <Image source={{ uri: image3 }} style={styles.image} />
+                  <Foundation
+                    name="minus-circle"
+                    size={18}
+                    color="white"
+                    style={{ marginLeft: 68, marginTop: 6 }}
+                    onPress={() => {
+                      setImage3(NoPicLink);
+                      setData({ ...data, image3: NoPicLink });
+                    }}
+                  />
+                </ZStack>
+              </Box>
+              )}
+            </Box>
+            <TouchableOpacity onPress={pickImage} style={styles.imageButton}>
+              <MaterialCommunityIcons
+                name="cloud-upload-outline"
+                size={24}
+                color="white"
+                style={styles.Cloudicon}
+              />
+              <Text style={styles.Cloudicontext}>上傳</Text>
+            </TouchableOpacity>
+          </Box>
+          <Divider my={2} bg="#bfbebe" /* my=margin-top and margin-bottom */ />
+          <Heading style={styles.inputboxText}>請確認以下聯絡資訊, 若有錯誤可至個人管理中心修改!</Heading>
+          <Box style={styles.body}>
+            <Heading style={styles.inputboxText}>活動聯絡人姓名</Heading>
+            <Box style={styles.inputbox}>
+              <Box style={{ flexDirection: 'row' }}>
+                <TextInput
+                  style={styles.input}
+                  editable={false}
+                  value={host.name}
+                  selectionColor="#ccc"
                 />
-                <Text style={styles.Cloudicontext}>上傳</Text>
-              </TouchableOpacity>
-            </Box>
-            <Divider my={2} bg="#bfbebe" /* my=margin-top and margin-bottom */ />
-            <Heading style={styles.inputboxText}>請確認以下聯絡資訊, 若有錯誤可至個人管理中心修改!</Heading>
-            <Box style={styles.body}>
-              <Heading style={styles.inputboxText}>活動聯絡人姓名</Heading>
-              <Box style={styles.inputbox}>
-                <Box style={{ flexDirection: 'row' }}>
-                  <TextInput
-                    style={styles.input}
-                    editable={false}
-                    value={host.name}
-                    selectionColor="#ccc"
-                  />
-                </Box>
               </Box>
             </Box>
-            <Box style={styles.body}>
-              <Heading style={styles.inputboxText}>連絡電話</Heading>
-              <Box style={styles.inputbox}>
-                <Box style={{ flexDirection: 'row' }}>
-                  <TextInput
-                    style={styles.input}
-                    editable={false}
-                    value={host.phone}
-                    selectionColor="#ccc"
-                  />
-                </Box>
+          </Box>
+          <Box style={styles.body}>
+            <Heading style={styles.inputboxText}>連絡電話</Heading>
+            <Box style={styles.inputbox}>
+              <Box style={{ flexDirection: 'row' }}>
+                <TextInput
+                  style={styles.input}
+                  editable={false}
+                  value={host.phone}
+                  selectionColor="#ccc"
+                />
               </Box>
             </Box>
-            <Box style={styles.body}>
-              <Heading style={styles.inputboxText}>電子郵件</Heading>
-              <Box style={styles.inputbox}>
-                <Box style={{ flexDirection: 'row' }}>
-                  <TextInput
-                    style={styles.input}
-                    editable={false}
-                    value={host.email}
-                    selectionColor="#ccc"
-                  />
-                </Box>
+          </Box>
+          <Box style={styles.body}>
+            <Heading style={styles.inputboxText}>電子郵件</Heading>
+            <Box style={styles.inputbox}>
+              <Box style={{ flexDirection: 'row' }}>
+                <TextInput
+                  style={styles.input}
+                  editable={false}
+                  value={host.email}
+                  selectionColor="#ccc"
+                />
               </Box>
             </Box>
-            <View style={styles.footer}>
-              {(genre === true && name === true && start === true && end === true
+          </Box>
+          <View style={styles.footer}>
+            {(genre === true && name === true && start === true && end === true
                   && limitNum === true && place === true && detail === true) ? (
                     <LinearGradient
                       colors={['#476685', '#1784B2']}
@@ -674,18 +673,18 @@ function Add({ navigation }) {
                         </Text>
                       </TouchableOpacity>
                     </LinearGradient>
-                ) : (
-                  <TouchableOpacity
-                    style={styles.unsentButton}
-                  >
-                    <Text style={styles.unsentButtonText}>
-                      確認新增
-                    </Text>
-                  </TouchableOpacity>
-                )}
-            </View>
+              ) : (
+                <TouchableOpacity
+                  style={styles.unsentButton}
+                >
+                  <Text style={styles.unsentButtonText}>
+                    確認新增
+                  </Text>
+                </TouchableOpacity>
+              )}
+          </View>
 
-            {Platform.OS === 'ios' && (
+          {Platform.OS === 'ios' && (
             <Portal>
               <Dialog visible={visible1} onDismiss={hideDialogi1}>
                 <Dialog.Title>選擇開始時間</Dialog.Title>
@@ -736,9 +735,9 @@ function Add({ navigation }) {
                 </Dialog.Actions>
               </Dialog>
             </Portal>
-            )}
+          )}
 
-            {Platform.OS === 'android' && (
+          {Platform.OS === 'android' && (
             <Portal>
               <Dialog visible={visible1} onDismiss={hideDialog1}>
                 <Dialog.Title>選擇開始時間</Dialog.Title>
@@ -785,8 +784,8 @@ function Add({ navigation }) {
                 </Dialog.Actions>
               </Dialog>
             </Portal>
-            )}
-          
+          )}
+
         </SafeAreaView>
       </ScrollView>
     </Provider>

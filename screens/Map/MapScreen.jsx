@@ -196,7 +196,6 @@ export default function MapScreen({ navigation }) {
           <CategorySlider
             setMarkerShowType={setMarkerShowType}
           />
-          <BusButton bottomDrawerShow={bottomDrawerShow} navigation={navigation} />
 
         </View>
 
@@ -227,6 +226,7 @@ export default function MapScreen({ navigation }) {
         />
       </View>
       <StatusBar backgroundColor="white" />
+      <BusButton bottomDrawerShow={bottomDrawerShow} navigation={navigation} />
     </NativeBaseProvider>
   );
 }

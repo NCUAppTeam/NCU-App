@@ -25,6 +25,8 @@ function Manage({ route, navigation }) {
   const passedID = JSON.stringify(Cd).slice(7, -2);
   const [message, messageSent] = useState('');
   const [attendeesNum, setAttendeeNum] = useState();
+  const [active, setActive] = useState([]);
+  const [attendeeINFO, setAttendeeInfo] = useState();
   useEffect(() => {
     setUser(UserController.getUid());
     ActiveController.getTotalOfAttendees(passedID).then((res) => {
@@ -32,17 +34,11 @@ function Manage({ route, navigation }) {
     }).catch((err) => {
       throw err;
     });
-  }, []);
-  const [active, setActive] = useState([]);
-  useEffect(() => {
     ActiveController.getOneActive(passedID).then((res) => {
       setActive(res);
     }).catch((err) => {
       throw err;
     });
-  }, []);
-  const [attendeeINFO, setAttendeeInfo] = useState();
-  useEffect(() => {
     ActiveController.getAllAttendees(passedID).then((res) => {
       setAttendeeInfo(res);
     }).catch((err) => {

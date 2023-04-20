@@ -19,7 +19,6 @@ import { getApp } from 'firebase/app';
 import { onSnapshot, collection, getFirestore } from 'firebase/firestore';
 import styles from './style_folder/Styles_Message';
 import MessageController from '../../controller/Message';
-import UserController from '../../controller/getStudentId';
 
 function Send({ route, navigation }) {
   const scrollview = useRef();
@@ -37,12 +36,12 @@ function Send({ route, navigation }) {
     }
   };
   const [showDialog, setShowDialog] = useState(false);
+  const { userAvatar } = route.params;
+  const { attendeeName } = route.params;
+  const { attendeeAvatar } = route.params;
   const { chatroomId } = route.params;
-  const { attendeeUid } = route.params;
   const { userUid } = route.params;
   const keyboard = useKeyboard();
-  const [attendeeINFO, setAttendeeInfo] = useState({});
-  const [userIDINFO, setUserIDInfo] = useState({});
   const [data, setData] = useState({
     id: chatroomId,
     sender: userUid,
@@ -55,16 +54,12 @@ function Send({ route, navigation }) {
   const [getData, setGetData] = useState([]);
 
   useEffect(() => {
-    MessageController.getRelativeMessage(chatroomId).then((res) => {
-      setGetData(res);
-    }).catch((err) => {
-      throw err;
-    });
+    MessageController.readMessage(userUid, chatroomId);
     onSnapshot(dbRef, (docsSnap) => {
       const message = [];
       docsSnap.forEach((doc) => {
         message.push({
-          id: doc.id,
+          messageid: doc.id,
           data: doc.data().data,
           type: doc.data().type,
           sendTime: doc.data().sendTime,
@@ -74,25 +69,24 @@ function Send({ route, navigation }) {
       message.sort((a, b) => a.sendTime - b.sendTime);
       setGetData(message);
     });
-    UserController.getINFO(userUid).then((res) => {
-      setUserIDInfo(res);
-    }).catch((err) => {
-      throw err;
-    });
-    UserController.getINFO(attendeeUid).then((res) => {
-      setAttendeeInfo(res);
-    }).catch((err) => {
-      throw err;
-    });
     scrollview.current.scrollToEnd({ animated: true });
   }, []);
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = () => {
     setRefreshing(true);
-    MessageController.getRelativeMessage(chatroomId).then((res) => {
-      setGetData(res);
-    }).catch((err) => {
-      throw err;
+    onSnapshot(dbRef, (docsSnap) => {
+      const message = [];
+      docsSnap.forEach((doc) => {
+        message.push({
+          messageid: doc.id,
+          data: doc.data().data,
+          type: doc.data().type,
+          sendTime: doc.data().sendTime,
+          sender: doc.data().sender,
+        });
+      });
+      message.sort((a, b) => a.sendTime - b.sendTime);
+      setGetData(message);
     });
     scrollview.current.scrollToEnd({ animated: true });
     setRefreshing(false);
@@ -106,13 +100,12 @@ function Send({ route, navigation }) {
       quality: 1,
     });
     if (!result.canceled) {
-      setData({
+      MessageController.addMessage({
         ...data,
         uri: result.assets[0].uri,
         sendTime: new Date(),
         type: 'image',
       });
-      await MessageController.addMessage(data);
 
       scrollview.current.scrollToEnd({ animated: true });
     }
@@ -138,12 +131,12 @@ function Send({ route, navigation }) {
                 <Image
                   style={styles.sendAvatar}
                   source={{
-                    uri: attendeeINFO.avatar,
+                    uri: attendeeAvatar,
                   }}
                 />
                 <Text style={styles.sendPeople}>
                     &ensp;
-                  {attendeeINFO.name}
+                  {attendeeName}
                 </Text>
               </HStack>
             </Box>
@@ -198,11 +191,11 @@ function Send({ route, navigation }) {
                     <Box style={{ maxWidth: 180 }}>
                       <HStack>
                         <Card
-                          key={item.id}
+                          key={item.messageid}
                           style={{ backgroundColor: '#E5EBF1', borderRadius: 10 }}
                           onLongPress={() => {
                             setShowDialog(true);
-                            setDeleteMessageId(item.id);
+                            setDeleteMessageId(item.messageid);
                           }}
                         >
                           <Dialog
@@ -326,7 +319,7 @@ function Send({ route, navigation }) {
                           <Image
                             style={{ height: 36, width: 36, borderRadius: 18 }}
                             source={{
-                              uri: userIDINFO.avatar,
+                              uri: userAvatar,
                             }}
                           />
                         )
@@ -334,7 +327,7 @@ function Send({ route, navigation }) {
                           <Image
                             style={{ height: 36, width: 36, borderRadius: 18 }}
                             source={{
-                              uri: attendeeINFO.avatar,
+                              uri: attendeeAvatar,
                             }}
                           />
                         )}

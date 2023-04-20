@@ -15,19 +15,19 @@ import UserController from '../../controller/getStudentId';
 
 function Message({ navigation }) {
   const userUid = UserController.getUid();
+  const [userAvatar, setUserAvatar] = useState();
   const [newInfo, setNewInfo] = useState();
 
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = () => {
     setRefreshing(true);
-    const Info = [];
-    MessageController.findRelateChatroom(userUid).then((res1) => {
-      res1.forEach((res) => {
-        MessageController.getNewestMessage(res).then((result) => {
-          Info.push(result);
-          setNewInfo([...Info]);
-        });
-      });
+    UserController.getINFO(userUid).then((res) => {
+      setUserAvatar(res.avatar);
+    }).catch((err) => {
+      throw err;
+    });
+    MessageController.findRelateChatroom(userUid).then((res) => {
+      setNewInfo(res);
     }).catch((err) => {
       throw err;
     });
@@ -35,14 +35,13 @@ function Message({ navigation }) {
   };
 
   useEffect(() => {
-    const Info = [];
-    MessageController.findRelateChatroom(userUid).then((res1) => {
-      res1.forEach((res) => {
-        MessageController.getNewestMessage(res).then((result) => {
-          Info.push(result);
-          setNewInfo([...Info]);
-        });
-      });
+    UserController.getINFO(userUid).then((res) => {
+      setUserAvatar(res.avatar);
+    }).catch((err) => {
+      throw err;
+    });
+    MessageController.findRelateChatroom(userUid).then((res) => {
+      setNewInfo(res);
     }).catch((err) => {
       throw err;
     });
@@ -50,7 +49,7 @@ function Message({ navigation }) {
       onRefresh();
     });
     return focusHandler;
-  }, [navigation]);
+  }, []);
   return (
     <SafeAreaView style={styles.container}>
       <NativeBaseProvider>
@@ -109,8 +108,10 @@ function Message({ navigation }) {
                 key={item.id}
                 onPress={() => {
                   navigation.navigate('send', {
+                    userAvatar,
+                    attendeeName: item.name,
+                    attendeeAvatar: item.avatar,
                     chatroomId: item.id,
-                    attendeeUid: item.othersUid,
                     userUid,
                   });
                 }}

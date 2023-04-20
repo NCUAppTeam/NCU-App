@@ -1,4 +1,5 @@
 import React from 'react';
+import { NativeBaseProvider } from 'native-base';
 import { RootNavigator } from './navigation/RootNavigator';
 import { AuthenticatedUserProvider } from './providers';
 import { BaseTheme } from './theme';
@@ -18,7 +19,7 @@ export default function App() {
   return (
     <NativeBaseProvider theme={BaseTheme} config={config}>
       <AuthenticatedUserProvider>
-          <RootNavigator />
+        <RootNavigator />
       </AuthenticatedUserProvider>
     </NativeBaseProvider>
   );

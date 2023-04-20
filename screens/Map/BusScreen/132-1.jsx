@@ -18,21 +18,24 @@ function Bus132({ navigation }) {
 
   const [start, setStart] = useState(true);
 
-  const [direction, setDirection] = useState(1);
+  const [direction, setDirection] = useState(0);
 
   const [refreshing, setRefreshing] = useState(false);
 
+  const [selection, setSelection] = useState(0);
+
   const onRefresh = () => {
     setRefreshing(true);
+    setSelection(1);
     BusController.route({ id: 132, dir: 1 }).then((res) => {
       setItems(res);
-      console.log();
       setRefreshing(false);
     });
   };
 
   const onRefresh1 = () => {
     setRefreshing(true);
+    setSelection(0);
     BusController.route({ id: 132, dir: 0 }).then((res) => {
       setItems(res);
       setRefreshing(false);
@@ -81,13 +84,13 @@ function Bus132({ navigation }) {
       </View>
 
       <View>
-        <View style={{ flexDirection: 'row', height: 50 }}>
+        <View style={{ flexDirection: 'row' }}>
           <TouchableOpacity
             onPress={() => { setStart(true); setDirection(0); }}
             style={{ width: '50%', backgroundColor: 'white' }}
           >
             <Text style={{
-              textAlign: 'center', fontSize: 20, textAlignVertical: 'center', lineHeight: 50,
+              textAlign: 'center', fontSize: 20, textAlignVertical: 'center', lineHeight: 50, color: selection === 0 ? 'black' : '#BFBFBF', borderBottomWidth: selection === 0 ? 3 : 0, marginHorizontal: selection === 0 ? 15 : 0,
             }}
             >
               往中央大學
@@ -98,7 +101,7 @@ function Bus132({ navigation }) {
             style={{ width: '50%', backgroundColor: 'white' }}
           >
             <Text style={{
-              textAlign: 'center', fontSize: 20, textAlignVertical: 'center', lineHeight: 50,
+              textAlign: 'center', fontSize: 20, textAlignVertical: 'center', lineHeight: 50, color: selection === 1 ? 'black' : '#BFBFBF', borderBottomWidth: selection === 1 ? 3 : 0, marginHorizontal: selection === 1 ? 15 : 0,
             }}
             >
               往中壢公車站

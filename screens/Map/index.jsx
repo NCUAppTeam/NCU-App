@@ -31,11 +31,11 @@ function MapStack() {
       <Stack.Screen name="List132" component={List132} />
       <Stack.Screen name="Bus9025A" component={Bus9025A} />
       <Stack.Screen name="List9025A" component={List9025A} />
-      <Stack.Screen name="Bus173" component={Bus173}/>
-      <Stack.Screen name="List173" component={List173}/>
-      <Stack.Screen name="Bus216" component={Bus216}/>
-      <Stack.Screen name="List216" component={List216}/>
-      <Stack.Screen name="UST" component={UST}/>
+      <Stack.Screen name="Bus173" component={Bus173} />
+      <Stack.Screen name="List173" component={List173} />
+      <Stack.Screen name="Bus216" component={Bus216} />
+      <Stack.Screen name="List216" component={List216} />
+      <Stack.Screen name="UST" component={UST} />
     </Stack.Navigator>
   );
 }

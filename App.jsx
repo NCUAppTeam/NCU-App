@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { NativeBaseProvider } from 'native-base';
 import { LinearGradient } from 'expo-linear-gradient';
 import { RootNavigator } from './navigation/RootNavigator';

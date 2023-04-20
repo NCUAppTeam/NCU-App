@@ -9,6 +9,7 @@ import * as ImagePicker from 'expo-image-picker';
 import logo from '../../assets/icon.png';
 import ActiveController from '../../controller/Active';
 import { auth } from '../../config';
+
 const supportedURL = 'https://ncuappteam.github.io/PRIVACY';
 
 function LoginScreen() {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-  SafeAreaView, ScrollView, RefreshControl, Image, Dimensions,
+  ScrollView, RefreshControl, Image, Dimensions,
   Pressable,
 } from 'react-native';
 import {
@@ -45,7 +45,7 @@ function List({ navigation }) {
     return focusHandler;
   }, [navigation]);
   return (
-    <SafeAreaView style={styles.container}>
+    <Box style={styles.container} safeArea>
       <SearchBarHeader />
 
       <Box style={styles.body}>
@@ -230,7 +230,7 @@ function List({ navigation }) {
         </ScrollView>
       </Box>
 
-    </SafeAreaView>
+    </Box>
   );
 }
 

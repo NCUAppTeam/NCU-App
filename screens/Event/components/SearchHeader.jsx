@@ -22,7 +22,7 @@ export function SearchHeader({ navigation }) {
     throw err;
   });
   return (
-    <Center style={{ marginTop: 20 }}>
+    <Center>
       <HStack mt="4" m="2" width="90%" alignItems="center" justifyContent="center">
         <Pressable
           onPress={() => { navigation.navigate('search'); }}
@@ -56,7 +56,7 @@ export function SearchHeader({ navigation }) {
                   size={16}
                   color={Messagenum !== 0 ? '#EB6F6F' : 'transparent'}
                   style={{
-                    transform: [{ translateX: 10 }, { translateY: -10 }],
+                    transform: [{ translateX: 12 }, { translateY: -10 }],
                   }}
                 />
               </Box>

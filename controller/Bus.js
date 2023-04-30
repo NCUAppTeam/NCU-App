@@ -83,9 +83,9 @@ function busTime9025(StopSequence, Direction) {
 function state9025(stopSequence, direction) {
   const stops = ['松山機場', '臺北大學（臺北校區）', '行天宮', '高雙里', '中央大學警衛室', '中央大學依仁堂', '祐民醫院', '新明國中', '舊社', '第一銀行']
   if (direction === 1) {
-    return stops[stopSequence];
+    return stops[stopSequence - 1];
   } else {
-    return stops[9 - stopSequence];
+    return stops[10 - stopSequence];
   }
 }
 

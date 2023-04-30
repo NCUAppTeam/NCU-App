@@ -7,7 +7,7 @@ import {
 } from 'react-native-paper';
 import styles from './Styles';
 import {
-  getAllActivities, getTags, getTagActivities, querySearch,
+  getAllactivities, getTags, getTagActivities, querySearch,
 } from '../../controller/Activity';
 
 function HomeScreen({ navigation }) {
@@ -31,7 +31,7 @@ function HomeScreen({ navigation }) {
     }).catch((err) => {
       throw err;
     });
-    getAllActivities().then((res) => {
+    getAllactivities().then((res) => {
       setItems(res);
     }).catch((err) => {
       throw err;
@@ -41,7 +41,7 @@ function HomeScreen({ navigation }) {
 
   const onRefresh = () => {
     setRefreshing(true);
-    getAllActivities().then((res) => {
+    getAllactivities().then((res) => {
       setItems(res);
       setPicked({});
       setSearchQuery('');
@@ -74,7 +74,7 @@ function HomeScreen({ navigation }) {
               onPress={() => {
                 if (tag.name === picked) {
                   setPicked(undefined);
-                  getAllActivities().then((res) => {
+                  getAllactivities().then((res) => {
                     setItems(res);
                   }).catch((err) => {
                     throw err;

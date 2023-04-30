@@ -1,4 +1,4 @@
-import { URLSearchParams } from 'url';
+import url from 'url';
 import axios from 'axios';
 import qs from 'qs';
 
@@ -171,19 +171,20 @@ async function route(param) {
   }
   
   const APIBASE = 'https://tdx.transportdata.tw/api/basic/v2/Bus/EstimatedTimeOfArrival/City/Taoyuan';
-  const str = `Direction eq ${param.dir}`;
   const data = {
     $select: 'StopStatus,EstimateTime,StopName,NextBusTime',
-    $filter: str,
+    $filter: `Direction eq ${param.dir}`,
     $orderby: 'StopSequence',
     $format: 'JSON',
   };
   
   const getFinalUrl = (bus) => {
-    const url = new URL(`${APIBASE}/${bus}`);
-    url.search = new URLSearchParams(data).toString();
-    return url.toString();
+    const finalUrl = url.parse(`${APIBASE}/${bus}`, true);
+    finalUrl.query = data;
+    return url.format(finalUrl);
   };
+
+  console.log(param)
 
   let responses;
   while (true) {
@@ -199,28 +200,31 @@ async function route(param) {
     }
   }
   
-  const output = [];
-  responses.forEach((response, i) => {
-    response.data.forEach((stop, stopIndex) => {
-      if (stop.NextBusTime) {
+  const output = responses[0].data.map((data) => ({
+    stop: data.StopName.Zh_tw,
+    bus: param.buses[0],
+    data: data,
+  }));
+  
+  responses.forEach((response, busIndex) => {
+    response.data.forEach((data, dataIndex) => {
+      if (data.NextBusTime) {
         const currentStop = {
-          stop: stop.StopName.Zh_tw,
-          bus: param.buses[i],
-          ...getBusTime(stop),
+          stop: data.StopName.Zh_tw,
+          bus: param.buses[busIndex],
+          data: data,
         };
-        if (!output[stopIndex] || stop.NextBusTime < output[stopIndex].data.NextBusTime) {
-          currentStop.data = stop;
-          output[stopIndex] = currentStop;
+        if (data.NextBusTime < output[dataIndex].data.NextBusTime) {
+          output[dataIndex] = currentStop;
         }
       }
     });
   });
   
-  return output.map(stop => ({
-    stop: stop.stop,
-    bus: stop.bus,
-    time: stop.time,
-    alert: stop.alert,
+  return output.map(element => ({
+    stop: element.stop,
+    bus: element.bus,
+    ...getBusTime(element.data),
   }));
 }
 

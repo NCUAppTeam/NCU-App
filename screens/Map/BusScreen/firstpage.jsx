@@ -12,6 +12,51 @@ import {
 import Styles from '../Styles';
 
 function First({ navigation }) {
+
+
+  const buses = [
+    {
+      "nameZH_TW": "中央-中壢火車站", 
+      "name": "toZhongli",
+    },
+    {
+      "nameZH_TW": "中央-桃園高鐵站", 
+      "name": "toHSR",
+    },
+    {
+      "nameZH_TW": "9025A", 
+      "name": "9025A",
+    },
+    {
+      "nameZH_TW": "台聯大專車", 
+      "name": "UST",
+    }
+    // '216': 'Bus216',
+    // '5035': 'Bus5035'
+  ];
+
+  let busList = [];
+
+  for (const [index, routeInfo] of Object.entries(buses)) {
+    console.log(routeInfo)
+    busList.push((
+        <TouchableOpacity
+              onPress={() => navigation.navigate('BusDetailView', routeInfo)}
+              style={{ width: '100%', backgroundColor: 'white' }}
+            >
+              <View>
+                <Text style={{
+                  textAlign: 'center', top: 15, fontSize: 28, color: '#476685',
+                }}
+                >
+                  {routeInfo.nameZH_TW}
+                </Text>
+              </View>
+              <Text style={{ fontSize: 10 }}>{'\n'}</Text>
+            </TouchableOpacity>
+      ))
+  }
+
   return (
     <SafeAreaView style={Styles.background}>
       <ScrollView>
@@ -36,110 +81,7 @@ function First({ navigation }) {
 
         <Text style={{ fontSize: 5 }}>{'\n'}</Text>
         <View>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('Bus132')}
-            style={{ width: '100%', backgroundColor: 'white' }}
-          >
-            <View>
-              <Text style={{
-                textAlign: 'center', top: 15, fontSize: 28, color: '#476685',
-              }}
-              >
-                132
-              </Text>
-            </View>
-            <Text style={{ fontSize: 10 }}>{'\n'}</Text>
-          </TouchableOpacity>
-          <Text style={{ fontSize: 5 }}>{'\n'}</Text>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('Bus133')}
-            style={{ width: '100%', backgroundColor: 'white' }}
-          >
-            <View>
-              <Text style={{
-                textAlign: 'center', top: 15, fontSize: 28, color: '#476685',
-              }}
-              >
-                133
-              </Text>
-            </View>
-            <Text style={{ fontSize: 10 }}>{'\n'}</Text>
-          </TouchableOpacity>
-          <Text style={{ fontSize: 5 }}>{'\n'}</Text>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('Bus172')}
-            style={{ width: '100%', backgroundColor: 'white' }}
-          >
-            <View>
-              <Text style={{
-                textAlign: 'center', top: 15, fontSize: 28, color: '#476685',
-              }}
-              >
-                172
-              </Text>
-            </View>
-            <Text style={{ fontSize: 10 }}>{'\n'}</Text>
-          </TouchableOpacity>
-          <Text style={{ fontSize: 5 }}>{'\n'}</Text>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('Bus173')}
-            style={{ width: '100%', backgroundColor: 'white' }}
-          >
-            <View>
-              <Text style={{
-                textAlign: 'center', top: 15, fontSize: 28, color: '#476685',
-              }}
-              >
-                173
-              </Text>
-            </View>
-            <Text style={{ fontSize: 10 }}>{'\n'}</Text>
-          </TouchableOpacity>
-          <Text style={{ fontSize: 5 }}>{'\n'}</Text>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('Bus216')}
-            style={{ width: '100%', backgroundColor: 'white' }}
-          >
-            <View>
-              <Text style={{
-                textAlign: 'center', top: 15, fontSize: 28, color: '#476685',
-              }}
-              >
-                216
-              </Text>
-            </View>
-            <Text style={{ fontSize: 10 }}>{'\n'}</Text>
-          </TouchableOpacity>
-          <Text style={{ fontSize: 5 }}>{'\n'}</Text>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('Bus9025A')}
-            style={{ width: '100%', backgroundColor: 'white' }}
-          >
-            <View>
-              <Text style={{
-                textAlign: 'center', top: 15, fontSize: 28, color: '#476685',
-              }}
-              >
-                9025A
-              </Text>
-            </View>
-            <Text style={{ fontSize: 10 }}>{'\n'}</Text>
-          </TouchableOpacity>
-          <Text style={{ fontSize: 5 }}>{'\n'}</Text>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('UST')}
-            style={{ width: '100%', backgroundColor: 'white' }}
-          >
-            <View>
-              <Text style={{
-                textAlign: 'center', top: 15, fontSize: 28, color: '#476685',
-              }}
-              >
-                台聯大專車
-              </Text>
-            </View>
-            <Text style={{ fontSize: 10 }}>{'\n'}</Text>
-          </TouchableOpacity>
+          {busList}
         </View>
       </ScrollView>
     </SafeAreaView>

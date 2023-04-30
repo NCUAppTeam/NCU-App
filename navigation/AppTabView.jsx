@@ -18,6 +18,7 @@ import {
 import CalendarScreen from '../screens/Calendar';
 import MapScreen from '../screens/Map';
 import EventScreen from '../screens/Event';
+import HomeScreen from '../screens/Home';
 
 const Tab = createBottomTabNavigator();
 

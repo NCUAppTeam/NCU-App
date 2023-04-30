@@ -20,7 +20,7 @@ import { Alert } from 'react-native';
  */
 export async function getActivityInfo(activityID) {
   const db = firebase.firestore();
-  const doc = await db.collection('Activities').doc(activityID).get();
+  const doc = await db.collection('activities').doc(activityID).get();
 
   if (!doc.exists) {
     // await Alert.alert('No event data found!');
@@ -43,7 +43,7 @@ export async function createAttendance(activityID) {
       if (numberLimit === attendees.length) {
         Alert.alert(`${name} has no vacancy now!`);
       } else {
-        const docRef = await db.collection('Activities').doc(activityID);
+        const docRef = await db.collection('activities').doc(activityID);
         docRef.update({
           attendees: firebase.firestore.FieldValue.arrayUnion(uid),
         });
@@ -61,7 +61,7 @@ export async function deleteAttendance(activityID) {
   try {
     const db = firebase.firestore();
     const { uid } = firebase.auth().currentUser;
-    const docRef = await db.collection('Activities').doc(activityID);
+    const docRef = await db.collection('activities').doc(activityID);
     docRef.update({
       attendees: firebase.firestore.FieldValue.arrayRemove(uid),
     });
@@ -75,7 +75,7 @@ export async function createActivity(data) {
   try {
     const db = firebase.firestore();
     const { uid } = firebase.auth().currentUser;
-    const res = await db.collection('Activities')
+    const res = await db.collection('activities')
       .add({
         uid,
         tag: data.tag,
@@ -99,7 +99,7 @@ export async function modifyActivity(data) {
   try {
     const db = firebase.firestore();
     const { uid } = firebase.auth().currentUser;
-    const res = await db.collection('Activities')
+    const res = await db.collection('activities')
       .doc(data.id)
       .set({
         uid,
@@ -124,7 +124,7 @@ export async function modifyActivity(data) {
 export async function deleteActivity(activityID) {
   try {
     const db = firebase.firestore();
-    const res = await db.collection('Activities').doc(activityID).delete();
+    const res = await db.collection('activities').doc(activityID).delete();
 
     return res;
   } catch (err) {
@@ -137,8 +137,8 @@ export async function deleteActivity(activityID) {
 export async function getTagActivities(tagId) {
   try {
     const db = firebase.firestore();
-    const activityRef = await db.collection('Activities');
-    const activitiesQueryRes = await activityRef.where('ActivitiesTags', '==', tagId).get();
+    const activityRef = await db.collection('activities');
+    const activitiesQueryRes = await activityRef.where('activitiesTags', '==', tagId).get();
     const activitiesRes = [];
     activitiesQueryRes.forEach((doc) => {
       const dataObj = doc.data();
@@ -155,10 +155,10 @@ export async function getTagActivities(tagId) {
   return null;
 }
 
-export async function getAllActivities() {
+export async function getAllactivities() {
   try {
     const db = firebase.firestore();
-    const activityRef = await db.collection('Activities');
+    const activityRef = await db.collection('activities');
     const activityQueryRes = await activityRef.get();
     const activityRes = [];
     activityQueryRes.forEach((doc) => {
@@ -179,7 +179,7 @@ export async function getAllActivities() {
 export async function getUserActivities() {
   try {
     const db = firebase.firestore();
-    const activityRef = await db.collection('Activities');
+    const activityRef = await db.collection('activities');
     const { uid } = firebase.auth().currentUser;
     const userActivityQueryRes = await activityRef.where('uid', '==', uid).get();
     const userActivityRes = [];
@@ -203,7 +203,7 @@ export async function getUserActivities() {
 export async function getTags() {
   try {
     const db = firebase.firestore();
-    const activityTagRef = await db.collection('ActivitiesTags');
+    const activityTagRef = await db.collection('activitiesTags');
     const activityTagQueryRes = await activityTagRef.get();
     const activityTagRes = [];
     activityTagQueryRes.forEach((doc) => {
@@ -228,10 +228,10 @@ export async function getTags() {
  */
 export async function querySearch(query, tagId = undefined) {
   const db = firebase.firestore();
-  const itemRef = db.collection('Activities');
+  const itemRef = db.collection('activities');
   let queryRef = itemRef.where('name', '>=', query);
   if (tagId) {
-    queryRef = queryRef.where('ActivitiesTags', '==', tagId);
+    queryRef = queryRef.where('activitiesTags', '==', tagId);
   }
   const querySnapshot = await queryRef.get();
   const resultArray = [];

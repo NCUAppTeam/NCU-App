@@ -1,4 +1,4 @@
-import { URLSearchParams } from 'url';
+import url from 'url';
 import axios from 'axios';
 import qs from 'qs';
 
@@ -180,10 +180,12 @@ async function route(param) {
   };
   
   const getFinalUrl = (bus) => {
-    const url = new URL(`${APIBASE}/${bus}`);
-    url.search = new URLSearchParams(data).toString();
-    return url.toString();
+    const finalUrl = url.parse(`${APIBASE}/${bus}`, true);
+    finalUrl.query = data;
+    return url.format(finalUrl);
   };
+
+  console.log(param)
 
   let responses;
   while (true) {
@@ -198,6 +200,8 @@ async function route(param) {
       await new Promise(resolve => setTimeout(resolve, 500));
     }
   }
+  
+  
   
   const output = [];
   responses.forEach((response, i) => {
@@ -215,7 +219,7 @@ async function route(param) {
       }
     });
   });
-  
+
   return output.map(stop => ({
     stop: stop.stop,
     bus: stop.bus,

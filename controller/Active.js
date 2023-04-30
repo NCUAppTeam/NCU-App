@@ -131,7 +131,7 @@ async function addActive(active) {
   };
 
   if (active.image1) {
-    const imageAddress = `actives/${imagePos(active.image1)}`;
+    const imageAddress = `activities/${imagePos(active.image1)}`;
     const storageRef = ref(storage, imageAddress);
     const response = await fetch(active.image1);
     const blob = await response.blob();
@@ -142,7 +142,7 @@ async function addActive(active) {
   }
 
   if (active.image2) {
-    const imageAddress = `actives/${imagePos(active.image2)}`;
+    const imageAddress = `activities/${imagePos(active.image2)}`;
     const storageRef = ref(storage, imageAddress);
     const response = await fetch(active.image2);
     const blob = await response.blob();
@@ -150,7 +150,7 @@ async function addActive(active) {
     item.imageUri2 = await getDownloadURL(uploadTask.ref);
   }
   if (active.image3) {
-    const imageAddress = `actives/${imagePos(active.image3)}`;
+    const imageAddress = `activities/${imagePos(active.image3)}`;
     const storageRef = ref(storage, imageAddress);
     const response = await fetch(active.image3);
     const blob = await response.blob();
@@ -162,13 +162,13 @@ async function addActive(active) {
     item.cost = '免費free';
   }
   const db = getFirestore(app);
-  const activesRef = query(collection(db, 'actives'));
+  const activesRef = query(collection(db, 'activities'));
   addDoc(activesRef, item).then(() => {
     console.log('Document has been added successfully');
   }).catch((error) => {
     console.log(error);
   });
-  const querySnapshot = await getDocs(collection(db, 'actives'));
+  const querySnapshot = await getDocs(collection(db, 'activities'));
   querySnapshot.forEach((doc1) => {
     if (doc1.data().name === item.name) {
       setDoc(doc(db, 'attendees', `${UserStudent}`, 'hostedEvent', `${doc1.id}`), {}, { merge: true });
@@ -188,7 +188,7 @@ async function updateActive(oldID, NEWactive) {
 
   const NEWitem = NEWactive;
   const db = getFirestore(app);
-  const activesRef = doc(db, `actives/${oldID}`);
+  const activesRef = doc(db, `activities/${oldID}`);
   const querySnapshot = await getDoc(activesRef);
   if (NEWactive.genre) {
     defaultRef = defaultLinks[values.indexOf(NEWactive.genre)].link;
@@ -213,21 +213,21 @@ async function updateActive(oldID, NEWactive) {
     if (NEWactive.image2 === 'forward') { // 如果是第二張照片往前補
       delete NEWitem.image1;
       delete NEWitem.image2;
-      const docRef = doc(db, 'actives', oldID);
+      const docRef = doc(db, 'activities', oldID);
       const data = {
         imageUri1: NEWactive.image1,
         imageUri2: deleteField(),
       };
       await updateDoc(docRef, data, { merge: true });
     } else {
-      const imageAddress = `actives/${imagePos(NEWactive.image1)}`;
+      const imageAddress = `activities/${imagePos(NEWactive.image1)}`;
       const storageRef = ref(storage, imageAddress);
       const response = await fetch(NEWactive.image1);
       const blob = await response.blob();
       const uploadTask = await uploadBytes(storageRef, blob);
       NEWitem.imageUri1 = await getDownloadURL(uploadTask.ref);
       if (querySnapshot.data().imageUri1 !== defaultLinks[values.indexOf(querySnapshot.data().genre)].link) {
-        const deleteRef = ref(storage, `actives/${querySnapshot.data().imageUri1.substr(-94, 41)}`);
+        const deleteRef = ref(storage, `activities/${querySnapshot.data().imageUri1.substr(-94, 41)}`);
         deleteObject(deleteRef).then(() => {
           console.log('origin image1 has been deleted!');
         }).catch((err) => {
@@ -241,7 +241,7 @@ async function updateActive(oldID, NEWactive) {
 
   if (NEWactive.image2 === 'removed') {
     delete NEWitem.image2;
-    const deleteRef = ref(storage, `actives/${querySnapshot.data().imageUri2.substr(-94, 41)}`);
+    const deleteRef = ref(storage, `activities/${querySnapshot.data().imageUri2.substr(-94, 41)}`);
     deleteObject(deleteRef).then(() => {
       console.log('origin image2 has been deleted!');
     }).catch((err) => {
@@ -250,20 +250,20 @@ async function updateActive(oldID, NEWactive) {
   } else if (NEWactive.image3 === 'forward') {
     delete NEWitem.image2;
     delete NEWitem.image3;
-    const docRef = doc(db, 'actives', oldID);
+    const docRef = doc(db, 'activities', oldID);
     const data = {
       imageUri2: NEWactive.image2,
       imageUri3: deleteField(),
     };
     await updateDoc(docRef, data, { merge: true });
   } else if (NEWactive.image2 !== undefined) {
-    const imageAddress = `actives/${imagePos(NEWactive.image2)}`;
+    const imageAddress = `activities/${imagePos(NEWactive.image2)}`;
     const storageRef = ref(storage, imageAddress);
     const response = await fetch(NEWactive.image2);
     const blob = await response.blob();
     const uploadTask = await uploadBytes(storageRef, blob);
     NEWitem.imageUri2 = await getDownloadURL(uploadTask.ref);
-    const deleteRef = ref(storage, `actives/${querySnapshot.data().imageUri2.substr(-94, 41)}`);
+    const deleteRef = ref(storage, `activities/${querySnapshot.data().imageUri2.substr(-94, 41)}`);
     deleteObject(deleteRef).then(() => {
       console.log('origin image2 has been deleted!');
     }).catch((err) => {
@@ -274,20 +274,20 @@ async function updateActive(oldID, NEWactive) {
 
   if (NEWactive.image3 === 'removed') {
     delete NEWitem.image3;
-    const deleteRef = ref(storage, `actives/${querySnapshot.data().imageUri3.substr(-94, 41)}`);
+    const deleteRef = ref(storage, `activities/${querySnapshot.data().imageUri3.substr(-94, 41)}`);
     deleteObject(deleteRef).then(() => {
       console.log('origin image3 has been deleted!');
     }).catch((err) => {
       console.log(err);
     });
   } else if (NEWactive.image3 !== undefined) {
-    const imageAddress = `actives/${imagePos(NEWactive.image3)}`;
+    const imageAddress = `activities/${imagePos(NEWactive.image3)}`;
     const storageRef = ref(storage, imageAddress);
     const response = await fetch(NEWactive.image3);
     const blob = await response.blob();
     const uploadTask = await uploadBytes(storageRef, blob);
     NEWitem.imageUri3 = await getDownloadURL(uploadTask.ref);
-    const deleteRef = ref(storage, `actives/${querySnapshot.data().imageUri3.substr(-94, 41)}`);
+    const deleteRef = ref(storage, `activities/${querySnapshot.data().imageUri3.substr(-94, 41)}`);
     deleteObject(deleteRef).then(() => {
       console.log('origin image3 has been deleted!');
     }).catch((err) => {
@@ -310,7 +310,7 @@ async function updateActive(oldID, NEWactive) {
 
 async function getAllActive() {
   const db = getFirestore(app);
-  const activesRef = query(collection(db, 'actives'), orderBy('uploadTime', 'desc'));
+  const activesRef = query(collection(db, 'activities'), orderBy('uploadTime', 'desc'));
   const activeArray = [];
   const querySnapshot = await getDocs(activesRef);
   querySnapshot.forEach((doc1) => {
@@ -336,7 +336,7 @@ async function getAllActive() {
 
 async function getGenreActive(genre) {
   const db = getFirestore(app);
-  const activesRef = query(collection(db, 'actives'), where('genre', '==', genre));
+  const activesRef = query(collection(db, 'activities'), where('genre', '==', genre));
   const GenreArray = [];
   const querySnapshot = await getDocs(activesRef);
 
@@ -378,7 +378,7 @@ async function getParticipatedActive() {
   });
 
   for (let i = 0; i < attendIDArray.length; i += 1) {
-    const refDoc = doc(db, `actives/${attendIDArray[i]}`);
+    const refDoc = doc(db, `activities/${attendIDArray[i]}`);
     const result = await getDoc(refDoc);
     if (new Date(toDateString(result.data().endTime)) > current) {
       activeArray.push({
@@ -414,7 +414,7 @@ async function getFinishedActive() {
     attendIDArray.push(attendID.id);
   });
   for (let i = 0; i < attendIDArray.length; i += 1) {
-    const refDoc = doc(db, `actives/${attendIDArray[i]}`);
+    const refDoc = doc(db, `activities/${attendIDArray[i]}`);
     const result = await getDoc(refDoc);
     if (new Date(toDateString(result.data().endTime)) < current) {
       activeArray.push({
@@ -440,7 +440,7 @@ async function getFinishedActive() {
 
 async function getOneActive(id) {
   const db = getFirestore(app);
-  const activesDoc = doc(db, `actives/${id}`);
+  const activesDoc = doc(db, `activities/${id}`);
 
   const querySnapshot = await getDoc(activesDoc);
   const oneactive = {
@@ -480,7 +480,7 @@ async function getOneActive(id) {
 
 async function getHangOutActive() {
   const db = getFirestore(app);
-  const activesRef = query(collection(db, 'actives'), where('genre', 'in', ['揪人遊戲', '揪人共乘', '揪人運動']));
+  const activesRef = query(collection(db, 'activities'), where('genre', 'in', ['揪人遊戲', '揪人共乘', '揪人運動']));
   const GenreArray = [];
   const querySnapshot = await getDocs(activesRef);
   querySnapshot.forEach((doc1) => {
@@ -510,7 +510,7 @@ async function getHangOutActive() {
 
 async function getEventActive() {
   const db = getFirestore(app);
-  const activesRef = query(collection(db, 'actives'), where('genre', 'in', ['校園活動', '系上活動', '社團活動']));
+  const activesRef = query(collection(db, 'activities'), where('genre', 'in', ['校園活動', '系上活動', '社團活動']));
   const EventArray = [];
   const querySnapshot = await getDocs(activesRef);
   querySnapshot.forEach((doc1) => {
@@ -540,11 +540,11 @@ async function getEventActive() {
 
 async function deleteOneActive(deleteDocId) {
   const db = getFirestore(app);
-  const activesRef = query(doc(db, 'actives', deleteDocId));
+  const activesRef = query(doc(db, 'activities', deleteDocId));
   const dltDoc = await getDoc(activesRef);
   if (dltDoc.data().imageUri1 !== defaultLinks[values.indexOf(dltDoc.data().genre)].link) {
     if (dltDoc.data().imageUri1) {
-      const uriRef1 = ref(storage, `actives/${dltDoc.data().imageUri1.substr(-94, 41)}`);
+      const uriRef1 = ref(storage, `activities/${dltDoc.data().imageUri1.substr(-94, 41)}`);
       deleteObject(uriRef1).then(() => {
         console.log('Image 1 has been deleted!');
       }).catch((err) => {
@@ -553,7 +553,7 @@ async function deleteOneActive(deleteDocId) {
     }
   }
   if (dltDoc.data().imageUri2) {
-    const uriRef2 = ref(storage, `actives/${dltDoc.data().imageUri2.substr(-94, 41)}`);
+    const uriRef2 = ref(storage, `activities/${dltDoc.data().imageUri2.substr(-94, 41)}`);
     deleteObject(uriRef2).then(() => {
       console.log('Image 2 has been deleted!');
     }).catch((err) => {
@@ -561,7 +561,7 @@ async function deleteOneActive(deleteDocId) {
     });
   }
   if (dltDoc.data().imageUri3) {
-    const uriRef3 = ref(storage, `actives/${dltDoc.data().imageUri3.substr(-94, 41)}`);
+    const uriRef3 = ref(storage, `activities/${dltDoc.data().imageUri3.substr(-94, 41)}`);
     deleteObject(uriRef3).then(() => {
       console.log('Image 3 has been deleted!');
     }).catch((err) => {
@@ -569,7 +569,7 @@ async function deleteOneActive(deleteDocId) {
     });
   }
 
-  await deleteDoc(doc(db, 'actives', deleteDocId));
+  await deleteDoc(doc(db, 'activities', deleteDocId));
   console.log('deleteOneActive Successful');
 }
 
@@ -667,7 +667,7 @@ async function getHostedEvent() {
     hostIDArray.push(doc1.id);
   });
   for (let i = 0; i < hostIDArray.length; i += 1) {
-    const refDoc = doc(db, `actives/${hostIDArray[i]}`);
+    const refDoc = doc(db, `activities/${hostIDArray[i]}`);
     const result = await getDoc(refDoc);
     const num = await getTotalOfAttendees(result.id);
     eventArray.push({
@@ -737,7 +737,7 @@ async function getHostInfo(docID) {
 
 async function fuseSearchName(searchString) {
   const db = getFirestore(app);
-  const activesRef = query(collection(db, 'actives'));
+  const activesRef = query(collection(db, 'activities'));
   const activeArray = [];
   const querySnapshot = await getDocs(activesRef);
 

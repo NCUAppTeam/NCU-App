@@ -78,7 +78,7 @@ function imagePos(imageUri) {
 async function addMessage(messageData) {
   const chatroomId = messageData.id;
   const db = getFirestore(app);
-  const messageRef = query(collection(db, `chatroom/${chatroomId}/messages`));
+  const messageRef = query(collection(db, `chatrooms/${chatroomId}/messages`));
   const item = {
     sender: messageData.sender,
     type: messageData.type,
@@ -127,7 +127,7 @@ async function getNewestMessage(chatroom) {
   };
 
   // 獲取最後一則消息 limit(1)
-  const q = query(collection(db, `chatroom/${chatroom.id}/messages`), orderBy('sendTime', 'desc'), limit(1));
+  const q = query(collection(db, `chatrooms/${chatroom.id}/messages`), orderBy('sendTime', 'desc'), limit(1));
   (await getDocs(q)).forEach((chat) => {
     if (chat.data() !== null) {
       if (chat.data().type === 'image') {
@@ -178,7 +178,7 @@ async function getNewestMessage(chatroom) {
 
 async function deleteMessage(chatroomId, messageID) {
   const db = getFirestore(app);
-  const deleteRef = doc(db, `chatroom/${chatroomId}/messages/${messageID}`);
+  const deleteRef = doc(db, `chatrooms/${chatroomId}/messages/${messageID}`);
   const deletedDoc = await getDoc(deleteRef);
 
   if (deletedDoc.data().type === 'image') {
@@ -198,7 +198,7 @@ async function deleteMessage(chatroomId, messageID) {
 async function findRelateChatroom(userUid) {
   const rooms = [];
   const db = getFirestore(app);
-  const q = query(collection(db, 'chatroom'), where('members', 'array-contains', userUid));
+  const q = query(collection(db, 'chatrooms'), where('members', 'array-contains', userUid));
   (await getDocs(q)).forEach((chatroom) => {
     rooms.push({
       id: chatroom.id,
@@ -218,7 +218,7 @@ async function addChatroom(other, user) {
   const relate = [];
 
   // 檢查現有
-  const q = query(collection(db, 'chatroom'), where('members', 'array-contains', user));
+  const q = query(collection(db, 'chatrooms'), where('members', 'array-contains', user));
   (await getDocs(q)).forEach((chatroom) => {
     relate.push({
       id: chatroom.id,
@@ -236,9 +236,9 @@ async function addChatroom(other, user) {
 
   // 如果沒有, 就新增一個聊天室
   if (exist === false) {
-    const newRef = doc(collection(db, 'chatroom'));
+    const newRef = doc(collection(db, 'chatrooms'));
     const snapshot = await getDoc(newRef);
-    setDoc(doc(db, `chatroom/${snapshot.id}`), { members: [user, other] }, { merge: true });
+    setDoc(doc(db, `chatrooms/${snapshot.id}`), { members: [user, other] }, { merge: true });
     returnID = snapshot.id;
   }
   return returnID;
@@ -247,7 +247,7 @@ async function addChatroom(other, user) {
 // 監聽即時訊息
 async function onSnap(chatroomId) {
   const db = getFirestore(app);
-  const dbRef = collection(db, `chatroom/${chatroomId}/messages`);
+  const dbRef = collection(db, `chatrooms/${chatroomId}/messages`);
   const message = [];
   onSnapshot(dbRef, (docsSnap) => {
     docsSnap.forEach((snap) => {
@@ -271,13 +271,13 @@ async function countUnreadMessage(uid) {
   const db = getFirestore(app);
   const relate = [];
 
-  const q = query(collection(db, 'chatroom'), where('members', 'array-contains', uid));
+  const q = query(collection(db, 'chatrooms'), where('members', 'array-contains', uid));
   (await getDocs(q)).forEach((chatroom) => {
     relate.push(chatroom.id);
   });
   const count = [];
   for (let i = 0; i < relate.length; i += 1) {
-    const messageRef = query(collection(db, `chatroom/${relate[i]}/messages`));
+    const messageRef = query(collection(db, `chatrooms/${relate[i]}/messages`));
     (await getDocs(messageRef)).forEach((result) => {
       if (result.data().read === false && result.data().sender !== uid.trim()) {
         count.push(result.id);
@@ -289,11 +289,11 @@ async function countUnreadMessage(uid) {
 
 async function readMessage(uid, chatroomID) {
   const db = getFirestore(app);
-  const messageRef = query(collection(db, `chatroom/${chatroomID}/messages`));
+  const messageRef = query(collection(db, `chatrooms/${chatroomID}/messages`));
 
   (await getDocs(messageRef)).forEach((result) => {
     if (result.data().read === false && result.data().sender !== uid) {
-      setDoc(doc(db, `chatroom/${chatroomID}/messages/${result.id}`), { read: true }, { merge: true });
+      setDoc(doc(db, `chatrooms/${chatroomID}/messages/${result.id}`), { read: true }, { merge: true });
     }
   });
 }
@@ -333,7 +333,7 @@ async function Notification(notifymessage, eventID) {
   // 傳送消息
   for (let i = 0; i < sendList.length; i += 1) {
     addChatroom(sendList[i], UserStudent).then((returnID) => {
-      addDoc(collection(db, `chatroom/${returnID}/messages`), item, { merge: true }).then(console.log('notify eveyone succeed'));
+      addDoc(collection(db, `chatrooms/${returnID}/messages`), item, { merge: true }).then(console.log('notify eveyone succeed'));
     });
   }
 }

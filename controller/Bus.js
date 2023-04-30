@@ -161,7 +161,7 @@ async function afun9025(param) {
 
 async function route(param) {
   if (param.buses.toString() === ['9025A'].toString()) return await afun9025(param);
-  if (![['132'], ['133'], ['132', '133'], ['172'], ['173'], ['172', '173']].some(valid => valid.join() === param.buses.join())) {
+  if (![['5035'], ['132'], ['133'], ['132', '133'], ['172'], ['173'], ['172', '173']].some(valid => valid.join() === param.buses.join())) {
     throw new Error('Invalid Buses: ' + param.buses.join(' '));
   }
   

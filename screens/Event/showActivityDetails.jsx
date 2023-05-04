@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   Text, View, SafeAreaView, ScrollView, Image, Dimensions,
-  TouchableOpacity, Alert,
+  TouchableOpacity, Alert, Share,
 } from 'react-native';
 import Dialog from 'react-native-popup-dialog';
 import {
@@ -85,6 +85,17 @@ function Detailscreen({ route, navigation }) {
     }
   };
   const [showDialog, setShowDialog] = useState(false);
+
+  const shareData = async () => {
+      try {
+          await Share.share({
+              message: '分享活動',
+          });
+      } catch (error) {
+          alert(error.message);
+      }
+  };
+
   return (
     <SafeAreaView style={styles.showActivityDetails_container} linking={linking}>
       <NativeBaseProvider>
@@ -232,7 +243,8 @@ function Detailscreen({ route, navigation }) {
                               size={25}
                               color="#28527A"
                               onPress={() => {
-                                console.log('Link Copied');
+                                // console.log('Link Copied');
+                                shareData()
                                 setShowDialog(false);
                               }}
                             >

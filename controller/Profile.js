@@ -6,7 +6,7 @@ async function getCurrentUserProfile() {
 
 async function getProfile(uid) {
   const db = firebase.firestore();
-  const docRef = db.collection('Profiles').doc(uid);
+  const docRef = db.collection('profiles').doc(uid);
   const doc = await docRef.get();
   if (doc.exists) {
     return doc.data();
@@ -16,7 +16,7 @@ async function getProfile(uid) {
 
 async function updateProfile(uid, data) {
   const db = firebase.firestore();
-  db.collection('Profiles').doc(uid).set(data);
+  db.collection('profiles').doc(uid).set(data);
 }
 
 export default {

@@ -46,7 +46,7 @@ function Send({ route, navigation }) {
   });
 
   const db = getFirestore(getApp());
-  const dbRef = collection(db, `chatroom/${chatroomId}/messages`);
+  const dbRef = collection(db, `chatrooms/${chatroomId}/messages`);
 
   // const [time, setTime] = useState();
   const [getData, setGetData] = useState([]);

@@ -64,7 +64,7 @@ async function checkSubscribe(eventId) {
     const db = firebase.firestore();
     const { uid } = firebase.auth().currentUser;
 
-    const calendarRef = await db.collection('CalendarEvents');
+    const calendarRef = await db.collection('calendar_events');
     const calendarQueryRes = await calendarRef
       .where('uid', '==', uid)
       .where('eventId', '==', eventId)
@@ -106,7 +106,7 @@ async function unsubscribe(eventId) {
     const db = firebase.firestore();
     const { uid } = firebase.auth().currentUser;
 
-    const calendarRef = await db.collection('CalendarEvents');
+    const calendarRef = await db.collection('calendar_events');
     const calendarQueryRes = await calendarRef
       .where('uid', '==', uid)
       .where('eventId', '==', eventId)
@@ -219,7 +219,7 @@ async function deleteEvent(eventID) {
  */
 async function getSubscribedEvents() {
   const db = firebase.firestore();
-  const subscriptionRef = await db.collection('CalendarEvents');
+  const subscriptionRef = await db.collection('calendar_events');
   const { uid } = firebase.auth().currentUser;
   const subscriptionQueryRes = await subscriptionRef
     .where('uid', '==', uid)
@@ -259,7 +259,7 @@ async function isUserPrvilleged() {
   const db = firebase.firestore();
   const user = firebase.auth().currentUser;
   if (user) {
-    const docRef = db.collection('Profiles').doc(user.uid);
+    const docRef = db.collection('profiles').doc(user.uid);
     const doc = await docRef.get();
     return doc.data().eventPrivilege === true;
   }

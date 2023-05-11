@@ -155,8 +155,55 @@ export default StyleSheet.create({
     height: 140,
   },
   removeBox2: {
-    flex: 1,
     width: 350,
-    height: 130,
+    height: 100,
+  },
+  DeleteTitle: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  DeleteTitleText: {
+    textAlign: 'left',
+    color: '#1f2937',
+    fontSize: 16,
+    fontWeight: '400',
+    marginTop: 17,
+    marginBottom: 10,
+  },
+  DeleteDialogBottom: {
+    flexDirection: 'row',
+    height: '100%',
+    width: '100%',
+    backgroundColor: '#f3f4f6',
+    justifyContent: 'flex-end',
+    alignItems: 'baseline',
+  },
+  textSetting1: {
+    fontSize: 16,
+    marginBottom: 5,
+  },
+  textSetting2: {
+    fontSize: 14,
+    marginBottom: 5,
+  },
+  RemoveDialog: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  RemoveDialogTitle: {
+    textAlign: 'left',
+    color: '#1f2937',
+    fontSize: 16,
+    fontWeight: '400',
+    marginTop: 17,
+    marginBottom: 10,
+  },
+  removeDialogBottom: {
+    flexDirection: 'row',
+    height: '100%',
+    width: '100%',
+    backgroundColor: '#f3f4f6',
+    justifyContent: 'flex-end',
+    alignItems: 'baseline',
   },
 });

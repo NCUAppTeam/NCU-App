@@ -21,7 +21,6 @@ function List({ navigation }) {
   const auth = getAuth();
   const [active1, setActive1] = useState([]);
   const [active2, setActive2] = useState([]);
-  const SearchBarHeader = () => SearchHeader({ navigation });
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = () => {
     setRefreshing(true);
@@ -46,7 +45,7 @@ function List({ navigation }) {
   }, [navigation]);
   return (
     <Box style={styles.container} safeArea>
-      <SearchBarHeader />
+      <SearchHeader navigation={navigation} />
 
       <Box style={styles.body}>
         <ScrollView

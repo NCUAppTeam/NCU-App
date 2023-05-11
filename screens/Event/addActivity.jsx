@@ -78,10 +78,29 @@ function Add({ navigation }) {
   const showDialog1 = () => setVisible1(true);
 
   const hideDialog1 = () => {
-    if (startDateText !== undefined && startTimeText !== undefined) {
-      setStart(`${startDateText}  ${startTimeText}`);
-      setStartCheck(true);
-    }
+    if(data.endTime!==undefined && data.endTime>=data.startTime &&
+      startDateText !== undefined && startTimeText !== undefined){
+       setStart(`${startDateText}  ${startTimeText}`);
+       setStartCheck(true);
+   }
+   else if(data.endTime!==undefined && data.endTime<data.startTime &&
+     startDateText !== undefined && startTimeText !== undefined){
+       alert("開始時間錯誤");
+       setData({ ...data, startTime: undefined });
+       setStartDate('');
+       setStartTime('');
+       setStart('');
+   }
+   else if(data.endTime===undefined && startDateText !== undefined && startTimeText !== undefined){
+     setStart(`${startDateText}  ${startTimeText}`);
+     setStartCheck(true);
+   }
+   else{
+     setData({ ...data, startTime: undefined });
+     setStartDate('');
+     setStartTime('');
+     setStart('');
+   }
     setVisible1(false);
   };
   const showMode1 = (currentMode) => {
@@ -111,7 +130,11 @@ function Add({ navigation }) {
   };
 
   const hideDialogi1 = () => {
-    if (startDateText === undefined || startTimeText === undefined) {
+    setData({ ...data, startTime: undefined });
+    setStart(undefined);
+    setStartCheck(false);
+    if ((data.endTime===undefined && (startDateText === undefined || startTimeText === undefined))
+    ||(data.endTime!==undefined && data.endTime>date1)){
       const currentDate = date1;
       setDate1(currentDate);
       const tempDate = new Date(currentDate);
@@ -120,9 +143,9 @@ function Add({ navigation }) {
       setData({ ...data, startTime: tempDate });
       setStart(`${fDate}  ${fTime}`);
       setStartCheck(true);
-    } else {
-      setStart(`${startDateText}  ${startTimeText}`);
-      setStartCheck(true);
+    }
+    else{
+      alert("開始時間錯誤");
     }
     setVisible1(false);
   };
@@ -152,9 +175,28 @@ function Add({ navigation }) {
   const [endText, setEnd] = useState();
   const showDialog2 = () => setVisible2(true);
   const hideDialog2 = () => {
-    if (endDateText !== undefined && endTimeText !== undefined) {
+    if(data.startTime!==undefined && data.endTime>=data.startTime &&
+       endDateText !== undefined && endTimeText !== undefined){
+        setEnd(`${endDateText}  ${endTimeText}`);
+        setEndCheck(true);
+    }
+    else if(data.startTime!==undefined && data.endTime<data.startTime &&
+      endDateText !== undefined && endTimeText !== undefined){
+        alert("結束時間錯誤");
+        setData({ ...data, endTime: undefined });
+        setEndDate('');
+        setEndTime('');
+        setEnd('');
+    }
+    else if(data.startTime===undefined && endDateText !== undefined && endTimeText !== undefined){
       setEnd(`${endDateText}  ${endTimeText}`);
       setEndCheck(true);
+    }
+    else{
+      setData({ ...data, endTime: undefined });
+      setEndDate('');
+      setEndTime('');
+      setEnd('');
     }
     setVisible2(false);
   };
@@ -185,7 +227,11 @@ function Add({ navigation }) {
   };
 
   const hideDialogi2 = () => {
-    if (endDateText === undefined || endTimeText === undefined) {
+    setData({ ...data, endTime: undefined });
+    setEnd(undefined);
+    setEndCheck(false);
+    if ((data.endTime===undefined && (startDateText === undefined || startTimeText === undefined))
+    ||(data.endTime!==undefined && data.endTime>data.startTime)){
       const currentDate = date2;
       setDate2(currentDate);
       const tempDate = new Date(currentDate);
@@ -194,9 +240,8 @@ function Add({ navigation }) {
       setData({ ...data, endTime: tempDate });
       setEnd(`${fDate}  ${fTime}`);
       setEndCheck(true);
-    } else {
-      setEnd(`${endDateText}  ${endTimeText}`);
-      setEndCheck(true);
+    }else{
+      alert("結束時間錯誤");
     }
     setVisible2(false);
   };
@@ -663,7 +708,6 @@ function Add({ navigation }) {
                       <TouchableOpacity
                         onPress={() => {
                           data.uploadTime = new Date();
-                          // console.log(data);
                           ActiveController.addActive(data);
                           navigation.navigate('list');
                         }}

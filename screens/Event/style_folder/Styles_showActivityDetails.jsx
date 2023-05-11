@@ -91,10 +91,20 @@ export default StyleSheet.create({
     color: '#FBEEAC',
     fontWeight: 'bold',
   },
+  DialogTitle: {
+    textAlign: 'center',
+    color: '#71717A',
+    fontSize: 24,
+    fontWeight: '400',
+    marginTop: 20,
+  },
   shareBox: {
-    width: 300,
-    height: 100,
-    marginLeft: 20,
+    width: '100%',
+    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  SocialApp: {
     marginTop: 20,
   },
   reachLimitNum: {

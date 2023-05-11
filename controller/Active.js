@@ -505,6 +505,7 @@ async function getHangOutActive() {
       details: doc1.data().details,
     });
   });
+  console.log("GenreArray",GenreArray);
   return GenreArray;
 }
 

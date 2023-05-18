@@ -176,7 +176,7 @@ function TimeTableRoute ({ direction, selectedBusList, availableBusList }) {
   // const [refreshing, setRefreshing] = useState(true);
   const onRefresh = () => {
     BusController({ buses: selectedBusList, dir: direction }).then((res) => {
-      setData(testData) // using testData
+      setData(res) // using testData
     })
   }
   useEffect(() => {

@@ -84,7 +84,7 @@ function DoubleRouteCell({ item, index, data, selectedBusList, availableBusList 
   const firstBusColor = "secondary.600";
   const secondBusColor = "secondary.100";
   const busColor = (item.bus[0].name === availableBusList[0] ? firstBusColor : secondBusColor);
-  console.log(selectedBusList);
+  // console.log(selectedBusList);
   const renderLine = (item) => {
     let lineList = [];
     if (item.type !== 0) {

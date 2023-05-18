@@ -196,35 +196,56 @@ async function route(param) {
 
   const output = [];
   if (param.buses.length == 1) {  // 如果只有選擇一個公車
-    responses[0].data.forEach(stop => {
+    responses[0].data.forEach(data => {
+      const busTimeObj = getBusTime(data);
       output.push({
-        stop: stop.StopName.Zh_tw,
-        bus: param.buses[0],
-        ...getBusTime(stop),
+        stop: data.StopName.Zh_tw,
+        type: 0,
+        pass: param.buses,
+        bus: [{name: param.buses[0], time: busTimeObj.time}],
+        alert: busTimeObj.alert,
       });
     });
   } else {  // 如果有兩個公車
     // 各自的站牌，最後各自加入空字串以計算最後一次的 extra
     const names = responses.map(response => response.data.map(stop => stop.StopName.Zh_tw)).map(stops => [...stops, '']);
     const commonNames = names[0].filter(name => names[1].includes(name));    // 共通的站牌
-    const prev = [-1, -1];  // 紀錄上一個共通站排是各自的第幾站，用來計算 skip，因為第一站就是 0，所以初始值設 -1
+    const prev = [-1, -1];  // 紀錄上一個共通站排是各自的第幾站，因為第一站就是 0，所以初始值設 -1
     commonNames.forEach(name => {  // 遍歷所有共通站牌
-      const data = responses.map(response => response.data.find(stop => stop.StopName.Zh_tw === name));
-      if (name !== '') {  // 如果代表一般的站牌，而非用來計算最後一次 extra 的空字串
-        // 因為剛好 132 和 172 第一班都比較早，所以判斷如果 133 或 173 有車才比較下一班抵達的時間
-        const earlier = Number(data[1].NextBusTime !== undefined && Date.parse(data[1].NextBusTime) < Date.parse(data[0].NextBusTime));
-        output.push({
-          stop: data[earlier].StopName.Zh_tw,
-          bus: param.buses[earlier],
-          ...getBusTime(data[earlier]),
-        });
-      }
+      // 加入所有在當前與上次共通站牌之間的所有站牌
       // 找到此共通站排是各自的第幾站
       const curr = [names[0].findIndex(element => element === name), names[1].findIndex(element => element === name)];
-      // 計算距離此共通站牌，兩班公車各自獨立的站牌數
-      const extra = param.buses.reduce((acc, bus, index) => ({ ...acc, [bus]: curr[index] - prev[index] - 1 }), {});
-      if (Object.values(extra).some(value => value !== 0)) output.push({ 'extra': extra });  // 如果有公車有非共通站牌
+      // 在此共通站牌之前，加入兩站各自獨立的站牌
+      [0, 1].forEach(i => {
+        if (curr[i] - prev[i] > 1) {
+          const index = responses[i].data.findIndex(stop => stop.StopName.Zh_tw === names[i][prev[i] + 1]);
+          for (let j = prev[i] + 1; j < curr[i]; j++) {
+            const data = responses[i].data[j];
+            const busTimeObj = getBusTime(data);
+            output.push({
+              stop: data.StopName.Zh_tw,
+              type: 1,
+              pass: [param.buses[i]],
+              bus: [{name: param.buses[i], time: busTimeObj.time}],
+              alert: busTimeObj.alert,
+            });
+          }
+        }
+      });
       prev.splice(0, curr.length, ...curr);  // prev = curr 的寫法
+      if (name !== '') {
+        const data = responses.map(response => response.data.find(stop => stop.StopName.Zh_tw === name));
+        // 因為剛好 132 和 172 第一班都比較早，所以判斷如果 133 或 173 有車才比較下一班抵達的時間
+        const earlier = Number(data[1].NextBusTime !== undefined && Date.parse(data[1].NextBusTime) < Date.parse(data[0].NextBusTime));
+        const busTimeObj = getBusTime(data[earlier]);
+        output.push({
+          stop: data[earlier].StopName.Zh_tw,
+          type: 0,
+          pass: param.buses,
+          bus: [{name: param.buses[earlier], time: busTimeObj.time}],
+          alert: busTimeObj.alert,
+        });
+      }
     });
   }
   return output;

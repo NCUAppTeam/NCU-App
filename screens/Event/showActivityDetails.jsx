@@ -61,6 +61,10 @@ function Detailscreen({ route, navigation }) {
       throw err;
     });
   }, []);
+  // if(active[0]!==undefined){
+  //   console.log('active=============',Date.parse(active[0].endTimeInNum),Date.now());
+  // }
+  
 
   const [slideDot1, setSlideDot1] = useState(true);
   const [slideDot2, setSlideDot2] = useState(false);
@@ -544,53 +548,67 @@ function Detailscreen({ route, navigation }) {
                 </VStack>
               </Box>
             </Box>
-            {user !== uid && (
-              <Box style={{ flexDirection: 'row', marginBottom: 20 }}>
-                <TouchableOpacity
-                  style={styles.sentMessage}
-                  onPress={() => {
-                    if (!SignUp) {
-                      Alert.alert(
-                        '確認報名?',
-                        '請盡可能確保能參加活動, 方便主辦方統計參與人數, 謝謝配合！',
-                        [{ text: '我要反悔T~T' },
-                          {
-                            text: '確認報名',
-                            onPress: () => (
-                              ActiveController.signUp(passedID).then(() => setSignUp(true))
-                            ),
-                          },
-                        ],
+            {(user !== uid)&&(
+                (Date.parse(active[0].endTimeInNum)> Date.now()) ? (
+                <Box style={{ flexDirection: 'row', marginBottom: 20 }}>
+                  <TouchableOpacity
+                    style={styles.sentMessage}
+                    onPress={() => {
+                      if (!SignUp) {
+                        Alert.alert(
+                          '確認報名?',
+                          '請盡可能確保能參加活動, 方便主辦方統計參與人數, 謝謝配合！',
+                          [{ text: '我要反悔T~T' },
+                            {
+                              text: '確認報名',
+                              onPress: () => (
+                                ActiveController.signUp(passedID).then(() => setSignUp(true))
+                              ),
+                            },
+                          ],
 
-                      );
-                    } else {
-                      Alert.alert(
-                        '確認取消報名?',
-                        '如果時間上真的無法配合，那下次有機會再一起參加活動吧~~',
-                        [{ text: '想想還是參加吧XD' },
-                          {
-                            text: '忍痛取消報名',
-                            onPress: () => (
-                              ActiveController.quitEvent(passedID).then(() => setSignUp(false))
-                            ),
-                          },
-                        ],
+                        );
+                      } else {
+                        Alert.alert(
+                          '確認取消報名?',
+                          '如果時間上真的無法配合，那下次有機會再一起參加活動吧~~',
+                          [{ text: '想想還是參加吧XD' },
+                            {
+                              text: '忍痛取消報名',
+                              onPress: () => (
+                                ActiveController.quitEvent(passedID).then(() => setSignUp(false))
+                              ),
+                            },
+                          ],
 
-                      );
-                    }
-                  }}
-                >
-                  <Text style={styles.sentButtonText}>
-                    <Feather
-                      name="users"
-                      size={16}
-                      color="#FBEEAC"
-                    />
-                    {SignUp ? '取消報名' : '報名候補'}
-                  </Text>
-                </TouchableOpacity>
-              </Box>
+                        );
+                      }
+                    }}
+                  >
+                    <Text style={styles.sentButtonText}>
+                      {active[0].endTime}
+                      <Feather
+                        name="users"
+                        size={16}
+                        color="#FBEEAC"
+                      />
+                      {SignUp ? '取消報名' : '報名候補'}
+                    </Text>
+                  </TouchableOpacity>
+                </Box>
+              ):(
+                <Box style={{ flexDirection: 'row', marginBottom: 20 }}>
+                  <Box
+                    style={[styles.sentMessage,{backgroundColor:'#BFBFBF'}]}
+                  >
+                    <Text style={styles.sentButtonText}>
+                      報名時間已過
+                    </Text>
+                  </Box>
+                </Box>
+              )
             )}
+
           </Box>
         ))}
       </ScrollView>

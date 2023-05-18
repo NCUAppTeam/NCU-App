@@ -605,7 +605,7 @@ async function getAllAttendees(docID) {
     attendeeList.push(attendee.id);
   });
   for (let i = 0; i < attendeeList.length; i += 1) {
-    const result = await getDocs(collection(db, `attendees/${attendeeList[i]}/attendedEvent`));
+    const result = await getDocs(collection(db, `attendees/${attendeeList[i]}/attendedEvent`), orderBy('signUpTime', 'asc'));
     result.forEach((event) => {
       if (event.id === docID) {
         IDlist.push(attendeeList[i]);
@@ -684,7 +684,8 @@ async function signUp(docID) {
   const UserStudent = UserController.getUid();
   const db = getFirestore(app);
   const Ref = doc(db, `attendees/${UserStudent}/attendedEvent/${docID}`);
-  setDoc(Ref, {})
+  const signUpTime = new Date();
+  setDoc(Ref, {signUpTime})
     .then(() => {
       console.log('sign up successfully!');
     })

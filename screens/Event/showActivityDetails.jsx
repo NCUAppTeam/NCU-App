@@ -1,86 +1,87 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'
 import {
   Text, View, SafeAreaView, ScrollView, Image, Dimensions,
-  TouchableOpacity, Alert,
-} from 'react-native';
-import Dialog, { DialogContent } from 'react-native-popup-dialog';
+  TouchableOpacity, Alert
+} from 'react-native'
+import SvgQRCode from 'react-native-qrcode-svg'
+import Dialog, { DialogContent } from 'react-native-popup-dialog'
 import {
-  Ionicons, FontAwesome5, AntDesign, MaterialCommunityIcons, Feather, Fontisto, Octicons,
-} from '@expo/vector-icons';
+  Ionicons, FontAwesome5, AntDesign, MaterialCommunityIcons, Feather, Fontisto, Octicons
+} from '@expo/vector-icons'
 import {
-  Box, Divider, Center, HStack, VStack, NativeBaseProvider,
-} from 'native-base';
-import styles from './style_folder/Styles_showActivityDetails';
-import ActiveController from '../../controller/Active';
-import MessageController from '../../controller/Message';
-import UserController from '../../controller/getStudentId';
-import UrlCreator from '../../controller/createUrl';
+  Box, Divider, Center, HStack, VStack, NativeBaseProvider
+} from 'native-base'
+import styles from './style_folder/Styles_showActivityDetails'
+import ActiveController from '../../controller/Active'
+import MessageController from '../../controller/Message'
+import UserController from '../../controller/getStudentId'
+import UrlCreator from '../../controller/createUrl'
 
-function Detailscreen({ route, navigation }) {
-  const [showDialog, setShowDialog] = useState(false);
-  const [activeUrl, setActiveUrl] = useState(null);
-  const [totalAttended, setTotal] = useState();
-  const [info, setInfo] = useState([]);
-  const [active, setActive] = useState([]);
+function Detailscreen ({ route, navigation }) {
+  const [showDialog, setShowDialog] = useState(false)
+  const [activeUrl, setActiveUrl] = useState(null)
+  const [totalAttended, setTotal] = useState()
+  const [info, setInfo] = useState([])
+  const [active, setActive] = useState([])
 
-  const user = UserController.getUid();
-  const [userAvatar, setUserAvatar] = useState();
-  const Cd = route.params;
-  const passedID = JSON.stringify(Cd).slice(7, 27);
+  const user = UserController.getUid()
+  const [userAvatar, setUserAvatar] = useState()
+  const Cd = route.params
+  const passedID = JSON.stringify(Cd).slice(7, 27)
 
-  const [SignUp, setSignUp] = useState();
+  const [SignUp, setSignUp] = useState()
   useEffect(() => {
     UserController.getINFO(user).then((res) => {
-      setUserAvatar(res.avatar);
+      setUserAvatar(res.avatar)
     }).catch((err) => {
-      throw err;
-    });
+      throw err
+    })
     UrlCreator.useInitialURL().then((res) => {
-      setActiveUrl(res);
+      setActiveUrl(res)
     }).catch((err) => {
-      throw err;
-    });
+      throw err
+    })
     ActiveController.getAttendedOrNot(passedID).then((res) => {
-      setSignUp(res);
+      setSignUp(res)
     }).catch((err) => {
-      throw err;
-    });
+      throw err
+    })
     ActiveController.getTotalOfAttendees(passedID).then((res) => {
-      setTotal(res);
+      setTotal(res)
     }).catch((err) => {
-      throw err;
-    });
+      throw err
+    })
     ActiveController.getHostInfo(passedID).then((res) => {
-      setInfo(res);
+      setInfo(res)
     }).catch((err) => {
-      throw err;
-    });
+      throw err
+    })
     ActiveController.getOneActive(passedID).then((res) => {
-      setActive(res);
+      setActive(res)
     }).catch((err) => {
-      throw err;
-    });
-  }, []);
+      throw err
+    })
+  }, [])
 
-  const [slideDot1, setSlideDot1] = useState(true);
-  const [slideDot2, setSlideDot2] = useState(false);
-  const [slideDot3, setSlideDot3] = useState(false);
+  const [slideDot1, setSlideDot1] = useState(true)
+  const [slideDot2, setSlideDot2] = useState(false)
+  const [slideDot3, setSlideDot3] = useState(false)
   const whenScrolling = ({ nativeEvent }) => {
-    const slide = Math.ceil(nativeEvent.contentOffset.x / nativeEvent.layoutMeasurement.width);
+    const slide = Math.ceil(nativeEvent.contentOffset.x / nativeEvent.layoutMeasurement.width)
     if (slide === 0) {
-      setSlideDot1(true);
-      setSlideDot2(false);
-      setSlideDot3(false);
+      setSlideDot1(true)
+      setSlideDot2(false)
+      setSlideDot3(false)
     } else if (slide === 1) {
-      setSlideDot1(false);
-      setSlideDot2(true);
-      setSlideDot3(false);
+      setSlideDot1(false)
+      setSlideDot2(true)
+      setSlideDot3(false)
     } else if (slide === 2) {
-      setSlideDot1(false);
-      setSlideDot2(false);
-      setSlideDot3(true);
+      setSlideDot1(false)
+      setSlideDot2(false)
+      setSlideDot3(true)
     }
-  };
+  }
   return (
     <SafeAreaView style={styles.showActivityDetails_container}>
 
@@ -91,7 +92,7 @@ function Detailscreen({ route, navigation }) {
               name="arrowleft"
               size={28}
               color="#476685"
-              onPress={() => { navigation.navigate('list'); }}
+              onPress={() => { navigation.navigate('list') }}
             />
           </Box>
           <Box style={styles.nameheader}>
@@ -108,8 +109,8 @@ function Detailscreen({ route, navigation }) {
         style={{ flexDirection: 'column', marginTop: 8.5 }}
       >
         {active.map(({
-          name, imageUri1, startTimeWeekday, endTimeWeekday, place, limitNum,
-          cost, link, details, imageUri2, imageUri3,
+          id, name, imageUri1, startTimeWeekday, endTimeWeekday, place, limitNum,
+          cost, link, details, imageUri2, imageUri3
         }) => (
           <Box>
             <ScrollView
@@ -122,7 +123,7 @@ function Detailscreen({ route, navigation }) {
               <Image
                 style={styles.bigpic}
                 source={{
-                  uri: imageUri1,
+                  uri: imageUri1
                 }}
               />
               )}
@@ -135,7 +136,7 @@ function Detailscreen({ route, navigation }) {
                     <Image
                       style={styles.bigpic}
                       source={{
-                        uri: imageUri2,
+                        uri: imageUri2
                       }}
                     />
                   </View>
@@ -146,7 +147,7 @@ function Detailscreen({ route, navigation }) {
                   <Image
                     style={styles.bigpic}
                     source={{
-                      uri: imageUri3,
+                      uri: imageUri3
                     }}
                   />
                 </View>
@@ -156,7 +157,7 @@ function Detailscreen({ route, navigation }) {
               marginTop: 12,
               marginBottom: 18,
               justifyContent: 'center',
-              flexDirection: 'row',
+              flexDirection: 'row'
             }}
             >
               <MaterialCommunityIcons
@@ -190,11 +191,11 @@ function Detailscreen({ route, navigation }) {
             <Box style={styles.bodyContainer}>
               <Box style={{
                 flexDirection: 'row',
-                marginBottom: 10,
+                marginBottom: 10
               }}
               >
                 <Text style={{
-                  fontSize: 24, color: '#476685', fontWeight: 'bold', flex: 9,
+                  fontSize: 24, color: '#476685', fontWeight: 'bold', flex: 9
                 }}
                 >
                   {name}
@@ -205,15 +206,15 @@ function Detailscreen({ route, navigation }) {
                     size={28}
                     color="#476685"
                     onPress={() => {
-                      setShowDialog(true);
+                      setShowDialog(true)
                     }}
                   />
                   <Dialog
                     width={Dimensions.get('window').width * 0.8}
-                    height={400}
+                    height={370}
                     visible={showDialog}
                     onTouchOutside={() => {
-                      setShowDialog(false);
+                      setShowDialog(false)
                     }}
                   >
                     <DialogContent style={styles.shareBox}>
@@ -225,93 +226,7 @@ function Detailscreen({ route, navigation }) {
                             </Text>
                           </Box>
                           <Box style={styles.SocialApp}>
-                            <Box>
-                              <Fontisto
-                                name="link"
-                                size={25}
-                                color="#476685"
-                                onPress={() => {
-                                  console.log('Link Copied');
-                                  setShowDialog(false);
-                                }}
-                              >
-                                <Text style={{
-                                  color: '#1f2937', fontSize: 20, fontWeight: '300',
-                                }}
-                                >
-                                  {activeUrl || 'still processing...'}
-                                </Text>
-                              </Fontisto>
-                              <Box style={{ marginVertical: 20 }} />
-                              <FontAwesome5
-                                name="facebook"
-                                size={25}
-                                color="#476685"
-                                onPress={() => {
-                                  console.log('share to fb');
-                                  setShowDialog(false);
-                                }}
-                              >
-                                <Text style={{
-                                  color: '#1f2937', fontSize: 20, fontWeight: '400',
-                                }}
-                                >
-                              &ensp;分享到 Facebook
-                                </Text>
-                              </FontAwesome5>
-                              <Box style={{ marginVertical: 20 }} />
-                              <FontAwesome5
-                                name="facebook-messenger"
-                                size={25}
-                                color="#476685"
-                                onPress={() => {
-                                  console.log('share to messenger');
-                                  setShowDialog(false);
-                                }}
-                              >
-                                <Text style={{
-                                  color: '#1f2937', fontSize: 20, fontWeight: '400',
-                                }}
-                                >
-                              &ensp;分享到 Messenger
-                                </Text>
-                              </FontAwesome5>
-                              <Box style={{ marginVertical: 20 }} />
-                              <FontAwesome5
-                                name="discord"
-                                size={25}
-                                color="#476685"
-                                style={{ marginLeft: 2 }}
-                                onPress={() => {
-                                  console.log('share to discord');
-                                  setShowDialog(false);
-                                }}
-                              >
-                                <Text style={{
-                                  color: '#1f2937', fontSize: 20, fontWeight: '400',
-                                }}
-                                >
-                              &ensp;分享到 Discord
-                                </Text>
-                              </FontAwesome5>
-                              <Box style={{ marginVertical: 20 }} />
-                              <Octicons
-                                name="x"
-                                size={28}
-                                color="#476685"
-                                style={{ marginLeft: 5 }}
-                                onPress={() => {
-                                  setShowDialog(false);
-                                }}
-                              >
-                                <Text style={{
-                                  color: '#1f2937', fontSize: 20, fontWeight: '400',
-                                }}
-                                >
-                              &nbsp;&ensp;取消
-                                </Text>
-                              </Octicons>
-                            </Box>
+                          <SvgQRCode value={active.id} />
                           </Box>
                         </ScrollView>
                       </NativeBaseProvider>
@@ -340,7 +255,7 @@ function Detailscreen({ route, navigation }) {
                 </Text>
               </Box>
               <Box style={{
-                flexDirection: 'row', marginLeft: -2, marginBottom: 10,
+                flexDirection: 'row', marginLeft: -2, marginBottom: 10
               }}
               >
                 <Ionicons
@@ -383,7 +298,7 @@ function Detailscreen({ route, navigation }) {
                         fontSize: 16,
                         color: 'black',
                         paddingTop: 12,
-                        paddingLeft: 65,
+                        paddingLeft: 65
                       }}
                       >
                         {cost}
@@ -394,7 +309,7 @@ function Detailscreen({ route, navigation }) {
                         fontSize: 16,
                         color: 'black',
                         paddingTop: 12,
-                        paddingLeft: 45,
+                        paddingLeft: 45
                       }}
                       >
                         {cost}
@@ -443,7 +358,7 @@ function Detailscreen({ route, navigation }) {
             </Box>
             <Box style={{ marginLeft: Dimensions.get('window').width * 0.07 }}>
               <Text style={{
-                color: 'black', fontSize: 16, fontWeight: 'bold', marginVertical: 10,
+                color: 'black', fontSize: 16, fontWeight: 'bold', marginVertical: 10
               }}
               >
                 詳細資訊
@@ -458,11 +373,11 @@ function Detailscreen({ route, navigation }) {
           </Box>
         ))}
         {info.map(({
-          uid, name, phone, email, avatar,
+          uid, name, phone, email, avatar
         }) => (
           <Box style={{ marginLeft: Dimensions.get('window').width * 0.07, marginBottom: 10 }}>
             <Text style={{
-              color: 'black', fontSize: 16, fontWeight: 'bold', marginVertical: 10,
+              color: 'black', fontSize: 16, fontWeight: 'bold', marginVertical: 10
             }}
             >
               主辦人
@@ -472,7 +387,7 @@ function Detailscreen({ route, navigation }) {
                 <Image
                   style={styles.avatar}
                   source={{
-                    uri: avatar,
+                    uri: avatar
                   }}
                 />
               </Box>
@@ -532,9 +447,9 @@ function Detailscreen({ route, navigation }) {
                               attendeeAvatar: avatar,
                               chatroomId: res,
                               attendeeUid: uid,
-                              userUid: user,
-                            });
-                          });
+                              userUid: user
+                            })
+                          })
                         }
                       }}
                     >
@@ -558,11 +473,11 @@ function Detailscreen({ route, navigation }) {
                             text: '確認報名',
                             onPress: () => (
                               ActiveController.signUp(passedID).then(() => setSignUp(true))
-                            ),
-                          },
-                        ],
+                            )
+                          }
+                        ]
 
-                      );
+                      )
                     } else {
                       Alert.alert(
                         '確認取消報名?',
@@ -572,11 +487,11 @@ function Detailscreen({ route, navigation }) {
                             text: '忍痛取消報名',
                             onPress: () => (
                               ActiveController.quitEvent(passedID).then(() => setSignUp(false))
-                            ),
-                          },
-                        ],
+                            )
+                          }
+                        ]
 
-                      );
+                      )
                     }
                   }}
                 >
@@ -597,7 +512,7 @@ function Detailscreen({ route, navigation }) {
 
     </SafeAreaView>
 
-  );
+  )
 }
 
-export default Detailscreen;
+export default Detailscreen

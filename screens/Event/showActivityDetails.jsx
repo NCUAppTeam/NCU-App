@@ -211,7 +211,7 @@ function Detailscreen ({ route, navigation }) {
                   />
                   <Dialog
                     width={Dimensions.get('window').width * 0.8}
-                    height={400}
+                    height={370}
                     visible={showDialog}
                     onTouchOutside={() => {
                       setShowDialog(false)

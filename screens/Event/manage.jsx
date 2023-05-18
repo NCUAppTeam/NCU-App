@@ -1,72 +1,72 @@
 /* eslint-disable max-len */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'
 import {
   Text, SafeAreaView, TextInput, RefreshControl,
-  ScrollView, TouchableOpacity, Image, TouchableHighlight,
-} from 'react-native';
+  ScrollView, TouchableOpacity, Image, TouchableHighlight
+} from 'react-native'
 
-import Dialog, { DialogContent } from 'react-native-popup-dialog';
-import { AntDesign, Feather } from '@expo/vector-icons';
+import Dialog, { DialogContent } from 'react-native-popup-dialog'
+import { AntDesign, Feather } from '@expo/vector-icons'
 import {
-  Box, Divider, Heading, VStack, HStack, FlatList, NativeBaseProvider,
-} from 'native-base';
-import { LinearGradient } from 'expo-linear-gradient';
-import ActiveController from '../../controller/Active';
-import MessageController from '../../controller/Message';
-import UserController from '../../controller/getStudentId';
-import styles from './style_folder/Styles_manage';
+  Box, Divider, Heading, VStack, HStack, FlatList, NativeBaseProvider
+} from 'native-base'
+import { LinearGradient } from 'expo-linear-gradient'
+import ActiveController from '../../controller/Active'
+import MessageController from '../../controller/Message'
+import UserController from '../../controller/getStudentId'
+import styles from './style_folder/Styles_manage'
 
-function Manage({ route, navigation }) {
-  const [user, setUser] = useState('');
-  const [deletePerson, setDeletePerson] = useState({});
-  const [showDialog1, setShowDialog1] = useState(false);
-  const [showDialog2, setShowDialog2] = useState(false);
-  const Cd = route.params;
-  const passedID = JSON.stringify(Cd).slice(7, -2);
-  const [message, messageSent] = useState('');
-  const [attendeesNum, setAttendeeNum] = useState();
-  const [active, setActive] = useState([]);
-  const [attendeeINFO, setAttendeeInfo] = useState();
+function Manage ({ route, navigation }) {
+  const [user, setUser] = useState('')
+  const [deletePerson, setDeletePerson] = useState({})
+  const [showDialog1, setShowDialog1] = useState(false)
+  const [showDialog2, setShowDialog2] = useState(false)
+  const Cd = route.params
+  const passedID = JSON.stringify(Cd).slice(7, -2)
+  const [message, messageSent] = useState('')
+  const [attendeesNum, setAttendeeNum] = useState()
+  const [active, setActive] = useState([])
+  const [attendeeINFO, setAttendeeInfo] = useState()
   useEffect(() => {
-    setUser(UserController.getUid());
+    setUser(UserController.getUid())
     ActiveController.getTotalOfAttendees(passedID).then((res) => {
-      setAttendeeNum(res);
+      setAttendeeNum(res)
     }).catch((err) => {
-      throw err;
-    });
+      throw err
+    })
     ActiveController.getOneActive(passedID).then((res) => {
-      setActive(res);
+      setActive(res)
     }).catch((err) => {
-      throw err;
-    });
+      throw err
+    })
     ActiveController.getAllAttendees(passedID).then((res) => {
-      setAttendeeInfo(res);
+      setAttendeeInfo(res)
     }).catch((err) => {
-      throw err;
-    });
-  }, []);
+      throw err
+    })
+  }, [])
 
-  const [refreshing, setRefreshing] = useState(false);
+  const [refreshing, setRefreshing] = useState(false)
   const onRefresh = () => {
-    setRefreshing(true);
-    setUser(UserController.getUid());
+    setRefreshing(true)
+    setUser(UserController.getUid())
     ActiveController.getOneActive(passedID).then((res) => {
-      setActive(res);
+      setActive(res)
     }).catch((err) => {
-      throw err;
-    });
+      throw err
+    })
     ActiveController.getTotalOfAttendees(passedID).then((res) => {
-      setAttendeeNum(res);
+      setAttendeeNum(res)
     }).catch((err) => {
-      throw err;
-    });
+      throw err
+    })
     ActiveController.getAllAttendees(passedID).then((res) => {
-      setAttendeeInfo(res);
+      setAttendeeInfo(res)
     }).catch((err) => {
-      throw err;
-    });
-    setRefreshing(false);
-  };
+      throw err
+    })
+    setRefreshing(false)
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -77,7 +77,7 @@ function Manage({ route, navigation }) {
             size={28}
             color="#476685"
             style={{ justifyContent: 'center' }}
-            onPress={() => { navigation.navigate('personal'); }}
+            onPress={() => { navigation.navigate('personal') }}
           />
         </Box>
         <Box style={styles.nameheader}>
@@ -91,7 +91,7 @@ function Manage({ route, navigation }) {
             size={25}
             color="#476685"
             onPress={() => {
-              setShowDialog1(true);
+              setShowDialog1(true)
             }}
           />
           <Dialog
@@ -99,7 +99,7 @@ function Manage({ route, navigation }) {
             height={285}
             visible={showDialog1}
             onTouchOutside={() => {
-              setShowDialog1(false);
+              setShowDialog1(false)
             }}
           >
             <NativeBaseProvider>
@@ -116,9 +116,9 @@ function Manage({ route, navigation }) {
                       size={26}
                       color="#1F2937"
                       style={{
-                        marginTop: 15,
+                        marginTop: 15
                       }}
-                      onPress={() => { setShowDialog1(false); }}
+                      onPress={() => { setShowDialog1(false) }}
                     />
                   </Box>
                 </Box>
@@ -151,10 +151,10 @@ function Manage({ route, navigation }) {
                 >
                   <Text
                     style={{
-                      fontSize: 14, color: '#64748B', padding: 10,
+                      fontSize: 14, color: '#64748B', padding: 10
                     }}
                     onPress={() => {
-                      setShowDialog1(false);
+                      setShowDialog1(false)
                     }}
                   >
                     取消
@@ -163,17 +163,17 @@ function Manage({ route, navigation }) {
                 </Box>
                 <Box
                   style={{
-                    marginTop: 10, backgroundColor: '#ef4444', borderRadius: 4, marginRight: 10,
+                    marginTop: 10, backgroundColor: '#ef4444', borderRadius: 4, marginRight: 10
                   }}
                 >
                   <Text
                     style={{
-                      color: '#ffffff', padding: 10,
+                      color: '#ffffff', padding: 10
                     }}
                     onPress={() => {
-                      setShowDialog1(false);
-                      ActiveController.deleteOneActive(passedID);
-                      ActiveController.deleteEverySingleAttendee(passedID);
+                      setShowDialog1(false)
+                      ActiveController.deleteOneActive(passedID)
+                      ActiveController.deleteEverySingleAttendee(passedID)
                     }}
                   >
                     刪除
@@ -190,14 +190,14 @@ function Manage({ route, navigation }) {
             size={24}
             color="#476685"
             onPress={() => {
-              navigation.navigate('edit', { Cd: passedID });
+              navigation.navigate('edit', { Cd: passedID })
             }}
           />
         </Box>
       </Box>
       <Box style={styles.bodyContainer}>
         {active.map(({
-          id, name, limitNum,
+          id, name, limitNum
         }) => (
           <Box key={id} style={{ marginTop: 20, marginHorizontal: 8 }}>
             <Heading>{name}</Heading>
@@ -221,11 +221,11 @@ function Manage({ route, navigation }) {
                 <TouchableOpacity
                   onPress={() => {
                     MessageController.Notification(message, passedID).then(() => {
-                      messageSent('');
+                      messageSent('')
                     }).catch((err) => {
-                      throw err;
-                    });
-                    onRefresh();
+                      throw err
+                    })
+                    onRefresh()
                   }}
                 >
                   <Text style={styles.manageSendMessagebtnText}>發送給所有參與者</Text>
@@ -237,7 +237,7 @@ function Manage({ route, navigation }) {
               <HStack style={{ justifyContent: 'space-between' }}>
                 <Box>
                   <Text style={{
-                    fontSize: 18, color: 'black', marginTop: 10, fontWeight: 'bold',
+                    fontSize: 18, color: 'black', marginTop: 10, fontWeight: 'bold'
                   }}
                   >
                     參加名單
@@ -247,7 +247,7 @@ function Manage({ route, navigation }) {
                   {limitNum !== '0' && (
                   <HStack>
                     <Text style={{
-                      fontSize: 18, color: 'black', marginTop: 10, fontWeight: 'bold',
+                      fontSize: 18, color: 'black', marginTop: 10, fontWeight: 'bold'
                     }}
                     >
                       目前人數：
@@ -269,7 +269,7 @@ function Manage({ route, navigation }) {
                   {limitNum === '0' && (
                   <HStack>
                     <Text style={{
-                      fontSize: 18, color: 'black', marginTop: 10, fontWeight: 'bold',
+                      fontSize: 18, color: 'black', marginTop: 10, fontWeight: 'bold'
                     }}
                     >
                       目前人數：
@@ -306,7 +306,7 @@ function Manage({ route, navigation }) {
                       <Image
                         style={styles.avatar}
                         source={{
-                          uri: item.avatar,
+                          uri: item.avatar
                         }}
                       />
                       <VStack style={{ alignSelf: 'center' }}>
@@ -335,8 +335,8 @@ function Manage({ route, navigation }) {
                       <TouchableHighlight
                         underlayColor="transparent"
                         onPress={() => {
-                          setShowDialog2(true);
-                          setDeletePerson({ studentID: item.uid, name: item.name });
+                          setShowDialog2(true)
+                          setDeletePerson({ studentID: item.uid, name: item.name })
                         }}
                       >
                         <Text style={styles.DeletebtnInManageText}>移除</Text>
@@ -346,7 +346,7 @@ function Manage({ route, navigation }) {
                         height={240}
                         visible={showDialog2}
                         onTouchOutside={() => {
-                          setShowDialog2(false);
+                          setShowDialog2(false)
                         }}
                       >
                         <NativeBaseProvider>
@@ -363,16 +363,16 @@ function Manage({ route, navigation }) {
                                 size={26}
                                 color="#1F2937"
                                 style={{
-                                  marginTop: 15,
+                                  marginTop: 15
                                 }}
-                                onPress={() => { setShowDialog2(false); }}
+                                onPress={() => { setShowDialog2(false) }}
                               />
                             </Box>
                             <Divider style={{ marginTop: 5 }} bg="#e5e5e5" />
                             <Box>
                               <Box style={styles.removeBox2}>
                                 <Box style={{
-                                  paddingTop: 10, paddingBottom: 10,
+                                  paddingTop: 10, paddingBottom: 10
                                 }}
                                 >
                                   <Text style={styles.textSetting2}>
@@ -412,10 +412,10 @@ function Manage({ route, navigation }) {
                             >
                               <Text
                                 style={{
-                                  fontSize: 14, color: '#64748B', padding: 10,
+                                  fontSize: 14, color: '#64748B', padding: 10
                                 }}
                                 onPress={() => {
-                                  setShowDialog2(false);
+                                  setShowDialog2(false)
                                 }}
                               >
                                 取消
@@ -423,16 +423,16 @@ function Manage({ route, navigation }) {
                             </Box>
                             <Box
                               style={{
-                                marginTop: 10, marginRight: 15, backgroundColor: '#ef4444', borderRadius: 4,
+                                marginTop: 10, marginRight: 15, backgroundColor: '#ef4444', borderRadius: 4
                               }}
                             >
                               <Text
                                 style={{
-                                  color: '#ffffff', padding: 10,
+                                  color: '#ffffff', padding: 10
                                 }}
                                 onPress={() => {
-                                  setShowDialog2(false);
-                                  ActiveController.removeAttendee(passedID, deletePerson.studentID);
+                                  setShowDialog2(false)
+                                  ActiveController.removeAttendee(passedID, deletePerson.studentID)
                                   ActiveController.getOneActive(passedID).then((event) => {
                                     MessageController.addMessage({
                                       message: `以下為自動寄出的訊息：你已被移出【${event[0].name}】的參加名單, 有任何問題請與活動負責人聯繫`,
@@ -441,9 +441,9 @@ function Manage({ route, navigation }) {
                                       sendTime: new Date(),
                                       readForSender: true,
                                       readForReceiver: false,
-                                      image: '',
-                                    }, user);
-                                  });
+                                      image: ''
+                                    }, user)
+                                  })
                                 }}
                               >
                                 移除
@@ -463,9 +463,9 @@ function Manage({ route, navigation }) {
                               navigation.navigate('send', {
                                 chatroomId: res,
                                 attendeeUid: item.uid,
-                                userUid: user,
-                              });
-                            });
+                                userUid: user
+                              })
+                            })
                           }}
                         >
                           私訊
@@ -481,7 +481,7 @@ function Manage({ route, navigation }) {
       </Box>
 
     </SafeAreaView>
-  );
+  )
 }
 
-export default Manage;
+export default Manage

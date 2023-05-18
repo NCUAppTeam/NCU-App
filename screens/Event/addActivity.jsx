@@ -72,18 +72,41 @@ function Add({ navigation }) {
   const [date1, setDate1] = useState(new Date());
   const [mode1, setMode1] = useState('date');
   const [show1, setShow1] = useState(false);
-  const [startDateText, setStartDate] = useState();
-  const [startTimeText, setStartTime] = useState();
-  const [startText, setStart] = useState();
+  const [startDateText, setStartDate] = useState();//dialog中選擇日期的字
+  const [startTimeText, setStartTime] = useState();//dialog中選擇時間的字
+  const [startText, setStart] = useState();//顯示開始時間(必填)的字
   const showDialog1 = () => setVisible1(true);
-
+  //按下done的時候觸發
   const hideDialog1 = () => {
-    if (startDateText !== undefined && startTimeText !== undefined) {
-      setStart(`${startDateText}  ${startTimeText}`);
-      setStartCheck(true);
-    }
+    //如果先填了結束時間 而且開始時間正確
+    if(data.endTime!==undefined && data.endTime>=data.startTime &&
+      startDateText !== undefined && startTimeText !== undefined){
+        //顯示開始時間(必填)的字
+        setStart(`${startDateText}  ${startTimeText}`);
+        setStartCheck(true);
+   }
+   //如果先填了結束時間案且結果錯誤
+   else if(data.endTime!==undefined && data.endTime<data.startTime &&
+     startDateText !== undefined && startTimeText !== undefined){
+       alert("開始時間錯誤");
+       //取消顯示
+       setData({ ...data, startTime: undefined });
+       setStartDate('');
+       setStartTime('');
+       setStart('');
+   }
+   //如果沒填結束時間
+   else if(data.endTime===undefined && startDateText !== undefined && startTimeText !== undefined){
+     setStart(`${startDateText}  ${startTimeText}`);
+     setStartCheck(true);
+   }
+   //如果直接跳掉
+   else{
+     setData({ ...data, startTime: undefined });
+   }
     setVisible1(false);
   };
+
   const showMode1 = (currentMode) => {
     setShow1(true);
     setMode1(currentMode);
@@ -111,7 +134,11 @@ function Add({ navigation }) {
   };
 
   const hideDialogi1 = () => {
-    if (startDateText === undefined || startTimeText === undefined) {
+    setData({ ...data, startTime: undefined });
+    setStart(undefined);
+    setStartCheck(false);
+    if ((data.endTime===undefined && (startDateText === undefined || startTimeText === undefined))
+    ||(data.endTime!==undefined && data.endTime>date1)){
       const currentDate = date1;
       setDate1(currentDate);
       const tempDate = new Date(currentDate);
@@ -120,9 +147,9 @@ function Add({ navigation }) {
       setData({ ...data, startTime: tempDate });
       setStart(`${fDate}  ${fTime}`);
       setStartCheck(true);
-    } else {
-      setStart(`${startDateText}  ${startTimeText}`);
-      setStartCheck(true);
+    }
+    else{
+      alert("開始時間錯誤");
     }
     setVisible1(false);
   };
@@ -147,14 +174,40 @@ function Add({ navigation }) {
   const [date2, setDate2] = useState(new Date());
   const [mode2, setMode2] = useState('date');
   const [show2, setShow2] = useState(false);
-  const [endDateText, setEndDate] = useState();
-  const [endTimeText, setEndTime] = useState();
-  const [endText, setEnd] = useState();
+  const [endDateText, setEndDate] = useState();//dialog中選擇日期的字
+  const [endTimeText, setEndTime] = useState();//dialog中選擇日期的字
+  const [endText, setEnd] = useState();//顯示結束時間(必填)的字
   const showDialog2 = () => setVisible2(true);
+  //按下done的時候觸發
   const hideDialog2 = () => {
-    if (endDateText !== undefined && endTimeText !== undefined) {
+    //如果先填了開始時間 而且結束時間正確
+    if(data.startTime!==undefined && data.endTime>=data.startTime &&
+       endDateText !== undefined && endTimeText !== undefined){
+        //顯示開始時間(必填)的字
+        setEnd(`${endDateText}  ${endTimeText}`);
+        setEndCheck(true);
+    }
+    //如果先填了開始時間案且結果錯誤
+    else if(data.startTime!==undefined && data.endTime<data.startTime &&
+      endDateText !== undefined && endTimeText !== undefined){
+        alert("結束時間錯誤");
+        setData({ ...data, endTime: undefined });
+        //取消顯示
+        setEndDate('');
+        setEndTime('');
+        setEnd('');
+    }
+    //如果沒填開始時間 
+    else if(data.startTime===undefined && endDateText !== undefined && endTimeText !== undefined){
       setEnd(`${endDateText}  ${endTimeText}`);
       setEndCheck(true);
+    }
+    //如果直接跳掉
+    else{
+      setData({ ...data, endTime: undefined });
+      setEndDate('');
+      setEndTime('');
+      setEnd('');
     }
     setVisible2(false);
   };
@@ -185,7 +238,11 @@ function Add({ navigation }) {
   };
 
   const hideDialogi2 = () => {
-    if (endDateText === undefined || endTimeText === undefined) {
+    setData({ ...data, endTime: undefined });
+    setEnd(undefined);
+    setEndCheck(false);
+    if ((data.endTime===undefined && (startDateText === undefined || startTimeText === undefined))
+    ||(data.endTime!==undefined && data.endTime>data.startTime)){
       const currentDate = date2;
       setDate2(currentDate);
       const tempDate = new Date(currentDate);
@@ -194,9 +251,8 @@ function Add({ navigation }) {
       setData({ ...data, endTime: tempDate });
       setEnd(`${fDate}  ${fTime}`);
       setEndCheck(true);
-    } else {
-      setEnd(`${endDateText}  ${endTimeText}`);
-      setEndCheck(true);
+    }else{
+      alert("結束時間錯誤");
     }
     setVisible2(false);
   };
@@ -663,7 +719,6 @@ function Add({ navigation }) {
                       <TouchableOpacity
                         onPress={() => {
                           data.uploadTime = new Date();
-                          // console.log(data);
                           ActiveController.addActive(data);
                           navigation.navigate('list');
                         }}

@@ -38,7 +38,7 @@ function First({ navigation }) {
   let busList = [];
 
   for (const [index, routeInfo] of Object.entries(buses)) {
-    console.log(routeInfo)
+    // console.log(routeInfo)
     busList.push((
         <TouchableOpacity
               onPress={() => navigation.navigate('BusDetailView', routeInfo)}

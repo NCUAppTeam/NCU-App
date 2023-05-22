@@ -200,7 +200,7 @@ async function route(param) {
       const busTimeObj = getBusTime(data);
       output.push({
         stop: data.StopName.Zh_tw,
-        type: 0,
+        isCombined: 0,
         pass: param.buses,
         bus: [{name: param.buses[0], time: busTimeObj.time}],
         alert: busTimeObj.alert,
@@ -224,7 +224,7 @@ async function route(param) {
             const busTimeObj = getBusTime(data);
             output.push({
               stop: data.StopName.Zh_tw,
-              type: 1,
+              isCombined: 1,
               pass: [param.buses[i]],
               bus: [{name: param.buses[i], time: busTimeObj.time}],
               alert: busTimeObj.alert,
@@ -240,7 +240,7 @@ async function route(param) {
         const busTimeObj = getBusTime(data[earlier]);
         output.push({
           stop: data[earlier].StopName.Zh_tw,
-          type: 0,
+          isCombined: 0,
           pass: param.buses,
           bus: [{name: param.buses[earlier], time: busTimeObj.time}],
           alert: busTimeObj.alert,

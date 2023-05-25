@@ -298,9 +298,9 @@ function DoubleRouteCell(props) {
     </Box>
   );
 }
-
 export default function BusDetailViewCell(props) {
   props.availableBusList.sort();
+  console.log("rerendering");
   if (props.selectedBusList.length == 0) {
 
   }

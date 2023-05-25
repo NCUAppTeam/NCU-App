@@ -199,6 +199,7 @@ async function route(param) {
     responses[0].data.forEach(data => {
       const busTimeObj = getBusTime(data);
       output.push({
+        id: Math.random().toString(16).slice(2),
         stop: data.StopName.Zh_tw,
         isCombined: 0,
         pass: param.buses,
@@ -223,6 +224,7 @@ async function route(param) {
             const data = responses[i].data[j];
             const busTimeObj = getBusTime(data);
             output.push({
+              id: Math.random().toString(16).slice(2),
               stop: data.StopName.Zh_tw,
               isCombined: 1,
               pass: [param.buses[i]],
@@ -239,6 +241,7 @@ async function route(param) {
         const earlier = Number(data[1].NextBusTime !== undefined && Date.parse(data[1].NextBusTime) < Date.parse(data[0].NextBusTime));
         const busTimeObj = getBusTime(data[earlier]);
         output.push({
+          id: Math.random().toString(16).slice(2),
           stop: data[earlier].StopName.Zh_tw,
           isCombined: 0,
           pass: param.buses,

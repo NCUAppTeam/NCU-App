@@ -15,6 +15,7 @@ import {
   Button,
   Circle,
   Container,
+  FlatList,
 } from "native-base";
 import { TabView } from "react-native-tab-view";
 import { Ionicons, FontAwesome } from '@expo/vector-icons';
@@ -86,7 +87,7 @@ function BusSelector({
             } else {
               return (
                 <Checkbox value={busName} m="1">
-                <Box
+                  <Box
                     alignSelf="flex-start"
                     _text={{
                       fontSize: "md",
@@ -129,6 +130,7 @@ function TimeTableRoute({ direction, selectedBusList, availableBusList }) {
   const [data, setData] = useState(testData); // useState([{}])
   // const [refreshing, setRefreshing] = useState(true);
   const [timerCount, setTimerCount] = useState(0);
+  const [dataUpdated, setDataUpdated] = React.useState(false)
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -139,10 +141,11 @@ function TimeTableRoute({ direction, selectedBusList, availableBusList }) {
   }, []);
 
   const onRefresh = () => {
+    console.log("refresh")
     BusController({ buses: selectedBusList, dir: direction }).then((res) => {
       setData(res); // using testData
       setTimerCount(0);
-      console.log("hahaha");
+      setDataUpdated((dataUpdated) => !dataUpdated)
     });
   };
   useEffect(() => {
@@ -155,31 +158,24 @@ function TimeTableRoute({ direction, selectedBusList, availableBusList }) {
 
   return (
     <Box width="100%" height="100%">
-      <ScrollView width="100%" height="94%">
-        <Center flex={1}>
-          <VStack width="100%" flex={1}>
-            {data.map((item, index) => {
-              const isFirstStation = (index===0)
-              const isLastStation=(index===data.length-1)
-              const isPrevCombined = (!isFirstStation && data[index].isCombined == false && data[index-1].isCombined == true)
-              const isNextCombined = (!isLastStation && data[index].isCombined == false && data[index+1].isCombined == true)
-              
-              return (
-                <BusDetailViewCell
-                  currentStation={item}
-                  isFirstStation={isFirstStation}
-                  isLastStation={isLastStation}
-                  isPrevCombined={isPrevCombined}
-                  isNextCombined={isNextCombined}
-                  availableBusList={availableBusList}
-                  selectedBusList={selectedBusList}
-                  key={index}
-                />
-              );
-            })}
-          </VStack>
-        </Center>
-      </ScrollView>
+      <FlatList data={data} width="100%" height="94%" renderItem={({ item, index }) => {
+        const isFirstStation = (index === 0)
+        const isLastStation = (index === data.length - 1)
+        const isPrevCombined = (!isFirstStation && data[index].isCombined == false && data[index - 1].isCombined == true)
+        const isNextCombined = (!isLastStation && data[index].isCombined == false && data[index + 1].isCombined == true)
+        return (
+          <BusDetailViewCell
+            currentStation={item}
+            isFirstStation={isFirstStation}
+            isLastStation={isLastStation}
+            isPrevCombined={isPrevCombined}
+            isNextCombined={isNextCombined}
+            availableBusList={availableBusList}
+            selectedBusList={selectedBusList}
+          />
+        );
+      }} keyExtractor={item => item.id} extraData={dataUpdated}/>
+
       <Box>
         <Text>{timerCount}秒前更新</Text>
       </Box>
@@ -294,7 +290,7 @@ function BusTimeTableTabView({ navigation, routeInfo }) {
 
   return (
     <Box flex={1}>
-      <NavigationBar/>
+      <NavigationBar />
       <BusSelector
         navigation={navigation}
         availableBusList={availableBusList}

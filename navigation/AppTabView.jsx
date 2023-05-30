@@ -51,7 +51,7 @@ function CustomTabBar({ state, descriptors, navigation }) {
           行事曆: 'calendar-month',
           活動: 'game-controller-outline',
           地圖: 'map-outline',
-          // 拍賣:'cart-outline' // 拍賣暫存
+          首頁:'home-outline' // 拍賣暫存
         };
 
         return (
@@ -87,6 +87,7 @@ export const AppTabView = () => {
         <CustomTabBar {...props} />
       )}
     >
+      <Tab.Screen name="首頁" component={HomeScreen} />
       <Tab.Screen name="行事曆" component={CalendarScreen} />
       <Tab.Screen name="活動" component={EventScreen} />
       <Tab.Screen name="地圖" component={MapScreen} />

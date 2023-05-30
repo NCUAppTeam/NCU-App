@@ -1,15 +1,23 @@
 import React from 'react';
-import { SafeAreaView } from 'react-native';
-import { WebView } from 'react-native-webview';
+import { SafeAreaView,Text } from 'react-native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import Settings from './settings';
+import HomePage from './homePage';
 import styles from './Styles';
+
+const Stack = createNativeStackNavigator()
 
 function HomeStack() {
   return (
-    <SafeAreaView style={styles.container}>
-      <WebView
-        source={{ uri: 'https://calendar.google.com/calendar/embed?src=ncu.acad@gmail.com&ctz=Asia/Taipei' }}
-      />
-    </SafeAreaView>
+    <Stack.Navigator
+      initialRouteName="list"
+      screenOptions={{
+        headerShown: false
+      }}
+    >
+      <Stack.Screen name="homepage" component={HomePage} />
+      <Stack.Screen name="settings" component={Settings} />
+    </Stack.Navigator>
   );
 }
 

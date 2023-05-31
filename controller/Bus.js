@@ -161,13 +161,14 @@ async function afun9025(param) {
 
 async function route(param) {
   if (param.buses.toString() === ['9025A'].toString()) return await afun9025(param);
-  if (![['132'], ['133'], ['132', '133'], ['133', '132'], ['172'], ['173'], ['172', '173'], ['173', '172'], ['5035']].some(valid => valid.join() === param.buses.join())) {
+  param.buses.sort();
+  if (![['132'], ['133'], ['132', '133'], ['172'], ['173'], ['172', '173'], ['5035']].some(valid => valid.join() === param.buses.join())) {
     throw new Error('Invalid Buses: ' + param.buses.join(' '));
   }
   
   const APIBASE = 'https://tdx.transportdata.tw/api/basic/v2/Bus/EstimatedTimeOfArrival/City/Taoyuan';
   const data = {
-    $select: 'StopStatus,EstimateTime,StopName,NextBusTime',
+    $select: 'StopUID,StopStatus,EstimateTime,StopName,NextBusTime',
     $filter: `Direction eq ${param.dir}`,
     $orderby: 'StopSequence',
     $format: 'JSON',
@@ -178,8 +179,6 @@ async function route(param) {
     finalUrl.query = data;
     return url.format(finalUrl);
   };
-
-  console.log(param)
 
   let responses;
   while (true) {
@@ -194,33 +193,65 @@ async function route(param) {
       await new Promise(resolve => setTimeout(resolve, 500));
     }
   }
-  
-  const output = responses[0].data.map((data) => ({
-    stop: data.StopName.Zh_tw,
-    bus: param.buses[0],
-    data: data,
-  }));
-  
-  responses.forEach((response, busIndex) => {
-    response.data.forEach((data, dataIndex) => {
-      if (data.NextBusTime) {
-        const currentStop = {
-          stop: data.StopName.Zh_tw,
-          bus: param.buses[busIndex],
-          data: data,
-        };
-        if (data.NextBusTime < output[dataIndex].data.NextBusTime) {
-          output[dataIndex] = currentStop;
+
+  const output = [];
+  if (param.buses.length == 1) {  // 如果只有選擇一個公車
+    responses[0].data.forEach(data => {
+      const busTimeObj = getBusTime(data);
+      output.push({
+        id: Math.random().toString(16).slice(2),
+        stop: data.StopName.Zh_tw,
+        isCombined: 0,
+        pass: param.buses,
+        bus: [{name: param.buses[0], time: busTimeObj.time}],
+        alert: busTimeObj.alert,
+      });
+    });
+  } else {  // 如果有兩個公車
+    // 各自的站牌，最後各自加入空字串以計算最後一次的 extra
+    const names = responses.map(response => response.data.map(stop => stop.StopName.Zh_tw)).map(stops => [...stops, '']);
+    const commonNames = names[0].filter(name => names[1].includes(name));    // 共通的站牌
+    const prev = [-1, -1];  // 紀錄上一個共通站排是各自的第幾站，因為第一站就是 0，所以初始值設 -1
+    commonNames.forEach(name => {  // 遍歷所有共通站牌
+      // 加入所有在當前與上次共通站牌之間的所有站牌
+      // 找到此共通站排是各自的第幾站
+      const curr = [names[0].findIndex(element => element === name), names[1].findIndex(element => element === name)];
+      // 在此共通站牌之前，加入兩站各自獨立的站牌
+      [0, 1].forEach(i => {
+        if (curr[i] - prev[i] > 1) {
+          const index = responses[i].data.findIndex(stop => stop.StopName.Zh_tw === names[i][prev[i] + 1]);
+          for (let j = prev[i] + 1; j < curr[i]; j++) {
+            const data = responses[i].data[j];
+            const busTimeObj = getBusTime(data);
+            output.push({
+              id: Math.random().toString(16).slice(2),
+              stop: data.StopName.Zh_tw,
+              isCombined: 1,
+              pass: [param.buses[i]],
+              bus: [{name: param.buses[i], time: busTimeObj.time}],
+              alert: busTimeObj.alert,
+            });
+          }
         }
+      });
+      prev.splice(0, curr.length, ...curr);  // prev = curr 的寫法
+      if (name !== '') {
+        const data = responses.map(response => response.data.find(stop => stop.StopName.Zh_tw === name));
+        // 因為剛好 132 和 172 第一班都比較早，所以判斷如果 133 或 173 有車才比較下一班抵達的時間
+        const earlier = Number(data[1].NextBusTime !== undefined && Date.parse(data[1].NextBusTime) < Date.parse(data[0].NextBusTime));
+        const busTimeObj = getBusTime(data[earlier]);
+        output.push({
+          id: Math.random().toString(16).slice(2),
+          stop: data[earlier].StopName.Zh_tw,
+          isCombined: 0,
+          pass: param.buses,
+          bus: [{name: param.buses[earlier], time: busTimeObj.time}],
+          alert: busTimeObj.alert,
+        });
       }
     });
-  });
-  
-  return output.map(element => ({
-    stop: element.stop,
-    bus: element.bus,
-    ...getBusTime(element.data),
-  }));
+  }
+  return output;
 }
 
 export default route;

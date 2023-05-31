@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { Box } from 'native-base'
 import { HomeHeader } from './components/HomeHeader'
 import { Calendar } from './components/Calender'
@@ -8,9 +8,7 @@ function HomePage ({ navigation }) {
   return (
     <Box style={styles.container}>
       <HomeHeader navigation={navigation} />
-      <Box h={100}>
-        <Calendar/>
-      </Box>
+      <Calendar navigation={navigation} />
     </Box>
   )
 }

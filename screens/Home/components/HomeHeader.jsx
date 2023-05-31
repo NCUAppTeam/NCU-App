@@ -32,48 +32,44 @@ export function HomeHeader ({ navigation }) {
 
   return (
     <Box safeArea style={styles.topHomePage}>
-          <Box style={styles.topLeftRight}>
-            <Image
-              style={styles.avatar}
-              source={{
-                uri: userInfo.avatar
-              }}
-            />
-            <Box style={styles.topGreet}>
-              <Text style={styles.topTextGreet}>早安,</Text>
-              <Text style={styles.topTextName}>{userInfo.name}</Text>
-            </Box>
+      <Box style={styles.topLeftRight}>
+          <Image
+            style={styles.avatar}
+            source={{
+              uri: userInfo.avatar
+            }}
+          />
+          <Box style={styles.topGreet}>
+            <Text style={styles.topTextGreet}>早安,</Text>
+            <Text style={styles.topTextName}>{userInfo.name}</Text>
           </Box>
-          <Pressable
-            onPress={() => { navigation.navigate('message', { prepage: 'list' }) }}
-          >
-            <Center>
-              <ZStack size={25} ml={3} alignItems="center" justifyContent="center">
-                <Box>
-                  <Octicons
-                    name="dot-fill"
-                    size={16}
-                    color={Messagenum !== 0 ? '#EB6F6F' : 'transparent'}
-                    style={{
-                      transform: [{ translateX: 12 }, { translateY: -10 }]
-                    }}
-                  />
-                </Box>
-                <Box>
-                  <FontAwesome5
-                    name="comment"
-                    size={25}
-                    color="#28527A"
-                  />
-                </Box>
-              </ZStack>
-            </Center>
+      </Box>
+      <Center style={styles.topLeftRight}>
+          <Pressable onPress={() => { navigation.navigate('message', { prepage: 'list' }) }}>
+            <ZStack size={25} ml={3} alignItems="center" justifyContent="center">
+              <Box>
+                <Octicons
+                      name="dot-fill"
+                      size={16}
+                      color={Messagenum !== 0 ? '#EB6F6F' : 'transparent'}
+                      style={{
+                        transform: [{ translateX: 12 }, { translateY: -10 }]
+                      }}
+                />
+              </Box>
+              <Box>
+                <FontAwesome5
+                  name="comment"
+                  size={25}
+                  color="#28527A"
+                />
+              </Box>
+            </ZStack>
           </Pressable>
-          <Center style={styles.topLeftRight}>
             <Ionicons
               name="settings-outline"
               size={25}
-              style={{ fontWeight: 'bold' }}
+              style={{ fontWeight: 'bold', marginLeft: 10 }}
               color="#28527A"
               onPress={() => {
                 navigation.navigate('settings', {

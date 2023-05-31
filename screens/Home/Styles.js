@@ -8,12 +8,7 @@ export default StyleSheet.create({
     paddingHorizontal: 20,
     backgroundColor: '#E5E5E5'
   },
-  containerForCal: {
-    flex: 1,
-    marginTop: Constants.statusBarHeight
-  },
   topHomePage: {
-    backgroundColor: 'gray',
     flexDirection: 'row',
     justifyContent: 'space-between'
   },

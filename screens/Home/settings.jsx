@@ -1,12 +1,15 @@
 import React from 'react'
-import { SafeAreaView, Text } from 'react-native'
+import { SettingHeader } from './components/SettingHeader'
+import { Box, Text } from 'native-base'
 import styles from './Styles'
 
-function Settings ({ navigation }) {
+function Settings ({ route, navigation }) {
+  const { userInfo } = route.params
   return (
-    <SafeAreaView style={{ paddingTop: 50 }}>
-        <Text>settings</Text>
-    </SafeAreaView>
+    <Box safeArea>
+      <SettingHeader navigation={navigation} />
+      <Text>{userInfo.name}</Text>
+    </Box>
   )
 }
 

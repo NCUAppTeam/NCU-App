@@ -4,10 +4,10 @@ import {
 } from 'react-native'
 
 import {
-  FontAwesome5, AntDesign, Feather, Octicons, Ionicons
+  FontAwesome5, Octicons, Ionicons
 } from '@expo/vector-icons'
 import {
-  Box, ZStack, HStack, Center, Input, Icon
+  Box, ZStack, Center
 } from 'native-base'
 import styles from '../Styles'
 import UserController from '../../../controller/getStudentId'

@@ -1,14 +1,13 @@
-import React from 'react';
-import { SafeAreaView,Text } from 'react-native'; 
-import styles from './Styles';
+import React from 'react'
+import { SafeAreaView, Text } from 'react-native'
+import styles from './Styles'
 
-function Settings({ navigation }) {
+function Settings ({ navigation }) {
   return (
-    <SafeAreaView style={{paddingTop:50}}>
+    <SafeAreaView style={{ paddingTop: 50 }}>
         <Text>settings</Text>
     </SafeAreaView>
-  );
+  )
 }
 
-
-export default Settings;
+export default Settings

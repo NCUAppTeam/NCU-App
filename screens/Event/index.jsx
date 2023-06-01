@@ -13,7 +13,6 @@ import Genre from './GenreEvent'
 import Detailscreen from './showActivityDetails'
 import Send from './Send'
 import Search from './search'
-import Share from './sharePage'
 
 const Stack = createNativeStackNavigator()
 
@@ -47,7 +46,6 @@ function EventStack () {
       <Stack.Screen name="message" component={Message} />
       <Stack.Screen name="send" component={Send} />
       <Stack.Screen name="genre" component={Genre} />
-      <Stack.Screen name="share" component={Share} />
     </Stack.Navigator>
   )
 }

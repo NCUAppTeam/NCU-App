@@ -8,7 +8,7 @@ import {
 
 export function SettingHeader ({ navigation }) {
   return (
-    <Box flexDirection="row" safeArea>
+    <Box flexDirection="row" safeArea backgroundColor="#FFFFFF" borderBottomWidth={10} borderBottomColor="#ffffff">
         <Center>
             <Box flex={1.5} marginLeft={6} onPress={() => { navigation.navigate('homepage') }}>
                 <AntDesign
@@ -18,9 +18,9 @@ export function SettingHeader ({ navigation }) {
                 />
             </Box>
         </Center>
-        <Box flex={2.2} />
+        <Box flex={2} />
         <Box flex={4}>
-            <Text fontSize="2xl" color="#28527A" justifyContent="center" marginTop={-1}>設定</Text>
+            <Text fontSize="2xl" color="#28527A" justifyContent="center" marginTop="-1.5">設定</Text>
         </Box>
     </Box>
 

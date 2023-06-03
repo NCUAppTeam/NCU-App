@@ -8,13 +8,14 @@ import {
 
 export function SettingHeader ({ navigation }) {
   return (
-    <Box flexDirection="row" safeArea backgroundColor="#FFFFFF" borderBottomWidth={10} borderBottomColor="#ffffff">
+    <Box flexDirection="row" safeArea backgroundColor="#FFFFFF" borderBottomWidth={10} borderBottomColor="#ffffff" paddingTop={5}>
         <Center>
-            <Box flex={1.5} marginLeft={6} onPress={() => { navigation.navigate('homepage') }}>
+            <Box flex={1.5} marginLeft={6}>
                 <AntDesign
                 name="arrowleft"
                 size={28}
                 color="#476685"
+                onPress={() => { navigation.navigate('homepage') }}
                 />
             </Box>
         </Center>

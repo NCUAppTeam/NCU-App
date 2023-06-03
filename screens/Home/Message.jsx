@@ -9,7 +9,7 @@ import {
   NativeBaseProvider, Box, VStack, HStack, FlatList, ZStack
 } from 'native-base'
 import { LinearGradient } from 'expo-linear-gradient'
-import styles from './style_folder/Styles_Message'
+import styles from './styles_folder/Styles_Message'
 import MessageController from '../../controller/Message'
 import UserController from '../../controller/getStudentId'
 import { BaseTheme } from '../../theme'
@@ -65,7 +65,7 @@ function Message ({ navigation }) {
                 name="arrowleft"
                 size={28}
                 color="#fff"
-                onPress={() => { navigation.navigate('list') }}
+                onPress={() => { navigation.navigate('homepage') }}
               />
             </Box>
             <Box style={styles.title}>
@@ -108,7 +108,7 @@ function Message ({ navigation }) {
                 style={styles.cardForMessage}
                 key={item.id}
                 onPress={() => {
-                  navigation.navigate('send', {
+                  navigation.navigate('hsend', {
                     userAvatar,
                     attendeeName: item.name,
                     attendeeAvatar: item.avatar,

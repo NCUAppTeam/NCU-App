@@ -1,17 +1,32 @@
-import React from 'react';
-import { SafeAreaView } from 'react-native';
-import { WebView } from 'react-native-webview';
-import styles from './Styles';
+import React from 'react'
+import { SafeAreaView, Text } from 'react-native'
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import Settings from './settings'
+import HomePage from './homePage'
+import Message from './Message'
+import Send from './Send'
+import BigCal from './bigCal'
+import EditInfo from './EditInfo'
+import styles from './styles_folder/Styles'
 
-function HomeStack() {
+const Stack = createNativeStackNavigator()
+
+function HomeStack () {
   return (
-    <SafeAreaView style={styles.container}>
-      <WebView
-        source={{ uri: 'https://calendar.google.com/calendar/embed?src=ncu.acad@gmail.com&ctz=Asia/Taipei' }}
-      />
-    </SafeAreaView>
-  );
+    <Stack.Navigator
+      initialRouteName="homepage"
+      screenOptions={{
+        headerShown: false
+      }}
+    >
+      <Stack.Screen name="homepage" component={HomePage} />
+      <Stack.Screen name="settings" component={Settings} />
+      <Stack.Screen name="hmessage" component={Message} />
+      <Stack.Screen name="hsend" component={Send} />
+      <Stack.Screen name="BigCal" component={BigCal} />
+      <Stack.Screen name="EditInfo" component={EditInfo} />
+    </Stack.Navigator>
+  )
 }
 
-
-export default HomeStack;
+export default HomeStack

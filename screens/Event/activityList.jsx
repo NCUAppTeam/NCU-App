@@ -105,6 +105,7 @@ function List ({ navigation }) {
                                   name="clockcircleo"
                                   size={12}
                                   color="rgba(40, 82, 122, 0.65)"
+                                  style={{ alignSelf: 'center', marginLeft: 1 }}
                                 />
                                 <Text style={styles.CardText}>
                                   {'  '}
@@ -116,6 +117,7 @@ function List ({ navigation }) {
                                   name="location-outline"
                                   size={15}
                                   color="rgba(40, 82, 122, 0.65)"
+                                  style={{ alignSelf: 'center' }}
                                 />
                                 <Text style={styles.CardText}>
                                   {' '}
@@ -180,6 +182,7 @@ function List ({ navigation }) {
                                   name="clockcircleo"
                                   size={12}
                                   color="rgba(40, 82, 122, 0.65)"
+                                  style={{ alignSelf: 'center', marginLeft: 1 }}
                                 />
                                 <Text style={styles.CardText}>
                                   {'  '}
@@ -191,6 +194,7 @@ function List ({ navigation }) {
                                   name="location-outline"
                                   size={15}
                                   color="rgba(40, 82, 122, 0.65)"
+                                  style={{ alignSelf: 'center' }}
                                 />
                                 <Text style={styles.CardText}>
                                   {' '}

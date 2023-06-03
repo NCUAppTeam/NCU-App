@@ -380,6 +380,7 @@ async function getParticipatedActive () {
   for (let i = 0; i < attendIDArray.length; i += 1) {
     const refDoc = doc(db, `activities/${attendIDArray[i]}`)
     const result = await getDoc(refDoc)
+    const num = await getTotalOfAttendees(result.id)
     if (new Date(toDateString(result.data().endTime)) > current) {
       activeArray.push({
         id: result.id,
@@ -395,7 +396,8 @@ async function getParticipatedActive () {
         hostName: result.data().hostName,
         hostPhone: result.data().hostPhone,
         hostMail: result.data().hostMail,
-        details: result.data().details
+        details: result.data().details,
+        num
       })
     }
   }
@@ -673,6 +675,7 @@ async function getHostedEvent () {
     const num = await getTotalOfAttendees(result.id)
     eventArray.push({
       id: result.id,
+      startTimeInNum: toDateString(result.data().startTime),
       ...result.data(),
       num
     })

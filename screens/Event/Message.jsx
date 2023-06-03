@@ -1,59 +1,59 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'
 import {
-  Text, SafeAreaView, RefreshControl, Image,
-} from 'react-native';
-import { Card } from 'react-native-paper';
-import { FontAwesome5, AntDesign, Octicons } from '@expo/vector-icons';
+  Text, SafeAreaView, RefreshControl, Image
+} from 'react-native'
+import { Card } from 'react-native-paper'
+import { FontAwesome5, AntDesign, Octicons } from '@expo/vector-icons'
 
 import {
-  NativeBaseProvider, Box, VStack, HStack, FlatList, ZStack,
-} from 'native-base';
-import { LinearGradient } from 'expo-linear-gradient';
-import styles from './style_folder/Styles_Message';
-import MessageController from '../../controller/Message';
-import UserController from '../../controller/getStudentId';
-import { BaseTheme } from '../../theme';
+  NativeBaseProvider, Box, VStack, HStack, FlatList, ZStack
+} from 'native-base'
+import { LinearGradient } from 'expo-linear-gradient'
+import styles from './style_folder/Styles_Message'
+import MessageController from '../../controller/Message'
+import UserController from '../../controller/getStudentId'
+import { BaseTheme } from '../../theme'
 
-function Message({ navigation }) {
-  const userUid = UserController.getUid();
-  const [userAvatar, setUserAvatar] = useState();
-  const [newInfo, setNewInfo] = useState();
+function Message ({ navigation }) {
+  const userUid = UserController.getUid()
+  const [userAvatar, setUserAvatar] = useState()
+  const [newInfo, setNewInfo] = useState()
 
-  const [refreshing, setRefreshing] = useState(false);
+  const [refreshing, setRefreshing] = useState(false)
   const onRefresh = () => {
-    setRefreshing(true);
+    setRefreshing(true)
     UserController.getINFO(userUid).then((res) => {
-      setUserAvatar(res.avatar);
+      setUserAvatar(res.avatar)
     }).catch((err) => {
-      throw err;
-    });
+      throw err
+    })
     MessageController.findRelateChatroom(userUid).then((res) => {
-      setNewInfo(res);
+      setNewInfo(res)
     }).catch((err) => {
-      throw err;
-    });
-    setRefreshing(false);
-  };
+      throw err
+    })
+    setRefreshing(false)
+  }
 
   useEffect(() => {
     UserController.getINFO(userUid).then((res) => {
-      setUserAvatar(res.avatar);
+      setUserAvatar(res.avatar)
     }).catch((err) => {
-      throw err;
-    });
+      throw err
+    })
     MessageController.findRelateChatroom(userUid).then((res) => {
-      setNewInfo(res);
+      setNewInfo(res)
     }).catch((err) => {
-      throw err;
-    });
+      throw err
+    })
     const focusHandler = navigation.addListener('focus', () => {
-      onRefresh();
-    });
-    return focusHandler;
-  }, []);
+      onRefresh()
+    })
+    return focusHandler
+  }, [])
   return (
     <SafeAreaView style={styles.container}>
-      
+
         <LinearGradient
           colors={['#1784B2', '#476685']}
           start={[1, 2]}
@@ -65,7 +65,7 @@ function Message({ navigation }) {
                 name="arrowleft"
                 size={28}
                 color="#fff"
-                onPress={() => { navigation.navigate('list'); }}
+                onPress={() => { navigation.navigate('list') }}
               />
             </Box>
             <Box style={styles.title}>
@@ -113,8 +113,8 @@ function Message({ navigation }) {
                     attendeeName: item.name,
                     attendeeAvatar: item.avatar,
                     chatroomId: item.id,
-                    userUid,
-                  });
+                    userUid
+                  })
                 }}
               >
                 <ZStack>
@@ -122,7 +122,7 @@ function Message({ navigation }) {
                     <Image
                       style={styles.avatar}
                       source={{
-                        uri: item.avatar,
+                        uri: item.avatar
                       }}
                     />
                     <VStack style={styles.messagePeople}>
@@ -157,8 +157,8 @@ function Message({ navigation }) {
             )}
           />
         </Box>
-      
+
     </SafeAreaView>
-  );
+  )
 }
-export default Message;
+export default Message

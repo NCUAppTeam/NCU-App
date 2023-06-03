@@ -1,98 +1,98 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'
 import {
   Text, SafeAreaView,
-  TouchableOpacity, Image, RefreshControl, Dimensions, Platform,
-} from 'react-native';
+  TouchableOpacity, Image, RefreshControl, Dimensions, Platform
+} from 'react-native'
 import {
-  Title, Card,
-} from 'react-native-paper';
+  Title, Card
+} from 'react-native-paper'
 import {
-  Ionicons, AntDesign, Feather,
-} from '@expo/vector-icons';
+  Ionicons, AntDesign, Feather
+} from '@expo/vector-icons'
 import {
-  NativeBaseProvider, Box, ZStack, VStack, FlatList, Pressable,
-} from 'native-base';
-import { LinearGradient } from 'expo-linear-gradient';
-import ActiveController from '../../controller/Active';
-import MessageController from '../../controller/Message';
-import UserController from '../../controller/getStudentId';
-import styles from './style_folder/Styles_personal_manage';
-import { BaseTheme } from '../../theme';
+  NativeBaseProvider, Box, ZStack, VStack, FlatList, Pressable
+} from 'native-base'
+import { LinearGradient } from 'expo-linear-gradient'
+import ActiveController from '../../controller/Active'
+import MessageController from '../../controller/Message'
+import UserController from '../../controller/getStudentId'
+import styles from './style_folder/Styles_personal_manage'
+import { BaseTheme } from '../../theme'
 
-function Personal({ navigation }) {
-  const [Messagenum, setMessageNum] = useState(0);
-  const [showNow, setShowNow] = useState([]);
-  const [showManage, setShowManage] = useState([]);
-  const [showEnd, setShowEnd] = useState([]);
-  const [isPress, setIsPress] = useState('參加中');
+function Personal ({ navigation }) {
+  const [Messagenum, setMessageNum] = useState(0)
+  const [showNow, setShowNow] = useState([])
+  const [showManage, setShowManage] = useState([])
+  const [showEnd, setShowEnd] = useState([])
+  const [isPress, setIsPress] = useState('參加中')
 
-  const [refreshing, setRefreshing] = useState(false);
+  const [refreshing, setRefreshing] = useState(false)
   const onRefresh = async () => {
-    setRefreshing(true);
-    const userid = UserController.getUid();
+    setRefreshing(true)
+    const userid = UserController.getUid()
     MessageController.countUnreadMessage(userid).then((num) => {
-      setMessageNum(num);
+      setMessageNum(num)
     }).catch((err) => {
-      throw err;
-    });
+      throw err
+    })
     if (isPress === '參加中') {
       await ActiveController.getParticipatedActive().then((res) => {
-        setShowNow(res);
+        setShowNow(res)
       }).catch((err) => {
-        throw err;
-      });
+        throw err
+      })
     } else if (isPress === '管理活動') {
       await ActiveController.getHostedEvent().then((res) => {
-        setShowManage(res);
+        setShowManage(res)
       }).catch((err) => {
-        throw err;
-      });
+        throw err
+      })
     } else {
       await ActiveController.getFinishedActive().then((res) => {
-        setShowEnd(res);
+        setShowEnd(res)
       }).catch((err) => {
-        throw err;
-      });
+        throw err
+      })
     }
-    setRefreshing(false);
-  };
+    setRefreshing(false)
+  }
 
   useEffect(() => {
-    const userid = UserController.getUid();
+    const userid = UserController.getUid()
     MessageController.countUnreadMessage(userid).then((num) => {
-      setMessageNum(num);
+      setMessageNum(num)
     }).catch((err) => {
-      throw err;
-    });
+      throw err
+    })
     ActiveController.getParticipatedActive().then((res) => {
-      setShowNow(res);
+      setShowNow(res)
     }).catch((err) => {
-      throw err;
-    });
+      throw err
+    })
     ActiveController.getHostedEvent().then((res) => {
-      setShowManage(res);
+      setShowManage(res)
     }).catch((err) => {
-      throw err;
-    });
+      throw err
+    })
     ActiveController.getHostedEvent().then((res) => {
-      setShowManage(res);
+      setShowManage(res)
     }).catch((err) => {
-      throw err;
-    });
+      throw err
+    })
     ActiveController.getFinishedActive().then((res) => {
-      setShowEnd(res);
+      setShowEnd(res)
     }).catch((err) => {
-      throw err;
-    });
+      throw err
+    })
     const focusHandler = navigation.addListener('focus', () => {
-      onRefresh();
-    });
-    return focusHandler;
-  }, [navigation]);
+      onRefresh()
+    })
+    return focusHandler
+  }, [navigation])
 
   return (
     <SafeAreaView style={{
-      flex: 1, flexDirection: 'column', alignSelf: 'center',
+      flex: 1, flexDirection: 'column', alignSelf: 'center'
     }}
     >
 
@@ -108,15 +108,15 @@ function Personal({ navigation }) {
             height: Dimensions.get('window').width,
             borderRadius: Dimensions.get('window').width,
             alignSelf: 'center',
-            marginTop: 118+53/2, // 私訊按鈕的marginTop + Height/2
-            transform: [{translateY: -Dimensions.get('window').width}],
+            marginTop: 118 + 53 / 2, // 私訊按鈕的marginTop + Height/2
+            transform: [{ translateY: -Dimensions.get('window').width }]
           }}
         />
 
         <Box style={{ alignSelf: 'center', marginTop: 61, flexDirection: 'row' }}>
-          <Feather name="user" size={24} color="white" style={{ marginTop: 5, marginRight: 15 }} onPress={() => { navigation.navigate('list'); }} />
+          <Feather name="user" size={24} color="white" style={{ marginTop: 5, marginRight: 15 }} onPress={() => { navigation.navigate('list') }} />
           <Text style={{
-            fontWeight: 'bold', fontSize: 24, color: 'white',
+            fontWeight: 'bold', fontSize: 24, color: 'white'
           }}
           >
             活動中心
@@ -138,7 +138,7 @@ function Personal({ navigation }) {
               alignContent: 'center',
               elevation: 10,
               shadowColor: '#000',
-              marginRight: 10,
+              marginRight: 10
             }}
           >
             <ZStack>
@@ -167,7 +167,7 @@ function Personal({ navigation }) {
               padding: 16,
               alignContent: 'center',
               elevation: 10,
-              shadowColor: '#000',
+              shadowColor: '#000'
             }}
           >
             <TouchableOpacity
@@ -194,8 +194,8 @@ function Personal({ navigation }) {
           <TouchableOpacity
             style={isPress === '參加中' ? styles.personalbtnPress : styles.personalbtn}
             onPress={() => {
-              setIsPress('參加中');
-              ActiveController.getParticipatedActive();
+              setIsPress('參加中')
+              ActiveController.getParticipatedActive()
             }}
           >
             <Text style={isPress === '參加中' ? styles.personalbtnPressText : styles.personalbtnText}>
@@ -205,8 +205,8 @@ function Personal({ navigation }) {
           <TouchableOpacity
             style={isPress === '管理活動' ? styles.personalbtnPress : styles.personalbtn}
             onPress={() => {
-              setIsPress('管理活動');
-              ActiveController.getHostedEvent();
+              setIsPress('管理活動')
+              ActiveController.getHostedEvent()
             }}
           >
             <Text style={isPress === '管理活動' ? styles.personalmanagebtnPressText : styles.personalmanagebtnText}>
@@ -216,8 +216,8 @@ function Personal({ navigation }) {
           <TouchableOpacity
             style={isPress === '已結束' ? styles.personalbtnPress : styles.personalbtn}
             onPress={() => {
-              setIsPress('已結束');
-              ActiveController.getFinishedActive();
+              setIsPress('已結束')
+              ActiveController.getFinishedActive()
             }}
           >
             <Text style={isPress === '已結束' ? styles.personalbtnPressText : styles.personalbtnText}>
@@ -245,7 +245,7 @@ function Personal({ navigation }) {
                   key={item.id}
                   style={styles.cardManage}
                   onPress={() => {
-                    navigation.navigate('manage', { Cd: item.id });
+                    navigation.navigate('manage', { Cd: item.id })
                   }}
                 >
                   <Card.Content style={{ padding: 0 }}>
@@ -254,7 +254,7 @@ function Personal({ navigation }) {
                         <Image
                           style={styles.cardManagepic}
                           source={{
-                            uri: item.imageUri1,
+                            uri: item.imageUri1
                           }}
                         />
                       </Box>
@@ -266,7 +266,7 @@ function Personal({ navigation }) {
                           <AntDesign
                             name="clockcircleo"
                             size={15}
-                            style={{ justifyContent: 'center' }}
+                            style={{ alignSelf: 'center' }}
                           />
                           <Text style={styles.cardManageText}>
                             {'   開始 ：'}
@@ -278,6 +278,7 @@ function Personal({ navigation }) {
                             name="location-outline"
                             size={17}
                             color="black"
+                            style={{ alignSelf: 'center' }}
                           />
                           <Text style={styles.cardManageTextLocation}>
                             {'  '}
@@ -289,6 +290,7 @@ function Personal({ navigation }) {
                             name="users"
                             size={16}
                             color="black"
+                            style={{ alignSelf: 'center' }}
                           />
                           {item.limitNum !== '0' && (
                             <Text style={styles.cardManageText}>
@@ -332,12 +334,12 @@ function Personal({ navigation }) {
               />
             )}
             renderItem={({ item }) => (
-              <Pressable onPress={() => { navigation.navigate('details', { Cd: item.id, prepage: 'personal' }); }}>
+              <Pressable onPress={() => { navigation.navigate('details', { Cd: item.id, prepage: 'personal' }) }}>
                 <VStack style={styles.CardInPersonal}>
                   <Image
                     style={styles.pic}
                     source={{
-                      uri: item.imageUri1,
+                      uri: item.imageUri1
                     }}
                   />
                   <Title style={styles.CardTitle}>
@@ -348,6 +350,7 @@ function Personal({ navigation }) {
                       name="clockcircleo"
                       size={12}
                       color="rgba(40, 82, 122, 0.65)"
+                      style={{ alignSelf: 'center' }}
                     />
                     <Text style={styles.CardTimeText}>
                       {'   '}
@@ -359,6 +362,7 @@ function Personal({ navigation }) {
                       name="location-outline"
                       size={15}
                       color="rgba(40, 82, 122, 0.65)"
+                      style={{ alignSelf: 'center' }}
                     />
                     <Text style={styles.cardPlaceText}>
                       {'  '}
@@ -385,12 +389,12 @@ function Personal({ navigation }) {
               />
             )}
             renderItem={({ item }) => (
-              <Pressable onPress={() => { navigation.navigate('details', { Cd: item.id, prepage: 'personal' }); }}>
+              <Pressable onPress={() => { navigation.navigate('details', { Cd: item.id, prepage: 'personal' }) }}>
                 <VStack style={styles.CardInPersonal}>
                   <Image
                     style={styles.pic}
                     source={{
-                      uri: item.imageUri1,
+                      uri: item.imageUri1
                     }}
                   />
                   <Title style={styles.CardTitle}>
@@ -401,6 +405,7 @@ function Personal({ navigation }) {
                       name="clockcircleo"
                       size={12}
                       color="rgba(40, 82, 122, 0.65)"
+                      style={{ alignSelf: 'center' }}
                     />
                     <Text style={styles.CardTimeText}>
                       {'   '}
@@ -412,6 +417,7 @@ function Personal({ navigation }) {
                       name="location-outline"
                       size={15}
                       color="rgba(40, 82, 122, 0.65)"
+                      style={{ alignSelf: 'center' }}
                     />
                     <Text style={styles.cardPlaceText}>
                       {'  '}
@@ -426,7 +432,7 @@ function Personal({ navigation }) {
       </Box>
 
     </SafeAreaView>
-  );
+  )
 }
 
-export default Personal;
+export default Personal

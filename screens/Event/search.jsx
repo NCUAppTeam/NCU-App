@@ -93,15 +93,11 @@ function Search({ navigation }) {
   }, []);
   return (
     <Box safeArea flex={1} flexGrow={1}>
-
-      <Center>
+      <Center m={4} >
         <Input
           placeholder="搜尋"
           size="lg"
-          m="2"
-          mt="4"
           variant="filled"
-          width="90%"
           height="40px"
           borderRadius="10"
           bg="#E5EBF1"
@@ -119,11 +115,12 @@ function Search({ navigation }) {
           InputRightElement={
             <Text mr="4" color="#476685" onPress={() => navigation.navigate('list')}>取消</Text>
             }
+            autoFocus
         />
       </Center>
 
       {searchQuery === '' && (
-      <Box style={styles.btnArea} flex={1}>
+      <Box mx={4} flex={1}>
         <CategoryList navigation={navigation} />
       </Box>
       )}

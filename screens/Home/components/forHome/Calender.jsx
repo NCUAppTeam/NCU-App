@@ -2,10 +2,10 @@ import React from 'react'
 import { Box, Pressable, Text } from 'native-base'
 import { WebView } from 'react-native-webview'
 
-export function Calendar (navigation) {
+export function Calendar ({ navigation }) {
   return (
     <Box w={375} h={300} borderRadius={10} borderColor='#E5EBF1' safeArea>
-      <Box marginBottom={5}>
+      <Box marginBottom="2">
           <Text fontSize="lg" bold>本週校曆</Text>
       </Box>
       <WebView
@@ -21,8 +21,9 @@ export function Calendar (navigation) {
                 borderWidth={1}
                 borderRadius={50}
                 borderColor="#E5EBF1"
-                backgroundColor="#FAFAFA">
-                <Text fontSize="sm" textAlign="center" >顯示完整校曆</Text>
+                backgroundColor="#FAFAFA"
+                >
+                <Text fontSize="sm" textAlign="center" onPress={() => { navigation.navigate('BigCal') }}>顯示完整校曆</Text>
             </Box>
         </Pressable>
       </Box>

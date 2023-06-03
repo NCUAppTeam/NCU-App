@@ -5,8 +5,15 @@ export default StyleSheet.create({
   container: {
     flex: 1,
     marginTop: Constants.statusBarHeight,
+    borderVerticalColor: '#e5e5e5',
+    borderVerticalWidth: 20,
     paddingHorizontal: 20,
+    paddingVertical: 20,
     backgroundColor: '#E5E5E5'
+  },
+  containerForCal: {
+    flex: 1,
+    marginTop: Constants.statusBarHeight
   },
   topHomePage: {
     flexDirection: 'row',

@@ -10,6 +10,9 @@ export const BaseTheme = extendTheme({
       600: "#ffaf42",
       100: "#7946e6",
     },
+    gray: {
+      600: "#737373",
+    },
     accent1: {
       50: "#E3F2F9",
       100: "#C5E4F3",

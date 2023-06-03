@@ -15,7 +15,7 @@ import { LinearGradient } from 'expo-linear-gradient'
 import * as ImagePicker from 'expo-image-picker'
 import { getApp } from 'firebase/app'
 import { onSnapshot, collection, getFirestore } from 'firebase/firestore'
-import styles from './style_folder/Styles_Message'
+import styles from './styles_folder/Styles_Message'
 import MessageController from '../../controller/Message'
 
 function Send ({ route, navigation }) {
@@ -124,7 +124,7 @@ function Send ({ route, navigation }) {
                 name="arrowleft"
                 size={28}
                 color="#fff"
-                onPress={() => { navigation.navigate('message', { prepage: 'send' }) }}
+                onPress={() => { navigation.navigate('hmessage') }}
               />
               <Image
                 style={styles.sendAvatar}

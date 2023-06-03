@@ -12,13 +12,11 @@ import {
 import {
   Box, Divider, HStack, Text
 } from 'native-base'
-import { getAuth, signOut } from 'firebase/auth'
 import styles from './style_folder/Styles_activityList'
 import ActiveController from '../../controller/Active'
 import { SearchHeader } from './components/SearchHeader'
 
 function List ({ navigation }) {
-  const auth = getAuth()
   const [active1, setActive1] = useState([])
   const [active2, setActive2] = useState([])
   const [refreshing, setRefreshing] = useState(false)
@@ -107,6 +105,7 @@ function List ({ navigation }) {
                                   name="clockcircleo"
                                   size={12}
                                   color="rgba(40, 82, 122, 0.65)"
+                                  style={{ alignSelf: 'center', marginLeft: 1 }}
                                 />
                                 <Text style={styles.CardText}>
                                   {'  '}
@@ -118,6 +117,7 @@ function List ({ navigation }) {
                                   name="location-outline"
                                   size={15}
                                   color="rgba(40, 82, 122, 0.65)"
+                                  style={{ alignSelf: 'center' }}
                                 />
                                 <Text style={styles.CardText}>
                                   {' '}
@@ -182,6 +182,7 @@ function List ({ navigation }) {
                                   name="clockcircleo"
                                   size={12}
                                   color="rgba(40, 82, 122, 0.65)"
+                                  style={{ alignSelf: 'center', marginLeft: 1 }}
                                 />
                                 <Text style={styles.CardText}>
                                   {'  '}
@@ -193,6 +194,7 @@ function List ({ navigation }) {
                                   name="location-outline"
                                   size={15}
                                   color="rgba(40, 82, 122, 0.65)"
+                                  style={{ alignSelf: 'center' }}
                                 />
                                 <Text style={styles.CardText}>
                                   {' '}
@@ -209,35 +211,6 @@ function List ({ navigation }) {
               </Box>
             </Box>
           </Box>
-          <Pressable
-            style={{
-              margin: 50, backgroundColor: 'yellow', height: 100, justifyContent: 'center'
-            }}
-            onPress={() => {
-              signOut(auth).then(() => {
-                // Sign-out successful.
-                console.log('Sign-out successful.')
-              }).catch((error) => {
-                throw error
-              })
-            }}
-          >
-            <Text style={{ alignSelf: 'center' }}>
-              登出
-            </Text>
-          </Pressable>
-          <Pressable
-            style={{
-              margin: 50, backgroundColor: 'yellow', height: 100, justifyContent: 'center'
-            }}
-            onPress={() => {
-              navigation.navigate('share')
-            }}
-          >
-            <Text style={{ alignSelf: 'center' }}>
-              分享
-            </Text>
-          </Pressable>
         </ScrollView>
       </Box>
 

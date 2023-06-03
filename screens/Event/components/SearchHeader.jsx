@@ -25,8 +25,8 @@ export function SearchHeader ({ navigation }) {
   }, [])
 
   return (
-    <Center>
-      <HStack mt="4" m="2" width="90%" alignItems="center" justifyContent="center">
+    <Center m={4}>
+      <HStack width="100%" alignItems="center" justifyContent="center">
         <Pressable
           onPress={() => { navigation.navigate('search') }}
           flex={1}

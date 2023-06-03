@@ -1,31 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react'
 import {
-  Pressable,
-} from 'react-native';
+  Pressable
+} from 'react-native'
 
 import {
-  FontAwesome5, AntDesign, Feather, Octicons,
-} from '@expo/vector-icons';
+  FontAwesome5, AntDesign, Feather, Octicons
+} from '@expo/vector-icons'
 import {
-  Box, ZStack, HStack, Center, Input, Icon,
-} from 'native-base';
-import MessageController from '../../../controller/Message';
-import UserController from '../../../controller/getStudentId';
+  Box, ZStack, HStack, Center, Input, Icon
+} from 'native-base'
+import MessageController from '../../../controller/Message'
+import UserController from '../../../controller/getStudentId'
 
-export function SearchHeader({ navigation }) {
-  const [Messagenum, setMessageNum] = useState(0);
-  const userid = UserController.getUid();
+export function SearchHeader ({ navigation }) {
+  const [Messagenum, setMessageNum] = useState(0)
+  const userid = UserController.getUid()
 
-  MessageController.countUnreadMessage(userid).then((num) => {
-    setMessageNum(num);
-  }).catch((err) => {
-    throw err;
-  });
+  useEffect(() => {
+    MessageController.countUnreadMessage(userid).then((num) => {
+      setMessageNum(num)
+    }).catch((err) => {
+      throw err
+    })
+  }, [])
+
   return (
     <Center>
       <HStack mt="4" m="2" width="90%" alignItems="center" justifyContent="center">
         <Pressable
-          onPress={() => { navigation.navigate('search'); }}
+          onPress={() => { navigation.navigate('search') }}
           flex={1}
         >
           <Center>
@@ -41,12 +44,12 @@ export function SearchHeader({ navigation }) {
               InputLeftElement={<Icon ml="2" size="6" as={AntDesign} name="search1" color="#476685" />}
               pointerEvents="none"
               isReadOnly
-              onPress={() => { navigation.navigate('search'); }}
+              onPress={() => { navigation.navigate('search') }}
             />
           </Center>
         </Pressable>
         <Pressable
-          onPress={() => { navigation.navigate('message', { prepage: 'list' }); }}
+          onPress={() => { navigation.navigate('message', { prepage: 'list' }) }}
         >
           <Center>
             <ZStack size={25} ml={3} alignItems="center" justifyContent="center">
@@ -56,7 +59,7 @@ export function SearchHeader({ navigation }) {
                   size={16}
                   color={Messagenum !== 0 ? '#EB6F6F' : 'transparent'}
                   style={{
-                    transform: [{ translateX: 12 }, { translateY: -10 }],
+                    transform: [{ translateX: 12 }, { translateY: -10 }]
                   }}
                 />
               </Box>
@@ -73,7 +76,7 @@ export function SearchHeader({ navigation }) {
           </Center>
         </Pressable>
         <Pressable
-          onPress={() => { navigation.navigate('personal'); }}
+          onPress={() => { navigation.navigate('personal') }}
         >
           <Box size={26} mx={3}>
             <Feather
@@ -85,6 +88,6 @@ export function SearchHeader({ navigation }) {
         </Pressable>
       </HStack>
     </Center>
-  );
+  )
 }
-export default { SearchHeader };
+export default { SearchHeader }

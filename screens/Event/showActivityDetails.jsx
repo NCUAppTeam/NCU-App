@@ -459,8 +459,9 @@ function Detailscreen ({ route, navigation }) {
                 </VStack>
               </Box>
             </Box>
-            {(user !== uid)&&(
-                (Date.parse(active[0].endTimeInNum)> Date.now()) ? (
+            {(user !== uid) && (
+              (Date.parse(active[0].endTimeInNum) > Date.now())
+                ? (
                 <Box style={{ flexDirection: 'row', marginBottom: 20 }}>
                   <TouchableOpacity
                     style={styles.sentMessage}
@@ -474,11 +475,11 @@ function Detailscreen ({ route, navigation }) {
                               text: '確認報名',
                               onPress: () => (
                                 ActiveController.signUp(passedID).then(() => setSignUp(true))
-                              ),
-                            },
-                          ],
+                              )
+                            }
+                          ]
 
-                        );
+                        )
                       } else {
                         Alert.alert(
                           '確認取消報名?',
@@ -488,11 +489,11 @@ function Detailscreen ({ route, navigation }) {
                               text: '忍痛取消報名',
                               onPress: () => (
                                 ActiveController.quitEvent(passedID).then(() => setSignUp(false))
-                              ),
-                            },
-                          ],
+                              )
+                            }
+                          ]
 
-                        );
+                        )
                       }
                     }}
                   >
@@ -507,17 +508,18 @@ function Detailscreen ({ route, navigation }) {
                     </Text>
                   </TouchableOpacity>
                 </Box>
-              ):(
+                  )
+                : (
                 <Box style={{ flexDirection: 'row', marginBottom: 20 }}>
                   <Box
-                    style={[styles.sentMessage,{backgroundColor:'#BFBFBF'}]}
+                    style={[styles.sentMessage, { backgroundColor: '#BFBFBF' }]}
                   >
                     <Text style={styles.sentButtonText}>
                       報名時間已過
                     </Text>
                   </Box>
                 </Box>
-              )
+                  )
             )}
 
           </Box>

@@ -1,4 +1,4 @@
-import { StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native'
 
 export default StyleSheet.create({
   bodyContainer: {
@@ -6,7 +6,7 @@ export default StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'flex-start',
     marginHorizontal: Dimensions.get('window').width * 0.03,
-    marginTop: 7,
+    marginTop: 7
   },
   cardManage: {
     height: 112,
@@ -14,39 +14,40 @@ export default StyleSheet.create({
     borderRadius: 10,
     marginTop: 15,
     flexDirection: 'row',
-    alignSelf: 'center',
+    alignSelf: 'center'
   },
   cardManagepic: {
     width: 115,
     height: 112,
     borderRadius: 10,
-    backgroundColor: '#E0E0E0',
+    backgroundColor: '#E0E0E0'
   },
   cardManageTitle: {
     marginLeft: 10,
     textAlign: 'left',
     justifyContent: 'center',
     fontWeight: 'bold',
-    fontSize: 16,
+    fontSize: 16
   },
   cardManageDetails: {
     marginHorizontal: 10,
     marginTop: 7,
     flexDirection: 'row',
-    alignContent: 'space-around',
+    alignContent: 'space-around'
   },
   cardManageLocation: {
     marginHorizontal: 9,
     marginTop: 7,
     flexDirection: 'row',
-    alignContent: 'space-around',
+    alignContent: 'space-around'
   },
   cardManageText: {
     fontSize: 12,
+    alignSelf: 'center'
   },
   cardManageTextLocation: {
     fontSize: 12,
-    marginLeft: 3,
+    alignSelf: 'center'
   },
   CardInPersonal: {
     height: Dimensions.get('window').width * 0.58 + 5,
@@ -55,12 +56,12 @@ export default StyleSheet.create({
     shadowColor: 'black',
     shadowOffset: {
       width: 0,
-      height: -4,
+      height: -4
     },
     elevation: 4,
     marginVertical: 7,
     backgroundColor: 'white',
-    marginRight: Dimensions.get('window').width * 0.03,
+    marginRight: Dimensions.get('window').width * 0.03
   },
   CardTitle: {
     textAlign: 'center',
@@ -68,30 +69,30 @@ export default StyleSheet.create({
     alignContent: 'center',
     alignItems: 'center',
     color: '#476685',
-    fontSize: 14,
+    fontSize: 14
   },
   CardStartTime: {
     marginLeft: 7,
-    flexDirection: 'row',
+    flexDirection: 'row'
   },
   CardTimeText: {
     fontSize: 12,
     color: 'rgba(40, 82, 122, 0.65)',
-    marginTop: -3,
+    marginTop: -3
   },
   CardPlace: {
     marginLeft: 5,
-    flexDirection: 'row',
+    flexDirection: 'row'
   },
   cardPlaceText: {
     fontSize: 12,
-    color: 'rgba(40, 82, 122, 0.65)',
+    color: 'rgba(40, 82, 122, 0.65)'
   },
   pic: {
     backgroundColor: '#E0E0E0',
     aspectRatio: 1,
     borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
+    borderTopRightRadius: 10
   },
   personalbtn: {
     width: 115,
@@ -105,7 +106,7 @@ export default StyleSheet.create({
     paddingVertical: 8,
     marginLeft: 9,
     marginRight: 9,
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   personalbtnText: {
     color: '#CBD8E4',
@@ -113,7 +114,7 @@ export default StyleSheet.create({
     fontWeight: 'bold',
     opacity: 0.5,
     textAlign: 'center',
-    textAlignVertical: 'center',
+    textAlignVertical: 'center'
   },
   personalbtnPress: {
     borderRadius: 20,
@@ -126,19 +127,19 @@ export default StyleSheet.create({
     borderColor: '#476685',
     marginLeft: 9,
     marginRight: 9,
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   personalbtnPressText: {
     color: '#FBEEAC',
     fontSize: 16,
     fontWeight: 'bold',
-    textAlign: 'center',
+    textAlign: 'center'
   },
   personalmanagebtnPressText: {
     color: '#FBEEAC',
     fontSize: 16,
     fontWeight: 'bold',
-    textAlign: 'center',
+    textAlign: 'center'
   },
   personalmanagebtnText: {
     color: '#CBD8E4',
@@ -146,7 +147,7 @@ export default StyleSheet.create({
     fontWeight: 'bold',
     opacity: 0.5,
     textAlign: 'center',
-    textAlignVertical: 'center',
+    textAlignVertical: 'center'
   },
   num: {
     minWidth: 18,
@@ -163,6 +164,6 @@ export default StyleSheet.create({
     backgroundColor: '#DC2626',
     borderRadius: 100,
     alignSelf: 'center',
-    textAlign: 'center',
-  },
-});
+    textAlign: 'center'
+  }
+})

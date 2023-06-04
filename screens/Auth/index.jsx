@@ -1,27 +1,27 @@
-import React, { useState } from 'react';
-import { SafeAreaView } from 'react-native';
-
+import React, { useState } from 'react'
 import {
-  Avatar, Box, Heading, Link,
-} from 'native-base';
-import logo from '../../assets/icon.png';
-import { LoginScreen } from './Login';
-import { RegisterScreen } from './Register';
+  Avatar, Box, Heading, Link, Button, VStack, Text, Center, Modal
+} from 'native-base'
+import logo from '../../assets/icon.png'
+import { LoginScreen } from './Login'
+import { RegisterScreen } from './Register'
 
-const supportedURL = 'https://ncuappteam.github.io/PRIVACY';
+const supportedURL = 'https://ncuappteam.github.io/PRIVACY'
 
-export function AuthScreen() {
-  const [register, setRegister] = useState(false);
-
+export function AuthScreen () {
   return (
-    <SafeAreaView>
-      <Box alignItems="center">
-        <Avatar source={logo} />
-        <Heading>歡迎使用 NCU-App</Heading>
-        {register ? <RegisterScreen /> : <LoginScreen /> }
-        <Link onPress={() => setRegister(!register)} mt="8">{register ? '已有帳號' : '申請帳號' }</Link>
-        <Link mt="8" href={supportedURL}>隱私權政策</Link>
+      <Box alignItems="center" safeArea>
+        <VStack>
+          <Box flex={2}/>
+            <Box flex={3}>
+            <Avatar size={150} alignSelf={'center'} source={logo} />
+            <Heading bold alignSelf={'center'} marginY={'20px'}>歡迎來到 <Text color={'#1784B2'}>NCU App</Text></Heading>
+            <RegisterScreen />
+            <LoginScreen />
+            <Link alignSelf={'center'} mt="8" href={supportedURL}>隱私權政策</Link>
+          </Box>
+          <Box flex={3}/>
+        </VStack>
       </Box>
-    </SafeAreaView>
-  );
+  )
 }

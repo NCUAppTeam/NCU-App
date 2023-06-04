@@ -24,7 +24,7 @@ function ActivityCard(props) {
   const place = props.place;
   const startTimeWeekday = props.startTimeWeekday;
   const navigation = props.navigation;
-  console.log(startTimeWeekday);
+
   return (
     <Pressable
       border="1"

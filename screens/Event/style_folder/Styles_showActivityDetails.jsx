@@ -110,14 +110,10 @@ export default StyleSheet.create({
   reachLimitNum: {
     fontSize: 18,
     color: 'red',
-    marginTop: 10,
-    marginLeft: 50,
   },
   underLimitNum: {
     fontSize: 18,
     color: '#abd873',
-    marginTop: 10,
-    marginLeft: 50,
   },
   NoLimitNum: {
     fontSize: 18,

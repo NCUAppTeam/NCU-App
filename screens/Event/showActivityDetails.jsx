@@ -259,7 +259,6 @@ const Body = ({
           )}
         </HStack>
 
-
         <HStack my={3}>
           <Center mr={4} width={8}>
             <Ionicons name="location-outline" size={28} color="#476685" />
@@ -271,7 +270,6 @@ const Body = ({
 
         {link && (
           <Box>
-
             <HStack my={3}>
               <Center mr={4} width={8}>
                 <MaterialCommunityIcons name="web" size={25} color="#476685" />
@@ -329,7 +327,6 @@ const Body = ({
           </Text>
           <Text>{details}</Text>
         </Box>
-
       </VStack>
     </Box>
   );
@@ -346,7 +343,7 @@ const HostDetail = ({
   navigation,
   SignUp,
   setSignUp,
-  passedID
+  passedID,
 }) => {
   const user = UserController.getUid();
   return (
@@ -411,79 +408,76 @@ const HostDetail = ({
           </HStack>
         </VStack>
       </HStack>
-  {user !== uid &&
-    (Date.parse(active[0].endTimeInNum) > Date.now() ? (
-      <Center>
-        <Button
-          width="130px"
-          height="38px"
-          borderRadius="30px"
-          py="4px"
-          bg="#476685"
-          onPress={() => {
-            if (!SignUp) {
-              Alert.alert(
-                "確認報名?",
-                "請盡可能確保能參加活動, 方便主辦方統計參與人數, 謝謝配合！",
-                [
-                  { text: "我要反悔T~T" },
-                  {
-                    text: "確認報名",
-                    onPress: () =>
-                      ActiveController.signUp(passedID).then(() =>
-                        setSignUp(true)
-                      ),
-                  },
-                ]
-              );
-            } else {
-              Alert.alert(
-                "確認取消報名?",
-                "如果時間上真的無法配合，那下次有機會再一起參加活動吧~~",
-                [
-                  { text: "想想還是參加吧XD" },
-                  {
-                    text: "忍痛取消報名",
-                    onPress: () =>
-                      ActiveController.quitEvent(passedID).then(() =>
-                        setSignUp(false)
-                      ),
-                  },
-                ]
-              );
-            }
-          }}
-        >
-          <HStack space={2}>
-            <Feather name="users" size={16} color="#FBEEAC" />
-            <Text color="#FBEEAC" bold>
-              {SignUp ? "取消報名" : "報名候補"}
-            </Text>
-          </HStack>
-        </Button>
-      </Center>
-    ) : (
-      <Center>
-        <Button
-          width="130px"
-          height="38px"
-          borderRadius="30px"
-          py="4px"
-          bg="#476685"
-          isDisabled
-        >
-          <Text color="#FBEEAC" bold>
-            報名時間已過
-          </Text>
-        </Button>
-      </Center>
-    ))}
-      
+      {user !== uid &&
+        (Date.parse(active[0].endTimeInNum) > Date.now() ? (
+          <Center>
+            <Button
+              width="130px"
+              height="38px"
+              borderRadius="30px"
+              py="4px"
+              bg="#476685"
+              onPress={() => {
+                if (!SignUp) {
+                  Alert.alert(
+                    "確認報名?",
+                    "請盡可能確保能參加活動, 方便主辦方統計參與人數, 謝謝配合！",
+                    [
+                      { text: "我要反悔T~T" },
+                      {
+                        text: "確認報名",
+                        onPress: () =>
+                          ActiveController.signUp(passedID).then(() =>
+                            setSignUp(true)
+                          ),
+                      },
+                    ]
+                  );
+                } else {
+                  Alert.alert(
+                    "確認取消報名?",
+                    "如果時間上真的無法配合，那下次有機會再一起參加活動吧~~",
+                    [
+                      { text: "想想還是參加吧XD" },
+                      {
+                        text: "忍痛取消報名",
+                        onPress: () =>
+                          ActiveController.quitEvent(passedID).then(() =>
+                            setSignUp(false)
+                          ),
+                      },
+                    ]
+                  );
+                }
+              }}
+            >
+              <HStack space={2}>
+                <Feather name="users" size={16} color="#FBEEAC" />
+                <Text color="#FBEEAC" bold>
+                  {SignUp ? "取消報名" : "報名候補"}
+                </Text>
+              </HStack>
+            </Button>
+          </Center>
+        ) : (
+          <Center>
+            <Button
+              width="130px"
+              height="38px"
+              borderRadius="30px"
+              py="4px"
+              bg="#476685"
+              isDisabled
+            >
+              <Text color="#FBEEAC" bold>
+                報名時間已過
+              </Text>
+            </Button>
+          </Center>
+        ))}
     </VStack>
   );
 };
-
-
 
 function Detailscreen({ route, navigation }) {
   const [totalAttended, setTotal] = useState();
@@ -579,9 +573,9 @@ function Detailscreen({ route, navigation }) {
             userAvatar={userAvatar}
             active={active}
             navigation={navigation}
-          SignUp={SignUp}
-          setSignUp={setSignUp}
-          passedID={passedID}
+            SignUp={SignUp}
+            setSignUp={setSignUp}
+            passedID={passedID}
           />
         )}
       </ScrollView>

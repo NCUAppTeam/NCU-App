@@ -85,59 +85,59 @@ function stop9025(stopSequence, direction) {
 function fun9025(param, response) {
   const output = [];
   const now = new Date();
-  let num, busTime, departTime = -1, departStop = 0;  //num：當前過站的站牌, departStop：上一個過站的站牌 (因為同時可能不只一班車)
-  for (let i = 0; i < response.data.length; i++) {  //response只有車最後經過的那站
+  let num, busTime, departTime = -1, departStop = 0;  // num：當前過站的站牌，departStop：上一個過站的站牌 (因為同時可能不只一班車)
+  for (let i = 0; i < response.data.length; i++) {  // response只有車最後經過的那站
     num = response.data[i].StopSequence;
     if (num === departStop) continue;
-    for (let j = departStop + 1; j < num; j++) {  //已經經過的站
-      if (departTime === -1) {  //前面沒有車
+    for (let j = departStop + 1; j < num; j++) {  // 已經經過的站
+      if (departTime === -1) {  // 前面沒有車
         busTime = busTime9025(j, param.dir);
-        if(busTime === '末班駛離') output.push({stop: stop9025(j, param.dir), bus: '9025A', time: busTime, alert: -1});
-        else output.push({stop: stop9025(j, param.dir), bus: '9025A', time: busTime, alert: 0});
+        if(busTime === '末班駛離') output.push({stop: stop9025(j, param.dir), type: 0, pass: ['9025A'], bus: [{name: '9025A', time: busTime}], alert: -1});
+        else output.push({stop: stop9025(j, param.dir), type: 0, pass: ['9025A'], bus: [{name: '9025A', time: busTime}], alert: 0});
       } else {
-        let time = chart[param.dir][j] - chart[param.dir][departStop] - Math.floor((now - new Date(departTime)) / (1000 * 60));  //兩站間格時間減掉經過的時間
-        if (time < chart[param.dir][j] - chart[param.dir][departStop + 1]) { //預防塞車
+        let time = chart[param.dir][j] - chart[param.dir][departStop] - Math.floor((now - new Date(departTime)) / (1000 * 60));  // 兩站間格時間減掉經過的時間
+        if (time < chart[param.dir][j] - chart[param.dir][departStop + 1]) {  // 預防塞車
           time = chart[param.dir][j] - chart[param.dir][departStop + 1];
         }
-        if (time <= 2) output.push({stop: stop9025(j, param.dir), bus: '9025A', time: '即將進站', alert: 2});
-        else if(time<=10) output.push({stop: stop9025(j, param.dir), bus: '9025A', time: `${time} 分鐘後`, alert: 1});
-        else output.push({stop: stop9025(j, param.dir), bus: '9025A', time: `${time} 分鐘後`, alert: 0});
+        if (time <= 2) output.push({stop: stop9025(j, param.dir), type: 0, pass: ['9025A'], bus: [{name: '9025A', time: '即將進站'}], alert: 2});
+        else if(time<=10) output.push({stop: stop9025(j, param.dir), type: 0, pass: ['9025A'], bus: [{name: '9025A', time: `${time} 分鐘後`}], alert: 1});
+        else output.push({stop: stop9025(j, param.dir), type: 0, pass: ['9025A'], bus: [{name: '9025A', time: `${time} 分鐘後`}], alert: 0});
       }
     }
-    const stay = Math.floor((now - new Date(response.data[i].GPSTime)) / (1000 * 60));  //最後經過的站
+    const stay = Math.floor((now - new Date(response.data[i].GPSTime)) / (1000 * 60));  // 最後經過的站
     if (response.data[i].A2EventType === 1 && !(num === 10 && stay > 1)) {
       busTime = '進站中';
-      output.push({stop: stop9025(num, param.dir), bus: '9025A', time: '進站中', alert: 2});
+      output.push({stop: stop9025(num, param.dir), type: 0, pass: ['9025A'], bus: [{name: '9025A', time: '進站中'}], alert: 2});
     } else if (departTime === -1) {
       busTime = busTime9025(num, param.dir);
-      if(busTime === '末班駛離') output.push({stop: stop9025(num, param.dir), bus: '9025A', time: busTime, alert: -1});
-      else output.push({stop: stop9025(num, param.dir), bus: '9025A', time: busTime, alert: 0});
+      if(busTime === '末班駛離') output.push({stop: stop9025(num, param.dir), type: 0, pass: ['9025A'], bus: [{name: '9025A', time: busTime}], alert: -1});
+      else output.push({stop: stop9025(num, param.dir), type: 0, pass: ['9025A'], bus: [{name: '9025A', time: busTime}], alert: 0});
     } else {
       let time = chart[param.dir][num] - chart[param.dir][departStop] - Math.floor((now - new Date(departTime)) / (1000 * 60));
       if (time < chart[param.dir][num] - chart[param.dir][departStop + 1]) {
         time = chart[param.dir][num] - chart[param.dir][departStop + 1];
       }
-      if (time <= 2) output.push({stop: stop9025(num, param.dir), bus: '9025A', time: '即將進站', alert: 2});
-      else if(time<=10) output.push({stop: stop9025(num, param.dir), bus: '9025A', time: `${time} 分鐘後`, alert: 1});
-      else output.push({stop: stop9025(num, param.dir), bus: '9025A', time: `${time} 分鐘後`, alert: 0});
+      if (time <= 2) output.push({stop: stop9025(num, param.dir), type: 0, pass: ['9025A'], bus: [{name: '9025A', time: '即將進站'}], alert: 2});
+      else if(time<=10) output.push({stop: stop9025(num, param.dir), type: 0, pass: ['9025A'], bus: [{name: '9025A', time: `${time} 分鐘後`}], alert: 1});
+      else output.push({stop: stop9025(num, param.dir), type: 0, pass: ['9025A'], bus: [{name: '9025A', time: `${time} 分鐘後`}], alert: 0});
     }
     departTime = response.data[i].GPSTime;
     departStop = num;
   }
 
-  for (let j = departStop + 1; j <= 10; j++) {  //還沒經過的站
+  for (let j = departStop + 1; j <= 10; j++) {  // 還沒經過的站
     if (departTime === -1) {
       busTime = busTime9025(j, param.dir);
-      if (busTime === '末班駛離') output.push({stop: stop9025(j, param.dir), bus: '9025A', time: busTime, alert: -1});
-      else output.push({stop: stop9025(j, param.dir), bus: '9025A', time: busTime, alert: 0});
+      if (busTime === '末班駛離') output.push({stop: stop9025(j, param.dir), type: 0, pass: ['9025A'], bus: [{name: '9025A', time: busTime}], alert: -1});
+      else output.push({stop: stop9025(j, param.dir), type: 0, pass: ['9025A'], bus: [{name: '9025A', time: busTime}], alert: 0});
     } else {
       let time = chart[param.dir][j] - chart[param.dir][departStop] - Math.floor((now - new Date(departTime)) / (1000 * 60));
       if (time < chart[param.dir][j] - chart[param.dir][departStop + 1]) {
         time = chart[param.dir][j] - chart[param.dir][departStop + 1];
       }
-      if (time <= 2) output.push({stop: stop9025(j, param.dir), bus: '9025A', time: '即將進站', alert: 2});
-      else if (time <= 10) output.push({stop: stop9025(j, param.dir), bus: '9025A', time: `${time} 分鐘後`, alert: 1});
-      else output.push({stop: stop9025(j, param.dir), bus: '9025A', time: `${time} 分鐘後`, alert: 0});
+      if (time <= 2) output.push({stop: stop9025(j, param.dir), type: 0, pass: ['9025A'], bus: [{name: '9025A', time: '即將進站'}], alert: 2});
+      else if (time <= 10) output.push({stop: stop9025(j, param.dir), type: 0, pass: ['9025A'], bus: [{name: '9025A', time: `${time} 分鐘後`}], alert: 1});
+      else output.push({stop: stop9025(j, param.dir), type: 0, pass: ['9025A'], bus: [{name: '9025A', time: `${time} 分鐘後`}], alert: 0});
     }
   }
   return output;

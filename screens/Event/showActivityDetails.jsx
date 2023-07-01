@@ -5,6 +5,7 @@ import {
   Dimensions,
   TouchableOpacity,
   Alert,
+  Share,
 } from "react-native";
 import SvgQRCode from "react-native-qrcode-svg";
 import Dialog, { DialogContent } from "react-native-popup-dialog";
@@ -104,6 +105,18 @@ const Body = ({
   if (startTimeWeekday) startTimeList = startTimeWeekday.split(" ");
   let endTimeList = ["loading", "loading", "loading"];
   if (endTimeWeekday) endTimeList = endTimeWeekday.split(" ");
+
+  // 開啟手機系統的分享選單
+  const shareData = async () => {
+    try {
+        await Share.share({
+            // 要分享的活動連結
+            message: `ncuapp://activity?=${id}`,
+        });
+    } catch (error) {
+        alert(error.message);
+    }
+  };
 
   return (
     <Box>
@@ -220,6 +233,12 @@ const Body = ({
                     <Box style={styles.SocialApp}>
                       <SvgQRCode value={active.id} />
                     </Box>
+                    <Button onPress={() => {
+                      console.log('Link Copied');
+                      shareData();
+                    }}>
+                    點我分享
+                    </Button>
                   </ScrollView>
                 </NativeBaseProvider>
               </DialogContent>

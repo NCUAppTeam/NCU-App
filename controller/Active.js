@@ -24,33 +24,33 @@ const defaultLinks = {
     {
       id: '0',
       type: 'carpool',
-      link: 'https://firebasestorage.googleapis.com/v0/b/ncu-app-test.appspot.com/o/actives%2Fcarpool.jpg?alt=media&token=e1486af1-6c69-4079-a0c1-d2071ab3fc5d'
+      link: 'https://firebasestorage.googleapis.com/v0/b/ncu-app-test.appspot.com/o/actives%2Fcarpool.png?alt=media&token=08874ff6-94a0-4470-a860-bdf3e2f80202'
     },
   1:
     {
       id: '1',
       type: 'exercising',
-      link: 'https://firebasestorage.googleapis.com/v0/b/ncu-app-test.appspot.com/o/actives%2Fexercising.jpg?alt=media&token=7f6ab5d3-658a-4a18-b05e-7c8f4082d8c6'
+      link: 'https://firebasestorage.googleapis.com/v0/b/ncu-app-test.appspot.com/o/actives%2Fexercising.png?alt=media&token=33430042-bff6-468d-acd6-1150de53536f'
     },
   2: {
     id: '2',
     type: 'HangOut',
-    link: 'https://firebasestorage.googleapis.com/v0/b/ncu-app-test.appspot.com/o/actives%2Fhangout.jpg?alt=media&token=dc27fce4-572b-430d-8868-51b522a9f523'
+    link: 'https://firebasestorage.googleapis.com/v0/b/ncu-app-test.appspot.com/o/actives%2Fhangout.png?alt=media&token=16239505-adcb-4ba6-a432-94f74dfb0881'
   },
   3: {
     id: '3',
     type: 'schoolEvent',
-    link: 'https://firebasestorage.googleapis.com/v0/b/ncu-app-test.appspot.com/o/actives%2FschoolEvent.jpg?alt=media&token=7c4fce8e-1d8b-4c36-a227-e73ecba8a56b'
+    link: 'https://firebasestorage.googleapis.com/v0/b/ncu-app-test.appspot.com/o/actives%2FschoolEvent.png?alt=media&token=e6a64e42-1df7-4b18-802e-b9621344c92c'
   },
   4: {
     id: '4',
     type: 'tiedEvent',
-    link: 'https://firebasestorage.googleapis.com/v0/b/ncu-app-test.appspot.com/o/actives%2FtiedEvent.jpg?alt=media&token=4bb055ea-cbc3-4afd-953e-be38a7104c82'
+    link: 'https://firebasestorage.googleapis.com/v0/b/ncu-app-test.appspot.com/o/actives%2FtiedEvent.png?alt=media&token=68ad94eb-c102-4102-85cf-757f4679c716'
   },
   5: {
     id: '5',
     type: 'clubEvent',
-    link: 'https://firebasestorage.googleapis.com/v0/b/ncu-app-test.appspot.com/o/actives%2FclubEvent.jpg?alt=media&token=3a29c950-b9b7-4d92-8cca-362d4308a4db'
+    link: 'https://firebasestorage.googleapis.com/v0/b/ncu-app-test.appspot.com/o/actives%2FclubEvent.png?alt=media&token=2433cd7b-f9fb-41c3-b78d-d2f21026816f'
   }
 }
 

@@ -1,23 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react'
 import {
   View,
   SafeAreaView,
   Dimensions,
-  TouchableOpacity,
   Alert,
-  Share,
-} from "react-native";
-import SvgQRCode from "react-native-qrcode-svg";
-import Dialog, { DialogContent } from "react-native-popup-dialog";
+  Share
+} from 'react-native'
+import SvgQRCode from 'react-native-qrcode-svg'
+import Dialog, { DialogContent } from 'react-native-popup-dialog'
 import {
   Ionicons,
   FontAwesome5,
   AntDesign,
   MaterialCommunityIcons,
-  Feather,
-  Fontisto,
-  Octicons,
-} from "@expo/vector-icons";
+  Feather
+} from '@expo/vector-icons'
 import {
   Box,
   Divider,
@@ -30,13 +27,12 @@ import {
   Text,
   ScrollView,
   Image,
-  Button,
-} from "native-base";
-import styles from "./style_folder/Styles_showActivityDetails";
-import ActiveController from "../../controller/Active";
-import MessageController from "../../controller/Message";
-import UserController from "../../controller/getStudentId";
-import UrlCreator from "../../controller/createUrl";
+  Button
+} from 'native-base'
+import styles from './style_folder/Styles_showActivityDetails'
+import ActiveController from '../../controller/Active'
+import MessageController from '../../controller/Message'
+import UserController from '../../controller/getStudentId'
 
 const NavigationBar = (props) => (
   <ZStack width="100%" height="12%">
@@ -57,7 +53,7 @@ const NavigationBar = (props) => (
       </Pressable>
     </Box>
   </ZStack>
-);
+)
 
 const Body = ({
   id,
@@ -73,50 +69,49 @@ const Body = ({
   imageUri2,
   imageUri3,
   active,
-  totalAttended,
+  totalAttended
 }) => {
-  const [showDialog, setShowDialog] = useState(false);
-  const [activeUrl, setActiveUrl] = useState(null);
+  const [showDialog, setShowDialog] = useState(false)
 
-  const [slideDot1, setSlideDot1] = useState(true);
-  const [slideDot2, setSlideDot2] = useState(false);
-  const [slideDot3, setSlideDot3] = useState(false);
+  const [slideDot1, setSlideDot1] = useState(true)
+  const [slideDot2, setSlideDot2] = useState(false)
+  const [slideDot3, setSlideDot3] = useState(false)
   const whenScrolling = ({ nativeEvent }) => {
     const slide = Math.ceil(
       nativeEvent.contentOffset.x / nativeEvent.layoutMeasurement.width
-    );
+    )
     if (slide === 0) {
-      setSlideDot1(true);
-      setSlideDot2(false);
-      setSlideDot3(false);
+      setSlideDot1(true)
+      setSlideDot2(false)
+      setSlideDot3(false)
     } else if (slide === 1) {
-      setSlideDot1(false);
-      setSlideDot2(true);
-      setSlideDot3(false);
+      setSlideDot1(false)
+      setSlideDot2(true)
+      setSlideDot3(false)
     } else if (slide === 2) {
-      setSlideDot1(false);
-      setSlideDot2(false);
-      setSlideDot3(true);
+      setSlideDot1(false)
+      setSlideDot2(false)
+      setSlideDot3(true)
     }
-  };
+  }
 
-  console.log("startTimeWeekday", startTimeWeekday);
-  let startTimeList = ["loading", "loading", "loading"];
-  if (startTimeWeekday) startTimeList = startTimeWeekday.split(" ");
-  let endTimeList = ["loading", "loading", "loading"];
-  if (endTimeWeekday) endTimeList = endTimeWeekday.split(" ");
+  console.log('startTimeWeekday', startTimeWeekday)
+  let startTimeList = ['loading', 'loading', 'loading']
+  if (startTimeWeekday) startTimeList = startTimeWeekday.split(' ')
+  let endTimeList = ['loading', 'loading', 'loading']
+  if (endTimeWeekday) endTimeList = endTimeWeekday.split(' ')
 
   // 開啟手機系統的分享選單
   const shareData = async () => {
     try {
-        await Share.share({
-            // 要分享的活動連結
-            message: `ncuapp://activity?=${id}`,
-        });
+      await Share.share({
+        // 要分享的活動連結
+        message: `ncuapp://activity?=${id}`
+      })
     } catch (error) {
-        alert(error.message);
+      alert(error.message)
     }
-  };
+  }
 
   return (
     <Box>
@@ -125,15 +120,16 @@ const Body = ({
         onScroll={whenScrolling}
         showsHorizontalScrollIndicator={false}
         style={{
-          width: Dimensions.get("window").width / 2,
-          alignSelf: "center",
+          width: Dimensions.get('window').width / 2,
+          alignSelf: 'center'
         }}
       >
         {imageUri1 && (
           <Image
             style={styles.bigpic}
+            alt='event image 1'
             source={{
-              uri: imageUri1,
+              uri: imageUri1
             }}
           />
         )}
@@ -144,15 +140,16 @@ const Body = ({
                 ? { marginLeft: 10 }
                 : {
                     marginLeft: 10,
-                    marginRight: Dimensions.get("window").width * 0.07,
+                    marginRight: Dimensions.get('window').width * 0.07
                   }
             }
           >
             <View>
               <Image
                 style={styles.bigpic}
+                alt='event image 2'
                 source={{
-                  uri: imageUri2,
+                  uri: imageUri2
                 }}
               />
             </View>
@@ -162,8 +159,9 @@ const Body = ({
           <View style={{ marginLeft: 10 }}>
             <Image
               style={styles.bigpic}
+              alt='event image 3'
               source={{
-                uri: imageUri3,
+                uri: imageUri3
               }}
             />
           </View>
@@ -174,8 +172,8 @@ const Body = ({
         style={{
           marginTop: 12,
           marginBottom: 18,
-          justifyContent: "center",
-          flexDirection: "row",
+          justifyContent: 'center',
+          flexDirection: 'row'
         }}
       >
         <MaterialCommunityIcons
@@ -212,34 +210,30 @@ const Body = ({
               size={28}
               color="#476685"
               onPress={() => {
-                setShowDialog(true);
+                setShowDialog(true)
               }}
             />
 
             <Dialog
-              width={Dimensions.get("window").width * 0.8}
+              width={Dimensions.get('window').width * 0.8}
               height={370}
               visible={showDialog}
               onTouchOutside={() => {
-                setShowDialog(false);
+                setShowDialog(false)
               }}
             >
               <DialogContent style={styles.shareBox}>
                 <NativeBaseProvider>
-                  <ScrollView showsVerticalScrollIndicator={false}>
-                    <Box>
-                      <Text style={styles.DialogTitle}>分享活動</Text>
-                    </Box>
-                    <Box style={styles.SocialApp}>
-                      <SvgQRCode value={active.id} />
-                    </Box>
-                    <Button onPress={() => {
-                      console.log('Link Copied');
-                      shareData();
-                    }}>
-                    點我分享
-                    </Button>
-                  </ScrollView>
+                  <Box showsVerticalScrollIndicator={false} my={10}>
+                      <Box>
+                        <SvgQRCode value={active.id} />
+                      </Box>
+                      <Button mt={2} isExternal _text={{ fontSize: 20 }} onPress={() => {
+                        shareData()
+                      }}>
+                      點我分享
+                      </Button>
+                  </Box>
                 </NativeBaseProvider>
               </DialogContent>
             </Dialog>
@@ -249,7 +243,8 @@ const Body = ({
           <Center mr={4} width={8}>
             <AntDesign name="clockcircleo" size={22} color="#476685" />
           </Center>
-          {startTimeList[0] === endTimeList[0] ? (
+          {startTimeList[0] === endTimeList[0]
+            ? (
             <VStack>
               <HStack>
                 <Text bold>
@@ -262,7 +257,8 @@ const Body = ({
                 </Text>
               </HStack>
             </VStack>
-          ) : (
+              )
+            : (
             <VStack>
               <HStack>
                 <Text bold>
@@ -275,7 +271,7 @@ const Body = ({
                 </Text>
               </HStack>
             </VStack>
-          )}
+              )}
         </HStack>
 
         <HStack my={3}>
@@ -321,16 +317,16 @@ const Body = ({
                 <Feather name="users" size={22} color="#476685" />
               </Center>
               <Center>
-                {limitNum !== "0" && (
+                {limitNum !== '0' && (
                   <Text
                     fontSize="md"
-                    color={totalAttended >= limitNum ? "red.400" : "green.600"}
+                    color={totalAttended >= limitNum ? 'red.400' : 'green.600'}
                     bold
                   >
                     {totalAttended} / {limitNum} 人
                   </Text>
                 )}
-                {limitNum === "0" && (
+                {limitNum === '0' && (
                   <Text fontSize="md" color="green.600">
                     {totalAttended} (無上限)
                   </Text>
@@ -348,8 +344,8 @@ const Body = ({
         </Box>
       </VStack>
     </Box>
-  );
-};
+  )
+}
 
 const HostDetail = ({
   uid,
@@ -362,9 +358,9 @@ const HostDetail = ({
   navigation,
   SignUp,
   setSignUp,
-  passedID,
+  passedID
 }) => {
-  const user = UserController.getUid();
+  const user = UserController.getUid()
   return (
     <VStack mx={6} mb={10}>
       <Text my={2} fontSize="xl" bold>
@@ -376,8 +372,9 @@ const HostDetail = ({
             width="72px"
             height="72px"
             borderRadius="36px"
+            alt='host avatar'
             source={{
-              uri: avatar,
+              uri: avatar
             }}
           />
         </Center>
@@ -410,15 +407,15 @@ const HostDetail = ({
               onPress={() => {
                 if (uid !== user) {
                   MessageController.addChatroom(uid, user).then((res) => {
-                    navigation.navigate("send", {
+                    navigation.navigate('send', {
                       userAvatar,
                       attendeeName: name,
                       attendeeAvatar: avatar,
                       chatroomId: res,
                       attendeeUid: uid,
-                      userUid: user,
-                    });
-                  });
+                      userUid: user
+                    })
+                  })
                 }
               }}
             >
@@ -428,7 +425,8 @@ const HostDetail = ({
         </VStack>
       </HStack>
       {user !== uid &&
-        (Date.parse(active[0].endTimeInNum) > Date.now() ? (
+        (Date.parse(active[0].endTimeInNum) > Date.now()
+          ? (
           <Center>
             <Button
               width="130px"
@@ -439,46 +437,47 @@ const HostDetail = ({
               onPress={() => {
                 if (!SignUp) {
                   Alert.alert(
-                    "確認報名?",
-                    "請盡可能確保能參加活動, 方便主辦方統計參與人數, 謝謝配合！",
+                    '確認報名?',
+                    '請盡可能確保能參加活動, 方便主辦方統計參與人數, 謝謝配合！',
                     [
-                      { text: "我要反悔T~T" },
+                      { text: '我要反悔T~T' },
                       {
-                        text: "確認報名",
+                        text: '確認報名',
                         onPress: () =>
                           ActiveController.signUp(passedID).then(() =>
                             setSignUp(true)
-                          ),
-                      },
+                          )
+                      }
                     ]
-                  );
+                  )
                 } else {
                   Alert.alert(
-                    "確認取消報名?",
-                    "如果時間上真的無法配合，那下次有機會再一起參加活動吧~~",
+                    '確認取消報名?',
+                    '如果時間上真的無法配合，那下次有機會再一起參加活動吧~~',
                     [
-                      { text: "想想還是參加吧XD" },
+                      { text: '想想還是參加吧XD' },
                       {
-                        text: "忍痛取消報名",
+                        text: '忍痛取消報名',
                         onPress: () =>
                           ActiveController.quitEvent(passedID).then(() =>
                             setSignUp(false)
-                          ),
-                      },
+                          )
+                      }
                     ]
-                  );
+                  )
                 }
               }}
             >
               <HStack space={2}>
                 <Feather name="users" size={16} color="#FBEEAC" />
                 <Text color="#FBEEAC" bold>
-                  {SignUp ? "取消報名" : "報名候補"}
+                  {SignUp ? '取消報名' : '報名候補'}
                 </Text>
               </HStack>
             </Button>
           </Center>
-        ) : (
+            )
+          : (
           <Center>
             <Button
               width="130px"
@@ -493,90 +492,83 @@ const HostDetail = ({
               </Text>
             </Button>
           </Center>
-        ))}
+            ))}
     </VStack>
-  );
-};
+  )
+}
 
-function Detailscreen({ route, navigation }) {
-  const [totalAttended, setTotal] = useState();
-  const [info, setInfo] = useState([]);
-  const [active, setActive] = useState([{}]);
-  const user = UserController.getUid();
+function Detailscreen ({ route, navigation }) {
+  const [totalAttended, setTotal] = useState()
+  const [info, setInfo] = useState([])
+  const [active, setActive] = useState([{}])
+  const user = UserController.getUid()
 
-  const [userAvatar, setUserAvatar] = useState();
-  const Cd = route.params;
-  const passedID = JSON.stringify(Cd).slice(7, 27);
+  const [userAvatar, setUserAvatar] = useState()
+  const Cd = route.params
+  const passedID = JSON.stringify(Cd).slice(7, 27)
 
-  const [SignUp, setSignUp] = useState();
+  const [SignUp, setSignUp] = useState()
   useEffect(() => {
     UserController.getINFO(user)
       .then((res) => {
-        setUserAvatar(res.avatar);
+        setUserAvatar(res.avatar)
       })
       .catch((err) => {
-        throw err;
-      });
-    UrlCreator.useInitialURL()
-      .then((res) => {
-        setActiveUrl(res);
+        throw err
       })
-      .catch((err) => {
-        throw err;
-      });
     ActiveController.getAttendedOrNot(passedID)
       .then((res) => {
-        setSignUp(res);
+        setSignUp(res)
       })
       .catch((err) => {
-        throw err;
-      });
+        throw err
+      })
     ActiveController.getTotalOfAttendees(passedID)
       .then((res) => {
-        setTotal(res);
+        setTotal(res)
       })
       .catch((err) => {
-        throw err;
-      });
+        throw err
+      })
     ActiveController.getHostInfo(passedID)
       .then((res) => {
-        setInfo(res);
+        setInfo(res)
       })
       .catch((err) => {
-        throw err;
-      });
+        throw err
+      })
     ActiveController.getOneActive(passedID)
       .then((res) => {
-        setActive(res);
+        setActive(res)
       })
       .catch((err) => {
-        throw err;
-      });
-  }, []);
+        throw err
+      })
+  }, [])
 
   return (
     <SafeAreaView style={styles.showActivityDetails_container}>
-      <NavigationBar navigation={navigation} gerne={active[0]["genre"]} />
+      <NavigationBar navigation={navigation} gerne={active[0].genre} />
 
       <ScrollView
         vertical
         showsVerticalScrollIndicator={false}
-        style={{ flexDirection: "column", marginTop: 8.5 }}
+        style={{ flexDirection: 'column', marginTop: 8.5 }}
       >
         {active[0] && (
           <Body
-            id={active[0]["id"]}
-            name={active[0]["name"]}
-            imageUri1={active[0]["imageUri1"]}
-            startTimeWeekday={active[0]["startTimeWeekday"]}
-            endTimeWeekday={active[0]["endTimeWeekday"]}
-            place={active[0]["place"]}
-            limitNum={active[0]["limitNum"]}
-            cost={active[0]["cost"]}
-            link={active[0]["link"]}
-            details={active[0]["details"]}
-            imageUri2={active[0]["imageUri2"]}
-            imageUri3={active[0]["imageUri3"]}
+            id={active[0].id}
+            name={active[0].name}
+            imageUri1={active[0].imageUri1}
+            startTimeWeekday={active[0].startTimeWeekday}
+            endTimeWeekday={active[0].endTimeWeekday}
+            place={active[0].place}
+            limitNum={active[0].limitNum}
+            cost={active[0].cost}
+            link={active[0].link}
+            details={active[0].details}
+            imageUri2={active[0].imageUri2}
+            imageUri3={active[0].imageUri3}
             totalAttended={totalAttended}
             active={active}
           />
@@ -584,11 +576,11 @@ function Detailscreen({ route, navigation }) {
 
         {info[0] && (
           <HostDetail
-            uid={info[0]["uid"]}
-            name={info[0]["name"]}
-            phone={info[0]["phone"]}
-            email={info[0]["email"]}
-            avatar={info[0]["avatar"]}
+            uid={info[0].uid}
+            name={info[0].name}
+            phone={info[0].phone}
+            email={info[0].email}
+            avatar={info[0].avatar}
             userAvatar={userAvatar}
             active={active}
             navigation={navigation}
@@ -599,7 +591,7 @@ function Detailscreen({ route, navigation }) {
         )}
       </ScrollView>
     </SafeAreaView>
-  );
+  )
 }
 
-export default Detailscreen;
+export default Detailscreen

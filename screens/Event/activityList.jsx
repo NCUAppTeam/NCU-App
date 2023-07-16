@@ -18,6 +18,7 @@ import ActiveController from '../../controller/Active'
 import { SearchHeader } from './components/SearchHeader'
 
 function ActivityCard (props) {
+  const key = props.id
   const id = props.id
   const name = props.name
   const imageUri1 = props.imageUri1
@@ -29,7 +30,7 @@ function ActivityCard (props) {
     <Pressable
       border="1"
       borderRadius="md"
-      key={id}
+      key={key}
       width="180px"
       height="100%"
       mx={2}
@@ -136,6 +137,7 @@ function List ({ navigation }) {
                   {active1.map(
                     ({ id, name, imageUri1, place, startTimeWeekday }) => (
                       <ActivityCard
+                        key={id}
                         id={id}
                         name={name}
                         imageUri1={imageUri1}
@@ -170,67 +172,27 @@ function List ({ navigation }) {
                   bg="#BFBFBF" /* my=margin-top and margin-bottom */
                 />
               </Box>
-              <Box style={styles.cardArea}>
+              <Box>
                 <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                   <Box
+                    m={2}
+                    pb={4}
                     style={{
-                      marginRight: Dimensions.get('window').width * 0.0694,
+                      // marginRight: Dimensions.get("window").width * 0.0694,
                       flexDirection: 'row'
                     }}
                   >
                     {active2.map(
                       ({ id, name, imageUri1, place, startTimeWeekday }) => (
-                        <Card
-                          key={id}
-                          style={styles.Card}
-                          onPress={() => {
-                            navigation.navigate('details', {
-                              Cd: id,
-                              prepage: 'list'
-                            })
-                          }}
-                        >
-                          <Card.Content>
-                            <Box
-                              style={{ flexDirection: 'column', margin: -15 }}
-                            >
-                              <Box style={{ aspectRatio: 1 }}>
-                                <Image
-                                  alt="EventPic"
-                                  style={styles.pic}
-                                  source={{
-                                    uri: imageUri1
-                                  }}
-                                />
-                              </Box>
-                              <Title style={styles.CardTitle}>{name}</Title>
-                              <Box style={styles.CardDetails}>
-                                <AntDesign
-                                  name="clockcircleo"
-                                  size={12}
-                                  color="rgba(40, 82, 122, 0.65)"
-                                  style={{
-                                    alignSelf: 'center',
-                                    marginLeft: 1
-                                  }}
-                                />
-                                <Text style={styles.CardText}>
-                                  {'  '}
-                                  {startTimeWeekday}
-                                </Text>
-                              </Box>
-                              <Box style={styles.CardDetails}>
-                                <Ionicons
-                                  name="location-outline"
-                                  size={15}
-                                  color="rgba(40, 82, 122, 0.65)"
-                                  style={{ alignSelf: 'center' }}
-                                />
-                                <Text style={styles.CardText}> {place}</Text>
-                              </Box>
-                            </Box>
-                          </Card.Content>
-                        </Card>
+                      <ActivityCard
+                        key={id}
+                        id={id}
+                        name={name}
+                        imageUri1={imageUri1}
+                        place={place}
+                        startTimeWeekday={startTimeWeekday}
+                        navigation={navigation}
+                      />
                       )
                     )}
                   </Box>

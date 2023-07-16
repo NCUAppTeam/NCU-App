@@ -24,33 +24,33 @@ const defaultLinks = {
     {
       id: '0',
       type: 'carpool',
-      link: 'https://firebasestorage.googleapis.com/v0/b/ncu-app-test.appspot.com/o/actives%2Fcarpool.png?alt=media&token=08874ff6-94a0-4470-a860-bdf3e2f80202'
+      link: 'https://firebasestorage.googleapis.com/v0/b/ncu-app-test.appspot.com/o/activities%2Fcarpool.png?alt=media&token=79c907f5-01f9-429e-bc4c-039a6cccfde4'
     },
   1:
     {
       id: '1',
       type: 'exercising',
-      link: 'https://firebasestorage.googleapis.com/v0/b/ncu-app-test.appspot.com/o/actives%2Fexercising.png?alt=media&token=33430042-bff6-468d-acd6-1150de53536f'
+      link: 'https://firebasestorage.googleapis.com/v0/b/ncu-app-test.appspot.com/o/activities%2Fexercising.png?alt=media&token=aff283ca-f80b-4f9a-9a4f-26631a7533b1'
     },
   2: {
     id: '2',
     type: 'HangOut',
-    link: 'https://firebasestorage.googleapis.com/v0/b/ncu-app-test.appspot.com/o/actives%2Fhangout.png?alt=media&token=16239505-adcb-4ba6-a432-94f74dfb0881'
+    link: 'https://firebasestorage.googleapis.com/v0/b/ncu-app-test.appspot.com/o/activities%2Fhangout.png?alt=media&token=c4746524-28a9-4e54-af12-9f06de57cf75'
   },
   3: {
     id: '3',
     type: 'schoolEvent',
-    link: 'https://firebasestorage.googleapis.com/v0/b/ncu-app-test.appspot.com/o/actives%2FschoolEvent.png?alt=media&token=e6a64e42-1df7-4b18-802e-b9621344c92c'
+    link: 'https://firebasestorage.googleapis.com/v0/b/ncu-app-test.appspot.com/o/activities%2FschoolEvent.png?alt=media&token=d94a9692-f843-45af-9809-f3d9acb0db51'
   },
   4: {
     id: '4',
     type: 'tiedEvent',
-    link: 'https://firebasestorage.googleapis.com/v0/b/ncu-app-test.appspot.com/o/actives%2FtiedEvent.png?alt=media&token=68ad94eb-c102-4102-85cf-757f4679c716'
+    link: 'https://firebasestorage.googleapis.com/v0/b/ncu-app-test.appspot.com/o/activities%2FtiedEvent.png?alt=media&token=9ce839a9-1df3-4edb-9755-d2241da49d4d'
   },
   5: {
     id: '5',
     type: 'clubEvent',
-    link: 'https://firebasestorage.googleapis.com/v0/b/ncu-app-test.appspot.com/o/actives%2FclubEvent.png?alt=media&token=2433cd7b-f9fb-41c3-b78d-d2f21026816f'
+    link: 'https://firebasestorage.googleapis.com/v0/b/ncu-app-test.appspot.com/o/activities%2FclubEvent.png?alt=media&token=4f1e582b-3ea5-42de-82e4-c0ef9e3d5462'
   }
 }
 
@@ -532,9 +532,6 @@ async function getEventActive () {
       limitNum: doc1.data().limitNum,
       genre: doc1.data().genre,
       link: doc1.data().link,
-      hostName: doc1.data().hostName,
-      hostPhone: doc1.data().hostPhone,
-      hostMail: doc1.data().hostMail,
       details: doc1.data().details
     })
   })

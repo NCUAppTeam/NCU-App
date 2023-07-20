@@ -1,61 +1,103 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'
 import {
-  Text, View, SafeAreaView, RefreshControl, Image,
-} from 'react-native';
-import { Title } from 'react-native-paper';
+  RefreshControl, Image
+} from 'react-native'
 import {
-  Ionicons, FontAwesome5, AntDesign, Feather, Octicons,
-} from '@expo/vector-icons';
+  FontAwesome5, AntDesign, Feather, Octicons
+} from '@expo/vector-icons'
 import {
-  NativeBaseProvider, Box, FlatList, VStack, Pressable, HStack,
-} from 'native-base';
-import styles from './style_folder/Styles_moreEvent';
-import ActiveController from '../../controller/Active';
-import MessageController from '../../controller/Message';
-import { BaseTheme } from '../../theme';
+  Divider, Box, FlatList, VStack, Pressable, HStack, Text
+} from 'native-base'
+import styles from './style_folder/Styles_moreEvent'
+import ActiveController from '../../controller/Active'
+import MessageController from '../../controller/Message'
 
-function More({ navigation, route }) {
-  const [Messagenum, setMessageNum] = useState(0);
-  useEffect(() => {
-    MessageController.countUnreadMessage().then((num) => {
-      setMessageNum(num);
-    }).catch((err) => {
-      throw err;
-    });
-  }, []);
-  const [active, setActive] = useState([]);
-  useEffect(() => {
-    ActiveController.getEventActive().then((res) => {
-      setActive(res);
-    }).catch((err) => {
-      throw err;
-    });
-  }, []);
-
-  const [refreshing, setRefreshing] = useState(false);
-  const onRefresh = () => {
-    setRefreshing(true);
-    ActiveController.getEventActive().then((res) => {
-      setActive(res);
-    });
-    MessageController.countUnreadMessage().then((num) => {
-      setMessageNum(num);
-    }).catch((err) => {
-      throw err;
-    });
-    setRefreshing(false);
-  };
+function ActivityCard (props) {
+  const key = props.id
+  const id = props.id
+  const name = props.name
+  const imageUri1 = props.imageUri1
+  const place = props.place
+  const startTimeWeekday = props.startTimeWeekday
+  const navigation = props.navigation
 
   return (
-    <SafeAreaView style={styles.container}>
-      
+    <Pressable
+      border="1"
+      borderRadius="md"
+      key={key}
+      width="180px"
+      height="96%"
+      mx={2}
+      marginBottom={2}
+      bg="white"
+      shadow="2"
+      onPress={() => {
+        navigation.navigate('details', { Cd: id, prepage: 'list' })
+      }}
+    >
+      <VStack divider={<Divider />}>
+        <Image
+          alt="eventPic"
+          style={styles.pic}
+          source={{
+            uri: imageUri1
+          }}
+        />
+        <VStack p={2}>
+          <Text fontSize="xs" bold color="gray.600">
+            {startTimeWeekday}
+          </Text>
+          <Text fontSize="md" bold color="primary.600">
+            {name}
+          </Text>
+        </VStack>
+      </VStack>
+    </Pressable>
+  )
+}
+
+function More ({ navigation, route }) {
+  const [Messagenum, setMessageNum] = useState(0)
+  useEffect(() => {
+    MessageController.countUnreadMessage().then((num) => {
+      setMessageNum(num)
+    }).catch((err) => {
+      throw err
+    })
+  }, [])
+  const [active, setActive] = useState([])
+  useEffect(() => {
+    ActiveController.getEventActive().then((res) => {
+      setActive(res)
+    }).catch((err) => {
+      throw err
+    })
+  }, [])
+
+  const [refreshing, setRefreshing] = useState(false)
+  const onRefresh = () => {
+    setRefreshing(true)
+    ActiveController.getEventActive().then((res) => {
+      setActive(res)
+    })
+    MessageController.countUnreadMessage().then((num) => {
+      setMessageNum(num)
+    }).catch((err) => {
+      throw err
+    })
+    setRefreshing(false)
+  }
+
+  return (
+    <Box style={styles.container} safeArea>
         <Box style={styles.headerContainer}>
           <Box style={styles.headerArrowBox}>
             <AntDesign
               name="arrowleft"
               size={28}
               color="#476685"
-              onPress={() => { navigation.navigate('list'); }}
+              onPress={() => { navigation.navigate('list') }}
             />
           </Box>
           <Box style={styles.nameheader}>
@@ -69,7 +111,7 @@ function More({ navigation, route }) {
                 name="comment"
                 size={25}
                 color="#476685"
-                onPress={() => { navigation.navigate('message'); }}
+                onPress={() => { navigation.navigate('message') }}
               />
               <Octicons name="dot-fill" size={16} color={Messagenum !== 0 ? '#EB6F6F' : 'transparent'} style={styles.readDot} />
             </HStack>
@@ -79,7 +121,7 @@ function More({ navigation, route }) {
               name="user"
               size={26}
               color="#476685"
-              onPress={() => { navigation.navigate('personal'); }}
+              onPress={() => { navigation.navigate('personal') }}
             />
           </Box>
         </Box>
@@ -97,51 +139,21 @@ function More({ navigation, route }) {
               />
               )}
             renderItem={({ item }) => (
-              <Pressable
-                onPress={() => {
-                  navigation.navigate('details', { Cd: item.id, prepage: 'more' });
-                }}
-              >
-                <VStack style={styles.CardInMore}>
-                  <Image
-                    style={styles.pic}
-                    source={{
-                      uri: item.imageUri1,
-                    }}
+                  <ActivityCard
+                    key={item.id}
+                    id={item.id}
+                    name={item.name}
+                    imageUri1={item.imageUri1}
+                    place={item.place}
+                    startTimeWeekday={item.startTimeWeekday}
+                    navigation={navigation}
                   />
-                  <Title style={styles.CardTitle}>
-                    {item.name}
-                  </Title>
-                  <Box style={styles.CardStartTime}>
-                    <AntDesign
-                      name="clockcircleo"
-                      size={12}
-                      color="rgba(40, 82, 122, 0.65)"
-                    />
-                    <Text style={styles.CardTimeText}>
-                      {'   '}
-                      {item.startTimeWeekday}
-                    </Text>
-                  </Box>
-                  <Box style={styles.CardPlace}>
-                    <Ionicons
-                      name="location-outline"
-                      size={15}
-                      color="rgba(40, 82, 122, 0.65)"
-                    />
-                    <Text style={styles.cardPlaceText}>
-                      {'  '}
-                      {item.place}
-                    </Text>
-                  </Box>
-                </VStack>
-              </Pressable>
-            )}
+            )
+            }
           />
         </Box>
-      
-    </SafeAreaView>
-  );
+    </Box>
+  )
 }
 
-export default More;
+export default More

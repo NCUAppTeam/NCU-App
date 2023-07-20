@@ -2,14 +2,16 @@
   "expo": {
     "name": "ncu-app",
     "slug": "ncu-app",
-    "version": "1.0.0",
+    "version": "2.0.3",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
+    "scheme": "ncuapp",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#ffffff",
+      "label": "NCU APP Logo"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -24,7 +26,7 @@
     },
     "android": {
       "package": "tw.edu.ncu.app",
-      "versionCode": 1,
+      "versionCode": 10,
       "config": {
         "googleMaps": {
           "apiKey": "AIzaSyBA-fvYndAZdoDJ8GqjaBj1rm6Yh1y9VUI"
@@ -40,7 +42,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "fdfcacd5-3fce-44ad-aa51-03c85991cfea"
+        "projectId": "b795d866-5d36-4bbb-9c46-c8d5446bbf26"
       }
     }
   }

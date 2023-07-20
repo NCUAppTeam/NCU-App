@@ -11,14 +11,15 @@ export function LoginScreen () {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPwd, setShowPwd] = useState(false)
-  const [msg, setMsg] = useState()
+  const [msg, setMsg] = useState('')
   const {
     isOpen,
     onOpen,
     onClose
   } = useDisclose()
   const localizeMsg = {
-    'auth/invalid-email': '電子郵件無效',
+    'auth/too-many-requests': '登入過於頻繁, 請稍後再試',
+    'auth/wrong-password': '密碼錯誤, 請確認後再登入',
     'auth/user-not-found': '找不到使用者'
   }
 
@@ -27,6 +28,9 @@ export function LoginScreen () {
       .catch((err) => {
         setMsg(localizeMsg[err.code])
       })
+    setTimeout(() => {
+      setMsg('')
+    }, 5000)
   }
 
   return (
@@ -34,40 +38,58 @@ export function LoginScreen () {
       <Button backgroundColor={'#28527A'} w={'100%'} marginY={'10px'} isExternal _text={{ fontSize: 'lg', fontWeight: 'bold', color: '#ffffff' }} onPress={onOpen}>登入</Button>
       <Actionsheet isOpen={isOpen} onClose={onClose}>
         <Actionsheet.Content>
-          <VStack w={'100%'} h={'100%'}>
+          <VStack w={'100%'} h={'100%'} marginX={10} alignItems={'center'}>
             <Box flex={0.1}/>
-            <Box flex={1.5} alignItems="flex-start" justifyContent={'center'}>
-              <Heading marginX={'40px'} marginY={'20px'}>登入帳號</Heading>
+            <Box flex={1.5} alignItems="flex-start" justifyContent={'center'} w={'80%'}>
+              <Heading size={'lg'} marginY={'20px'}>登入帳號</Heading>
 
-              <Heading size={'xs'} marginX={'40px'} marginBottom={'20px'}>Portal 帳號</Heading>
-              <Input w={'80%'} mx="3" alignSelf={'center'} placeholder="學號@cc.ncu.edu.tw" wx="100%" onChangeText={(text) => setEmail(text)} />
-
-              <Heading size={'xs'} marginX={'40px'} marginY={'20px'}>密碼</Heading>
-                <Box width={'100%'}>
+              <Heading size={'sm'} marginBottom={'10px'}>Portal 帳號</Heading>
+              <Box my={3}>
                 <Input
-                  w={'80%'}
-                  mx="3"
-                  placeholder="密碼"
-                  wx="100%"
+                  w={'100%'}
+                  py={2}
+                  size="md"
+                  placeholder="學號@cc.ncu.edu.tw"
                   alignSelf={'center'}
-                  onChangeText={(text) => setPassword(text)}
-                  type={showPwd ? 'text' : 'password'}
-                  InputRightElement={
-                  <Pressable onPress={() => setShowPwd(!showPwd)}>
-                    <Icon as={<MaterialIcons name={showPwd ? 'visibility' : 'visibility-off'} />} size={5} mr="2" color="muted.400" />
-                  </Pressable>}/>
+                  wx="100%"
+                  value={email}
+                  onChangeText={(text) => setEmail(text)}
+                />
+              </Box>
+
+              <Heading size={'sm'} marginY={'10px'}>密碼</Heading>
+                <Box mt={3}>
+                  <Input
+                    w={'100%'}
+                    p={2}
+                    size="md"
+                    placeholder="Password"
+                    wx="100%"
+                    alignSelf={'center'}
+                    value={password}
+                    onChangeText={(text) => setPassword(text)}
+                    type={showPwd ? 'text' : 'password'}
+                    InputRightElement={
+                    <Pressable onPress={() => setShowPwd(!showPwd)}>
+                      <Icon as={<MaterialIcons name={showPwd ? 'visibility' : 'visibility-off'} />} size={6} mr="2" color="muted.500" />
+                    </Pressable>}
+                  />
                 </Box>
-                <Text color={'amber.400'}>{ msg }</Text>
-                <HStack>
-                  <Link onPress={() => { onClose() }} ml="40px" my="10px" isExternal _text={{
+                <Text color={'red.500'}>{ msg }</Text>
+
+                <HStack my={2}>
+                  <Link onPress={() => { onClose() }} isExternal _text={{
+                    fontSize: '16',
                     color: '#737373'
                   }}>忘記密碼?
                   </Link>
-                  <Link onPress={() => { onClose() }} ml="10px" my="10px" isExternal _text={{
+                  <Link onPress={() => { onClose() }} ml="10px" isExternal _text={{
+                    fontSize: '16',
                     color: '#737373'
                   }}>尚未註冊?
                   </Link>
                 </HStack>
+
               {email && password && (
                 <Box
                 bg={{
@@ -86,7 +108,7 @@ export function LoginScreen () {
                 <Pressable
                   onPress={login}>
                   <Text fontSize={'lg'} fontWeight={'bold'} color={'#fbeeac'}
-                        textAlign={'center'} alignSelf={'center'}>
+                        textAlign={'center'} >
                       登入
                   </Text>
                   </Pressable>
@@ -98,7 +120,9 @@ export function LoginScreen () {
                   borderRadius={'100px'}
                   alignSelf={'center'}
                   backgroundColor={'#D4D4D4'}
-                  isExternal _text={{
+                  _text={{
+                    textAlign: 'center',
+                    justifyContent: 'center',
                     fontSize: 'lg',
                     fontWeight: 'bold',
                     color: '#737373'

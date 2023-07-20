@@ -105,7 +105,7 @@ function List ({ navigation }) {
           <VStack>
             <VStack mx={4} my={2}>
               <HStack style={{ flexDirection: 'row' }}>
-                <Text flex={10} fontSize="md" bold color="primary.600">
+                <Text flex={10} fontSize="lg" bold color="primary.600">
                   近期揪人
                 </Text>
                 <Pressable
@@ -114,7 +114,7 @@ function List ({ navigation }) {
                     navigation.navigate('moreHang')
                   }}
                 >
-                  <Text fontSize="xs" color="primary.600">
+                  <Text fontSize="sm" color="primary.600">
                     顯示更多
                   </Text>
                 </Pressable>
@@ -130,7 +130,6 @@ function List ({ navigation }) {
                   m={2}
                   pb={4}
                   style={{
-                    // marginRight: Dimensions.get("window").width * 0.0694,
                     flexDirection: 'row'
                   }}
                 >
@@ -151,39 +150,39 @@ function List ({ navigation }) {
               </ScrollView>
             </Box>
           </VStack>
-          <Box>
-            <Box style={{ flex: 1 }}>
-              <Box style={styles.more}>
-                <Box style={{ width: '100%' }}>
-                  <HStack style={{ flexDirection: 'row' }}>
-                    <Text style={styles.title}>熱門活動</Text>
-                    <Text
-                      style={styles.showMore}
-                      onPress={() => {
-                        navigation.navigate('more')
-                      }}
-                    >
-                      顯示更多
-                    </Text>
-                  </HStack>
-                </Box>
-                <Divider
-                  style={{ marginTop: 5 }}
-                  bg="#BFBFBF" /* my=margin-top and margin-bottom */
-                />
-              </Box>
-              <Box>
-                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                  <Box
-                    m={2}
-                    pb={4}
-                    style={{
-                      // marginRight: Dimensions.get("window").width * 0.0694,
-                      flexDirection: 'row'
-                    }}
-                  >
-                    {active2.map(
-                      ({ id, name, imageUri1, place, startTimeWeekday }) => (
+          <VStack>
+            <VStack mx={4} my={2}>
+              <HStack style={{ flexDirection: 'row' }}>
+                <Text flex={10} fontSize="lg" bold color="primary.600">
+                  熱門活動
+                </Text>
+                <Pressable
+                  flexDirection="column-reverse"
+                  onPress={() => {
+                    navigation.navigate('moreHang')
+                  }}
+                >
+                  <Text fontSize="sm" color="primary.600">
+                    顯示更多
+                  </Text>
+                </Pressable>
+              </HStack>
+              <Divider
+                width="100%"
+                bg="#BFBFBF" /* my=margin-top and margin-bottom */
+              />
+            </VStack>
+            <Box>
+              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                <Box
+                  m={2}
+                  pb={4}
+                  style={{
+                    flexDirection: 'row'
+                  }}
+                >
+                  {active2.map(
+                    ({ id, name, imageUri1, place, startTimeWeekday }) => (
                       <ActivityCard
                         key={id}
                         id={id}
@@ -193,13 +192,12 @@ function List ({ navigation }) {
                         startTimeWeekday={startTimeWeekday}
                         navigation={navigation}
                       />
-                      )
-                    )}
-                  </Box>
-                </ScrollView>
-              </Box>
+                    )
+                  )}
+                </Box>
+              </ScrollView>
             </Box>
-          </Box>
+          </VStack>
         </ScrollView>
       </Box>
     </Box>

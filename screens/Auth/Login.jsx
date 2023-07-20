@@ -6,6 +6,7 @@ import {
 import { signInWithEmailAndPassword } from 'firebase/auth'
 import { auth } from '../../config'
 import { MaterialIcons } from '@expo/vector-icons'
+import { ResetScreen } from './ResetPwd'
 
 export function LoginScreen () {
   const [email, setEmail] = useState('')
@@ -78,11 +79,7 @@ export function LoginScreen () {
                 <Text color={'red.500'}>{ msg }</Text>
 
                 <HStack my={2}>
-                  <Link onPress={() => { onClose() }} isExternal _text={{
-                    fontSize: '16',
-                    color: '#737373'
-                  }}>忘記密碼?
-                  </Link>
+                  <ResetScreen />
                   <Link onPress={() => { onClose() }} ml="10px" isExternal _text={{
                     fontSize: '16',
                     color: '#737373'

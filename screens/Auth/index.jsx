@@ -18,7 +18,7 @@ export function AuthScreen () {
             <Heading bold alignSelf={'center'} marginY={'20px'}>歡迎來到 <Text color={'#1784B2'}>NCU App</Text></Heading>
             <RegisterScreen />
             <LoginScreen />
-            <Link alignSelf={'center'} mt="8" href={supportedURL}>隱私權政策</Link>
+            <Link _text={{ fontSize: 'md' }} alignSelf={'center'} mt="8" href={supportedURL}>隱私權政策</Link>
           </Box>
           <Box flex={3}/>
         </VStack>

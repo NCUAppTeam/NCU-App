@@ -106,7 +106,7 @@ const Body = ({
     try {
       await Share.share({
         // 要分享的活動連結
-        message: `ncuapp://activity?=${id}`
+        message: `ncu-app://activity?=${id}`
       })
     } catch (error) {
       alert(error.message)

@@ -2,6 +2,7 @@
   "expo": {
     "name": "ncu-app",
     "slug": "ncu-app",
+    "scheme": "ncu-app",
     "version": "2.0.3",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -42,7 +43,11 @@
     },
     "extra": {
       "eas": {
+<<<<<<< Updated upstream
         "projectId": "b795d866-5d36-4bbb-9c46-c8d5446bbf26"
+=======
+        "projectId": "63394f69-b1b7-467d-965a-8554ba7eeb8f"
+>>>>>>> Stashed changes
       }
     }
   }

@@ -27,7 +27,7 @@ function SplashScreen () {
 // [測試中] 大概是從主頁導向至活動頁面
 const linking = {
   prefixes: [
-    'ncuapp://', 'exp://', '*://'
+    'ncu-app://', 'exp://', '*://'
   ],
   config: {
     screens: {

@@ -7,7 +7,6 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
-    "scheme": "ncuapp",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -36,14 +35,28 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
+      },
+      "intentFilters": [
+      {
+        "action": "VIEW",
+        "autoVerify": true,
+        "data": [
+          {
+            "scheme": "https",
+            "host": "dynamic.link.host",
+            "pathPrefix": "/"
+          }
+        ],
+        "category": ["BROWSABLE", "DEFAULT"]
       }
+    ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "extra": {
       "eas": {
-        "projectId": "b795d866-5d36-4bbb-9c46-c8d5446bbf26"
+        "projectId": "63394f69-b1b7-467d-965a-8554ba7eeb8f"
       }
     }
   }

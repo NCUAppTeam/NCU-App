@@ -33,6 +33,8 @@ import styles from './style_folder/Styles_showActivityDetails'
 import ActiveController from '../../controller/Active'
 import MessageController from '../../controller/Message'
 import UserController from '../../controller/getStudentId'
+import * as Linking from 'expo-linking'
+
 
 const NavigationBar = (props) => (
   <ZStack width="100%" height="12%">
@@ -106,7 +108,7 @@ const Body = ({
     try {
       await Share.share({
         // 要分享的活動連結
-        message: `ncu-app://activity?=${id}`
+        message: `ncu-app://activity/?id=${id}`
       })
     } catch (error) {
       alert(error.message)

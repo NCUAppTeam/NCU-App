@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react'
 import {
   Box,
   ZStack,
@@ -15,38 +15,38 @@ import {
   Button,
   Circle,
   Container,
-  FlatList,
-} from "native-base";
-import { TabView } from "react-native-tab-view";
-import { Ionicons, FontAwesome } from '@expo/vector-icons';
-import BusController from "../../../controller/Bus";
-import BusDetailViewCell from "./BusDetailViewCell";
+  FlatList
+} from 'native-base'
+import { TabView } from 'react-native-tab-view'
+import { Ionicons, FontAwesome } from '@expo/vector-icons'
+import BusController from '../../../controller/Bus'
+import BusDetailViewCell from './BusDetailViewCell'
 
 const testData = [
   {
     alert: 0,
     type: 0, // 0 合併, 1 分岔
-    pass: ["132", "133"],
+    pass: ['132', '133'],
     bus: [
       // 最近五班車
       {
-        name: "133",
-        time: "14:00",
+        name: '133',
+        time: '14:00'
       },
       {
-        name: "132",
-        time: "15:00",
-      },
+        name: '132',
+        time: '15:00'
+      }
     ],
-    stop: "loading",
-  },
-];
+    stop: 'loading'
+  }
+]
 
-function BusSelector({
+function BusSelector ({
   navigation,
   availableBusList,
   selectedBusList,
-  setSelectedBusList,
+  setSelectedBusList
 }) {
   return (
     <HStack>
@@ -62,20 +62,20 @@ function BusSelector({
           defaultValue={availableBusList}
           accessibilityLabel="choose multiple items"
           onChange={(values) => {
-            setSelectedBusList(values || []);
+            setSelectedBusList(values || [])
           }}
         >
           {availableBusList.map((busName, index) => {
             if (index === 0) {
               return (
-                <Checkbox value={busName} m="1">
+                <Checkbox key={index} value={busName} m="1">
                   <Box
                     alignSelf="flex-start"
                     _text={{
-                      fontSize: "md",
-                      fontWeight: "medium",
-                      color: "warmGray.50",
-                      letterSpacing: "lg",
+                      fontSize: 'md',
+                      fontWeight: 'medium',
+                      color: 'warmGray.50',
+                      letterSpacing: 'lg'
                     }}
                     bg="accent1.600"
                     px="2px"
@@ -83,17 +83,17 @@ function BusSelector({
                     {busName}
                   </Box>
                 </Checkbox>
-              );
+              )
             } else {
               return (
-                <Checkbox value={busName} m="1">
+                <Checkbox key={index} value={busName} m="1">
                   <Box
                     alignSelf="flex-start"
                     _text={{
-                      fontSize: "md",
-                      fontWeight: "medium",
-                      color: "warmGray.50",
-                      letterSpacing: "lg",
+                      fontSize: 'md',
+                      fontWeight: 'medium',
+                      color: 'warmGray.50',
+                      letterSpacing: 'lg'
                     }}
                     bg="accent2.600"
                     px="2px"
@@ -101,7 +101,7 @@ function BusSelector({
                     {busName}
                   </Box>
                 </Checkbox>
-              );
+              )
             }
           })}
         </Checkbox.Group>
@@ -115,7 +115,7 @@ function BusSelector({
 
       <Pressable
         onPress={() => {
-          navigation.navigate("BusTimeTable");
+          navigation.navigate('BusTimeTable')
         }}
       >
         <Center flex={1} bg="#FFE66F">
@@ -123,38 +123,38 @@ function BusSelector({
         </Center>
       </Pressable>
     </HStack>
-  );
+  )
 }
 
-function TimeTableRoute({ direction, selectedBusList, availableBusList }) {
-  const [data, setData] = useState(testData); // useState([{}])
+function TimeTableRoute ({ direction, selectedBusList, availableBusList }) {
+  const [data, setData] = useState(testData) // useState([{}])
   // const [refreshing, setRefreshing] = useState(true);
-  const [timerCount, setTimerCount] = useState(0);
+  const [timerCount, setTimerCount] = useState(0)
   const [dataUpdated, setDataUpdated] = React.useState(false)
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setTimerCount((timerCount) => timerCount + 1);
-    }, 1000);
+      setTimerCount((timerCount) => timerCount + 1)
+    }, 1000)
 
-    return () => clearInterval(interval);
-  }, []);
+    return () => clearInterval(interval)
+  }, [])
 
   const onRefresh = () => {
-    console.log("refresh")
+    console.log('refresh')
     BusController({ buses: selectedBusList, dir: direction }).then((res) => {
-      setData(res); // using testData
-      setTimerCount(0);
+      setData(res) // using testData
+      setTimerCount(0)
       setDataUpdated((dataUpdated) => !dataUpdated)
-    });
-  };
+    })
+  }
   useEffect(() => {
-    onRefresh();
-    const id = setInterval(onRefresh, 10000);
+    onRefresh()
+    const id = setInterval(onRefresh, 10000)
     return () => {
-      clearInterval(id);
-    };
-  }, [selectedBusList]);
+      clearInterval(id)
+    }
+  }, [selectedBusList])
 
   return (
     <Box width="100%" height="100%">
@@ -173,44 +173,44 @@ function TimeTableRoute({ direction, selectedBusList, availableBusList }) {
             availableBusList={availableBusList}
             selectedBusList={selectedBusList}
           />
-        );
+        )
       }} keyExtractor={item => item.id} extraData={dataUpdated}/>
 
       <Box>
-        <Text>{timerCount}秒前更新</Text>
+        <Text style={{ marginLeft: 40 }}>{timerCount}秒前更新</Text>
       </Box>
     </Box>
-  );
+  )
 }
 
 const renderScene = ({ route }, selectedBusList, availableBusList) => {
   switch (route.key) {
-    case "first":
+    case 'first':
       return (
         <TimeTableRoute
           direction={1}
           selectedBusList={selectedBusList}
           availableBusList={availableBusList}
         />
-      );
-    case "second":
+      )
+    case 'second':
       return (
         <TimeTableRoute
           direction={0}
           selectedBusList={selectedBusList}
           availableBusList={availableBusList}
         />
-      );
+      )
     default:
-      return null;
+      return null
   }
-};
+}
 const renderTabBar = (props, index, setIndex) => {
-  const inputRange = props.navigationState.routes.map((x, i) => i);
+  const inputRange = props.navigationState.routes.map((x, i) => i)
   return (
     <Box flexDirection="row">
       {props.navigationState.routes.map((route, i) => {
-        const borderColor = index === i ? "#476685" : "coolGray.200";
+        const borderColor = index === i ? '#476685' : 'coolGray.200'
         return (
           <Box
             borderBottomWidth="3"
@@ -222,55 +222,54 @@ const renderTabBar = (props, index, setIndex) => {
           >
             <Pressable
               onPress={() => {
-                setIndex(i);
+                setIndex(i)
               }}
             >
               <Text>{route.title}</Text>
             </Pressable>
           </Box>
-        );
+        )
       })}
     </Box>
-  );
-};
+  )
+}
 
-function BusTimeTableTabView({ navigation, routeInfo }) {
-  let availableBusList = [];
-  if (routeInfo.name === "toZhongli") availableBusList = ["132", "133"];
-  else if (routeInfo.name === "toHSR") availableBusList = ["172", "173"];
-  else availableBusList = [routeInfo.name];
+function BusTimeTableTabView ({ navigation, routeInfo }) {
+  let availableBusList = []
+  if (routeInfo.name === 'toZhongli') availableBusList = ['132', '133']
+  else if (routeInfo.name === 'toHSR') availableBusList = ['172', '173']
+  else availableBusList = [routeInfo.name]
 
   const [selectedBusList, setSelectedBusList] =
-    React.useState(availableBusList);
-  const [index, setIndex] = React.useState(0); // TabBar index (can't change valuable name)
+    React.useState(availableBusList)
+  const [index, setIndex] = React.useState(0) // TabBar index (can't change valuable name)
   const destination = {
-    route0: "往中央大學",
-    route1: "",
-  };
+    route0: '往中央大學',
+    route1: ''
+  }
   switch (routeInfo.name) {
-    case "toZhongli":
-      destination.route1 = "往中壢公車站";
-      break;
-    case "toHSR":
-      destination.route1 = "往桃園高鐵站";
-      break;
-    case "9025A":
-      destination.route1 = "松山機場";
-      break;
+    case 'toZhongli':
+      destination.route1 = '往中壢公車站'
+      break
+    case 'toHSR':
+      destination.route1 = '往桃園高鐵站'
+      break
+    case '9025A':
+      destination.route1 = '松山機場'
+      break
     default:
-      destination.route1 = "unknown";
+      destination.route1 = 'unknown'
   }
   const [routes] = React.useState([
     {
-      key: "first",
-      title: destination.route0,
+      key: 'first',
+      title: destination.route0
     },
     {
-      key: "second",
-      title: destination.route1,
-    },
-  ]);
-
+      key: 'second',
+      title: destination.route1
+    }
+  ])
 
   const NavigationBar = () => (
     <ZStack width="100%" height="12%" bg="primary.600">
@@ -283,7 +282,6 @@ function BusTimeTableTabView({ navigation, routeInfo }) {
           <Icon size={18} color="white" name='chevron-left' as={FontAwesome} />
         </Pressable>
       </Box>
-
 
     </ZStack>
   )
@@ -307,7 +305,7 @@ function BusTimeTableTabView({ navigation, routeInfo }) {
         style={{ marginTop: StatusBar.currentHeight }}
       />
     </Box>
-  );
+  )
 }
 
 export default function ({ route, navigation }) {
@@ -315,5 +313,5 @@ export default function ({ route, navigation }) {
     <Box flex={1} safeArea>
       <BusTimeTableTabView navigation={navigation} routeInfo={route.params} />
     </Box>
-  );
+  )
 }

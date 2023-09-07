@@ -9,7 +9,8 @@ export default StyleSheet.create({
     marginTop: 7
   },
   cardManage: {
-    height: 112,
+    minHeight: 109,
+    height: 'auto',
     width: Dimensions.get('window').width * 0.9,
     borderRadius: 10,
     marginTop: 15,
@@ -17,8 +18,8 @@ export default StyleSheet.create({
     alignSelf: 'center'
   },
   cardManagepic: {
-    width: 115,
-    height: 112,
+    height: 'auto',
+    aspectRatio: 1,
     borderRadius: 10,
     backgroundColor: '#E0E0E0'
   },
@@ -36,16 +37,20 @@ export default StyleSheet.create({
     alignContent: 'space-around'
   },
   cardManageLocation: {
+    width: '70%',
+    height: 'auto',
     marginHorizontal: 9,
     marginTop: 7,
     flexDirection: 'row',
     alignContent: 'space-around'
   },
   cardManageText: {
+    width: '80%',
     fontSize: 12,
     alignSelf: 'center'
   },
   cardManageTextLocation: {
+    width: 'auto',
     fontSize: 12,
     alignSelf: 'center'
   },

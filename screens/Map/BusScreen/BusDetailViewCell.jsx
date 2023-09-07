@@ -1,10 +1,10 @@
-import React from "react";
-import { Box, ZStack, VStack, Text, HStack, Center, Circle } from "native-base";
+import React from 'react'
+import { Box, ZStack, VStack, Text, HStack, Center, Circle } from 'native-base'
 
-function SingleRouteCell(props) {
-  const firstBusColor = "secondary.600";
-  const secondBusColor = "secondary.100";
-  const busColor = (props.currentStation.bus[0].name === props.availableBusList[0] ? firstBusColor : secondBusColor);
+function SingleRouteCell (props) {
+  const firstBusColor = 'secondary.600'
+  const secondBusColor = 'secondary.100'
+  const busColor = (props.currentStation.bus[0].name === props.availableBusList[0] ? firstBusColor : secondBusColor)
 
   const RouteGraph = () => (
     <ZStack width="23%" height="100%" mx="5px">
@@ -39,19 +39,21 @@ function SingleRouteCell(props) {
       <HStack height="100%" width="100%">
         <RouteGraph />
         <VStack mt="16px" width="40%" height="100%">
-          {props.currentStation.isCombined === 0 ? (
+          {props.currentStation.isCombined === 0
+            ? (
             <Text bold>{props.currentStation.stop}</Text>
-          ) : (
+              )
+            : (
             <Text color="gray.500">{props.currentStation.stop}</Text>
-          )}
+              )}
 
           <Box
             alignSelf="flex-start"
             _text={{
-              fontSize: "md",
-              fontWeight: "medium",
-              color: "warmGray.50",
-              letterSpacing: "lg",
+              fontSize: 'md',
+              fontWeight: 'medium',
+              color: 'warmGray.50',
+              letterSpacing: 'lg'
             }}
             bg={busColor}
             px="2px"
@@ -64,15 +66,15 @@ function SingleRouteCell(props) {
         </Center>
       </HStack>
     </Box>
-  );
+  )
 }
 
-function DoubleRouteCell(props) {
-  const firstBusColor = "accent1.600";
-  const secondBusColor = "accent2.600";
-  const busColor = (props.currentStation.bus[0].name === props.availableBusList[0] ? firstBusColor : secondBusColor);
+function DoubleRouteCell (props) {
+  const firstBusColor = 'accent1.600'
+  const secondBusColor = 'accent2.600'
+  const busColor = (props.currentStation.bus[0].name === props.availableBusList[0] ? firstBusColor : secondBusColor)
   const renderLine = () => {
-    let lineList = [];
+    const lineList = []
     if (props.currentStation.isCombined !== 0) {
       return (
         <Box
@@ -82,7 +84,7 @@ function DoubleRouteCell(props) {
           width="4px"
           mr="29px" // 要把線的寬度的一半算進去
         ></Box>
-      );
+      )
     }
     // upper line
     if (props.isPrevCombined) {
@@ -95,11 +97,11 @@ function DoubleRouteCell(props) {
             transform: [
               { translateX: -14 },
               { translateY: -16 },
-              { rotate: "-45deg" },
-            ],
+              { rotate: '-45deg' }
+            ]
           }}
         ></Box>
-      );
+      )
     } else if (!props.isFirstStation) {
       lineList.push(
         <Box
@@ -108,10 +110,10 @@ function DoubleRouteCell(props) {
           height="32px"
           width="4px"
           style={{
-            transform: [{ translateY: -16 }],
+            transform: [{ translateY: -16 }]
           }}
         ></Box>
-      );
+      )
     }
     // down line
     if (props.isNextCombined) {
@@ -124,11 +126,11 @@ function DoubleRouteCell(props) {
             transform: [
               { translateX: -14 },
               { translateY: 16 },
-              { rotate: "45deg" },
-            ],
+              { rotate: '45deg' }
+            ]
           }}
         ></Box>
-      );
+      )
     } else if (!props.isLastStation) {
       lineList.push(
         <Box
@@ -138,16 +140,16 @@ function DoubleRouteCell(props) {
           height="32px"
           width="4px"
           style={{
-            transform: [{ translateY: 16 }],
+            transform: [{ translateY: 16 }]
           }}
         ></Box>
-      );
+      )
     }
-    return lineList;
-  };
+    return lineList
+  }
 
   const renderLine2 = () => {
-    let lineList = [];
+    const lineList = []
     if (props.currentStation.isCombined) {
       return (
         <Box width="100%">
@@ -158,7 +160,7 @@ function DoubleRouteCell(props) {
             ml="29px" // 要把線的寬度的一半算進去
           ></Box>
         </Box>
-      );
+      )
     }
     // upper line
     if (props.isPrevCombined) {
@@ -171,15 +173,15 @@ function DoubleRouteCell(props) {
             transform: [
               { translateX: 14 },
               { translateY: -7 },
-              { rotate: "45deg" },
-            ],
+              { rotate: '45deg' }
+            ]
           }}
         ></Box>
-      );
+      )
     } else if (!props.isFirstStation) {
       lineList.push(
         <Box bg={secondBusColor} maxW="4px" height="32px" width="4px"></Box>
-      );
+      )
     }
     // down line
     if (props.isNextCombined) {
@@ -192,11 +194,11 @@ function DoubleRouteCell(props) {
             transform: [
               { translateX: 14 },
               { translateY: 25 },
-              { rotate: "-45deg" },
-            ],
+              { rotate: '-45deg' }
+            ]
           }}
         ></Box>
-      );
+      )
     } else if (!props.isLastStation) {
       lineList.push(
         <Box
@@ -206,12 +208,12 @@ function DoubleRouteCell(props) {
           height="32px"
           width="4px"
         ></Box>
-      );
+      )
     }
-    return lineList;
-  };
+    return lineList
+  }
 
-  const RouteGraph = () => (
+  const RouteGraph2 = () => (
     <ZStack width="23%" height="100%" mx="5px">
           <HStack height="100%" width="100%">
             <ZStack
@@ -231,7 +233,7 @@ function DoubleRouteCell(props) {
                   bg="white"
                   mr="31px"
                   style={{
-                    transform: [{ translateX: 10 }],
+                    transform: [{ translateX: 10 }]
                   }}
                 ></Box>
               )}
@@ -247,7 +249,7 @@ function DoubleRouteCell(props) {
                     borderWidth="2px"
                     bg="white"
                     style={{
-                      transform: [{ translateX: 10 }],
+                      transform: [{ translateX: 10 }]
                     }}
                   ></Box>
                 )}
@@ -271,19 +273,19 @@ function DoubleRouteCell(props) {
   return (
     <Box bg="white" height="64px" width="100%">
       <HStack height="100%" width="100%">
-        <RouteGraph/>
+        <RouteGraph2 />
         <VStack mt="16px" width="40%" height="100%">
-          {props.currentStation.isCombined === 0 
-          ? <Text bold>{props.currentStation.stop}</Text>
-          : <Text color="gray.500">{props.currentStation.stop}</Text>
+          {props.currentStation.isCombined === 0
+            ? <Text bold>{props.currentStation.stop}</Text>
+            : <Text color="gray.500">{props.currentStation.stop}</Text>
           }
           <Box
             alignSelf="flex-start"
             _text={{
-              fontSize: "md",
-              fontWeight: "medium",
-              color: "warmGray.50",
-              letterSpacing: "lg",
+              fontSize: 'md',
+              fontWeight: 'medium',
+              color: 'warmGray.50',
+              letterSpacing: 'lg'
             }}
             bg={busColor}
             px="2px"
@@ -296,15 +298,14 @@ function DoubleRouteCell(props) {
         </Center>
       </HStack>
     </Box>
-  );
+  )
 }
-export default function BusDetailViewCell(props) {
-  props.availableBusList.sort();
-  console.log("rerendering");
+export default function BusDetailViewCell (props) {
+  props.availableBusList.sort()
+  console.log('rerendering')
   if (props.selectedBusList.length == 0) {
 
-  }
-  else if (props.selectedBusList.length == 1) {
+  } else if (props.selectedBusList.length == 1) {
     return (
       <SingleRouteCell
         currentStation={props.currentStation}
@@ -313,7 +314,7 @@ export default function BusDetailViewCell(props) {
         availableBusList={props.availableBusList}
         selectedBusList={props.selectedBusList}
       />
-    );
+    )
   } else {
     return (
       <DoubleRouteCell
@@ -325,6 +326,6 @@ export default function BusDetailViewCell(props) {
         availableBusList={props.availableBusList}
         selectedBusList={props.selectedBusList}
       />
-    );
+    )
   }
 }

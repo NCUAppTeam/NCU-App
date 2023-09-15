@@ -6,7 +6,7 @@ import {
   FontAwesome5, AntDesign, Feather, Octicons
 } from '@expo/vector-icons'
 import {
-  Divider, Box, FlatList, VStack, Pressable, HStack, Text
+  Divider, Box, FlatList, VStack, Pressable, HStack, Text, ZStack
 } from 'native-base'
 import styles from './style_folder/Styles_moreEvent'
 import ActiveController from '../../controller/Active'
@@ -26,10 +26,10 @@ function ActivityCard (props) {
       border="1"
       borderRadius="md"
       key={key}
-      width="180px"
+      width="45%"
       height="96%"
       mx={2}
-      marginBottom={2}
+      my={2}
       bg="white"
       shadow="2"
       onPress={() => {
@@ -90,7 +90,7 @@ function More ({ navigation, route }) {
   }
 
   return (
-    <Box style={styles.container} safeArea>
+    <Box flex="1" style={styles.container} safeArea>
         <Box style={styles.headerContainer}>
           <Box style={styles.headerArrowBox}>
             <AntDesign
@@ -106,15 +106,25 @@ function More ({ navigation, route }) {
             </Text>
           </Box>
           <Box style={styles.headerCommentView}>
-            <HStack>
-              <FontAwesome5
-                name="comment"
-                size={25}
-                color="#476685"
-                onPress={() => { navigation.navigate('message') }}
-              />
-              <Octicons name="dot-fill" size={16} color={Messagenum !== 0 ? '#EB6F6F' : 'transparent'} style={styles.readDot} />
-            </HStack>
+            <ZStack size={25} ml={3} alignItems="center" justifyContent="center">
+              <Box>
+                <Octicons
+                  name="dot-fill"
+                  size={16}
+                  color={Messagenum !== 0 ? '#EB6F6F' : 'transparent'}
+                  style={{
+                    transform: [{ translateX: 12 }, { translateY: -10 }]
+                  }}
+                />
+              </Box>
+              <Box>
+                <FontAwesome5
+                  name="comment"
+                  size={25}
+                  color="#476685"
+                />
+              </Box>
+            </ZStack>
           </Box>
           <Box style={styles.headerPersonalView}>
             <Feather
@@ -125,7 +135,7 @@ function More ({ navigation, route }) {
             />
           </Box>
         </Box>
-        <Box style={styles.bodyContainer}>
+        <Box flex="1" style={styles.bodyContainer}>
           <FlatList
             numColumns={2}
             data={active}

@@ -154,12 +154,12 @@ function List ({ navigation }) {
             <VStack mx={4} my={2}>
               <HStack style={{ flexDirection: 'row' }}>
                 <Text flex={10} fontSize="lg" bold color="primary.600">
-                  熱門活動
+                  近期活動
                 </Text>
                 <Pressable
                   flexDirection="column-reverse"
                   onPress={() => {
-                    navigation.navigate('moreHang')
+                    navigation.navigate('more')
                   }}
                 >
                   <Text fontSize="sm" color="primary.600">

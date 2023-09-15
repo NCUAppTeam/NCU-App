@@ -35,7 +35,6 @@ import MessageController from '../../controller/Message'
 import UserController from '../../controller/getStudentId'
 import * as Linking from 'expo-linking'
 
-
 const NavigationBar = (props) => (
   <ZStack width="100%" height="12%">
     <Center width="100%" height="100%">
@@ -108,7 +107,7 @@ const Body = ({
     try {
       await Share.share({
         // 要分享的活動連結
-        message: `ncu-app://activity/?id=${id}`
+        message: `https://NCUAppTeam.github.io/ncuapp_Redirect.html?id=${id}`
       })
     } catch (error) {
       alert(error.message)
@@ -218,7 +217,7 @@ const Body = ({
 
             <Dialog
               width={Dimensions.get('window').width * 0.8}
-              height={370}
+              height={340}
               visible={showDialog}
               onTouchOutside={() => {
                 setShowDialog(false)
@@ -228,7 +227,7 @@ const Body = ({
                 <NativeBaseProvider>
                   <Box showsVerticalScrollIndicator={false} my={10}>
                       <Box>
-                        <SvgQRCode value={active.id} />
+                        <SvgQRCode size={200} value={'https://NCUAppTeam.github.io/ncuapp_Redirect.html?id=' + active.id} />
                       </Box>
                       <Button mt={2} isExternal _text={{ fontSize: 20 }} onPress={() => {
                         shareData()
@@ -280,9 +279,7 @@ const Body = ({
           <Center mr={4} width={8}>
             <Ionicons name="location-outline" size={28} color="#476685" />
           </Center>
-          <Center>
-            <Text>{place}</Text>
-          </Center>
+          <Text width={'80%'}>{place}</Text>
         </HStack>
 
         {link && (
@@ -489,7 +486,7 @@ const HostDetail = ({
               bg="#476685"
               isDisabled
             >
-              <Text color="#FBEEAC" bold>
+              <Text color="#000000" bold>
                 報名時間已過
               </Text>
             </Button>

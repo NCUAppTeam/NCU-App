@@ -1,277 +1,276 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'
 import {
   Text, Platform, View, SafeAreaView, TextInput,
-  ScrollView, TouchableOpacity, Dimensions, Image, TouchableHighlight,
-} from 'react-native';
-import DateTimePicker from '@react-native-community/datetimepicker';
+  ScrollView, TouchableOpacity, Dimensions, Image, TouchableHighlight
+} from 'react-native'
+import DateTimePicker from '@react-native-community/datetimepicker'
 import {
-  Dialog, Portal, Button, Provider,
-} from 'react-native-paper';
+  Dialog, Portal, Button, Provider
+} from 'react-native-paper'
 import {
-  MaterialCommunityIcons, AntDesign, Foundation,
-} from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
+  MaterialCommunityIcons, AntDesign, Foundation
+} from '@expo/vector-icons'
+import { LinearGradient } from 'expo-linear-gradient'
 import {
-  Box, Divider, Heading, ZStack,
-} from 'native-base';
-import * as ImagePicker from 'expo-image-picker';
-import styles from './style_folder/Styles_addActivity';
-import ActiveController from '../../controller/Active';
+  Box, Divider, Heading, ZStack
+} from 'native-base'
+import * as ImagePicker from 'expo-image-picker'
+import styles from './style_folder/Styles_addActivity'
+import ActiveController from '../../controller/Active'
 
-function Add({ navigation }) {
+function Add ({ navigation }) {
   const [data, setData] = useState({
     cost: '',
-    link: '',
-  });
-  const [host, setHost] = useState([]);
+    link: ''
+  })
+  const [host, setHost] = useState([])
   useEffect(() => {
     ActiveController.getHostinAdd().then((res) => {
-      setHost(res);
-    });
-  }, []);
+      setHost(res)
+    })
+  }, [])
 
-  const [genre, setGenre] = useState(false);
-  const [name, setName] = useState(false);
-  const [start, setStartCheck] = useState(false);
-  const [end, setEndCheck] = useState(false);
-  const [limitNum, setLimitNum] = useState(false);
-  const [place, setPlace] = useState(false);
-  const [detail, setDetail] = useState(false);
+  const [genre, setGenre] = useState(false)
+  const [name, setName] = useState(false)
+  const [start, setStartCheck] = useState(false)
+  const [end, setEndCheck] = useState(false)
+  const [limitNum, setLimitNum] = useState(false)
+  const [place, setPlace] = useState(false)
+  const [detail, setDetail] = useState(false)
 
-  const [image1, setImage1] = useState();
-  const [image2, setImage2] = useState();
-  const [image3, setImage3] = useState();
-  let NoPicLink;
+  const [image1, setImage1] = useState()
+  const [image2, setImage2] = useState()
+  const [image3, setImage3] = useState()
+  let NoPicLink
 
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [1, 1],
-      quality: 0.2,
-    });
+      quality: 0.2
+    })
 
-    NoPicLink = result.assets[0].uri;
+    NoPicLink = result.assets[0].uri
     if (!result.assets[0].canceled) {
       if (image1 === undefined) {
-        setImage1(result.assets[0].uri);
-        setData({ ...data, image1: result.assets[0].uri });
+        setImage1(result.assets[0].uri)
+        setData({ ...data, image1: result.assets[0].uri })
       } else if (image2 === undefined) {
-        setImage2(result.assets[0].uri);
-        setData({ ...data, image2: result.assets[0].uri });
+        setImage2(result.assets[0].uri)
+        setData({ ...data, image2: result.assets[0].uri })
       } else if (image3 === undefined) {
-        setImage3(result.assets[0].uri);
-        setData({ ...data, image3: result.assets[0].uri });
+        setImage3(result.assets[0].uri)
+        setData({ ...data, image3: result.assets[0].uri })
       }
     }
-  };
-  const [isPress, setIsPress] = useState('');
-  const values = ['揪人共乘', '揪人運動', '揪人遊戲', '校園活動', '系上活動', '社團活動'];
+  }
+  const [isPress, setIsPress] = useState('')
+  const values = ['揪人共乘', '揪人運動', '揪人遊戲', '校園活動', '系上活動', '社團活動']
 
-  const [visible1, setVisible1] = React.useState(false);
-  const [date1, setDate1] = useState(new Date());
-  const [mode1, setMode1] = useState('date');
-  const [show1, setShow1] = useState(false);
-  const [startDateText, setStartDate] = useState();//dialog中選擇日期的字
-  const [startTimeText, setStartTime] = useState();//dialog中選擇時間的字
-  const [startText, setStart] = useState();//顯示開始時間(必填)的字
-  const showDialog1 = () => setVisible1(true);
-  //按下done的時候觸發
+  const [visible1, setVisible1] = React.useState(false)
+  const [date1, setDate1] = useState(new Date())
+  const [mode1, setMode1] = useState('date')
+  const [show1, setShow1] = useState(false)
+  const [startDateText, setStartDate] = useState()// dialog中選擇日期的字
+  const [startTimeText, setStartTime] = useState()// dialog中選擇時間的字
+  const [startText, setStart] = useState()// 顯示開始時間(必填)的字
+  const showDialog1 = () => setVisible1(true)
+  // 按下done的時候觸發
   const hideDialog1 = () => {
-    //如果先填了結束時間 而且開始時間正確
-    if(data.endTime!==undefined && data.endTime>=data.startTime &&
-      startDateText !== undefined && startTimeText !== undefined){
-        //顯示開始時間(必填)的字
-        setStart(`${startDateText}  ${startTimeText}`);
-        setStartCheck(true);
-   }
-   //如果先填了結束時間案且結果錯誤
-   else if(data.endTime!==undefined && data.endTime<data.startTime &&
-     startDateText !== undefined && startTimeText !== undefined){
-       alert("開始時間錯誤");
-       //取消顯示
-       setData({ ...data, startTime: undefined });
-       setStartDate('');
-       setStartTime('');
-       setStart('');
-   }
-   //如果沒填結束時間
-   else if(data.endTime===undefined && startDateText !== undefined && startTimeText !== undefined){
-     setStart(`${startDateText}  ${startTimeText}`);
-     setStartCheck(true);
-   }
-   //如果直接跳掉
-   else{
-     setData({ ...data, startTime: undefined });
-   }
-    setVisible1(false);
-  };
+    // 如果先填了結束時間 而且開始時間正確
+    if (data.endTime !== undefined && data.endTime >= data.startTime &&
+      startDateText !== undefined && startTimeText !== undefined) {
+      // 顯示開始時間(必填)的字
+      setStart(`${startDateText}  ${startTimeText}`)
+      setStartCheck(true)
+    }
+    // 如果先填了結束時間案且結果錯誤
+    else if (data.endTime !== undefined && data.endTime < data.startTime &&
+     startDateText !== undefined && startTimeText !== undefined) {
+      alert('開始時間錯誤')
+      // 取消顯示
+      setData({ ...data, startTime: undefined })
+      setStartDate('')
+      setStartTime('')
+      setStart('')
+    }
+    // 如果沒填結束時間
+    else if (data.endTime === undefined && startDateText !== undefined && startTimeText !== undefined) {
+      setStart(`${startDateText}  ${startTimeText}`)
+      setStartCheck(true)
+    }
+    // 如果直接跳掉
+    else {
+      setData({ ...data, startTime: undefined })
+    }
+    setVisible1(false)
+  }
 
   const showMode1 = (currentMode) => {
-    setShow1(true);
-    setMode1(currentMode);
-  };
+    setShow1(true)
+    setMode1(currentMode)
+  }
   const showTimepicker1 = () => {
-    showMode1('time');
-  };
+    showMode1('time')
+  }
   const showDatepicker1 = () => {
-    showMode1('date');
-  };
+    showMode1('date')
+  }
   const onStartChange = (event, selectedDate) => {
-    const currentDate = selectedDate || date1;
-    setShow1(false);
-    setDate1(currentDate);
+    const currentDate = selectedDate || date1
+    setShow1(false)
+    setDate1(currentDate)
 
-    const tempDate = new Date(currentDate);
+    const tempDate = new Date(currentDate)
     if (mode1 === 'date') {
-      const fDate = `${tempDate.getFullYear()}/${tempDate.getMonth() + 1}/${tempDate.getDate()}`;
-      setStartDate(`${fDate}`);
+      const fDate = `${tempDate.getFullYear()}/${tempDate.getMonth() + 1}/${tempDate.getDate()}`
+      setStartDate(`${fDate}`)
     } else if (mode1 === 'time') {
-      const fTime = `${tempDate.getHours() < 10 ? `0${tempDate.getHours()}` : tempDate.getHours()} : ${tempDate.getMinutes() < 10 ? `0${tempDate.getMinutes()}` : tempDate.getMinutes()}`;
-      setStartTime(`${fTime}`);
+      const fTime = `${tempDate.getHours() < 10 ? `0${tempDate.getHours()}` : tempDate.getHours()} : ${tempDate.getMinutes() < 10 ? `0${tempDate.getMinutes()}` : tempDate.getMinutes()}`
+      setStartTime(`${fTime}`)
     }
-    setData({ ...data, startTime: tempDate });
-  };
+    setData({ ...data, startTime: tempDate })
+  }
 
   const hideDialogi1 = () => {
-    setData({ ...data, startTime: undefined });
-    setStart(undefined);
-    setStartCheck(false);
-    if ((data.endTime===undefined && (startDateText === undefined || startTimeText === undefined))
-    ||(data.endTime!==undefined && data.endTime>date1)){
-      const currentDate = date1;
-      setDate1(currentDate);
-      const tempDate = new Date(currentDate);
-      const fDate = `${tempDate.getFullYear()}/${tempDate.getMonth() + 1}/${tempDate.getDate()}`;
-      const fTime = `${tempDate.getHours() < 10 ? `0${tempDate.getHours()}` : tempDate.getHours()} : ${tempDate.getMinutes() < 10 ? `0${tempDate.getMinutes()}` : tempDate.getMinutes()}`;
-      setData({ ...data, startTime: tempDate });
-      setStart(`${fDate}  ${fTime}`);
-      setStartCheck(true);
+    setData({ ...data, startTime: undefined })
+    setStart(undefined)
+    setStartCheck(false)
+    if ((data.endTime === undefined && (startDateText === undefined || startTimeText === undefined)) ||
+    (data.endTime !== undefined && data.endTime > date1)) {
+      const currentDate = date1
+      setDate1(currentDate)
+      const tempDate = new Date(currentDate)
+      const fDate = `${tempDate.getFullYear()}/${tempDate.getMonth() + 1}/${tempDate.getDate()}`
+      const fTime = `${tempDate.getHours() < 10 ? `0${tempDate.getHours()}` : tempDate.getHours()} : ${tempDate.getMinutes() < 10 ? `0${tempDate.getMinutes()}` : tempDate.getMinutes()}`
+      setData({ ...data, startTime: tempDate })
+      setStart(`${fDate}  ${fTime}`)
+      setStartCheck(true)
+    } else {
+      alert('開始時間錯誤')
     }
-    else{
-      alert("開始時間錯誤");
-    }
-    setVisible1(false);
-  };
+    setVisible1(false)
+  }
   const onStartChangei1 = (event, selectedDate) => {
-    const currentDate = selectedDate || date1;
-    setDate1(currentDate);
-    const tempDate = new Date(currentDate);
-    const fDate = `${tempDate.getFullYear()}/${tempDate.getMonth() + 1}/${tempDate.getDate()}`;
-    setStartDate(`${fDate}`);
-    setData({ ...data, startTime: tempDate });
-  };
+    const currentDate = selectedDate || date1
+    setDate1(currentDate)
+    const tempDate = new Date(currentDate)
+    const fDate = `${tempDate.getFullYear()}/${tempDate.getMonth() + 1}/${tempDate.getDate()}`
+    setStartDate(`${fDate}`)
+    setData({ ...data, startTime: tempDate })
+  }
   const onStartChangei2 = (event, selectedDate) => {
-    const currentDate = selectedDate || date1;
-    setDate1(currentDate);
-    const tempDate = new Date(currentDate);
-    const fTime = `${tempDate.getHours() < 10 ? `0${tempDate.getHours()}` : tempDate.getHours()} : ${tempDate.getMinutes() < 10 ? `0${tempDate.getMinutes()}` : tempDate.getMinutes()}`;
-    setStartTime(`${fTime}`);
-    setData({ ...data, startTime: tempDate });
-  };
+    const currentDate = selectedDate || date1
+    setDate1(currentDate)
+    const tempDate = new Date(currentDate)
+    const fTime = `${tempDate.getHours() < 10 ? `0${tempDate.getHours()}` : tempDate.getHours()} : ${tempDate.getMinutes() < 10 ? `0${tempDate.getMinutes()}` : tempDate.getMinutes()}`
+    setStartTime(`${fTime}`)
+    setData({ ...data, startTime: tempDate })
+  }
 
-  const [visible2, setVisible2] = React.useState(false);
-  const [date2, setDate2] = useState(new Date());
-  const [mode2, setMode2] = useState('date');
-  const [show2, setShow2] = useState(false);
-  const [endDateText, setEndDate] = useState();//dialog中選擇日期的字
-  const [endTimeText, setEndTime] = useState();//dialog中選擇日期的字
-  const [endText, setEnd] = useState();//顯示結束時間(必填)的字
-  const showDialog2 = () => setVisible2(true);
-  //按下done的時候觸發
+  const [visible2, setVisible2] = React.useState(false)
+  const [date2, setDate2] = useState(new Date())
+  const [mode2, setMode2] = useState('date')
+  const [show2, setShow2] = useState(false)
+  const [endDateText, setEndDate] = useState()// dialog中選擇日期的字
+  const [endTimeText, setEndTime] = useState()// dialog中選擇日期的字
+  const [endText, setEnd] = useState()// 顯示結束時間(必填)的字
+  const showDialog2 = () => setVisible2(true)
+  // 按下done的時候觸發
   const hideDialog2 = () => {
-    //如果先填了開始時間 而且結束時間正確
-    if(data.startTime!==undefined && data.endTime>=data.startTime &&
-       endDateText !== undefined && endTimeText !== undefined){
-        //顯示開始時間(必填)的字
-        setEnd(`${endDateText}  ${endTimeText}`);
-        setEndCheck(true);
+    // 如果先填了開始時間 而且結束時間正確
+    if (data.startTime !== undefined && data.endTime >= data.startTime &&
+       endDateText !== undefined && endTimeText !== undefined) {
+      // 顯示開始時間(必填)的字
+      setEnd(`${endDateText}  ${endTimeText}`)
+      setEndCheck(true)
     }
-    //如果先填了開始時間案且結果錯誤
-    else if(data.startTime!==undefined && data.endTime<data.startTime &&
-      endDateText !== undefined && endTimeText !== undefined){
-        alert("結束時間錯誤");
-        setData({ ...data, endTime: undefined });
-        //取消顯示
-        setEndDate('');
-        setEndTime('');
-        setEnd('');
+    // 如果先填了開始時間案且結果錯誤
+    else if (data.startTime !== undefined && data.endTime < data.startTime &&
+      endDateText !== undefined && endTimeText !== undefined) {
+      alert('結束時間錯誤')
+      setData({ ...data, endTime: undefined })
+      // 取消顯示
+      setEndDate('')
+      setEndTime('')
+      setEnd('')
     }
-    //如果沒填開始時間 
-    else if(data.startTime===undefined && endDateText !== undefined && endTimeText !== undefined){
-      setEnd(`${endDateText}  ${endTimeText}`);
-      setEndCheck(true);
+    // 如果沒填開始時間
+    else if (data.startTime === undefined && endDateText !== undefined && endTimeText !== undefined) {
+      setEnd(`${endDateText}  ${endTimeText}`)
+      setEndCheck(true)
     }
-    //如果直接跳掉
-    else{
-      setData({ ...data, endTime: undefined });
-      setEndDate('');
-      setEndTime('');
-      setEnd('');
+    // 如果直接跳掉
+    else {
+      setData({ ...data, endTime: undefined })
+      setEndDate('')
+      setEndTime('')
+      setEnd('')
     }
-    setVisible2(false);
-  };
+    setVisible2(false)
+  }
   const showMode2 = (currentMode) => {
-    setShow2(true);
-    setMode2(currentMode);
-  };
+    setShow2(true)
+    setMode2(currentMode)
+  }
   const showTimepicker2 = () => {
-    showMode2('time');
-  };
+    showMode2('time')
+  }
   const showDatepicker2 = () => {
-    showMode2('date');
-  };
+    showMode2('date')
+  }
   const onEndChange = (event, selectedDate) => {
-    const currentDate = selectedDate || date2;
-    setShow2(false);
-    setDate2(currentDate);
+    const currentDate = selectedDate || date2
+    setShow2(false)
+    setDate2(currentDate)
 
-    const tempDate = new Date(currentDate);
+    const tempDate = new Date(currentDate)
     if (mode2 === 'date') {
-      const fDate = `${tempDate.getFullYear()}/${tempDate.getMonth() + 1}/${tempDate.getDate()}`;
-      setEndDate(`${fDate}`);
+      const fDate = `${tempDate.getFullYear()}/${tempDate.getMonth() + 1}/${tempDate.getDate()}`
+      setEndDate(`${fDate}`)
     } else if (mode2 === 'time') {
-      const fTime = `${tempDate.getHours() < 10 ? `0${tempDate.getHours()}` : tempDate.getHours()} : ${tempDate.getMinutes() < 10 ? `0${tempDate.getMinutes()}` : tempDate.getMinutes()}`;
-      setEndTime(`${fTime}`);
+      const fTime = `${tempDate.getHours() < 10 ? `0${tempDate.getHours()}` : tempDate.getHours()} : ${tempDate.getMinutes() < 10 ? `0${tempDate.getMinutes()}` : tempDate.getMinutes()}`
+      setEndTime(`${fTime}`)
     }
-    setData({ ...data, endTime: tempDate });
-  };
+    setData({ ...data, endTime: tempDate })
+  }
 
   const hideDialogi2 = () => {
-    setData({ ...data, endTime: undefined });
-    setEnd(undefined);
-    setEndCheck(false);
-    if ((data.endTime===undefined && (startDateText === undefined || startTimeText === undefined))
-    ||(data.endTime!==undefined && data.endTime>data.startTime)){
-      const currentDate = date2;
-      setDate2(currentDate);
-      const tempDate = new Date(currentDate);
-      const fDate = `${tempDate.getFullYear()}/${tempDate.getMonth() + 1}/${tempDate.getDate()}`;
-      const fTime = `${tempDate.getHours() < 10 ? `0${tempDate.getHours()}` : tempDate.getHours()} : ${tempDate.getMinutes() < 10 ? `0${tempDate.getMinutes()}` : tempDate.getMinutes()}`;
-      setData({ ...data, endTime: tempDate });
-      setEnd(`${fDate}  ${fTime}`);
-      setEndCheck(true);
-    }else{
-      alert("結束時間錯誤");
+    setData({ ...data, endTime: undefined })
+    setEnd(undefined)
+    setEndCheck(false)
+    if ((data.endTime === undefined && (startDateText === undefined || startTimeText === undefined)) ||
+    (data.endTime !== undefined && data.endTime > data.startTime)) {
+      const currentDate = date2
+      setDate2(currentDate)
+      const tempDate = new Date(currentDate)
+      const fDate = `${tempDate.getFullYear()}/${tempDate.getMonth() + 1}/${tempDate.getDate()}`
+      const fTime = `${tempDate.getHours() < 10 ? `0${tempDate.getHours()}` : tempDate.getHours()} : ${tempDate.getMinutes() < 10 ? `0${tempDate.getMinutes()}` : tempDate.getMinutes()}`
+      setData({ ...data, endTime: tempDate })
+      setEnd(`${fDate}  ${fTime}`)
+      setEndCheck(true)
+    } else {
+      alert('結束時間錯誤')
     }
-    setVisible2(false);
-  };
+    setVisible2(false)
+  }
   const onEndChangei1 = (event, selectedDate) => {
-    const currentDate = selectedDate || date2;
-    setDate2(currentDate);
-    const tempDate = new Date(currentDate);
-    const fDate = `${tempDate.getFullYear()}/${tempDate.getMonth() + 1}/${tempDate.getDate()}`;
-    setEndDate(`${fDate}`);
-    setData({ ...data, endTime: tempDate });
-  };
+    const currentDate = selectedDate || date2
+    setDate2(currentDate)
+    const tempDate = new Date(currentDate)
+    const fDate = `${tempDate.getFullYear()}/${tempDate.getMonth() + 1}/${tempDate.getDate()}`
+    setEndDate(`${fDate}`)
+    setData({ ...data, endTime: tempDate })
+  }
   const onEndChangei2 = (event, selectedDate) => {
-    const currentDate = selectedDate || date2;
-    setDate2(currentDate);
-    const tempDate = new Date(currentDate);
-    const fTime = `${tempDate.getHours() < 10 ? `0${tempDate.getHours()}` : tempDate.getHours()} : ${tempDate.getMinutes() < 10 ? `0${tempDate.getMinutes()}` : tempDate.getMinutes()}`;
-    setEndTime(`${fTime}`);
-    setData({ ...data, endTime: tempDate });
-  };
+    const currentDate = selectedDate || date2
+    setDate2(currentDate)
+    const tempDate = new Date(currentDate)
+    const fTime = `${tempDate.getHours() < 10 ? `0${tempDate.getHours()}` : tempDate.getHours()} : ${tempDate.getMinutes() < 10 ? `0${tempDate.getMinutes()}` : tempDate.getMinutes()}`
+    setEndTime(`${fTime}`)
+    setData({ ...data, endTime: tempDate })
+  }
 
   return (
     <Provider>
@@ -281,11 +280,11 @@ function Add({ navigation }) {
           <View style={{ flex: 0.1, flexDirection: 'column' }}>
             <View style={{
               flexDirection: 'row',
-              marginBottom: 44,
+              marginBottom: 44
             }}
             >
               <Box style={{
-                flex: 0.8, justifyContent: 'center', alignItems: 'flex-start',
+                flex: 0.8, justifyContent: 'center', alignItems: 'flex-start'
               }}
               >
                 <AntDesign
@@ -293,7 +292,7 @@ function Add({ navigation }) {
                   size={28}
                   color="#476685"
                   style={{ justifyContent: 'center' }}
-                  onPress={() => { navigation.navigate('personal'); }}
+                  onPress={() => { navigation.navigate('personal') }}
                 />
               </Box>
               <View style={styles.nameheader}>
@@ -302,7 +301,7 @@ function Add({ navigation }) {
                 </Text>
               </View>
               <View style={{
-                flex: 2, justifyContent: 'center', alignItems: 'flex-end',
+                flex: 2, justifyContent: 'center', alignItems: 'flex-end'
               }}
               />
             </View>
@@ -316,9 +315,9 @@ function Add({ navigation }) {
                   activeOpacity={0.5} // 不透明度
                   underlayColor="#476685" // 切換時候的顏色
                   onPress={() => {
-                    setIsPress(value);
-                    setData({ ...data, genre: value });
-                    setGenre(true);
+                    setIsPress(value)
+                    setData({ ...data, genre: value })
+                    setGenre(true)
                   }}
                   style={isPress === value ? styles.btnPress : styles.btnNormal}
                 >
@@ -339,10 +338,10 @@ function Add({ navigation }) {
                   placeholder="請輸入活動名稱(上限十字)"
                   value={data.name}
                   onChangeText={(text) => {
-                    setData({ ...data, name: text });
-                    setName(true);
+                    setData({ ...data, name: text })
+                    setName(true)
                     if (text === '') {
-                      setName(false);
+                      setName(false)
                     }
                   }}
                   selectionColor="#ccc"
@@ -357,7 +356,7 @@ function Add({ navigation }) {
                 {Platform.OS === 'android' && (
                   <TouchableOpacity
                     onPress={() => {
-                      showDialog1();
+                      showDialog1()
                     }}
                     style={{ width: '100%' }}
                   >
@@ -382,7 +381,7 @@ function Add({ navigation }) {
                 {Platform.OS === 'ios' && (
                   <TouchableOpacity
                     onPress={() => {
-                      showDialog1();
+                      showDialog1()
                     }}
                     style={styles.input}
                   >
@@ -393,7 +392,7 @@ function Add({ navigation }) {
                       color: '#BEBEBE',
                       textAlign: 'left',
                       marginTop: Dimensions.get('window').height * 0.01,
-                      fontSize: 16,
+                      fontSize: 16
                     }}
                     >
                       開始時間
@@ -405,7 +404,7 @@ function Add({ navigation }) {
                       color: '#000',
                       textAlign: 'left',
                       marginTop: Dimensions.get('window').height * 0.01,
-                      fontSize: 16,
+                      fontSize: 16
                     }}
                     >
                       {startText}
@@ -423,7 +422,7 @@ function Add({ navigation }) {
                 {Platform.OS === 'android' && (
                   <TouchableOpacity
                     onPress={() => {
-                      showDialog2();
+                      showDialog2()
                     }}
                     style={{ width: '100%' }}
                   >
@@ -448,7 +447,7 @@ function Add({ navigation }) {
                 {Platform.OS === 'ios' && (
                   <TouchableOpacity
                     onPress={() => {
-                      showDialog2();
+                      showDialog2()
                     }}
                     style={styles.input}
                   >
@@ -459,7 +458,7 @@ function Add({ navigation }) {
                       color: '#BEBEBE',
                       textAlign: 'left',
                       marginTop: Dimensions.get('window').height * 0.01,
-                      fontSize: 16,
+                      fontSize: 16
                     }}
                     >
                       結束時間
@@ -471,7 +470,7 @@ function Add({ navigation }) {
                       color: '#000',
                       textAlign: 'left',
                       marginTop: Dimensions.get('window').height * 0.01,
-                      fontSize: 16,
+                      fontSize: 16
                     }}
                     >
                       {endText}
@@ -491,10 +490,10 @@ function Add({ navigation }) {
                   placeholder="活動地點"
                   value={data.place}
                   onChangeText={(text) => {
-                    setData({ ...data, place: text });
-                    setPlace(true);
+                    setData({ ...data, place: text })
+                    setPlace(true)
                     if (text === '') {
-                      setPlace(false);
+                      setPlace(false)
                     }
                   }}
                   selectionColor="#ccc"
@@ -514,7 +513,7 @@ function Add({ navigation }) {
             <Box style={styles.CostBox}>
               <Box style={{ flexDirection: 'row' }}>
                 <TextInput
-                  style={styles.input}
+                  style={styles.inputCost}
                   maxLength={5}
                   keyboardType="number-pad"
                   placeholder="NT$"
@@ -528,16 +527,16 @@ function Add({ navigation }) {
             <Box style={styles.LimitnumBox}>
               <Box style={{ flexDirection: 'row' }}>
                 <TextInput
-                  style={styles.input}
+                  style={styles.inputCost}
                   maxLength={3}
                   keyboardType="number-pad"
                   placeholder="不限填0"
                   value={data.limitNum}
                   onChangeText={(text) => {
-                    setData({ ...data, limitNum: text });
-                    setLimitNum(true);
+                    setData({ ...data, limitNum: text })
+                    setLimitNum(true)
                     if (text === '') {
-                      setLimitNum(false);
+                      setLimitNum(false)
                     }
                   }}
                   selectionColor="#ccc"
@@ -572,10 +571,10 @@ function Add({ navigation }) {
                   placeholder="請簡單描述一下你的活動內容吧!"
                   value={data.details}
                   onChangeText={(text) => {
-                    setData({ ...data, details: text });
-                    setDetail(true);
+                    setData({ ...data, details: text })
+                    setDetail(true)
                     if (text === '') {
-                      setDetail(false);
+                      setDetail(false)
                     }
                   }}
                   selectionColor="#ccc"
@@ -596,19 +595,19 @@ function Add({ navigation }) {
                       color="white"
                       style={{ marginLeft: 68, marginTop: 6 }}
                       onPress={() => {
-                        setImage1(NoPicLink);
-                        setData({ ...data, image1: NoPicLink });
+                        setImage1(NoPicLink)
+                        setData({ ...data, image1: NoPicLink })
                         if (image2) {
-                          setImage1(image2);
-                          setData({ ...data, image1: image2 });
-                          setImage2(NoPicLink);
-                          setData({ ...data, image2: NoPicLink });
+                          setImage1(image2)
+                          setData({ ...data, image1: image2 })
+                          setImage2(NoPicLink)
+                          setData({ ...data, image2: NoPicLink })
                         }
                         if (image3) {
-                          setImage2(image3);
-                          setData({ ...data, image2: image3 });
-                          setImage3(NoPicLink);
-                          setData({ ...data, image3: NoPicLink });
+                          setImage2(image3)
+                          setData({ ...data, image2: image3 })
+                          setImage3(NoPicLink)
+                          setData({ ...data, image3: NoPicLink })
                         }
                       }}
                     />
@@ -625,13 +624,13 @@ function Add({ navigation }) {
                     color="white"
                     style={{ marginLeft: 68, marginTop: 6 }}
                     onPress={() => {
-                      setImage2(NoPicLink);
-                      setData({ ...data, image2: NoPicLink });
+                      setImage2(NoPicLink)
+                      setData({ ...data, image2: NoPicLink })
                       if (image3) {
-                        setImage2(image3);
-                        setData({ ...data, image2: image3 });
-                        setImage3(NoPicLink);
-                        setData({ ...data, image3: NoPicLink });
+                        setImage2(image3)
+                        setData({ ...data, image2: image3 })
+                        setImage3(NoPicLink)
+                        setData({ ...data, image3: NoPicLink })
                       }
                     }}
                   />
@@ -648,8 +647,8 @@ function Add({ navigation }) {
                     color="white"
                     style={{ marginLeft: 68, marginTop: 6 }}
                     onPress={() => {
-                      setImage3(NoPicLink);
-                      setData({ ...data, image3: NoPicLink });
+                      setImage3(NoPicLink)
+                      setData({ ...data, image3: NoPicLink })
                     }}
                   />
                 </ZStack>
@@ -708,8 +707,9 @@ function Add({ navigation }) {
             </Box>
           </Box>
           <View style={styles.footer}>
-            {(genre === true && name === true && start === true && end === true
-                  && limitNum === true && place === true && detail === true) ? (
+            {(genre === true && name === true && start === true && end === true &&
+                  limitNum === true && place === true && detail === true)
+              ? (
                     <LinearGradient
                       colors={['#476685', '#1784B2']}
                       start={[0, 0]}
@@ -718,9 +718,9 @@ function Add({ navigation }) {
                     >
                       <TouchableOpacity
                         onPress={() => {
-                          data.uploadTime = new Date();
-                          ActiveController.addActive(data);
-                          navigation.navigate('list');
+                          data.uploadTime = new Date()
+                          ActiveController.addActive(data)
+                          navigation.navigate('list')
                         }}
                       >
                         <Text style={styles.sentButtonText}>
@@ -728,7 +728,8 @@ function Add({ navigation }) {
                         </Text>
                       </TouchableOpacity>
                     </LinearGradient>
-              ) : (
+                )
+              : (
                 <TouchableOpacity
                   style={styles.unsentButton}
                 >
@@ -736,7 +737,7 @@ function Add({ navigation }) {
                     確認新增
                   </Text>
                 </TouchableOpacity>
-              )}
+                )}
           </View>
 
           {Platform.OS === 'ios' && (
@@ -844,7 +845,7 @@ function Add({ navigation }) {
         </SafeAreaView>
       </ScrollView>
     </Provider>
-  );
+  )
 }
 
-export default Add;
+export default Add

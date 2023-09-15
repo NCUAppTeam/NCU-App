@@ -14,6 +14,7 @@ export default StyleSheet.create({
     width: Dimensions.get('window').width * 0.9,
     borderRadius: 10,
     marginTop: 15,
+    paddingVertical: 10,
     flexDirection: 'row',
     alignSelf: 'center'
   },
@@ -55,7 +56,7 @@ export default StyleSheet.create({
     alignSelf: 'center'
   },
   CardInPersonal: {
-    height: Dimensions.get('window').width * 0.58 + 5,
+    height: 'auto',
     width: Dimensions.get('window').width * 0.42,
     borderRadius: 10,
     shadowColor: 'black',
@@ -100,7 +101,7 @@ export default StyleSheet.create({
     borderTopRightRadius: 10
   },
   personalbtn: {
-    width: 115,
+    width: 100,
     height: 40,
     color: 'transparent',
     fontWeight: '500',
@@ -114,7 +115,7 @@ export default StyleSheet.create({
     justifyContent: 'center'
   },
   personalbtnText: {
-    color: '#CBD8E4',
+    color: '#8ba0b5',
     fontSize: 16,
     fontWeight: 'bold',
     opacity: 0.5,
@@ -126,7 +127,7 @@ export default StyleSheet.create({
     flexDirection: 'row',
     paddingVertical: 8,
     backgroundColor: '#1784B2',
-    width: 115,
+    width: 100,
     height: 40,
     borderWidth: 1,
     borderColor: '#476685',
@@ -147,7 +148,7 @@ export default StyleSheet.create({
     textAlign: 'center'
   },
   personalmanagebtnText: {
-    color: '#CBD8E4',
+    color: '#8ba0b5',
     fontSize: 16,
     fontWeight: 'bold',
     opacity: 0.5,

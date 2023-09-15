@@ -27,10 +27,11 @@ export default StyleSheet.create({
     marginTop: 7,
     paddingVertical: 10,
     fontSize: 24,
-    color: '#476685'
+    color: '#476685',
+    height: 40
   },
   headerCommentView: {
-    flex: 1.1,
+    flex: 1.5,
     justifyContent: 'center',
     alignItems: 'flex-end'
   },
@@ -91,5 +92,8 @@ export default StyleSheet.create({
   cardPlaceText: {
     fontSize: 12,
     color: 'rgba(40, 82, 122, 0.65)'
+  },
+  readDot: {
+    transform: [{ translateX: 12 }, { translateY: -10 }]
   }
 })

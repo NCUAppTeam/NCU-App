@@ -5,17 +5,16 @@ import {
   Text,
   ScrollView,
   TouchableOpacity,
-  Animated,
-} from 'react-native';
-import React, { useState, useRef } from 'react';
-import { Icon } from 'native-base';
-import MarkersCategories from '../assets/MarkersCategories';
+  Animated
+} from 'react-native'
+import React, { useState, useRef } from 'react'
+import { Icon } from 'native-base'
+import MarkersCategories from '../assets/MarkersCategories'
 
-export default function CategorySlider(props) {
-  const [selectedBtn, setSelectedBtn] = useState('');
-
-  const showAllBtnFadeAnim = useRef(new Animated.Value(0)).current;
-  const showAllBtnMoveAnim = useRef(new Animated.Value(-100)).current;
+export default function CategorySlider (props) {
+  const [selectedBtn, setSelectedBtn] = useState('')
+  const showAllBtnFadeAnim = useRef(new Animated.Value(0)).current
+  const showAllBtnMoveAnim = useRef(new Animated.Value(-100)).current
 
   return (
     <View>
@@ -28,8 +27,8 @@ export default function CategorySlider(props) {
           shadowOpacity: 0.02,
           shadowOffset: {
             width: 0,
-            height: 9,
-          },
+            height: 9
+          }
           // marginTop:10
         }}
       >
@@ -40,18 +39,18 @@ export default function CategorySlider(props) {
               style={{ alignItems: 'center', width: 80 }}
               key={index}
               onPress={() => {
-                setSelectedBtn(type.title);
-                props.setMarkerShowType(type.title);
+                setSelectedBtn(selectedBtn === type.title ? '' : type.title)
+                props.setMarkerShowType(selectedBtn === type.title ? '' : type.title)
                 Animated.timing(showAllBtnFadeAnim, {
                   toValue: 1,
                   duration: 150,
-                  useNativeDriver: true,
-                }).start();
+                  useNativeDriver: true
+                }).start()
                 Animated.timing(showAllBtnMoveAnim, {
                   toValue: 0,
                   duration: 150,
-                  useNativeDriver: true,
-                }).start();
+                  useNativeDriver: true
+                }).start()
               }}
             >
               <View style={{ marginBottom: 8, paddingTop: 8 }}>
@@ -71,7 +70,7 @@ export default function CategorySlider(props) {
                   color:
                       type.title === selectedBtn || selectedBtn === ''
                         ? 'black'
-                        : '#e5e5e5',
+                        : '#e5e5e5'
                 }}
               >
                 {type.title}
@@ -112,7 +111,7 @@ export default function CategorySlider(props) {
           display: 'flex',
           zIndex: -1,
           opacity: showAllBtnFadeAnim,
-          transform: [{ translateY: showAllBtnMoveAnim }],
+          transform: [{ translateY: showAllBtnMoveAnim }]
         }}
       >
         <TouchableOpacity
@@ -122,27 +121,27 @@ export default function CategorySlider(props) {
             borderRadius: 50,
             marginTop: 10,
             paddingVertical: 10,
-            width: '30%',
+            width: '30%'
           }}
           activeOpacity={1}
           onPress={() => {
-            setSelectedBtn('');
-            props.setMarkerShowType('');
+            setSelectedBtn('')
+            props.setMarkerShowType('')
             Animated.timing(showAllBtnFadeAnim, {
               toValue: 0,
               duration: 150,
-              useNativeDriver: true,
-            }).start();
+              useNativeDriver: true
+            }).start()
             Animated.timing(showAllBtnMoveAnim, {
               toValue: -100,
               duration: 150,
-              useNativeDriver: true,
-            }).start();
+              useNativeDriver: true
+            }).start()
           }}
         >
           <Text>顯示全部</Text>
         </TouchableOpacity>
       </Animated.View>
     </View>
-  );
+  )
 }

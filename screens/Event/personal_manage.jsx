@@ -91,8 +91,8 @@ function Personal ({ navigation }) {
   }, [navigation])
 
   return (
-    <SafeAreaView style={{
-      flex: 1, flexDirection: 'column', alignSelf: 'center'
+    <Box safeArea style={{
+      flex: 1, flexDirection: 'column', alignSelf: 'center', marginTop: -Dimensions.get('window').height * 0.03
     }}
     >
 
@@ -431,7 +431,7 @@ function Personal ({ navigation }) {
         )}
       </Box>
 
-    </SafeAreaView>
+    </Box>
   )
 }
 

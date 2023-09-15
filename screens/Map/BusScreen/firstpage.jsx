@@ -10,9 +10,9 @@ import {
   ZStack,
   Center
 } from 'native-base'
-import { Ionicons, FontAwesome } from '@expo/vector-icons';
+import { Ionicons, FontAwesome } from '@expo/vector-icons'
 
-function First({ navigation }) {
+function First ({ navigation }) {
   const busLst = [
     {
       nameZH_TW: '中央-中壢火車站',
@@ -45,7 +45,6 @@ function First({ navigation }) {
         </Pressable>
       </Box>
 
-
     </ZStack>
   )
   return (
@@ -59,6 +58,7 @@ function First({ navigation }) {
             return (
 
               <Pressable
+                key={index}
                 onPress={() => navigation.navigate('BusDetailView', busInfo)}
               >
                 <HStack height="100px" m={2} alignItems="center" bg="gray.200">
@@ -79,6 +79,7 @@ function First({ navigation }) {
                             const busColor = (index === 0 ? firstBusColor : secondBusColor)
                             return (
                               <Box
+                                key={index}
                                 alignSelf="flex-start"
                                 _text={{
                                   fontSize: 'md',

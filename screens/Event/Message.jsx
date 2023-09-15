@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import {
-  Text, SafeAreaView, RefreshControl, Image
+  Text, RefreshControl, Image
 } from 'react-native'
 import { Card } from 'react-native-paper'
 import { FontAwesome5, AntDesign, Octicons } from '@expo/vector-icons'
@@ -52,7 +52,7 @@ function Message ({ navigation }) {
     return focusHandler
   }, [])
   return (
-    <SafeAreaView style={styles.container}>
+    <Box safeArea style={styles.container}>
 
         <LinearGradient
           colors={['#1784B2', '#476685']}
@@ -69,10 +69,11 @@ function Message ({ navigation }) {
               />
             </Box>
             <Box style={styles.title}>
-              <FontAwesome5
+            <FontAwesome5
                 name="comment"
                 size={25}
                 color="#fff"
+                style={{ height: 40 }}
               >
                 <Text>&ensp;私訊中心</Text>
               </FontAwesome5>
@@ -158,7 +159,7 @@ function Message ({ navigation }) {
           />
         </Box>
 
-    </SafeAreaView>
+    </Box>
   )
 }
 export default Message

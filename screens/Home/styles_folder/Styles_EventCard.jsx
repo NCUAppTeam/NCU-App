@@ -3,11 +3,13 @@ import { StyleSheet, Dimensions } from 'react-native'
 export default StyleSheet.create({
   cardManage: {
     height: 127,
-    width: Dimensions.get('window').width * 0.9,
+    width: Dimensions.get('window').width * 0.77,
     borderRadius: 10,
     marginTop: 10,
     flexDirection: 'row',
-    alignSelf: 'center'
+    alignSelf: 'center',
+    marginRight: 10
+
   },
   cardManagepic: {
     width: 127,

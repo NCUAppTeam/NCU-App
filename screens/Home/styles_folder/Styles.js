@@ -9,7 +9,7 @@ export default StyleSheet.create({
     borderVerticalWidth: 20,
     paddingHorizontal: 20,
     paddingVertical: 20,
-    backgroundColor: '#E5E5E5'
+    backgroundColor: '#ffffff'
   },
   containerForCal: {
     flex: 1,

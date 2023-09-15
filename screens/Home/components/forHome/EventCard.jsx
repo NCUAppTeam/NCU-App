@@ -31,9 +31,9 @@ export function EventCard ({ navigation }) {
     })
   }, [])
   return (
-    <Box w={375} h={200} borderRadius={10} borderColor='#E5EBF1' safeArea>
+    <Box w={'100%'} h={200} borderRadius={10} borderColor='#E5EBF1' safeArea>
       <Box>
-          <Text fontSize="lg" bold>你參加的活動(Swipe Right)</Text>
+          <Text fontSize="lg" bold>你參加的活動</Text>
       </Box>
       <FlatList
         nestedScrollEnabled
@@ -75,7 +75,7 @@ export function EventCard ({ navigation }) {
                             style={{ alignSelf: 'center' }}
                           />
                           <Text style={styles.cardManageText}>
-                            {'   開始 ：'}
+                            {'   '}
                             {item.startTimeInNum}
                           </Text>
                         </Box>

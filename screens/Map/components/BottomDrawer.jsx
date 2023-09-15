@@ -1,46 +1,46 @@
 /* eslint-disable react/no-array-index-key */
-import React from 'react';
+import React from 'react'
 import {
-  View, Text, TouchableOpacity,
-} from 'react-native';
-import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
-import { Icon } from 'native-base';
-import { Entypo } from '@expo/vector-icons';
-import getDirections from 'react-native-google-maps-directions';
-import BuildingsInfo from '../assets/BuildingsInfo';
+  View, Text, TouchableOpacity
+} from 'react-native'
+import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet'
+import { Icon } from 'native-base'
+import { Entypo } from '@expo/vector-icons'
+import getDirections from 'react-native-google-maps-directions'
+import BuildingsInfo from '../assets/BuildingsInfo'
 
-export default function BottomDrawer({
+export default function BottomDrawer ({
   snapPoints,
   sheetRef,
   userLocation,
   selectedMarker,
   getTwoPointsDistance,
   bottomDrawerState,
-  handleSheetChanges,
+  handleSheetChanges
 }) {
   const handleGetDirections = () => {
     const data = {
       source: {
         latitude: userLocation.latitude,
-        longitude: userLocation.long,
+        longitude: userLocation.long
       },
       destination: {
         latitude: selectedMarker.latitude,
-        longitude: selectedMarker.longitude,
+        longitude: selectedMarker.longitude
       },
       params: [
         {
           key: 'travelmode',
-          value: 'walking',
+          value: 'walking'
         },
         {
           key: 'dir_action',
-          value: 'navigate',
-        },
-      ],
-    };
-    getDirections(data);
-  };
+          value: 'navigate'
+        }
+      ]
+    }
+    getDirections(data)
+  }
 
   return (
     <BottomSheet
@@ -53,7 +53,7 @@ export default function BottomDrawer({
         backgroundColor: '#E5EBF1',
         borderTopRightRadius: bottomDrawerState === 2 ? 0 : 15,
         borderTopLeftRadius: bottomDrawerState === 2 ? 0 : 15,
-        height: 20,
+        height: 20
       }}
     >
       <View style={{
@@ -62,7 +62,7 @@ export default function BottomDrawer({
         height: 60,
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-between',
+        justifyContent: 'space-between'
       }}
       >
         <Text style={{ paddingLeft: 20 }}>
@@ -70,7 +70,7 @@ export default function BottomDrawer({
           公尺
         </Text>
         <View style={{
-          alignItems: 'center', position: 'absolute', left: 0, width: '100%',
+          alignItems: 'center', position: 'absolute', left: 0, width: '100%'
         }}
         >
           <Text
@@ -80,7 +80,7 @@ export default function BottomDrawer({
               fontSize: 23,
               fontWeight: '700',
               width: '47%',
-              textAlign: 'center',
+              textAlign: 'center'
             }}
           >
             {selectedMarker.name}
@@ -106,8 +106,12 @@ export default function BottomDrawer({
               <Text key={index} style={{ fontSize: 15, marginBottom: 10 }}>{time}</Text>
             ))
           ))}
+          <Text style={{ fontWeight: 'bold', fontSize: 15, marginBottom: 10 }}>建築物資訊</Text>
+          {BuildingsInfo.filter((val) => val.name === selectedMarker.name).map((e) => (
+              <Text key={e.index} style={{ fontSize: 15, marginBottom: 10 }}>{e.units}</Text>
+          ))}
         </View>
       </BottomSheetScrollView>
     </BottomSheet>
-  );
+  )
 }

@@ -1,13 +1,13 @@
-import DateTimePicker from '@react-native-community/datetimepicker';
-import { Box, Heading, NativeBaseProvider, VStack, Input, extendTheme, Button, HStack, IconButton } from 'native-base';
-import React, { useState } from 'react';
-import { Text, Image } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import { styles } from '../stylesheet';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import { ImagePickerResult, launchImageLibraryAsync } from 'expo-image-picker';
+import { Box, Button, HStack, Heading, Input, NativeBaseProvider, VStack, extendTheme } from 'native-base';
+import React, { useState } from 'react';
+import { Image, Text } from 'react-native';
+import { styles } from '../stylesheet';
 
 //預設為Dark Mode
-function CreateEventScreen({navigation}){
+function CreateEventScreen({navigation}:any){
   const config = {
     useSystemColorMode: false,
     initialColorMode: 'dark',
@@ -97,8 +97,8 @@ function CreateEventScreen({navigation}){
             <DateTimePicker
               testID="startDatePicker"
               value={startDate}
-              mode="datetime"
-              is24Hour
+              mode="datetime" //time才有is24hour
+              //is24Hour={true}
               display="default"
               onChange={handleStartDateChange}
               minimumDate={new Date()}
@@ -112,8 +112,8 @@ function CreateEventScreen({navigation}){
             <DateTimePicker
               testID="endDatePicker"
               value={endDate}
-              mode="datetime"
-              is24Hour
+              mode="datetime" //time才有is24hour
+              // is24Hour={true}
               display="default"
               onChange={handleEndDateChange}
               minimumDate={startDate}
@@ -160,8 +160,9 @@ function CreateEventScreen({navigation}){
           <Button onPress={handleUploadImage} startIcon={<MaterialIcons name="add-a-photo" />}>
             上傳照片
           </Button>
-          {selectedImage && (
-            <Image source={{ uri: selectedImage.uri }} style={{ width: 200, height: 100 }} />
+          {selectedImage?.assets && (  //selectedImage可能是null 所以用selectedImage?.assets
+            <Image source={{ uri: selectedImage.assets[0].uri }} style={{ width: 200, height: 100 }} />
+            //可以印出來看selectedImage裡面的結構 再找uri
           )}
         </HStack>
         <VStack space={4} marginTop={3} alignItems="center">

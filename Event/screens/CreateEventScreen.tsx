@@ -73,6 +73,7 @@ function CreateEventScreen({navigation}:any){
     }
   };
   return (
+    
     <NativeBaseProvider theme={customTheme}>
       <Box style={styles.container} safeArea>
         <HStack>

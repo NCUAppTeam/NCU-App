@@ -74,7 +74,7 @@ function CreateEventScreen({navigation}:any){
   };
   return (
     <NativeBaseProvider theme={customTheme}>
-      <Box style={styles.container}>
+      <Box style={styles.container} safeArea>
         <HStack>
           <Button marginLeft={4} onPress={()=>navigation.navigate('EventMainScreen')}>返回</Button>
           <Heading size="lg" marginLeft={60}>新增活動</Heading>

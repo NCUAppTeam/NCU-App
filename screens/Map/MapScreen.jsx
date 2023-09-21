@@ -224,7 +224,7 @@ export default function MapScreen ({ navigation }) {
         />
       </View>
       <StatusBar backgroundColor="white" />
-      <BusButton bottomDrawerShow={bottomDrawerShow} navigation={navigation} />
+      {/* <BusButton bottomDrawerShow={bottomDrawerShow} navigation={navigation} /> */}
     </NativeBaseProvider>
   )
 }

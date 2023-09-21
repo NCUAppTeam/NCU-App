@@ -1,5 +1,5 @@
-import firebase from 'firebase/app';
-import 'firebase/firestore';
+import { getApp,firebase } from 'firebase/app'
+import {getFirestore, doc,getDoc} from 'firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 /**
@@ -7,6 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
  *
  * @returns {Array} A array of ads.
  */
+
 async function getAds() {
   const db = firebase.firestore();
   const adsRef = db.collection('Ads');
@@ -71,10 +72,28 @@ async function getNetFlowByIP(ip) {
   }
 }
 
+async function getCalender(){
+  const app = getApp()
+  const db = getFirestore(app)
+  const Doc = doc(db, `other/links`)
+  const querySnapshot = await getDoc(Doc)
+  return querySnapshot.data().calendarLink
+}
+
+async function getTutorial(){
+  const app = getApp()
+  const db = getFirestore(app)
+  const Doc = doc(db, `other/tutorial`)
+  const querySnapshot = await getDoc(Doc)
+  return querySnapshot.data().img
+}
+
 export default {
   getAds,
   getWeather,
   getNetFlowByIP,
   getStoredIP,
   setStoredIP,
+  getCalender,
+  getTutorial,
 };

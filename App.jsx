@@ -31,14 +31,13 @@ function handleIncomingLink (url) {
 // 決定透過URL初始化應用時，要等多久（單位：毫秒）才轉畫面 (navigate)
 const APP_INIT_NAVIGATE_DELAY = 2000
 
-
 export default function App () {
   // 處理 Linking 進來的 URL
   const url = Linking.useURL()
   Linking.addEventListener('url', () => handleIncomingLink(url)) // 透過 listener 處理後續的 url 事件
 
-   // 應用還沒打開，點 url 後才啟動
-   // 這裡給它設 2 秒延遲，否則可能會吃不到
+  // 應用還沒打開，點 url 後才啟動
+  // 這裡給它設 2 秒延遲，否則可能會吃不到
   setTimeout(() => { handleIncomingLink(url) }, APP_INIT_NAVIGATE_DELAY)
 
   return (

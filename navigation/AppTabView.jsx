@@ -15,7 +15,6 @@ import {
   Ionicons
 } from '@expo/vector-icons'
 
-import CalendarScreen from '../screens/Calendar'
 import MapScreen from '../screens/Map'
 import EventScreen from '../screens/Event'
 import HomeScreen from '../screens/Home'
@@ -87,7 +86,6 @@ export const AppTabView = () => {
       )}
     >
       <Tab.Screen name="首頁" component={HomeScreen} />
-      {/* <Tab.Screen name="行事曆" component={CalendarScreen} /> */}
       <Tab.Screen name="活動" component={EventScreen} />
       <Tab.Screen name="地圖" component={MapScreen} />
     </Tab.Navigator>

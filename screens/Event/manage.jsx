@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 import React, { useState, useEffect } from 'react'
 import {
-  Text, SafeAreaView, TextInput, RefreshControl,
+  Text, TextInput, RefreshControl,
   ScrollView, TouchableOpacity, Image, TouchableHighlight
 } from 'react-native'
 
@@ -24,16 +24,10 @@ function Manage ({ route, navigation }) {
   const Cd = route.params
   const passedID = JSON.stringify(Cd).slice(7, -2)
   const [message, messageSent] = useState('')
-  const [attendeesNum, setAttendeeNum] = useState()
   const [active, setActive] = useState([])
   const [attendeeINFO, setAttendeeInfo] = useState()
   useEffect(() => {
     setUser(UserController.getUid())
-    ActiveController.getTotalOfAttendees(passedID).then((res) => {
-      setAttendeeNum(res)
-    }).catch((err) => {
-      throw err
-    })
     ActiveController.getOneActive(passedID).then((res) => {
       setActive(res)
     }).catch((err) => {
@@ -55,11 +49,6 @@ function Manage ({ route, navigation }) {
     }).catch((err) => {
       throw err
     })
-    ActiveController.getTotalOfAttendees(passedID).then((res) => {
-      setAttendeeNum(res)
-    }).catch((err) => {
-      throw err
-    })
     ActiveController.getAllAttendees(passedID).then((res) => {
       setAttendeeInfo(res)
     }).catch((err) => {
@@ -69,7 +58,7 @@ function Manage ({ route, navigation }) {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <Box safeArea style={styles.container}>
       <Box style={styles.headerContainer}>
         <Box style={styles.headerArrowBox}>
           <AntDesign
@@ -197,7 +186,7 @@ function Manage ({ route, navigation }) {
       </Box>
       <Box style={styles.bodyContainer}>
         {active.map(({
-          id, name, limitNum
+          id, name, limitNum, totalAttendee
         }) => (
           <Box key={id} style={{ marginTop: 20, marginHorizontal: 8 }}>
             <Heading>{name}</Heading>
@@ -252,11 +241,11 @@ function Manage ({ route, navigation }) {
                     >
                       目前人數：
                     </Text>
-                    <Text style={attendeesNum >= limitNum
+                    <Text style={totalAttendee >= limitNum
                       ? styles.reachLimitNum
                       : styles.underLimitNum}
                     >
-                      {attendeesNum}
+                      {totalAttendee}
                       &ensp;
                       /
                       {' '}
@@ -275,7 +264,7 @@ function Manage ({ route, navigation }) {
                       目前人數：
                     </Text>
                     <Text style={styles.NoLimitNum}>
-                      {attendeesNum}
+                      {totalAttendee}
                       &ensp;
 
                       (無上限)
@@ -479,8 +468,7 @@ function Manage ({ route, navigation }) {
           />
         </Box>
       </Box>
-
-    </SafeAreaView>
+    </Box>
   )
 }
 

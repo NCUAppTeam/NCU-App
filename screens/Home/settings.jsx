@@ -8,7 +8,7 @@ import styles from './styles_folder/Styles'
 function Settings ({ route, navigation }) {
   const { userInfo } = route.params
   return (
-    <Box>
+    <Box safeArea backgroundColor={'#ffffff'} h={'100%'}>
       <SettingHeader navigation={navigation} />
       <Info navigation={navigation} userInfo={userInfo}/>
       <Others navigation={navigation} />

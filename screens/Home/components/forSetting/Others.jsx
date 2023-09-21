@@ -1,6 +1,6 @@
 import React from 'react'
 import {
-  Box, Center, Text, Pressable
+  Box, Center, Text, Pressable, Link
 } from 'native-base'
 import { getAuth, signOut } from 'firebase/auth'
 
@@ -9,12 +9,22 @@ export function Others ({ navigation }) {
   return (
     <Box safeArea>
         <Center>
-            <Box w={'90%'} backgroundColor={'#FFFFFF'} borderWidth={'5'} borderColor={'#ffffff'}>
-                <Text color={'#28527A'} fontSize={'lg'} marginLeft={'5'}>幫助</Text>
-            </Box>
-            <Box w={'90%'} marginTop={'2'} backgroundColor={'#FFFFFF'} borderWidth={'5'} borderColor={'#ffffff'}>
-                <Text color={'#28527A'} fontSize={'lg'} marginLeft={'5'}>關於NCU app</Text>
-            </Box>
+            <Link w={'90%'} _text={{
+              fontWeight: 'bold',
+              fontSize: 'xl',
+              color: 'cyan.700'
+            }} marginTop={'2'} backgroundColor={'#FFFFFF'} borderWidth={'5'} borderColor={'#ffffff'} href="https://www.facebook.com/NCUAppTeam">
+              幫助
+            </Link>
+
+            <Link w={'90%'} _text={{
+              fontWeight: 'bold',
+              fontSize: 'xl',
+              color: 'cyan.700'
+            }}
+              marginTop={'2'} backgroundColor={'#FFFFFF'} borderWidth={'5'} borderColor={'#ffffff'} href="https://ncuappteam.github.io/">
+              關於NCU app
+            </Link>
 
             <Pressable w={'90%'} marginTop={'2'} backgroundColor={'#FFFFFF'} borderWidth={'5'} borderColor={'#ffffff'}
             onPress={() => {
@@ -26,7 +36,7 @@ export function Others ({ navigation }) {
               })
             }}
           >
-            <Text bold color={'#EF4444'} fontSize={'lg'} marginLeft={'5'}>
+            <Text bold color={'#EF4444'} fontSize={'xl'}>
               登出
             </Text>
           </Pressable>

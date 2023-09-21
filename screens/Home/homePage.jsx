@@ -16,7 +16,7 @@ function HomePage ({ navigation }) {
     setRefreshing(false)
   }
   return (
-      <Box style={styles.container}>
+      <Box safeArea style={styles.container}>
         <HomeHeader navigation={navigation} />
         <ScrollView
           showsVerticalScrollIndicator={false}

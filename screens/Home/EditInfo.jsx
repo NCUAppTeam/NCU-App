@@ -55,12 +55,12 @@ export function EditInfo ({ route, navigation }) {
     }
   }
   return (
-    <Box>
+    <Box safeArea bgColor={'#ffffff'}>
         <EditHeader navigation={navigation} info={info}/>
         <Box marginX={2} paddingBottom={8}>
             <Center>
-                <Box backgroundColor="#ffffff" w={'94%'} h={'94.5%'} >
-                    <Center justifyContent={'center'} paddingTop="30px">
+                <Box backgroundColor="#ffffff" w={'97%'} h={'94.5%'} >
+                    <Center justifyContent={'center'}>
                         <Box>
                             <Pressable onPress={pickImage}>
                                 <Image size={150} borderRadius={100} alt={'userAvatar'} source={{ uri: avatar }} />

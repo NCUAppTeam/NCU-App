@@ -1,4 +1,4 @@
-import React,{useEffect,useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import { Box, Pressable, Text } from 'native-base'
 import { WebView } from 'react-native-webview'
 import homeController from '../../../../controller/Home'
@@ -23,7 +23,7 @@ export function Calendar ({ navigation }) {
         <Pressable
           alignItems="flex-end">
             <Box
-              w={131}
+                w={131}
                 h={28}
                 marginTop={2}
                 borderWidth={1}

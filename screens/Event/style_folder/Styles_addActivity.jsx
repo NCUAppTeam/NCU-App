@@ -63,7 +63,7 @@ export default StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     alignContent: 'center',
-    marginTop: 50,
+    marginTop: 10,
     marginHorizontal: 15
   },
   categorybutton: {

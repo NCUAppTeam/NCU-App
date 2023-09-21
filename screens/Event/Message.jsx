@@ -61,12 +61,12 @@ function Message ({ navigation }) {
         >
           <HStack style={styles.header}>
             <Box style={styles.headerArrowBox}>
-              <AntDesign
+              {/* <AntDesign
                 name="arrowleft"
                 size={28}
                 color="#fff"
                 onPress={() => { navigation.navigate('list') }}
-              />
+              /> */}
             </Box>
             <Box style={styles.title}>
             <FontAwesome5

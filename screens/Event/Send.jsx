@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import {
-  Text, View, SafeAreaView, Dimensions,
+  Text, View, Dimensions,
   ScrollView, Image, TouchableHighlight, TextInput,
   Platform, RefreshControl
 } from 'react-native'
@@ -10,7 +10,7 @@ import {
 } from '@expo/vector-icons'
 import { Card } from 'react-native-paper'
 import Dialog, { DialogContent } from 'react-native-popup-dialog'
-import { Box, HStack, FlatList } from 'native-base'
+import { Box, HStack, FlatList, Pressable } from 'native-base'
 import { LinearGradient } from 'expo-linear-gradient'
 import * as ImagePicker from 'expo-image-picker'
 import { getApp } from 'firebase/app'
@@ -110,7 +110,7 @@ function Send ({ route, navigation }) {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <Box safeArea style={styles.container}>
 
       <LinearGradient
         colors={['#1784B2', '#476685']}
@@ -120,12 +120,14 @@ function Send ({ route, navigation }) {
         <HStack style={styles.header}>
           <Box style={styles.headerArrowBoxSend}>
             <HStack style={{ alignItems: 'center', alignSelf: 'flex-start', marginLeft: 10 }}>
-              <AntDesign
-                name="arrowleft"
-                size={28}
-                color="#fff"
-                onPress={() => { navigation.navigate('message', { prepage: 'send' }) }}
-              />
+              {/* <Pressable style={{ marginHorizontal: 10 }}>
+                <AntDesign
+                  name="arrowleft"
+                  size={28}
+                  color="#fff"
+                  onPress={() => { navigation.navigate('message', { prepage: 'send' }) }}
+                />
+              </Pressable> */}
               <Image
                 style={styles.sendAvatar}
                 source={{
@@ -139,13 +141,13 @@ function Send ({ route, navigation }) {
             </HStack>
           </Box>
           <Box style={{ flex: 5 }} />
-          <Box style={styles.info}>
+          {/* <Box style={styles.info}>
             <Feather
               name="info"
               size={28}
               color="#fff"
             />
-          </Box>
+          </Box> */}
         </HStack>
       </LinearGradient>
       <Box style={keyboard.keyboardShown ? { flex: 1 } : { flex: 5.3 }}>
@@ -437,7 +439,7 @@ function Send ({ route, navigation }) {
         </Box>
       </Box>
 
-    </SafeAreaView>
+    </Box>
   )
 }
 export default Send

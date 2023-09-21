@@ -43,7 +43,6 @@ export default StyleSheet.create({
     flexDirection: 'row',
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height * 0.04,
-    marginTop: Platform.OS === 'ios' ? Dimensions.get('window').height * 0.02 : 53,
     marginBottom: 20
   },
   headerArrowBox: {

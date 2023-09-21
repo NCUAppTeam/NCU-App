@@ -6,7 +6,7 @@ import {
   FontAwesome5, AntDesign, Feather, Octicons
 } from '@expo/vector-icons'
 import {
-  Divider, Box, FlatList, VStack, Pressable, HStack, Text, ZStack
+  Divider, Box, FlatList, VStack, Pressable, HStack, Text, ZStack, Center, Input, Icon
 } from 'native-base'
 import styles from './style_folder/Styles_moreEvent'
 import ActiveController from '../../controller/Active'
@@ -26,7 +26,7 @@ function ActivityCard (props) {
       border="1"
       borderRadius="md"
       key={key}
-      width="180px"
+      width="45%"
       height="96%"
       mx={2}
       marginBottom={2}
@@ -92,75 +92,88 @@ function MoreHang ({ navigation, route }) {
   return (
     <Box flex="1" style={styles.container} safeArea>
         <Box style={styles.headerContainer}>
-          <Box style={styles.headerArrowBox}>
-            <AntDesign
-              name="arrowleft"
-              size={28}
-              color="#476685"
-              onPress={() => { navigation.navigate('list') }}
-            />
-          </Box>
-          <Box style={styles.nameheader}>
-            <Text style={styles.name}>
-              近期揪人
-            </Text>
-          </Box>
-          <Box style={styles.headerCommentView}>
-            <ZStack size={25} ml={3} alignItems="center" justifyContent="center">
-              <Box>
-                <Octicons
-                  name="dot-fill"
-                  size={16}
-                  color={Messagenum !== 0 ? '#EB6F6F' : 'transparent'}
-                  style={{
-                    transform: [{ translateX: 12 }, { translateY: -10 }]
-                  }}
-                />
-              </Box>
-              <Box>
-                <FontAwesome5
-                  name="comment"
-                  size={25}
+          <HStack width="100%" alignItems="center" justifyContent="center">
+            <Pressable style={styles.headerArrowBox}>
+              <AntDesign
+                name="arrowleft"
+                size={28}
+                color="#476685"
+                onPress={() => { navigation.navigate('list') }}
+              />
+            </Pressable>
+            <Box style={styles.nameheader}>
+              <Text style={styles.name}>
+                近期揪人
+              </Text>
+            </Box>
+            <Pressable
+              onPress={() => { navigation.navigate('message', { prepage: 'list' }) }}
+            >
+              <Center>
+                <ZStack size={25} ml={3} alignItems="center" justifyContent="center">
+                  <Box>
+                    <Octicons
+                      name="dot-fill"
+                      size={16}
+                      color={Messagenum !== 0 ? '#EB6F6F' : 'transparent'}
+                      style={{
+                        transform: [{ translateX: 12 }, { translateY: -10 }]
+                      }}
+                    />
+                  </Box>
+                  <Box>
+                    <FontAwesome5
+                      name="comment"
+                      size={25}
+                      color="#476685"
+                    />
+                  </Box>
+
+                  {/* // 要記得變0 */}
+                </ZStack>
+              </Center>
+            </Pressable>
+            <Pressable
+              onPress={() => { navigation.navigate('personal') }}
+            >
+              <Box size={26} mx={3}>
+                <Feather
+                  name="user"
+                  size={26}
                   color="#476685"
                 />
               </Box>
-            </ZStack>
-          </Box>
-          <Box style={styles.headerPersonalView}>
-            <Feather
-              name="user"
-              size={26}
-              color="#476685"
-              onPress={() => { navigation.navigate('personal') }}
-            />
-          </Box>
+            </Pressable>
+          </HStack>
         </Box>
         <Box flex="1" style={styles.bodyContainer}>
-          <FlatList
-            numColumns={2}
-            data={active}
-            keyExtractor={(item) => item.id}
-            showsVerticalScrollIndicator={false}
-            showsHorizontalScrollIndicator={false}
-            refreshControl={(
-              <RefreshControl
-                refreshing={refreshing}
-                onRefresh={onRefresh}
-              />
-              )}
-            renderItem={({ item }) => (
-                  <ActivityCard
-                    key={item.id}
-                    id={item.id}
-                    name={item.name}
-                    imageUri1={item.imageUri1}
-                    place={item.place}
-                    startTimeWeekday={item.startTimeWeekday}
-                    navigation={navigation}
-                  />
-            )
-            }
-          />
+          <Center>
+            <FlatList
+              numColumns={2}
+              data={active}
+              keyExtractor={(item) => item.id}
+              showsVerticalScrollIndicator={false}
+              showsHorizontalScrollIndicator={false}
+              refreshControl={(
+                <RefreshControl
+                  refreshing={refreshing}
+                  onRefresh={onRefresh}
+                />
+                )}
+              renderItem={({ item }) => (
+                    <ActivityCard
+                      key={item.id}
+                      id={item.id}
+                      name={item.name}
+                      imageUri1={item.imageUri1}
+                      place={item.place}
+                      startTimeWeekday={item.startTimeWeekday}
+                      navigation={navigation}
+                    />
+              )
+              }
+            />
+          </Center>
         </Box>
     </Box>
   )

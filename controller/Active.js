@@ -127,7 +127,9 @@ async function addActive (active) {
     limitNum: active.limitNum,
     genre: active.genre,
     link: active.link.trim(),
-    details: active.details.trim()
+    details: active.details.trim(),
+    host: UserStudent,
+    totalAttendee: 0
   }
 
   if (active.image1) {
@@ -462,7 +464,8 @@ async function getOneActive (id) {
     hostName: querySnapshot.data().hostName,
     hostPhone: querySnapshot.data().hostPhone,
     hostMail: querySnapshot.data().hostMail,
-    details: querySnapshot.data().details
+    details: querySnapshot.data().details,
+    totalAttendee: querySnapshot.data().totalAttendee
   }
   if (querySnapshot.data().imageUri2) {
     oneactive.imageUri2 = querySnapshot.data().imageUri2
@@ -620,6 +623,14 @@ async function getAllAttendees (docID) {
 }
 async function deleteEverySingleAttendee (docID) {
   const db = getFirestore(app)
+  const docRef = doc(db, `activities/${docID}`)
+
+  const update = {
+    totalAttendee: 0
+  }
+
+  await updateDoc(docRef, update, { merge: true })
+
   const activesRef = query(collection(db, 'attendees'))
   const querySnapshot = await getDocs(activesRef)
   querySnapshot.forEach(async (student) => {
@@ -631,6 +642,15 @@ async function deleteEverySingleAttendee (docID) {
 
 async function removeAttendee (docID, studentUid) { // remove attendee
   const db = getFirestore(app)
+  const docRef = doc(db, `activities/${docID}`)
+  const activeRef = await getDoc(docRef)
+
+  const update = {
+    totalAttendee: activeRef.data().totalAttendee - 1
+  }
+
+  await updateDoc(docRef, update, { merge: true })
+
   const activesRef = query(collection(db, `attendees/${studentUid}/attendedEvent`))
   await deleteDoc(doc(db, 'attendees', studentUid, 'attendedEvent', docID))
   console.log('delete successfully!')
@@ -669,7 +689,7 @@ async function getHostedEvent () {
   for (let i = 0; i < hostIDArray.length; i += 1) {
     const refDoc = doc(db, `activities/${hostIDArray[i]}`)
     const result = await getDoc(refDoc)
-    const num = await getTotalOfAttendees(result.id)
+    const num = result.data().totalAttendee
     eventArray.push({
       id: result.id,
       startTimeInNum: toDateString(result.data().startTime),
@@ -683,6 +703,15 @@ async function getHostedEvent () {
 async function signUp (docID) {
   const UserStudent = UserController.getUid()
   const db = getFirestore(app)
+  const docRef = doc(db, `activities/${docID}`)
+  const activeRef = await getDoc(docRef)
+
+  const update = {
+    totalAttendee: activeRef.data().totalAttendee + 1
+  }
+
+  await updateDoc(docRef, update, { merge: true })
+
   const Ref = doc(db, `attendees/${UserStudent}/attendedEvent/${docID}`)
   const signUpTime = new Date()
   setDoc(Ref, { signUpTime })
@@ -699,6 +728,15 @@ async function signUp (docID) {
 async function quitEvent (docID) {
   const UserStudent = UserController.getUid()
   const db = getFirestore(app)
+
+  const docRef = doc(db, `activities/${docID}`)
+  const activeRef = await getDoc(docRef)
+
+  const update = {
+    totalAttendee: activeRef.data().totalAttendee - 1
+  }
+
+  await updateDoc(docRef, update, { merge: true })
   const Ref = doc(db, `attendees/${UserStudent}/attendedEvent/${docID}`)
   deleteDoc(Ref)
     .then(() => {
@@ -713,24 +751,16 @@ async function quitEvent (docID) {
 
 async function getHostInfo (docID) {
   const db = getFirestore(app)
-  const infoRef = query(collection(db, 'attendees'))
-  const querySnapshot = await getDocs(infoRef)
-
-  const attendeeList = []
+  const activityRef = query(collection(db, 'activities'))
+  const querySnapshot = await getDocs(activityRef)
   let hostID
   const info = []
-  querySnapshot.forEach((attendee) => {
-    attendeeList.push(attendee.id)
-  })
 
-  for (let i = 0; i < attendeeList.length; i += 1) {
-    const result = await getDocs(collection(db, `attendees/${attendeeList[i]}/hostedEvent`))
-    result.forEach((event) => {
-      if (event.id === docID) {
-        hostID = attendeeList[i]
-      }
-    })
-  }
+  querySnapshot.forEach((e) => {
+    if (e.id === docID) {
+      hostID = e.data().host
+    }
+  })
   const querySnapshot2 = await getDoc(doc(db, `attendees/${hostID}`))
   info.push({ uid: querySnapshot2.id, ...querySnapshot2.data() })
   console.log(info)

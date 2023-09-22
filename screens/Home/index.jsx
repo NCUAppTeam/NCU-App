@@ -1,5 +1,4 @@
 import React from 'react'
-import { SafeAreaView, Text } from 'react-native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import Settings from './settings'
 import HomePage from './homePage'
@@ -7,7 +6,6 @@ import Message from './Message'
 import Send from './Send'
 import BigCal from './bigCal'
 import EditInfo from './EditInfo'
-import styles from './styles_folder/Styles'
 
 const Stack = createNativeStackNavigator()
 

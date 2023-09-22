@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import {
-  Text, View, SafeAreaView, Dimensions,
+  Text, View, Dimensions,
   ScrollView, Image, TouchableHighlight, TextInput,
   Platform, RefreshControl
 } from 'react-native'
@@ -110,7 +110,7 @@ function Send ({ route, navigation }) {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <Box safeArea style={styles.container}>
 
       <LinearGradient
         colors={['#1784B2', '#476685']}
@@ -120,12 +120,12 @@ function Send ({ route, navigation }) {
         <HStack style={styles.header}>
           <Box style={styles.headerArrowBoxSend}>
             <HStack style={{ alignItems: 'center', alignSelf: 'flex-start', marginLeft: 10 }}>
-              <AntDesign
+              {/* <AntDesign
                 name="arrowleft"
                 size={28}
                 color="#fff"
                 onPress={() => { navigation.navigate('hmessage') }}
-              />
+              /> */}
               <Image
                 style={styles.sendAvatar}
                 source={{
@@ -139,13 +139,13 @@ function Send ({ route, navigation }) {
             </HStack>
           </Box>
           <Box style={{ flex: 5 }} />
-          <Box style={styles.info}>
+          {/* <Box style={styles.info}>
             <Feather
               name="info"
               size={28}
               color="#fff"
             />
-          </Box>
+          </Box> */}
         </HStack>
       </LinearGradient>
       <Box style={keyboard.keyboardShown ? { flex: 1 } : { flex: 5.3 }}>
@@ -192,8 +192,12 @@ function Send ({ route, navigation }) {
                         key={item.messageid}
                         style={{ backgroundColor: '#E5EBF1', borderRadius: 10 }}
                         onLongPress={() => {
-                          setShowDialog(true)
-                          setDeleteMessageId(item.messageid)
+                          if (item.sender === userUid) {
+                            setShowDialog(true)
+                            setDeleteMessageId(item.messageid)
+                          } else {
+                            setShowDialog(false)
+                          }
                         }}
                       >
                         <Dialog
@@ -437,7 +441,7 @@ function Send ({ route, navigation }) {
         </Box>
       </Box>
 
-    </SafeAreaView>
+    </Box>
   )
 }
 export default Send

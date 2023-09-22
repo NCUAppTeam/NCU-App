@@ -182,7 +182,7 @@ export function RegisterScreen () {
                 </Box>
                 <Box my={3}>
                   <Heading size={'sm'} mb={2}>
-                    Portal帳號<Text color="red.600">*</Text>
+                    Portal帳號信箱<Text color="red.600">*</Text>
                   </Heading>
                   <InputGroup w={{ base: '95%' }}>
                     <Input
@@ -264,7 +264,7 @@ export function RegisterScreen () {
                     密碼不相符，請再次做確認
                   </Text>
                 )}
-
+              <Pressable>
                 <Link
                   onPress={() => {
                     onClose()
@@ -277,6 +277,7 @@ export function RegisterScreen () {
                 >
                   已有帳號
                 </Link>
+                </Pressable>
 
                 <Text color={'red.500'}>{ msg }</Text>
 

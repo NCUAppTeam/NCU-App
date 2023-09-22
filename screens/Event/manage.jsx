@@ -1,14 +1,14 @@
 /* eslint-disable max-len */
 import React, { useState, useEffect } from 'react'
 import {
-  Text, SafeAreaView, TextInput, RefreshControl,
+  Text, TextInput, RefreshControl,
   ScrollView, TouchableOpacity, Image, TouchableHighlight
 } from 'react-native'
 
 import Dialog, { DialogContent } from 'react-native-popup-dialog'
 import { AntDesign, Feather } from '@expo/vector-icons'
 import {
-  Box, Divider, Heading, VStack, HStack, FlatList, NativeBaseProvider
+  Box, Divider, Heading, VStack, HStack, FlatList, NativeBaseProvider, Pressable, Button
 } from 'native-base'
 import { LinearGradient } from 'expo-linear-gradient'
 import ActiveController from '../../controller/Active'
@@ -24,18 +24,15 @@ function Manage ({ route, navigation }) {
   const Cd = route.params
   const passedID = JSON.stringify(Cd).slice(7, -2)
   const [message, messageSent] = useState('')
-  const [attendeesNum, setAttendeeNum] = useState()
   const [active, setActive] = useState([])
   const [attendeeINFO, setAttendeeInfo] = useState()
+  const [closeEvent, setCloseEvent] = useState()
+
   useEffect(() => {
     setUser(UserController.getUid())
-    ActiveController.getTotalOfAttendees(passedID).then((res) => {
-      setAttendeeNum(res)
-    }).catch((err) => {
-      throw err
-    })
     ActiveController.getOneActive(passedID).then((res) => {
       setActive(res)
+      setCloseEvent(res[0].CloseEvent)
     }).catch((err) => {
       throw err
     })
@@ -52,11 +49,7 @@ function Manage ({ route, navigation }) {
     setUser(UserController.getUid())
     ActiveController.getOneActive(passedID).then((res) => {
       setActive(res)
-    }).catch((err) => {
-      throw err
-    })
-    ActiveController.getTotalOfAttendees(passedID).then((res) => {
-      setAttendeeNum(res)
+      setCloseEvent(res[0].CloseEvent)
     }).catch((err) => {
       throw err
     })
@@ -69,7 +62,7 @@ function Manage ({ route, navigation }) {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <Box safeArea style={styles.container}>
       <Box style={styles.headerContainer}>
         <Box style={styles.headerArrowBox}>
           <AntDesign
@@ -197,10 +190,45 @@ function Manage ({ route, navigation }) {
       </Box>
       <Box style={styles.bodyContainer}>
         {active.map(({
-          id, name, limitNum
+          id, name, limitNum, totalAttendee
         }) => (
           <Box key={id} style={{ marginTop: 20, marginHorizontal: 8 }}>
-            <Heading>{name}</Heading>
+            <HStack>
+              <Heading>{name}</Heading>
+              {closeEvent
+                ? (<Button
+                    rounded={'lg'}
+                    ml={2}
+                    bgColor={'#25a158'}
+                    onPress={() => {
+                      ActiveController.openEvent(passedID).then(() => {
+                        setCloseEvent(false)
+                      }).catch((err) => {
+                        throw err
+                      })
+                      onRefresh()
+                    }}
+                  >
+                  <Text style={{ fontSize: 16, color: '#ffffff' }}>重新開啟報名</Text>
+
+                </Button>)
+                : (<Button
+                  rounded={'lg'}
+                  ml={2}
+                  bgColor={'#db1d26'}
+                  onPress={() => {
+                    ActiveController.closeEvent(passedID).then(() => {
+                      setCloseEvent(true)
+                    }).catch((err) => {
+                      throw err
+                    })
+                    onRefresh()
+                  }}
+                >
+                <Text style={{ fontSize: 16, color: '#ffffff' }}>關閉報名</Text>
+
+              </Button>)}
+            </HStack>
             <Divider my={2} bg="#bfbebe" /* my=margin-top and margin-bottom */ />
             <Box style={{ flexDirection: 'column' }}>
               <Text style={{ fontSize: 18, color: 'black', marginBottom: 10 }}>發送通知</Text>
@@ -212,13 +240,14 @@ function Manage ({ route, navigation }) {
                 onChangeText={(text) => messageSent(text)}
                 selectionColor="#ccc"
               />
+
               <LinearGradient
                 colors={['#1784B2', '#1D74A0', '#476685']}
                 start={[0.6497, 0.9972]}
                 end={[0.1203, 0.6497]}
                 style={styles.manageSendMessagebtn}
               >
-                <TouchableOpacity
+                <Pressable
                   onPress={() => {
                     MessageController.Notification(message, passedID).then(() => {
                       messageSent('')
@@ -229,7 +258,7 @@ function Manage ({ route, navigation }) {
                   }}
                 >
                   <Text style={styles.manageSendMessagebtnText}>發送給所有參與者</Text>
-                </TouchableOpacity>
+                </Pressable>
               </LinearGradient>
             </Box>
             <Divider marginTop={3} bg="#bfbebe" /* my=margin-top and margin-bottom */ />
@@ -243,6 +272,7 @@ function Manage ({ route, navigation }) {
                     參加名單
                   </Text>
                 </Box>
+
                 <Box>
                   {limitNum !== '0' && (
                   <HStack>
@@ -252,11 +282,11 @@ function Manage ({ route, navigation }) {
                     >
                       目前人數：
                     </Text>
-                    <Text style={attendeesNum >= limitNum
+                    <Text style={totalAttendee >= limitNum
                       ? styles.reachLimitNum
                       : styles.underLimitNum}
                     >
-                      {attendeesNum}
+                      {totalAttendee}
                       &ensp;
                       /
                       {' '}
@@ -275,7 +305,7 @@ function Manage ({ route, navigation }) {
                       目前人數：
                     </Text>
                     <Text style={styles.NoLimitNum}>
-                      {attendeesNum}
+                      {totalAttendee}
                       &ensp;
 
                       (無上限)
@@ -479,8 +509,7 @@ function Manage ({ route, navigation }) {
           />
         </Box>
       </Box>
-
-    </SafeAreaView>
+    </Box>
   )
 }
 

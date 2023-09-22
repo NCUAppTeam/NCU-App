@@ -1,4 +1,4 @@
-import { Platform, StyleSheet, Dimensions } from 'react-native'
+import { StyleSheet, Dimensions } from 'react-native'
 
 export default StyleSheet.create({
   container: {
@@ -16,7 +16,7 @@ export default StyleSheet.create({
   },
   title: {
     flex: 2,
-    justifyContent: 'center',
+    marginTop: 10,
     alignItems: 'center'
   },
   titleSend: {
@@ -77,7 +77,7 @@ export default StyleSheet.create({
     borderColor: '#bfbebe',
     borderWidth: 1,
     alignSelf: 'center',
-    marginLeft: 10
+    marginLeft: 15
   },
   messagePeople: {
     marginLeft: 5,

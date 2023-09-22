@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import {
-  Text, SafeAreaView,
-  TouchableOpacity, Image, RefreshControl, Dimensions, Platform
+  Text,
+  TouchableOpacity, Image, RefreshControl, Dimensions
 } from 'react-native'
 import {
   Title, Card
@@ -10,7 +10,7 @@ import {
   Ionicons, AntDesign, Feather
 } from '@expo/vector-icons'
 import {
-  NativeBaseProvider, Box, ZStack, VStack, FlatList, Pressable
+  Box, ZStack, VStack, FlatList, Pressable
 } from 'native-base'
 import { LinearGradient } from 'expo-linear-gradient'
 import ActiveController from '../../controller/Active'
@@ -66,11 +66,6 @@ function Personal ({ navigation }) {
     })
     ActiveController.getParticipatedActive().then((res) => {
       setShowNow(res)
-    }).catch((err) => {
-      throw err
-    })
-    ActiveController.getHostedEvent().then((res) => {
-      setShowManage(res)
     }).catch((err) => {
       throw err
     })

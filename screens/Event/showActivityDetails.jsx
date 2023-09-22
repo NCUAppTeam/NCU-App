@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import {
   View,
-  SafeAreaView,
   Dimensions,
   Alert,
   Share
+  , RefreshControl
 } from 'react-native'
 import SvgQRCode from 'react-native-qrcode-svg'
 import Dialog, { DialogContent } from 'react-native-popup-dialog'
@@ -36,9 +36,9 @@ import UserController from '../../controller/getStudentId'
 import * as Linking from 'expo-linking'
 
 const NavigationBar = (props) => (
-  <ZStack width="100%" height="12%">
+  <ZStack width="100%" height="8%">
     <Center width="100%" height="100%">
-      <Text fontSize="xl" color="primary.600">
+      <Text fontSize="2xl" color="primary.600">
         {props.gerne}
       </Text>
     </Center>
@@ -184,20 +184,24 @@ const Body = ({
             slideDot1 === true ? styles.imageDotIsHere : styles.imageDotNoHere
           }
         />
-        <MaterialCommunityIcons
+        {imageUri2 && (
+          <MaterialCommunityIcons
           name="circle"
           size={5}
           style={
             slideDot2 === true ? styles.imageDotIsHere : styles.imageDotNoHere
           }
         />
-        <MaterialCommunityIcons
+        )}
+        {imageUri3 && (
+          <MaterialCommunityIcons
           name="circle"
           size={5}
           style={
             slideDot3 === true ? styles.imageDotIsHere : styles.imageDotNoHere
           }
         />
+        )}
       </Box>
 
       <VStack mx={4}>
@@ -424,7 +428,7 @@ const HostDetail = ({
         </VStack>
       </HStack>
       {user !== uid &&
-        (Date.parse(active[0].endTimeInNum) > Date.now()
+        (Date.parse(active[0].endTimeInNum) > Date.now() && active[0].CloseEvent === false
           ? (
           <Center>
             <Button
@@ -442,10 +446,11 @@ const HostDetail = ({
                       { text: '我要反悔T~T' },
                       {
                         text: '確認報名',
-                        onPress: () =>
+                        onPress: () => {
                           ActiveController.signUp(passedID).then(() =>
                             setSignUp(true)
                           )
+                        }
                       }
                     ]
                   )
@@ -487,7 +492,7 @@ const HostDetail = ({
               isDisabled
             >
               <Text color="#000000" bold>
-                報名時間已過
+                報名截止
               </Text>
             </Button>
           </Center>
@@ -497,7 +502,6 @@ const HostDetail = ({
 }
 
 function Detailscreen ({ route, navigation }) {
-  const [totalAttended, setTotal] = useState()
   const [info, setInfo] = useState([])
   const [active, setActive] = useState([{}])
   const user = UserController.getUid()
@@ -507,24 +511,24 @@ function Detailscreen ({ route, navigation }) {
   const passedID = JSON.stringify(Cd).slice(7, 27)
 
   const [SignUp, setSignUp] = useState()
-  useEffect(() => {
-    UserController.getINFO(user)
+
+  const [refreshing, setRefreshing] = useState(false)
+  const onRefresh = () => {
+    setRefreshing(true)
+    ActiveController.getOneActive(passedID)
       .then((res) => {
-        setUserAvatar(res.avatar)
+        setActive(res)
       })
       .catch((err) => {
         throw err
       })
+    setRefreshing(false)
+  }
+
+  useEffect(() => {
     ActiveController.getAttendedOrNot(passedID)
       .then((res) => {
         setSignUp(res)
-      })
-      .catch((err) => {
-        throw err
-      })
-    ActiveController.getTotalOfAttendees(passedID)
-      .then((res) => {
-        setTotal(res)
       })
       .catch((err) => {
         throw err
@@ -543,16 +547,30 @@ function Detailscreen ({ route, navigation }) {
       .catch((err) => {
         throw err
       })
-  }, [])
+    UserController.getINFO(user)
+      .then((res) => {
+        setUserAvatar(res.avatar)
+      })
+      .catch((err) => {
+        throw err
+      })
+    const focusHandler = navigation.addListener('focus', () => {
+      onRefresh()
+    })
+    return focusHandler
+  }, [navigation])
 
   return (
-    <SafeAreaView style={styles.showActivityDetails_container}>
+    <Box safeArea style={styles.showActivityDetails_container}>
       <NavigationBar navigation={navigation} gerne={active[0].genre} />
 
       <ScrollView
         vertical
         showsVerticalScrollIndicator={false}
         style={{ flexDirection: 'column', marginTop: 8.5 }}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
       >
         {active[0] && (
           <Body
@@ -568,7 +586,7 @@ function Detailscreen ({ route, navigation }) {
             details={active[0].details}
             imageUri2={active[0].imageUri2}
             imageUri3={active[0].imageUri3}
-            totalAttended={totalAttended}
+            totalAttended={active[0].totalAttendee}
             active={active}
           />
         )}
@@ -589,7 +607,7 @@ function Detailscreen ({ route, navigation }) {
           />
         )}
       </ScrollView>
-    </SafeAreaView>
+    </Box>
   )
 }
 

@@ -1,4 +1,4 @@
-import { Platform, StyleSheet, Dimensions } from 'react-native'
+import { StyleSheet, Dimensions } from 'react-native'
 
 export default StyleSheet.create({
   container: {
@@ -10,7 +10,6 @@ export default StyleSheet.create({
     flexDirection: 'row',
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height * 0.05,
-    marginTop: Platform.OS === 'ios' ? Dimensions.get('window').height * 0.02 : 20,
     marginBottom: 10
   },
   headerArrowBox: {
@@ -19,33 +18,19 @@ export default StyleSheet.create({
     justifyContent: 'center'
   },
   nameheader: {
-    flex: 5,
+    flex: 6,
     alignItems: 'center',
     justifyContent: 'center'
   },
   name: {
-    marginTop: 7,
-    paddingVertical: 10,
     fontSize: 24,
     color: '#476685',
-    height: 40
-  },
-  headerCommentView: {
-    flex: 1.5,
-    justifyContent: 'center',
-    alignItems: 'flex-end'
-  },
-  headerPersonalView: {
-    flex: 1.1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginHorizontal: Dimensions.get('window').width * 0.03
+    paddingTop: 8
   },
   bodyContainer: {
     flex: 1,
-    flexDirection: 'column',
     alignItems: 'flex-start',
-    marginHorizontal: Dimensions.get('window').width * 0.03,
+    alignSelf: 'center',
     marginTop: 7
   },
   CardInMore: {

@@ -49,11 +49,13 @@ export function ResetScreen () {
 
   return (
     <Center>
+      <Pressable>
       <Link onPress={onOpen} _text={{
         fontSize: '16',
         color: '#737373'
       }}>忘記密碼?
         </Link>
+      </Pressable>
       <Actionsheet isOpen={isOpen} onClose={onClose}>
         <Actionsheet.Content>
           <VStack w={'100%'} h={'100%'} marginX={10} alignItems={'center'}>

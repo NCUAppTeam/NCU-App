@@ -49,7 +49,7 @@ export function HomeHeader ({ navigation }) {
       throw err
     })
 
-    if (hr > 0 && hr <= 4) {
+    if (hr >= 0 && hr <= 4) {
       setGreetText('凌晨了, 還沒睡嗎? 加油! 💪')
     } else if (hr > 4 && hr <= 10) {
       setGreetText('早安, 祝你有個美好的一天🔅')

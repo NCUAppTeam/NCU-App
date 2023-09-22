@@ -8,32 +8,12 @@ import {
 } from '@expo/vector-icons'
 import { Box, Text, FlatList } from 'native-base'
 import styles from '../../styles_folder/Styles_EventCard'
-import ActiveController from '../../../../controller/Active'
 
-export function EventCard ({ navigation }) {
-  const [showNow, setShowNow] = useState([])
-  const [refreshing, setRefreshing] = useState(false)
-  const onRefresh = async () => {
-    setRefreshing(true)
-    ActiveController.getParticipatedActive().then((res) => {
-      setShowNow(res)
-    }).catch((err) => {
-      throw err
-    })
-    setRefreshing(false)
-  }
-
-  useEffect(() => {
-    ActiveController.getParticipatedActive().then((res) => {
-      setShowNow(res)
-    }).catch((err) => {
-      throw err
-    })
-  }, [])
+export function EventCard ({ showNow }) {
   return (
     <Box w={'100%'} h={200} borderRadius={10} borderColor='#E5EBF1' safeArea>
       <Box>
-          <Text fontSize="lg" bold>你參加的活動</Text>
+          <Text fontSize="lg" bold>你即將參加的活動</Text>
       </Box>
       <FlatList
         nestedScrollEnabled
@@ -42,12 +22,6 @@ export function EventCard ({ navigation }) {
         keyExtractor={(item) => item.id}
         showsHorizontalScrollIndicator={false}
         style={{ marginBottom: 10, alignSelf: 'center' }}
-        refreshControl={(
-            <RefreshControl
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-          />
-        )}
         renderItem={({ item }) => (
             <Box style={{ flexDirection: 'column' }}>
                 <Card

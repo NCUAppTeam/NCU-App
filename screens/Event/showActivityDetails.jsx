@@ -428,7 +428,7 @@ const HostDetail = ({
         </VStack>
       </HStack>
       {user !== uid &&
-        (Date.parse(active[0].endTimeInNum) > Date.now()
+        (Date.parse(active[0].endTimeInNum) > Date.now() && active[0].CloseEvent === false
           ? (
           <Center>
             <Button
@@ -492,7 +492,7 @@ const HostDetail = ({
               isDisabled
             >
               <Text color="#000000" bold>
-                報名時間已過
+                報名截止
               </Text>
             </Button>
           </Center>

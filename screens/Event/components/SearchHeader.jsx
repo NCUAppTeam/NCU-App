@@ -16,14 +16,28 @@ export function SearchHeader ({ navigation }) {
   const [Messagenum, setMessageNum] = useState(0)
   const userid = UserController.getUid()
 
+  const [refreshing, setRefreshing] = useState(false)
+  const onRefresh = async () => {
+    setRefreshing(true)
+    MessageController.countUnreadMessage(userid).then((num) => {
+      setMessageNum(num)
+    }).catch((err) => {
+      throw err
+    })
+    setRefreshing(false)
+  }
+
   useEffect(() => {
     MessageController.countUnreadMessage(userid).then((num) => {
       setMessageNum(num)
     }).catch((err) => {
       throw err
     })
-  }, [])
-
+    const focusHandler = navigation.addListener('focus', () => {
+      onRefresh()
+    })
+    return focusHandler
+  }, [navigation])
   return (
     <Center m={4}>
       <HStack width="100%" alignItems="center" justifyContent="center">

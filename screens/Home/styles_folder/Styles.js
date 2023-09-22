@@ -4,7 +4,6 @@ import Constants from 'expo-constants'
 export default StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: Constants.statusBarHeight,
     borderVerticalColor: '#e5e5e5',
     borderVerticalWidth: 20,
     paddingHorizontal: 20,
@@ -13,7 +12,7 @@ export default StyleSheet.create({
   },
   containerForCal: {
     flex: 1,
-    marginTop: Constants.statusBarHeight
+    marginHorizontal: 5
   },
   topHomePage: {
     flexDirection: 'row',
@@ -28,8 +27,7 @@ export default StyleSheet.create({
     flexDirection: 'row'
   },
   topGreet: {
-    paddingLeft: 17,
-    paddingTop: 5
+    paddingLeft: 17
   },
   topTextGreet: {
     fontSize: 12,

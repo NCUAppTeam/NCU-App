@@ -3,21 +3,21 @@ import {
   AntDesign
 } from '@expo/vector-icons'
 import {
-  Box, Center, Text
+  Box, Center, Pressable, Text
 } from 'native-base'
 
 export function SettingHeader ({ navigation }) {
   return (
-    <Box flexDirection="row" safeArea backgroundColor="#FFFFFF" borderBottomWidth={10} borderBottomColor="#ffffff" paddingTop={5}>
+    <Box flexDirection="row" backgroundColor="#FFFFFF" borderBottomWidth={10} borderBottomColor="#ffffff" paddingTop={5}>
         <Center>
-            <Box flex={1.5} marginLeft={6}>
+            <Pressable flex={1.5} marginLeft={6}>
                 <AntDesign
                 name="arrowleft"
                 size={28}
                 color="#476685"
                 onPress={() => { navigation.navigate('homepage') }}
                 />
-            </Box>
+            </Pressable>
         </Center>
         <Box flex={2} />
         <Box flex={4}>

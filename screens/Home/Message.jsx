@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import {
-  Text, SafeAreaView, RefreshControl, Image
+  Text, RefreshControl, Image
 } from 'react-native'
 import { Card } from 'react-native-paper'
 import { FontAwesome5, AntDesign, Octicons } from '@expo/vector-icons'
 
 import {
-  NativeBaseProvider, Box, VStack, HStack, FlatList, ZStack
+  NativeBaseProvider, Box, VStack, HStack, FlatList, ZStack, Pressable
 } from 'native-base'
 import { LinearGradient } from 'expo-linear-gradient'
 import styles from './styles_folder/Styles_Message'
@@ -60,14 +60,14 @@ function Message ({ navigation }) {
           end={[1, 0]}
         >
           <HStack style={styles.header}>
-            <Box style={styles.headerArrowBox}>
-              <AntDesign
+            <Pressable style={styles.headerArrowBox}>
+              {/* <AntDesign
                 name="arrowleft"
                 size={28}
                 color="#fff"
                 onPress={() => { navigation.navigate('homepage') }}
-              />
-            </Box>
+              /> */}
+            </Pressable>
             <Box style={styles.title}>
               <FontAwesome5
                 name="comment"
@@ -81,17 +81,6 @@ function Message ({ navigation }) {
             <Box style={{ flex: 1 }} />
           </HStack>
         </LinearGradient>
-        {/* 暫時關閉區分拍賣和活動的私訊按鈕 */}
-        {/* <Box style={styles.option}>
-          <HStack>
-            <TouchableOpacity>
-              <Text style={styles.optionLeft}>拍賣私訊</Text>
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Text style={styles.optionRight}>活動私訊</Text>
-            </TouchableOpacity>
-          </HStack>
-        </Box> */}
         <Box style={{ flex: 1, alignItems: 'center' }}>
           <FlatList
             style={{ marginTop: 20 }}

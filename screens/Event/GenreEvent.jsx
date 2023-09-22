@@ -1,64 +1,63 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'
 import {
-  Text, View, SafeAreaView, RefreshControl, Image,
-} from 'react-native';
-import { Title } from 'react-native-paper';
+  Text, RefreshControl, Image
+} from 'react-native'
+import { Title } from 'react-native-paper'
 import {
-  Ionicons, FontAwesome5, AntDesign, Feather, Octicons,
-} from '@expo/vector-icons';
+  Ionicons, FontAwesome5, AntDesign, Feather, Octicons
+} from '@expo/vector-icons'
 import {
-  NativeBaseProvider, Box, FlatList, VStack, Pressable, HStack,
-} from 'native-base';
-import styles from './style_folder/Styles_moreEvent';
-import ActiveController from '../../controller/Active';
-import MessageController from '../../controller/Message';
-import { BaseTheme } from '../../theme';
+  NativeBaseProvider, Box, FlatList, VStack, Pressable, HStack
+} from 'native-base'
+import styles from './style_folder/Styles_moreEvent'
+import ActiveController from '../../controller/Active'
+import MessageController from '../../controller/Message'
+import { BaseTheme } from '../../theme'
 
-function Genre({ navigation, route }) {
-  const { GenreName } = route.params;
-  const [Messagenum, setMessageNum] = useState(0);
+function Genre ({ navigation, route }) {
+  const { GenreName } = route.params
+  const [Messagenum, setMessageNum] = useState(0)
   useEffect(() => {
     MessageController.countUnreadMessage().then((num) => {
-      setMessageNum(num);
+      setMessageNum(num)
     }).catch((err) => {
-      throw err;
-    });
-  }, []);
-  const [active, setActive] = useState([]);
+      throw err
+    })
+  }, [])
+  const [active, setActive] = useState([])
   useEffect(() => {
     ActiveController.getGenreActive(GenreName).then((res) => {
-      setActive(res);
+      setActive(res)
     }).catch((err) => {
-      throw err;
-    });
-  }, []);
+      throw err
+    })
+  }, [])
 
-  const [refreshing, setRefreshing] = useState(false);
+  const [refreshing, setRefreshing] = useState(false)
   const onRefresh = () => {
-    setRefreshing(true);
+    setRefreshing(true)
     ActiveController.getGenreActive(GenreName).then((res) => {
-      setActive(res);
+      setActive(res)
     }).catch((err) => {
-      throw err;
-    });
+      throw err
+    })
     MessageController.countUnreadMessage().then((num) => {
-      setMessageNum(num);
+      setMessageNum(num)
     }).catch((err) => {
-      throw err;
-    });
-    setRefreshing(false);
-  };
+      throw err
+    })
+    setRefreshing(false)
+  }
 
   return (
-    <SafeAreaView style={styles.container}>
-      
+    <Box safeArea style={styles.container}>
         <Box style={styles.headerContainer}>
           <Box style={styles.headerArrowBox}>
             <AntDesign
               name="arrowleft"
               size={28}
               color="#476685"
-              onPress={() => { navigation.navigate('search'); }}
+              onPress={() => { navigation.navigate('search') }}
             />
           </Box>
           <Box style={styles.nameheader}>
@@ -72,7 +71,7 @@ function Genre({ navigation, route }) {
                 name="comment"
                 size={25}
                 color="#476685"
-                onPress={() => { navigation.navigate('message'); }}
+                onPress={() => { navigation.navigate('message') }}
               />
               <Octicons name="dot-fill" size={16} color={Messagenum !== 0 ? '#EB6F6F' : 'transparent'} style={styles.readDot} />
             </HStack>
@@ -82,7 +81,7 @@ function Genre({ navigation, route }) {
               name="user"
               size={26}
               color="#476685"
-              onPress={() => { navigation.navigate('personal'); }}
+              onPress={() => { navigation.navigate('personal') }}
             />
           </Box>
         </Box>
@@ -101,14 +100,14 @@ function Genre({ navigation, route }) {
             renderItem={({ item }) => (
               <Pressable
                 onPress={() => {
-                  navigation.navigate('details', { Cd: item.id, prepage: 'more' });
+                  navigation.navigate('details', { Cd: item.id, prepage: 'more' })
                 }}
               >
                 <VStack style={styles.CardInMore}>
                   <Image
                     style={styles.pic}
                     source={{
-                      uri: item.imageUri1,
+                      uri: item.imageUri1
                     }}
                   />
                   <Title style={styles.CardTitle}>
@@ -141,9 +140,9 @@ function Genre({ navigation, route }) {
             )}
           />
         </Box>
-      
-    </SafeAreaView>
-  );
+
+    </Box>
+  )
 }
 
-export default Genre;
+export default Genre

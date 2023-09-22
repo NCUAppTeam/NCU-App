@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import {
-  Text, Platform, View, SafeAreaView, TextInput, Alert,
+  Text, Platform, View, TextInput, Alert,
   ScrollView, TouchableOpacity, Dimensions, Image, TouchableHighlight
 } from 'react-native'
 import DateTimePicker from '@react-native-community/datetimepicker'
@@ -251,10 +251,10 @@ function Edit ({ route, navigation }) {
   return (
     <Provider>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <SafeAreaView style={styles.container}>
+        <Box safeArea style={styles.container}>
 
-            <View style={{ flex: 0.1, flexDirection: 'column' }}>
-              <View style={{ flexDirection: 'row' }}>
+            <Box style={{ flex: 0.1, flexDirection: 'column' }}>
+              <Box style={{ flexDirection: 'row' }}>
                 <Box style={{
                   flex: 0.8, justifyContent: 'center', alignItems: 'flex-start'
                 }}
@@ -280,17 +280,17 @@ function Edit ({ route, navigation }) {
                     }}
                   />
                 </Box>
-                <View style={styles.nameheader}>
+                <Box style={styles.nameheader}>
                   <Text style={styles.name}>
                     編輯活動
                   </Text>
-                </View>
-                <View style={{
+                </Box>
+                <Box style={{
                   flex: 2, justifyContent: 'center', alignItems: 'flex-end'
                 }}
                 />
-              </View>
-            </View>
+              </Box>
+            </Box>
             <Box style={styles.body}>
               <Heading style={styles.inputboxText}>活動分類(必選一個)</Heading>
               <Box style={styles.categorybutton}>
@@ -700,7 +700,7 @@ function Edit ({ route, navigation }) {
                 </Box>
               </Box>
             </Box>
-            <View style={styles.footer}>
+            <Box style={styles.footer}>
               {(genre === true && name === true && start === true && end === true &&
                   limitNum === true && place === true && detail === true)
                 ? (
@@ -742,7 +742,7 @@ function Edit ({ route, navigation }) {
                   </TouchableOpacity>
                   )}
 
-            </View>
+            </Box>
             {Platform.OS === 'ios' && (
             <Portal>
               <Dialog visible={visible1} onDismiss={hideDialogi1}>
@@ -845,7 +845,7 @@ function Edit ({ route, navigation }) {
             </Portal>
             )}
 
-        </SafeAreaView>
+        </Box>
       </ScrollView>
     </Provider>
   )

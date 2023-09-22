@@ -80,11 +80,13 @@ export function LoginScreen () {
 
                 <HStack my={2}>
                   <ResetScreen />
-                  <Link onPress={() => { onClose() }} ml="10px" isExternal _text={{
-                    fontSize: '16',
-                    color: '#737373'
-                  }}>尚未註冊?
-                  </Link>
+                  <Pressable>
+                    <Link onPress={() => { onClose() }} ml="10px" isExternal _text={{
+                      fontSize: '16',
+                      color: '#737373'
+                    }}>尚未註冊?
+                    </Link>
+                  </Pressable>
                 </HStack>
 
               {email && password && (

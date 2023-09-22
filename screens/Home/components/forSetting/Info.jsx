@@ -27,12 +27,12 @@ export function Info ({ userInfo, navigation }) {
     return focusHandler
   }, [])
   return (
-    <Box safeArea marginX={2}>
+    <Box marginX={2}>
         <Box alignSelf="flex-start">
             <Text fontSize="md" color={'#737373'} marginLeft={'5'} marginBottom={'2'}>個人檔案</Text>
         </Box>
         <Center>
-            <Box backgroundColor="#ffffff" w={'94%'} h={'180'}>
+            <Box backgroundColor="#dee9fa" w={'94%'} h={'180'} rounded={'lg'}>
                 <HStack alignContent={'center'}>
                     <VStack w={'40%'} marginTop={'8'}>
                         <Center justifyContent={'center'} >
@@ -45,7 +45,7 @@ export function Info ({ userInfo, navigation }) {
                                 borderWidth={1}
                                 borderRadius={50}
                                 borderColor="#E5EBF1"
-                                backgroundColor="#E5EBF1"
+                                backgroundColor="#ffffff"
                                 marginTop="15px"
                                 flexDirection={'row'}
                                 justifyContent={'center'}

@@ -26,9 +26,9 @@ export default function CustomMarkerView (props) {
                 marginBottom: 5
               }}
             >
-              <Icon key={index} as={val.icon} name={val.iconName} size={4} color="white" />
+              <Icon as={val.icon} name={val.iconName} size={4} color="white" />
+              <Text style={{ color: val.border, display: props.name === props.selectedMarker ? 'flex' : 'none' }}>{props.name}</Text>
             </View>
-            <Text style={{ color: val.border, display: props.name === props.selectedMarker ? 'flex' : 'none' }}>{props.name}</Text>
           </>
         )
       )}

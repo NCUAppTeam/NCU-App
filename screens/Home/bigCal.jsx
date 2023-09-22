@@ -1,15 +1,22 @@
-import React from 'react'
-import { SafeAreaView } from 'react-native'
+import React, { useState, useEffect } from 'react'
 import { WebView } from 'react-native-webview'
 import styles from './styles_folder/Styles'
+import { Box } from 'native-base'
+import homeController from '../../controller/Home'
 
 function BigCal ({ navigation }) {
+  const [link, setLink] = useState()
+  useEffect(() => {
+    homeController.getCalender().then((res) => {
+      setLink(res)
+    })
+  }, [])
   return (
-    <SafeAreaView style={styles.containerForCal}>
+    <Box safeArea style={styles.containerForCal}>
       <WebView
-        source={{ uri: 'https://calendar.google.com/calendar/embed?src=ncu.acad@gmail.com&ctz=Asia/Taipei' }}
+        source={{ uri: link }}
       />
-    </SafeAreaView>
+    </Box>
   )
 }
 

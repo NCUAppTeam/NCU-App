@@ -18,14 +18,17 @@ function handleIncomingLink (url) {
 
   const { hostname, path, queryParams } = Linking.parse(url)
 
+  // 如果路徑不包含 "activity"，跳過
+  if (!path.includes("activity")) return
+
+  // 如果缺少活動 ID 參數，跳過
+  if (!("id" in queryParams)) return
+
+  // 在打開活動詳細頁之前，先初始化活動列表
+  navigate('活動', { screen: 'list' })
+
   // 直接 navigate 到活動 details 頁面，因為是 nested navigator，所以多了一個 screen 參數
   navigate('活動', { screen: 'details', params: { Cd: queryParams.id, prepage: 'list' } })
-
-  console.log(
-        `Linked to app with hostname: ${hostname}, path: ${path} and data: ${JSON.stringify(
-            queryParams
-        )}`
-  )
 }
 
 // 決定透過URL初始化應用時，要等多久（單位：毫秒）才轉畫面 (navigate)

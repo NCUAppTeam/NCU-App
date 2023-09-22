@@ -85,7 +85,11 @@ async function getTutorial () {
   const db = getFirestore(app)
   const Doc = doc(db, 'other/tutorial')
   const querySnapshot = await getDoc(Doc)
-  return querySnapshot.data().img
+  const result = []
+  Object.keys(querySnapshot.data()).forEach((i) => {
+    result.push(querySnapshot.data()[i])
+  })
+  return result
 }
 
 export default {

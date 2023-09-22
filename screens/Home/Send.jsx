@@ -192,8 +192,12 @@ function Send ({ route, navigation }) {
                         key={item.messageid}
                         style={{ backgroundColor: '#E5EBF1', borderRadius: 10 }}
                         onLongPress={() => {
-                          setShowDialog(true)
-                          setDeleteMessageId(item.messageid)
+                          if (item.sender === userUid) {
+                            setShowDialog(true)
+                            setDeleteMessageId(item.messageid)
+                          } else {
+                            setShowDialog(false)
+                          }
                         }}
                       >
                         <Dialog

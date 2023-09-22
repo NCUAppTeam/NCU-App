@@ -17,6 +17,7 @@ import {
 } from 'firebase/storage'
 import Fuse from 'fuse.js'
 import UserController from './getStudentId'
+import MessageController from './Message'
 
 const values = ['揪人共乘', '揪人運動', '揪人遊戲', '校園活動', '系上活動', '社團活動']
 const defaultLinks = {
@@ -129,7 +130,8 @@ async function addActive (active) {
     link: active.link.trim(),
     details: active.details.trim(),
     host: UserStudent,
-    totalAttendee: 0
+    totalAttendee: 0,
+    CloseEvent: false
   }
 
   if (active.image1) {
@@ -382,7 +384,7 @@ async function getParticipatedActive () {
   for (let i = 0; i < attendIDArray.length; i += 1) {
     const refDoc = doc(db, `activities/${attendIDArray[i]}`)
     const result = await getDoc(refDoc)
-    const num = await getTotalOfAttendees(result.id)
+
     if (new Date(toDateString(result.data().endTime)) > current) {
       activeArray.push({
         id: result.id,
@@ -399,7 +401,7 @@ async function getParticipatedActive () {
         hostPhone: result.data().hostPhone,
         hostMail: result.data().hostMail,
         details: result.data().details,
-        num
+        num: result.data().totalAttendee
       })
     }
   }
@@ -435,7 +437,8 @@ async function getFinishedActive () {
         hostName: result.data().hostName,
         hostPhone: result.data().hostPhone,
         hostMail: result.data().hostMail,
-        details: result.data().details
+        details: result.data().details,
+        num: result.data().totalAttendee
       })
     }
   }
@@ -465,7 +468,8 @@ async function getOneActive (id) {
     hostPhone: querySnapshot.data().hostPhone,
     hostMail: querySnapshot.data().hostMail,
     details: querySnapshot.data().details,
-    totalAttendee: querySnapshot.data().totalAttendee
+    totalAttendee: querySnapshot.data().totalAttendee,
+    CloseEvent: querySnapshot.data().CloseEvent
   }
   if (querySnapshot.data().imageUri2) {
     oneactive.imageUri2 = querySnapshot.data().imageUri2
@@ -641,6 +645,7 @@ async function deleteEverySingleAttendee (docID) {
 }
 
 async function removeAttendee (docID, studentUid) { // remove attendee
+  const user = UserController.getUid()
   const db = getFirestore(app)
   const docRef = doc(db, `activities/${docID}`)
   const activeRef = await getDoc(docRef)
@@ -656,6 +661,18 @@ async function removeAttendee (docID, studentUid) { // remove attendee
   console.log('delete successfully!')
   const result = await getDocs(activesRef)
   result.forEach((doc1) => console.log(doc1.id))
+
+  const chatroomID = await MessageController.addChatroom(studentUid, user)
+  const messageData = {
+    id: chatroomID,
+    sender: user,
+    type: 'text',
+    data: '(此為自動發出的訊息)你已被移出 【' + activeRef.data().name + '】，此活動的參加名單！',
+    sendTime: new Date(),
+    read: false
+  }
+
+  await MessageController.addMessage(messageData)
 }
 
 async function addUser (uid, newUserInfo) {
@@ -689,12 +706,23 @@ async function getHostedEvent () {
   for (let i = 0; i < hostIDArray.length; i += 1) {
     const refDoc = doc(db, `activities/${hostIDArray[i]}`)
     const result = await getDoc(refDoc)
-    const num = result.data().totalAttendee
+
     eventArray.push({
       id: result.id,
+      name: result.data().name,
+      imageUri1: result.data().imageUri1,
+      startTimeWeekday: dateToWeekday(result.data().startTime),
       startTimeInNum: toDateString(result.data().startTime),
-      ...result.data(),
-      num
+      place: result.data().place.length < 10 ? result.data().place : result.data().place.slice(0, 8) + '...',
+      cost: result.data().cost,
+      limitNum: result.data().limitNum,
+      genre: result.data().genre,
+      link: result.data().link,
+      hostName: result.data().hostName,
+      hostPhone: result.data().hostPhone,
+      hostMail: result.data().hostMail,
+      details: result.data().details,
+      num: result.data().totalAttendee
     })
   }
   return eventArray
@@ -817,6 +845,31 @@ async function getHostinAdd () {
   return querySnapshot.data()
 }
 
+async function closeEvent (docID) {
+  const db = getFirestore(app)
+
+  const docRef = doc(db, `activities/${docID}`)
+  console.log(docID)
+
+  const update = {
+    CloseEvent: true
+  }
+
+  await updateDoc(docRef, update, { merge: true })
+}
+
+async function openEvent (docID) {
+  const db = getFirestore(app)
+
+  const docRef = doc(db, `activities/${docID}`)
+  console.log(docID)
+  const update = {
+    CloseEvent: false
+  }
+
+  await updateDoc(docRef, update, { merge: true })
+}
+
 export default {
   toDateString,
   addActive,
@@ -840,5 +893,8 @@ export default {
   getTotalOfAttendees,
   removeAttendee,
   getAttendedOrNot,
-  getHostinAdd
+  getHostinAdd,
+  closeEvent,
+  openEvent,
+  toDateString
 }

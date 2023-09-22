@@ -9,16 +9,16 @@ export default StyleSheet.create({
     marginTop: 7
   },
   cardManage: {
-    minHeight: 109,
+    minHeight: 120,
     height: 'auto',
     width: Dimensions.get('window').width * 0.9,
     borderRadius: 10,
     marginTop: 15,
-    paddingVertical: 10,
     flexDirection: 'row',
     alignSelf: 'center'
   },
   cardManagepic: {
+    minHeight: 120,
     height: 'auto',
     aspectRatio: 1,
     borderRadius: 10,

@@ -10,7 +10,6 @@ export default function CustomMarkerView (props) {
     <View style={{ alignItems: 'center' }}>
       {MarkersCategories.filter((obj) => obj.title === props.type).map(
         (val, index) => (
-          <>
             <View
               key={index}
               style={{
@@ -29,7 +28,6 @@ export default function CustomMarkerView (props) {
               <Icon as={val.icon} name={val.iconName} size={4} color="white" />
               <Text style={{ color: val.border, display: props.name === props.selectedMarker ? 'flex' : 'none' }}>{props.name}</Text>
             </View>
-          </>
         )
       )}
     </View>

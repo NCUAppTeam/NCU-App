@@ -3,10 +3,10 @@ import {
   RefreshControl, Image
 } from 'react-native'
 import {
-  FontAwesome5, AntDesign, Feather, Octicons
+  FontAwesome5, AntDesign, Feather, Octicons, Ionicons
 } from '@expo/vector-icons'
 import {
-  Divider, Box, FlatList, VStack, Pressable, HStack, Text, ZStack, Center, Input, Icon
+  Divider, Box, FlatList, VStack, Pressable, HStack, Text, ZStack, Center
 } from 'native-base'
 import styles from './style_folder/Styles_moreEvent'
 import ActiveController from '../../controller/Active'
@@ -18,7 +18,7 @@ function ActivityCard (props) {
   const name = props.name
   const imageUri1 = props.imageUri1
   const place = props.place
-  const startTimeWeekday = props.startTimeWeekday
+  const startTime = props.startTime
   const navigation = props.navigation
 
   return (
@@ -26,11 +26,10 @@ function ActivityCard (props) {
       border="1"
       borderRadius="md"
       key={key}
-      width="45%"
-      height="96%"
+      width="180px"
+      height="99%"
       mx={2}
-      marginBottom={2}
-      bg="white"
+      bgColor={'white'}
       shadow="2"
       onPress={() => {
         navigation.navigate('details', { Cd: id, prepage: 'list' })
@@ -46,7 +45,7 @@ function ActivityCard (props) {
         />
         <VStack p={2}>
           <Text fontSize="xs" bold color="gray.600">
-            {startTimeWeekday}
+            {startTime}
           </Text>
           <Text fontSize="md" bold color="primary.600">
             {name}
@@ -78,7 +77,7 @@ function MoreHang ({ navigation, route }) {
   const [refreshing, setRefreshing] = useState(false)
   const onRefresh = () => {
     setRefreshing(true)
-    ActiveController.getHangOutActive('hangout').then((res) => {
+    ActiveController.getHangOutActive().then((res) => {
       setActive(res)
     })
     MessageController.countUnreadMessage().then((num) => {
@@ -90,7 +89,7 @@ function MoreHang ({ navigation, route }) {
   }
 
   return (
-    <Box flex="1" style={styles.container} safeArea>
+    <Box style={styles.container} safeArea>
         <Box style={styles.headerContainer}>
           <HStack width="100%" alignItems="center" justifyContent="center">
             <Pressable style={styles.headerArrowBox}>
@@ -146,8 +145,7 @@ function MoreHang ({ navigation, route }) {
             </Pressable>
           </HStack>
         </Box>
-        <Box flex="1" style={styles.bodyContainer}>
-          <Center>
+        <Box style={styles.bodyContainer}>
             <FlatList
               numColumns={2}
               data={active}
@@ -167,13 +165,12 @@ function MoreHang ({ navigation, route }) {
                       name={item.name}
                       imageUri1={item.imageUri1}
                       place={item.place}
-                      startTimeWeekday={item.startTimeWeekday}
+                      startTime={item.startTime}
                       navigation={navigation}
                     />
               )
               }
             />
-          </Center>
         </Box>
     </Box>
   )

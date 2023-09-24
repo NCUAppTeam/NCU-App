@@ -26,7 +26,7 @@
     },
     "android": {
       "package": "tw.edu.ncu.app",
-      "versionCode": 10,
+      "versionCode": 13,
       "config": {
         "googleMaps": {
           "apiKey": "AIzaSyBA-fvYndAZdoDJ8GqjaBj1rm6Yh1y9VUI"

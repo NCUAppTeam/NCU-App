@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import {
-  Text,
   TouchableOpacity, Image, RefreshControl, Dimensions
 } from 'react-native'
 import {
@@ -10,7 +9,7 @@ import {
   Ionicons, AntDesign, Feather
 } from '@expo/vector-icons'
 import {
-  Box, ZStack, VStack, FlatList, Pressable
+  Box, ZStack, VStack, FlatList, Pressable, Text
 } from 'native-base'
 import { LinearGradient } from 'expo-linear-gradient'
 import ActiveController from '../../controller/Active'
@@ -97,7 +96,6 @@ function Personal ({ navigation }) {
           start={[0.6497, 0.9972]}
           end={[0.1203, 0.6497]}
           style={{
-            // flex: 1,
             position: 'absolute',
             width: Dimensions.get('window').width,
             height: Dimensions.get('window').width,
@@ -108,10 +106,10 @@ function Personal ({ navigation }) {
           }}
         />
 
-        <Box style={{ alignSelf: 'center', marginTop: 61, flexDirection: 'row' }}>
+        <Box style={{ marginTop: 58, alignSelf: 'center', flexDirection: 'row' }}>
           <Feather name="user" size={24} color="white" style={{ marginTop: 5, marginRight: 15 }} onPress={() => { navigation.navigate('list') }} />
           <Text style={{
-            fontWeight: 'bold', fontSize: 24, color: 'white'
+            fontWeight: 'bold', fontSize: 24, color: 'white', paddingVertical: 12
           }}
           >
             活動中心
@@ -349,7 +347,7 @@ function Personal ({ navigation }) {
                     />
                     <Text style={styles.CardTimeText}>
                       {'   '}
-                      {item.startTimeWeekday}
+                      {item.startTimeInNum}
                     </Text>
                   </Box>
                   <Box style={styles.CardPlace}>
@@ -404,7 +402,7 @@ function Personal ({ navigation }) {
                     />
                     <Text style={styles.CardTimeText}>
                       {'   '}
-                      {item.startTimeWeekday}
+                      {item.startTimeInNum}
                     </Text>
                   </Box>
                   <Box style={styles.CardPlace}>

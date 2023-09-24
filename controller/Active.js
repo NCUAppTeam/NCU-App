@@ -62,8 +62,8 @@ const defaultLinks = {
  */
 
 function toDateString (time) {
-  const date = new Date(time * 1000)
-  const dateString = `${date.getFullYear().toString() - 1969}/${
+  const date = new Date(time)
+  const dateString = `${date.getFullYear().toString()}/${
     (date.getMonth() + 1).toString().padStart(2, '0')}/${
     date.getDate().toString().padStart(2, '0')}  ${
     date.getHours().toString().padStart(2, '0')}:${
@@ -72,8 +72,8 @@ function toDateString (time) {
 }
 
 function dateToWeekday (t) {
-  const time = new Date(t * 1000)
-  const y = (time.getFullYear().toString() - 1969) % 100
+  const time = new Date(t)
+  const y = (time.getFullYear().toString())
   const c = ((time.getFullYear().toString() - 1969) % 100 === 0)
     ? ((time.getFullYear().toString() - 1969).toString().substring(0, 2) - 1)
     : (time.getFullYear().toString() - 1969).toString().substring(0, 2)
@@ -90,7 +90,30 @@ function dateToWeekday (t) {
   Math.floor(2.6 * m + 2.6) + d * 1 - 1) % 7
   let weekday = ''
   if (day === 0) { weekday = '星期日' } else if (day === 1) { weekday = '星期一' } else if (day === 2) { weekday = '星期二' } else if (day === 3) { weekday = '星期三' } else if (day === 4) { weekday = '星期四' } else if (day === 5) { weekday = '星期五' } else if (day === 6) { weekday = '星期六' }
-  const check = `${(time.getMonth() + 1).toString()}月${time.getDate().toString()}日 ${weekday} ${time.getHours().toString().padStart(2, '0')}:${time.getMinutes().toString().padStart(2, '0')}`
+  const check = `${y}年 ${(time.getMonth() + 1).toString()}月${time.getDate().toString()}日 ${weekday} ${time.getHours().toString().padStart(2, '0')}:${time.getMinutes().toString().padStart(2, '0')}`
+  return check
+}
+
+function dateToWeekdayWithoutTime (t) {
+  const time = new Date(t)
+  const y = (time.getFullYear().toString())
+  const c = ((time.getFullYear().toString() - 1969) % 100 === 0)
+    ? ((time.getFullYear().toString() - 1969).toString().substring(0, 2) - 1)
+    : (time.getFullYear().toString() - 1969).toString().substring(0, 2)
+  let m = 0
+  if ((time.getMonth() + 1).toString() === 1) {
+    m = 13
+  } else if ((time.getMonth() + 1).toString() === 2) {
+    m = 14
+  } else {
+    m = (time.getMonth() + 1).toString()
+  }
+  const d = time.getDate().toString()
+  const day = (y + Math.floor((y / 4)) + Math.floor((c / 4)) - 2 * c +
+  Math.floor(2.6 * m + 2.6) + d * 1 - 1) % 7
+  let weekday = ''
+  if (day === 0) { weekday = '星期日' } else if (day === 1) { weekday = '星期一' } else if (day === 2) { weekday = '星期二' } else if (day === 3) { weekday = '星期三' } else if (day === 4) { weekday = '星期四' } else if (day === 5) { weekday = '星期五' } else if (day === 6) { weekday = '星期六' }
+  const check = `${y}年 ${(time.getMonth() + 1).toString()}月${time.getDate().toString()}日 ${weekday}`
   return check
 }
 
@@ -322,8 +345,8 @@ async function getAllActive () {
       id: doc1.id,
       name: doc1.data().name,
       imageUri1: doc1.data().imageUri1,
-      startTimeWeekday: dateToWeekday(doc1.data().startTime),
-      startTimeInNum: toDateString(doc1.data().startTime),
+      startTimeWeekday: dateToWeekday(doc1.data().startTime.toDate()),
+      startTimeInNum: toDateString(doc1.data().startTime.toDate()),
       place: doc1.data().place,
       cost: doc1.data().cost,
       limitNum: doc1.data().limitNum,
@@ -351,11 +374,11 @@ async function getGenreActive (genre) {
       imageUri1: doc1.data().imageUri1,
       imageUri2: doc1.data().imageUri2,
       imageUri3: doc1.data().imageUri3,
-      startTime: toDateString(doc1.data().startTime),
-      endTime: toDateString(doc1.data().endTime),
-      startTimeWeekday: dateToWeekday(doc1.data().startTime),
-      endTimeWeekday: dateToWeekday(doc1.data().endTime),
-      place: doc1.data().place,
+      startTime: toDateString(doc1.data().startTime.toDate()),
+      endTime: toDateString(doc1.data().endTime.toDate()),
+      startTimeWeekday: dateToWeekday(doc1.data().startTime.toDate()),
+      endTimeWeekday: dateToWeekday(doc1.data().endTime.toDate()),
+      place: doc1.data().place.length < 10 ? doc1.data().place : doc1.data().place.slice(0, 8) + '...',
       cost: doc1.data().cost,
       limitNum: doc1.data().limitNum,
       genre: doc1.data().genre,
@@ -385,13 +408,14 @@ async function getParticipatedActive () {
     const refDoc = doc(db, `activities/${attendIDArray[i]}`)
     const result = await getDoc(refDoc)
 
-    if (new Date(toDateString(result.data().endTime)) > current) {
+    if (result.data().endTime.toDate() >= current) {
       activeArray.push({
         id: result.id,
         name: result.data().name,
         imageUri1: result.data().imageUri1,
-        startTimeWeekday: dateToWeekday(result.data().startTime),
-        startTimeInNum: toDateString(result.data().startTime),
+        time: dateToWeekdayWithoutTime(result.data().startTime.toDate()),
+        startTimeWeekday: dateToWeekday(result.data().startTime.toDate()),
+        startTimeInNum: toDateString(result.data().startTime.toDate()),
         place: result.data().place.length < 10 ? result.data().place : result.data().place.slice(0, 8) + '...',
         cost: result.data().cost,
         limitNum: result.data().limitNum,
@@ -422,13 +446,13 @@ async function getFinishedActive () {
   for (let i = 0; i < attendIDArray.length; i += 1) {
     const refDoc = doc(db, `activities/${attendIDArray[i]}`)
     const result = await getDoc(refDoc)
-    if (new Date(toDateString(result.data().endTime)) < current) {
+    if (result.data().endTime.toDate() < current) {
       activeArray.push({
         id: result.id,
         name: result.data().name,
         imageUri1: result.data().imageUri1,
-        startTimeWeekday: dateToWeekday(result.data().startTime),
-        startTimeInNum: toDateString(result.data().startTime),
+        startTimeWeekday: dateToWeekday(result.data().startTime.toDate()),
+        startTimeInNum: toDateString(result.data().startTime.toDate()),
         place: result.data().place.length < 10 ? result.data().place : result.data().place.slice(0, 8) + '...',
         cost: result.data().cost,
         limitNum: result.data().limitNum,
@@ -454,10 +478,11 @@ async function getOneActive (id) {
     id: querySnapshot.id,
     name: querySnapshot.data().name,
     imageUri1: querySnapshot.data().imageUri1,
-    startTimeInNum: toDateString(querySnapshot.data().startTime),
-    endTimeInNum: toDateString(querySnapshot.data().endTime),
-    startTimeWeekday: dateToWeekday(querySnapshot.data().startTime),
-    endTimeWeekday: dateToWeekday(querySnapshot.data().endTime),
+    endTime: querySnapshot.data().endTime.toDate(),
+    startTimeInNum: toDateString(querySnapshot.data().startTime.toDate()),
+    endTimeInNum: toDateString(querySnapshot.data().endTime.toDate()),
+    startTimeWeekday: dateToWeekday(querySnapshot.data().startTime.toDate()),
+    endTimeWeekday: dateToWeekday(querySnapshot.data().endTime.toDate()),
     place: querySnapshot.data().place,
     cost: querySnapshot.data().cost,
     limitNum: querySnapshot.data().limitNum,
@@ -499,11 +524,11 @@ async function getHangOutActive () {
       imageUri1: doc1.data().imageUri1,
       imageUri2: doc1.data().imageUri2,
       imageUri3: doc1.data().imageUri3,
-      startTime: toDateString(doc1.data().startTime),
-      endTime: toDateString(doc1.data().endTime),
-      startTimeWeekday: dateToWeekday(doc1.data().startTime),
-      endTimeWeekday: dateToWeekday(doc1.data().endTime),
-      place: doc1.data().place,
+      startTime: toDateString(doc1.data().startTime.toDate()),
+      endTime: toDateString(doc1.data().endTime.toDate()),
+      startTimeWeekday: dateToWeekday(doc1.data().startTime.toDate()),
+      endTimeWeekday: dateToWeekday(doc1.data().endTime.toDate()),
+      place: doc1.data().place.length < 10 ? doc1.data().place : doc1.data().place.slice(0, 8) + '...',
       cost: doc1.data().cost,
       limitNum: doc1.data().limitNum,
       genre: doc1.data().genre,
@@ -530,11 +555,11 @@ async function getEventActive () {
       imageUri1: doc1.data().imageUri1,
       imageUri2: doc1.data().imageUri2,
       imageUri3: doc1.data().imageUri3,
-      startTime: toDateString(doc1.data().startTime),
-      endTime: toDateString(doc1.data().endTime),
-      startTimeWeekday: dateToWeekday(doc1.data().startTime),
-      endTimeWeekday: dateToWeekday(doc1.data().endTime),
-      place: doc1.data().place,
+      startTime: toDateString(doc1.data().startTime.toDate()),
+      endTime: toDateString(doc1.data().endTime.toDate()),
+      startTimeWeekday: dateToWeekday(doc1.data().startTime.toDate()),
+      endTimeWeekday: dateToWeekday(doc1.data().endTime.toDate()),
+      place: doc1.data().place.length < 10 ? doc1.data().place : doc1.data().place.slice(0, 8) + '...',
       cost: doc1.data().cost,
       limitNum: doc1.data().limitNum,
       genre: doc1.data().genre,
@@ -711,8 +736,8 @@ async function getHostedEvent () {
       id: result.id,
       name: result.data().name,
       imageUri1: result.data().imageUri1,
-      startTimeWeekday: dateToWeekday(result.data().startTime),
-      startTimeInNum: toDateString(result.data().startTime),
+      startTimeWeekday: dateToWeekday(result.data().startTime.toDate()),
+      startTimeInNum: toDateString(result.data().startTime.toDate()),
       place: result.data().place.length < 10 ? result.data().place : result.data().place.slice(0, 8) + '...',
       cost: result.data().cost,
       limitNum: result.data().limitNum,
@@ -895,6 +920,5 @@ export default {
   getAttendedOrNot,
   getHostinAdd,
   closeEvent,
-  openEvent,
-  toDateString
+  openEvent
 }

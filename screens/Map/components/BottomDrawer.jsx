@@ -44,7 +44,7 @@ export default function BottomDrawer ({
 
   return (
     <BottomSheet
-      key={selectedMarker.name}
+      keyExtractor={selectedMarker.name}
       ref={sheetRef}
       index={-1}
       snapPoints={snapPoints}

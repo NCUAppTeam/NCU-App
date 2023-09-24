@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'
 
 import {
-  Ionicons, FontAwesome5, FontAwesome, AntDesign, MaterialCommunityIcons, MaterialIcons,
-} from '@expo/vector-icons';
+  Ionicons, FontAwesome5, FontAwesome, AntDesign, MaterialCommunityIcons, MaterialIcons
+} from '@expo/vector-icons'
 import {
-  Box, ZStack, FlatList, Pressable, Icon, Input, Center, Text,
-} from 'native-base';
+  Box, ZStack, FlatList, Pressable, Icon, Input, Center, Text
+} from 'native-base'
 
-import styles from './style_folder/Styles_search';
-import ActiveController from '../../controller/Active';
+import styles from './style_folder/Styles_search'
+import ActiveController from '../../controller/Active'
 
-function CategoryItem({ item, navigation }) {
+function CategoryItem ({ item, navigation }) {
   return (
     <Box
       flex={1}
@@ -22,15 +22,15 @@ function CategoryItem({ item, navigation }) {
         linearGradient: {
           colors: ['#D2E6EA26', '#0A6B7E26'],
           start: [0, 0],
-          end: [1, 1],
-        },
+          end: [1, 1]
+        }
       }}
       rounded="xl"
 
     >
       <Pressable
         onPress={() => {
-          navigation.navigate('genre', { GenreName: item.name });
+          navigation.navigate('genre', { GenreName: item.name })
         }}
       >
 
@@ -48,12 +48,12 @@ function CategoryItem({ item, navigation }) {
             <FontAwesome5 name="school" size={80} color="#ccc8c8" />
           )}
           {(item.name === '社團活動') && (
-            <MaterialCommunityIcons name="drama-masks" size={100} color="#ccc8c8" />
+            <MaterialCommunityIcons name="drama-masks" size={100} color="#ccc8c8" style={{ marginTop: -15 }}/>
           )}
           {(item.name === '系上活動') && (
             <FontAwesome5 name="trophy" size={80} color="#ccc8c8" />
           )}
-          <Text textAlign="center">
+          <Text bold fontSize={'lg'} color={'#023b78'} textAlign="center">
             {item.name}
           </Text>
 
@@ -61,13 +61,13 @@ function CategoryItem({ item, navigation }) {
 
       </Pressable>
     </Box>
-  );
+  )
 }
-function CategoryList({ navigation }) {
+function CategoryList ({ navigation }) {
   const renderItem = ({ item }) => (
     <CategoryItem item={item} navigation={navigation} />
-  );
-  const genreName = [{ id: 0, name: '揪人共乘' }, { id: 1, name: '校園活動' }, { id: 2, name: '揪人運動' }, { id: 3, name: '系上活動' }, { id: 4, name: '揪人遊戲' }, { id: 5, name: '社團活動' }];
+  )
+  const genreName = [{ id: 0, name: '揪人共乘' }, { id: 1, name: '校園活動' }, { id: 2, name: '揪人運動' }, { id: 3, name: '系上活動' }, { id: 4, name: '揪人遊戲' }, { id: 5, name: '社團活動' }]
 
   return (
     <FlatList
@@ -77,20 +77,20 @@ function CategoryList({ navigation }) {
       showsVerticalScrollIndicator={false}
       renderItem={renderItem}
     />
-  );
+  )
 }
 
-function Search({ navigation }) {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [data, setData] = useState({});
+function Search ({ navigation }) {
+  const [searchQuery, setSearchQuery] = useState('')
+  const [data, setData] = useState({})
   useEffect(() => {
     ActiveController.fuseSearchName(searchQuery).then((res) => {
-      setData(res);
-      console.log(res);
+      setData(res)
+      console.log(res)
     }).then().catch((err) => {
-      throw err;
-    });
-  }, []);
+      throw err
+    })
+  }, [])
   return (
     <Box safeArea flex={1} flexGrow={1}>
       <Center m={4} >
@@ -106,10 +106,10 @@ function Search({ navigation }) {
           InputLeftElement={<Icon ml="2" size="6" as={AntDesign} name="search1" color="#476685" />}
           value={searchQuery}
           onChangeText={(text) => {
-            setSearchQuery(text);
+            setSearchQuery(text)
             ActiveController.fuseSearchName(text).then((query) => {
-              setData(query);
-            });
+              setData(query)
+            })
           }}
           _focus={{ backgroundColor: '#E5EBF1' }}
           InputRightElement={
@@ -135,7 +135,7 @@ function Search({ navigation }) {
               <Pressable
                 style={styles.keywordBox}
                 onPress={() => {
-                  navigation.navigate('details', { Cd: item.item.id, prepage: 'search' });
+                  navigation.navigate('details', { Cd: item.item.id, prepage: 'search' })
                 }}
               >
                 <Text style={styles.keywordBoxText}>{item.item.name}</Text>
@@ -147,7 +147,7 @@ function Search({ navigation }) {
       )}
 
     </Box>
-  );
+  )
 }
 
-export default Search;
+export default Search

@@ -96,7 +96,6 @@ const Body = ({
     }
   }
 
-  console.log('startTimeWeekday', startTimeWeekday)
   let startTimeList = ['loading', 'loading', 'loading']
   if (startTimeWeekday) startTimeList = startTimeWeekday.split(' ')
   let endTimeList = ['loading', 'loading', 'loading']
@@ -248,17 +247,17 @@ const Body = ({
           <Center mr={4} width={8}>
             <AntDesign name="clockcircleo" size={22} color="#476685" />
           </Center>
-          {startTimeList[0] === endTimeList[0]
+          {(startTimeList[0] === endTimeList[0] && startTimeList[1] === endTimeList[1])
             ? (
             <VStack>
               <HStack>
                 <Text bold>
-                  {startTimeList[0]} {startTimeList[1]}
+                  {startTimeList[0]} {startTimeList[1]} {startTimeList[2]}
                 </Text>
               </HStack>
               <HStack>
                 <Text>
-                  {startTimeList[2]} - {endTimeList[2]}
+                  {startTimeList[3]} - {endTimeList[3]}
                 </Text>
               </HStack>
             </VStack>
@@ -266,13 +265,13 @@ const Body = ({
             : (
             <VStack>
               <HStack>
-                <Text bold>
-                  {startTimeList[0]} {startTimeList[1]}
+                <Text>
+                  {startTimeList[0]} {startTimeList[1]} {startTimeList[2]} {startTimeList[3]}
                 </Text>
               </HStack>
               <HStack>
                 <Text>
-                  {startTimeList[2]} - {endTimeList[0]} {endTimeList[2]}
+                   - {endTimeList[0]} {endTimeList[1]} {endTimeList[2]} {endTimeList[3]}
                 </Text>
               </HStack>
             </VStack>
@@ -364,6 +363,8 @@ const HostDetail = ({
   passedID
 }) => {
   const user = UserController.getUid()
+  const current = new Date()
+
   return (
     <VStack mx={6} mb={10}>
       <Text my={2} fontSize="xl" bold>
@@ -428,7 +429,7 @@ const HostDetail = ({
         </VStack>
       </HStack>
       {user !== uid &&
-        (Date.parse(active[0].endTimeInNum) > Date.now() && active[0].CloseEvent === false
+        (active[0].endTime >= current && active[0].CloseEvent === false
           ? (
           <Center>
             <Button

@@ -1,13 +1,13 @@
 /* eslint-disable react/no-array-index-key */
 import {
-  Text, View, Animated, TouchableOpacity, Keyboard,
-} from 'react-native';
-import React from 'react';
-import { Icon } from 'native-base';
-import { Entypo } from '@expo/vector-icons';
-import BuildingsInfo from '../assets/BuildingsInfo';
+  Text, View, Animated, TouchableOpacity, Keyboard
+} from 'react-native'
+import React from 'react'
+import { Icon } from 'native-base'
+import { Entypo } from '@expo/vector-icons'
+import BuildingsInfo from '../assets/BuildingsInfo'
 
-export default function SearchResults({
+export default function SearchResults ({
   screenHeight,
   searchBarHeight,
   searchResultsViewFadeAnim,
@@ -20,6 +20,7 @@ export default function SearchResults({
   setTextInputValue,
   handleSnapPress,
   getTwoPointsDistance,
+  setMarkerShowType
 }) {
   return (
     <Animated.ScrollView
@@ -34,48 +35,49 @@ export default function SearchResults({
         zIndex: searchResultsViewZIndexAnim,
         opacity: searchResultsViewFadeAnim,
         borderTopColor: '#e5e5e5',
-        borderTopWidth: 1,
+        borderTopWidth: 1
       }}
     >
       {BuildingsInfo
         .filter((obj) => {
-          if (textInputValue === '' || textInputValue === ' ') { return 0; }
-          return obj.units.includes(textInputValue) || obj.name.includes(textInputValue);
+          if (textInputValue === '' || textInputValue === ' ') { return 0 }
+          return obj.units.includes(textInputValue) || obj.name.includes(textInputValue)
         })
         .map((val, index) => (
           <TouchableOpacity
             key={index}
             onPress={() => {
-              Keyboard.dismiss();
+              Keyboard.dismiss()
+              setMarkerShowType(val.type)
               setSelectedMarker({
                 name: val.name,
                 latitude: val.latitude,
-                longitude: val.longitude,
-              });
-              setTextInputValue(val.name);
-              changeCenter(val.latitude - 0.0006, val.longitude);
-              handleSnapPress(1);
-              setBottomDrawerShow(true);
+                longitude: val.longitude
+              })
+              setTextInputValue(val.name)
+              changeCenter(val.latitude - 0.0006, val.longitude)
+              handleSnapPress(1)
+              setBottomDrawerShow(true)
               Animated.timing(searchResultsViewFadeAnim, {
                 toValue: 0,
                 duration: 200,
-                useNativeDriver: true,
-              }).start();
+                useNativeDriver: true
+              }).start()
               Animated.timing(searchResultsViewZIndexAnim, {
                 toValue: -1,
                 duration: 200,
-                useNativeDriver: true,
-              }).start();
+                useNativeDriver: true
+              }).start()
               Animated.timing(cancelBtnFadeAnim, {
                 toValue: 0,
                 duration: 150,
-                useNativeDriver: true,
-              }).start();
+                useNativeDriver: true
+              }).start()
             }}
             style={{ paddingVertical: 20 }}
           >
             <View style={{
-              flexDirection: 'row', marginHorizontal: 30, alignItems: 'center', justifyContent: 'space-between',
+              flexDirection: 'row', marginHorizontal: 30, alignItems: 'center', justifyContent: 'space-between'
             }}
             >
               <Text style={{ fontSize: 15 }}>{val.name}</Text>
@@ -90,5 +92,5 @@ export default function SearchResults({
           </TouchableOpacity>
         ))}
     </Animated.ScrollView>
-  );
+  )
 }

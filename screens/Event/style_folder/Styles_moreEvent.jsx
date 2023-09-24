@@ -10,6 +10,7 @@ export default StyleSheet.create({
     flexDirection: 'row',
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height * 0.05,
+    marginTop: 5,
     marginBottom: 10
   },
   headerArrowBox: {
@@ -30,7 +31,7 @@ export default StyleSheet.create({
   bodyContainer: {
     flex: 1,
     alignItems: 'flex-start',
-    alignSelf: 'center',
+    marginHorizontal: 10,
     marginTop: 7
   },
   CardInMore: {
@@ -72,7 +73,8 @@ export default StyleSheet.create({
   },
   CardPlace: {
     marginLeft: 5,
-    flexDirection: 'row'
+    flexDirection: 'row',
+    marginTop: 3
   },
   cardPlaceText: {
     fontSize: 12,

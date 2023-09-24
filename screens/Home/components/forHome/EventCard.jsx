@@ -11,7 +11,7 @@ import styles from '../../styles_folder/Styles_EventCard'
 
 export function EventCard ({ showNow }) {
   return (
-    <Box w={'100%'} h={200} borderRadius={10} borderColor='#E5EBF1' safeArea>
+    <Box w={'100%'} h={210} borderRadius={10} borderColor='#E5EBF1' safeArea>
       <Box>
           <Text fontSize="lg" bold>你即將參加的活動</Text>
       </Box>

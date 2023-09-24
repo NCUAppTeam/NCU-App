@@ -105,7 +105,7 @@ function List ({ navigation }) {
           <VStack>
             <VStack mx={4} my={2}>
               <HStack style={{ flexDirection: 'row' }}>
-                <Text flex={10} fontSize="lg" bold color="primary.600">
+                <Text flex={10} fontSize="xl" bold color="primary.600">
                   近期揪人
                 </Text>
                 <Pressable
@@ -114,7 +114,7 @@ function List ({ navigation }) {
                     navigation.navigate('moreHang')
                   }}
                 >
-                  <Text fontSize="sm" color="primary.600">
+                  <Text fontSize="md" color="primary.600">
                     顯示更多
                   </Text>
                 </Pressable>
@@ -153,7 +153,7 @@ function List ({ navigation }) {
           <VStack>
             <VStack mx={4} my={2}>
               <HStack style={{ flexDirection: 'row' }}>
-                <Text flex={10} fontSize="lg" bold color="primary.600">
+                <Text flex={10} fontSize="xl" bold color="primary.600">
                   近期活動
                 </Text>
                 <Pressable
@@ -162,7 +162,7 @@ function List ({ navigation }) {
                     navigation.navigate('more')
                   }}
                 >
-                  <Text fontSize="sm" color="primary.600">
+                  <Text fontSize="md" color="primary.600">
                     顯示更多
                   </Text>
                 </Pressable>

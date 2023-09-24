@@ -19,10 +19,10 @@ function handleIncomingLink (url) {
   const { hostname, path, queryParams } = Linking.parse(url)
 
   // 如果路徑不包含 "activity"，跳過
-  if (!path.includes("activity")) return
+  if (!path.includes('activity')) return
 
   // 如果缺少活動 ID 參數，跳過
-  if (!("id" in queryParams)) return
+  if (!('id' in queryParams)) return
 
   // 在打開活動詳細頁之前，先初始化活動列表
   navigate('活動', { screen: 'list' })

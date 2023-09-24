@@ -21,6 +21,7 @@ import CustomMarkerView from './components/CustomMarkerView'
 import SearchResults from './components/SearchResults'
 import BottomDrawer from './components/BottomDrawer'
 import Styles from './Styles'
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
 
 export default function MapScreen ({ navigation }) {
   const [userLocation, setUserLocation] = useState({
@@ -32,7 +33,7 @@ export default function MapScreen ({ navigation }) {
   const [bottomDrawerState, setBottomDrawerState] = useState(-1)
   const sheetRef = useRef(null)
 
-  const snapPoints = useMemo(() => ['15%', '40%', '95%'], [])
+  const snapPoints = useMemo(() => ['10%', '30%', '50%'], [])
 
   const handleSheetChanges = useCallback((index) => {
     setBottomDrawerState(index)
@@ -111,6 +112,8 @@ export default function MapScreen ({ navigation }) {
   }, [])
 
   return (
+  <GestureHandlerRootView style={{ flex: 1 }}>
+
     <NativeBaseProvider>
       <View
         style={Styles.flex}
@@ -221,10 +224,12 @@ export default function MapScreen ({ navigation }) {
           setBottomDrawerShow={setBottomDrawerShow}
           getTwoPointsDistance={getTwoPointsDistance}
           handleSnapPress={handleSnapPress}
+          setMarkerShowType={setMarkerShowType}
         />
       </View>
       <StatusBar backgroundColor="white" />
       {/* <BusButton bottomDrawerShow={bottomDrawerShow} navigation={navigation} /> */}
     </NativeBaseProvider>
+    </GestureHandlerRootView>
   )
 }

@@ -45,7 +45,7 @@ export function Tutorial ({ card }) {
                     <Text fontSize="xs" color="coolGray.600" _dark={{
                       color: 'warmGray.200'
                     }} fontWeight="400">
-                      updated at {`${ActiveController.toDateString(item.upload)}`}
+                      updated at {`${ActiveController.toDateString(item.upload.toDate())}`}
                     </Text>
                     <Heading size="md" ml="-1">
                       {item.title}

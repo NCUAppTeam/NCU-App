@@ -11,11 +11,21 @@ import styles from '../../styles_folder/Styles_EventCard'
 
 export function EventCard ({ showNow }) {
   return (
-    <Box w={'100%'} h={210} borderRadius={10} borderColor='#E5EBF1' safeArea>
+    <Box w={'100%'} borderRadius={10} borderColor='#E5EBF1' safeArea>
       <Box>
           <Text fontSize="lg" bold>你即將參加的活動</Text>
       </Box>
+      {showNow.length == 0 ? 
+      // no event
+      (
+        <Box h={45} style={{ marginTop: 20, alignSelf: 'center' }}>
+          <Text style={{ alignSelf: 'center' }}>你最近沒有參加任何活動</Text>
+        </Box>
+      )
+      : (
+      // have recent event
       <FlatList
+        h={150}
         nestedScrollEnabled
         horizontal
         data={showNow}
@@ -98,6 +108,7 @@ export function EventCard ({ showNow }) {
               </Box>
         )}
           />
+      )}
     </Box>
   )
 }

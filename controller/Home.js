@@ -1,5 +1,5 @@
 import { getApp, firebase } from 'firebase/app'
-import { getFirestore, doc, getDoc } from 'firebase/firestore'
+import { getFirestore, doc, getDoc, orderBy, query, getDocs, collection } from 'firebase/firestore'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 /**
@@ -72,6 +72,12 @@ async function getNetFlowByIP (ip) {
   }
 }
 
+/**
+ * Get National Central University Calendar Link
+ * 
+ * @returns {string} calendar link 
+ */
+
 async function getCalender () {
   const app = getApp()
   const db = getFirestore(app)
@@ -80,14 +86,20 @@ async function getCalender () {
   return querySnapshot.data().calendarLink
 }
 
+/**
+ * Get all ncu app team announcements
+ * 
+ * @returns {Array} A array of announcements.
+ */
 async function getTutorial () {
   const app = getApp()
   const db = getFirestore(app)
-  const Doc = doc(db, 'other/tutorial')
-  const querySnapshot = await getDoc(Doc)
+  const tutorialRef = query(collection(db, 'NCU-APP corner'), orderBy('upload', 'desc'))
+  const querySnapshot = await getDocs(tutorialRef)
+
   const result = []
-  Object.keys(querySnapshot.data()).forEach((i) => {
-    result.push(querySnapshot.data()[i])
+   querySnapshot.forEach((doc) => {
+    result.push({ ...doc.data() })
   })
   return result
 }

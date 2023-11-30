@@ -6,7 +6,7 @@
 import { getApp } from 'firebase/app'
 import {
   getFirestore, collection, query, getDoc, getDocs, addDoc,
-  setDoc, doc, orderBy, where, deleteDoc, deleteField, updateDoc
+  setDoc, doc, orderBy, where, deleteDoc, deleteField, updateDoc, FieldValue, arrayRemove
 } from 'firebase/firestore'
 import {
   getStorage,
@@ -122,12 +122,6 @@ const storage = getStorage()
 
 /**
  *
- * @param {*} rawdata
- * @returns
- */
-
-/**
- *
  * @param {*} imageUri
  * @returns
  */
@@ -136,8 +130,32 @@ function imagePos (imageUri) {
 }
 
 /**
+ * Create a new activity
  *
- * @param {*} active
+ * @param {object} active
+ * @property {string} UserStudent - the id of the user that create this activity(current user)
+ * @property {object} item - all information of this activity
+ * @property {string} item.name - the name of the activity
+ * @property {timestamp} item.startTime - the start time of the activity
+ * @property {timestamp} item.endTime - the end time of the activity
+ * @property {timestamp} item.uploadTime - the time that the activity is uploaded
+ * @property {string} item.place - the place of the activity
+ * @property {number} item.cost - the cost for attending this activity
+ * @property {number} item.limitNum - the maximum number of attendees
+ * @property {string} item.genre - the genre of the activity
+ * @property {string} item.link - the link of the activity
+ * @property {string} item.details - the details of the activity
+ * @property {string} item.host - the id of the host
+ * @property {number} item.totalAttendee - the number of attendees
+ * @property {boolean} item.CloseEvent - the status of the activity
+ * @property {array} item.participant - the list of attendees
+ * @property {string} item.imageUri1 - the uri of the first image
+ * @property {string} item.imageUri2 - the uri of the second image
+ * @property {string} item.imageUri3 - the uri of the third image
+ * @property {*} db - the reference of the firestore
+ * @property {*} activesRef - the reference of the activities collection
+ * @property {*} querySnapshot - the snapshot of the activesRef
+ *
  */
 async function addActive (active) {
   const UserStudent = UserController.getUid()
@@ -154,7 +172,8 @@ async function addActive (active) {
     details: active.details.trim(),
     host: UserStudent,
     totalAttendee: 0,
-    CloseEvent: false
+    CloseEvent: false,
+    participant: []
   }
 
   if (active.image1) {
@@ -206,9 +225,10 @@ async function addActive (active) {
 }
 
 /**
+ * Update the information of an activity
  *
- * @param {*} oldID
- * @param {*} NEWactive
+ * @param {*} oldID - the id of the activity that is going to be updated
+ * @param {*} NEWactive - the new information of the activity
  */
 async function updateActive (oldID, NEWactive) {
   let defaultRef
@@ -335,6 +355,16 @@ async function updateActive (oldID, NEWactive) {
   }
 }
 
+/**
+ * Get all activities
+ *
+ * @property {*} db - the reference of the firestore
+ * @property {*} activesRef - the reference of the activities collection
+ * @property {*} querySnapshot - the snapshot of the activesRef
+ * 
+ * @returns {object} activeArray - the array of all activities
+ */
+
 async function getAllActive () {
   const db = getFirestore(app)
   const activesRef = query(collection(db, 'activities'), orderBy('uploadTime', 'desc'))
@@ -360,6 +390,16 @@ async function getAllActive () {
   })
   return activeArray
 }
+
+/**
+ * Get activities by genre
+ *
+ * @property {*} db - the reference of the firestore
+ * @property {*} activesRef - the reference of the activities collection
+ * @property {*} querySnapshot - the snapshot of the activesRef
+ * 
+ * @returns {object} GenreArray - the array of all activities
+ */
 
 async function getGenreActive (genre) {
   const db = getFirestore(app)
@@ -392,14 +432,28 @@ async function getGenreActive (genre) {
   return GenreArray
 }
 
+/**
+ * Get current user's activities that are not finished
+ *
+ * @property {string} UserStudent - the id of the current user
+ * @property {*} db - the reference of the firestore
+ * @property {*} attendRef - the reference of the user's attendedEvent collection
+ * @property {*} querySnapshot - the snapshot of the activesRef
+ * @property {array} attendIDArray - the array of the id of the activities that the current user has attended
+ * @property {array} activeArray - array that filter the activities that are not finished
+ * @property {timestamp} current - the current time
+ * 
+ * @returns {object} activeArray - the array of current user's activities that are not finished
+ */
+
 async function getParticipatedActive () {
   const UserStudent = await UserController.getUid()
   const db = getFirestore(app)
   const attendRef = query(collection(db, `attendees/${UserStudent}/attendedEvent`))
+  const querySnapshot = await getDocs(attendRef)
   const attendIDArray = []
   const activeArray = []
   const current = new Date()
-  const querySnapshot = await getDocs(attendRef)
   querySnapshot.forEach((attendID) => {
     attendIDArray.push(attendID.id)
   })
@@ -432,14 +486,28 @@ async function getParticipatedActive () {
   return activeArray
 }
 
+/**
+ * Get current user's activities that has already finished
+ *
+ * @property {string} UserStudent - the id of the current user
+ * @property {*} db - the reference of the firestore
+ * @property {*} attendRef - the reference of the user's attendedEvent collection
+ * @property {*} querySnapshot - the snapshot of the activesRef
+ * @property {array} attendIDArray - the array of the id of the activities that the current user has attended
+ * @property {array} activeArray - array that filter the activities that has finished
+ * @property {timestamp} current - the current time
+ * 
+ * @returns {object} activeArray - the array of current user's activities that are not finished
+ */
+
 async function getFinishedActive () {
   const UserStudent = UserController.getUid()
   const db = getFirestore(app)
   const attendRef = query(collection(db, `attendees/${UserStudent}/attendedEvent`))
+  const querySnapshot = await getDocs(attendRef)
   const attendIDArray = []
   const activeArray = []
   const current = new Date()
-  const querySnapshot = await getDocs(attendRef)
   querySnapshot.forEach((attendID) => {
     attendIDArray.push(attendID.id)
   })
@@ -468,6 +536,18 @@ async function getFinishedActive () {
   }
   return activeArray
 }
+
+/**
+ * Get one activity by id
+ *
+ * @param {string} id - the id of the activity
+ * @property {*} db - the reference of the firestore
+ * @property {*} activesDoc - the reference of the activity
+ * @property {*} querySnapshot - the snapshot of the activesRef
+ * @property {object} oneactive - the information of the activity
+ * 
+ * @returns {array} oneactive - the array of the activity
+ */
 
 async function getOneActive (id) {
   const db = getFirestore(app)
@@ -507,9 +587,13 @@ async function getOneActive (id) {
 }
 
 /**
+ * Get activities by 'hangout' genre
  *
- * @param {*} genre
- * @returns
+ * @property {*} db - the reference of the firestore
+ * @property {*} activesRef - the reference of the activity
+ * @property {*} querySnapshot - the snapshot of the activesRef
+ * 
+ * @returns {object} GenreArray - the array of activities of corresponding genre
  */
 
 async function getHangOutActive () {
@@ -543,6 +627,17 @@ async function getHangOutActive () {
   return GenreArray
 }
 
+
+/**
+ * Get activities by 'event' genre
+ *
+ * @property {*} db - the reference of the firestore
+ * @property {*} activesRef - the reference of the activity
+ * @property {*} querySnapshot - the snapshot of the activesRef
+ * 
+ * @returns {object} EventArray - the array of activities of corresponding genre
+ */
+
 async function getEventActive () {
   const db = getFirestore(app)
   const activesRef = query(collection(db, 'activities'), where('genre', 'in', ['校園活動', '系上活動', '社團活動']))
@@ -569,6 +664,15 @@ async function getEventActive () {
   })
   return EventArray
 }
+
+/**
+ * Delete one activity by id
+ *
+ * @property {*} db - the reference of the firestore
+ * @property {*} activesRef - the reference of the activity
+ * @property {*} dltDoc - the snapshot of the activesRef
+ * 
+ */
 
 async function deleteOneActive (deleteDocId) {
   const db = getFirestore(app)
@@ -605,44 +709,30 @@ async function deleteOneActive (deleteDocId) {
   console.log('deleteOneActive Successful')
 }
 
-async function getTotalOfAttendees (docID) {
-  const db = getFirestore(app)
-  const totalRef = query(collection(db, 'attendees'))
-  const querySnapshot = await getDocs(totalRef)
-  const attendeeList = []
-  const total = []
-  querySnapshot.forEach((attendee) => {
-    attendeeList.push(attendee.id)
-  })
-  for (let i = 0; i < attendeeList.length; i += 1) {
-    const result = await getDocs(collection(db, `attendees/${attendeeList[i]}/attendedEvent`))
-    result.forEach((event) => {
-      if (event.id === docID) {
-        total.push(attendeeList[i])
-      }
-    })
-  }
-  return total.length
-}
+/**
+ * Get all attendees of an activity
+ *
+ * @property {*} db - the reference of the firestore
+ * @property {*} infoRef - the reference of the attendees information
+ * @property {*} activesDoc - the reference of the activity
+ * @property {*} querySnapshot - the snapshot of the infoRef
+ * @property {*} activesSnapshot - the snapshot of the activesDoc
+ * @property {array} IDlist - the array of the id of attendees
+ * @property {array} info - the array of the information of attendees
+ * 
+ * @returns {object} info - the array of the information of attendees
+ */
 
 async function getAllAttendees (docID) {
   const db = getFirestore(app)
   const infoRef = query(collection(db, 'attendees'))
+  const activesDoc = doc(db, `activities/${docID}`)
+
   const querySnapshot = await getDocs(infoRef)
-  const attendeeList = []
-  const IDlist = []
-  const info = []
-  querySnapshot.forEach((attendee) => {
-    attendeeList.push(attendee.id)
-  })
-  for (let i = 0; i < attendeeList.length; i += 1) {
-    const result = await getDocs(collection(db, `attendees/${attendeeList[i]}/attendedEvent`), orderBy('signUpTime', 'asc'))
-    result.forEach((event) => {
-      if (event.id === docID) {
-        IDlist.push(attendeeList[i])
-      }
-    })
-  }
+  const activesSnapshot = await getDoc(activesDoc)
+  const IDlist = activesSnapshot.data().participant
+  let info = []
+
   for (let j = 0; j < IDlist.length; j += 1) {
     const infoDoc = doc(db, `attendees/${IDlist[j]}`)
     const querySnapshot2 = await getDoc(infoDoc)
@@ -650,33 +740,60 @@ async function getAllAttendees (docID) {
   }
   return info
 }
+
+/**
+ * Delete every attendee of an activity
+ *
+ * @property {*} db - the reference of the firestore
+ * @property {*} docRef - the reference of the activity
+ * @property {*} docSnapshot - the snapshot of the docRef
+ * @property {*} attendeeRef - the reference of the attendees information
+ * @property {*} querySnapshot - the snapshot of the attendeeRef
+ * 
+ */
+
+
 async function deleteEverySingleAttendee (docID) {
   const db = getFirestore(app)
   const docRef = doc(db, `activities/${docID}`)
+  const docSnapshot = await getDoc(docRef)
 
-  const update = {
-    totalAttendee: 0
-  }
-
-  await updateDoc(docRef, update, { merge: true })
-
-  const activesRef = query(collection(db, 'attendees'))
-  const querySnapshot = await getDocs(activesRef)
+  const attendeeRef = query(collection(db, 'attendees'))
+  const querySnapshot = await getDocs(attendeeRef)
   querySnapshot.forEach(async (student) => {
     await deleteDoc(doc(db, 'attendees', `${student.id}`, 'attendedEvent', `${docID}`))
-    await deleteDoc(doc(db, 'attendees', `${student.id}`, 'hostedEvent', `${docID}`))
   })
+  await deleteDoc(doc(db, 'attendees', `${docSnapshot.data().host}`, 'hostedEvent', `${docID}`))
+  await MessageController.Notification('(此為自動發出的訊息，無需回覆)主辦者已刪除【' + docSnapshot.data().name + '】這項活動，特此通知！', docID)
   console.log('delete successfully!')
 }
+
+/**
+ * Remove an attendee by uid
+ *
+ * @param {string} docID - the id of the activity 
+ * @param {string} studentUid - the id of the attendee that is going to be removed
+ * @property {string} user - the id of the current user
+ * @property {*} db - the reference of the firestore
+ * @property {*} docRef - the reference of the activity
+ * @property {*} docSnapshot - the snapshot of the docRef
+ * @property {object} update - the information that is going to be updated
+ * @property {*} activesRef - the reference of the attendee attendedEvent collection
+ * @property {*} result - the snapshot of the activesRef
+ * @property {string} chatroomID - the id of the chatroom
+ * @property {object} messageData - the information of the message
+ * 
+ */
 
 async function removeAttendee (docID, studentUid) { // remove attendee
   const user = UserController.getUid()
   const db = getFirestore(app)
   const docRef = doc(db, `activities/${docID}`)
-  const activeRef = await getDoc(docRef)
+  const docSnapshot = await getDoc(docRef)
 
   const update = {
-    totalAttendee: activeRef.data().totalAttendee - 1
+    totalAttendee: docSnapshot.data().totalAttendee - 1,
+    participant: arrayRemove(studentUid)
   }
 
   await updateDoc(docRef, update, { merge: true })
@@ -692,13 +809,24 @@ async function removeAttendee (docID, studentUid) { // remove attendee
     id: chatroomID,
     sender: user,
     type: 'text',
-    data: '(此為自動發出的訊息)你已被移出 【' + activeRef.data().name + '】，此活動的參加名單！',
+    data: '(此為自動發出的訊息，無需回覆)你已被移出 【' + docSnapshot.data().name + '】，此活動的參加名單！',
     sendTime: new Date(),
     read: false
   }
 
   await MessageController.addMessage(messageData)
 }
+
+/**
+ * add an attendee by uid
+ *
+ * @param {string} uid - the id of the new user
+ * @param {object} newUserInfo - the information of the new user
+ * @property {*} db - the reference of the firestore
+ * @property {*} attendeeRefRef - the reference of the attendee collection
+ * @property {*} result - the snapshot of the attendeeRef
+ * 
+ */
 
 async function addUser (uid, newUserInfo) {
   const db = getFirestore(app)
@@ -717,6 +845,19 @@ async function addUser (uid, newUserInfo) {
   const result = await getDocs(attendeeRef)
   result.forEach((doc1) => console.log(doc1.data()))
 }
+
+/**
+ * Get current user's hosted events
+ *
+ * @property {string} UserStudent - the id of the current user
+ * @property {*} db - the reference of the firestore
+ * @property {*} Ref - the reference of the current user's hostedEvent collection
+ * @property {*} querySnapshot - the snapshot of the activesRef
+ * @property {array} hostIDArray - the array of the id of the activities that the current user has hosted
+ * @property {array} eventArray - the array of the information of the activities that the current user has hosted
+ * 
+ * @returns {object} eventArray - the array of the information of the activities that the current user has hosted
+ */
 
 async function getHostedEvent () {
   const UserStudent = UserController.getUid()
@@ -753,14 +894,30 @@ async function getHostedEvent () {
   return eventArray
 }
 
+/**
+ * Sign up an activity by id
+ *
+ * @param {string} docID - the id of the activity
+ * @property {string} UserStudent - the id of the current user
+ * @property {*} db - the reference of the firestore
+ * @property {*} docRef - the reference of the activity
+ * @property {*} docSnapshot - the snapshot of the docRef
+ * @property {object} update - the information that is going to be updated
+ * @property {*} Ref - the reference of the attendee attendedEvent collection
+ * @property {*} result - the snapshot of the Ref
+ * @property {object} signUpTime - the time that the current user sign up
+ * 
+ */
+
 async function signUp (docID) {
   const UserStudent = UserController.getUid()
   const db = getFirestore(app)
   const docRef = doc(db, `activities/${docID}`)
-  const activeRef = await getDoc(docRef)
+  const docSnapshot = await getDoc(docRef)
 
   const update = {
-    totalAttendee: activeRef.data().totalAttendee + 1
+    totalAttendee: docSnapshot.data().totalAttendee + 1,
+    participant: [...docSnapshot.data().participant, UserStudent]
   }
 
   await updateDoc(docRef, update, { merge: true })
@@ -778,18 +935,33 @@ async function signUp (docID) {
   result.forEach((doc1) => console.log(doc1.id))
 }
 
+/**
+ * Quit an activity by id
+ *
+ * @param {string} docID - the id of the activity
+ * @property {string} UserStudent - the id of the current user
+ * @property {*} db - the reference of the firestore
+ * @property {*} docRef - the reference of the activity
+ * @property {*} docSnapshot - the snapshot of the docRef
+ * @property {object} update - the information that is going to be updated
+ * @property {*} Ref - the reference of the attendee attendedEvent collection
+ * @property {*} result - the snapshot of the Ref
+ * @property {object} signUpTime - the time that the current user sign up
+ * 
+ */
+
 async function quitEvent (docID) {
   const UserStudent = UserController.getUid()
   const db = getFirestore(app)
-
   const docRef = doc(db, `activities/${docID}`)
-  const activeRef = await getDoc(docRef)
-
+  const docSnapshot = await getDoc(docRef)
   const update = {
-    totalAttendee: activeRef.data().totalAttendee - 1
+    totalAttendee: docSnapshot.data().totalAttendee - 1,
+    participant: arrayRemove(UserStudent)
   }
 
   await updateDoc(docRef, update, { merge: true })
+
   const Ref = doc(db, `attendees/${UserStudent}/attendedEvent/${docID}`)
   deleteDoc(Ref)
     .then(() => {
@@ -802,23 +974,42 @@ async function quitEvent (docID) {
   result.forEach((doc1) => console.log(doc1.id))
 }
 
+
+/**
+ * Get Host info by docID
+ *
+ * @param {string} docID - the id of the activity
+ * @property {*} db - the reference of the firestore
+ * @property {*} activesDoc - the reference of the activity
+ * @property {*} querySnapshot - the snapshot of the activesDoc
+ * @property {*} querySnapshot2 - the snapshot of the host info
+ * 
+ * @returns {object} info - the array of the host info
+ */
+
 async function getHostInfo (docID) {
   const db = getFirestore(app)
-  const activityRef = query(collection(db, 'activities'))
-  const querySnapshot = await getDocs(activityRef)
-  let hostID
+  const activesDoc = doc(db, `activities/${docID}`)
+  const querySnapshot = await getDoc(activesDoc)
+  const querySnapshot2 = await getDoc(doc(db, `attendees/${querySnapshot.data().host}`))
   const info = []
 
-  querySnapshot.forEach((e) => {
-    if (e.id === docID) {
-      hostID = e.data().host
-    }
-  })
-  const querySnapshot2 = await getDoc(doc(db, `attendees/${hostID}`))
   info.push({ uid: querySnapshot2.id, ...querySnapshot2.data() })
-  console.log(info)
+
   return info
 }
+
+/**
+ * fuseSearch by activities' names
+ *
+ * @param {string} searchString - the query string
+ * @property {*} db - the reference of the firestore
+ * @property {*} activesRef - the reference of the activity
+ * @property {*} querySnapshot - the snapshot of the activesDoc
+ * @property {*} activeArray - the array of all activities' names and ids
+ * 
+ * @returns {object} result - the array of the search result
+ */
 
 async function fuseSearchName (searchString) {
   const db = getFirestore(app)
@@ -844,22 +1035,41 @@ async function fuseSearchName (searchString) {
   return result
 }
 
+/**
+ * Get attended status of an activity
+ *
+ * @param {string} docID - the id of the activity
+ * @property {string} UserStudent - the id of the current user
+ * @property {*} db - the reference of the firestore
+ * @property {*} attendRef - the reference of the activity
+ * @property {*} querySnapshot - the snapshot of the activesDoc
+ * 
+ * @returns {boolean} - attended or not
+ */
+
 async function getAttendedOrNot (docID) {
   const UserStudent = UserController.getUid()
-  const result = []
   const db = getFirestore(app)
-  const attendRef = query(collection(db, `attendees/${UserStudent}/attendedEvent`))
-  const querySnapshot = await getDocs(attendRef)
-  querySnapshot.forEach((attendID) => {
-    if (attendID.id === docID) {
-      result.push(docID)
-    }
-  })
-  if (result.length) {
+  const attendRef = doc(db, `activities/${docID}`)
+  const querySnapshot = await getDoc(attendRef)
+  
+  if (querySnapshot.data().participant.includes(UserStudent)) {
     return true
   }
   return false
 }
+
+/**
+ * Get Host info for add event function
+ *
+ * @property {string} Uid - the id of the current user
+ * @property {*} db - the reference of the firestore
+ * @property {*} infoRef - the reference of the attendees information
+ * @property {*} querySnapshot - the snapshot of the infoRef
+ * @property {object} querySnapshot.data() - the information of the host
+ * 
+ * @returns {object} info - the array of the host info
+ */
 
 async function getHostinAdd () {
   const Uid = UserController.getUid()
@@ -869,6 +1079,16 @@ async function getHostinAdd () {
 
   return querySnapshot.data()
 }
+
+/**
+ * Disable an event sign up button
+ *
+ * @property {string} docID - the id of the activity
+ * @property {*} db - the reference of the firestore
+ * @property {*} docRef - the reference of the attendees information
+ * @property {object} update - the information of the host
+ * 
+ */
 
 async function closeEvent (docID) {
   const db = getFirestore(app)
@@ -882,6 +1102,16 @@ async function closeEvent (docID) {
 
   await updateDoc(docRef, update, { merge: true })
 }
+
+/**
+ * Enable an event sign up button
+ *
+ * @property {string} docID - the id of the activity
+ * @property {*} db - the reference of the firestore
+ * @property {*} docRef - the reference of the attendees information
+ * @property {object} update - the information of the host
+ * 
+ */
 
 async function openEvent (docID) {
   const db = getFirestore(app)
@@ -915,7 +1145,6 @@ export default {
   quitEvent,
   getHostInfo,
   getAllAttendees,
-  getTotalOfAttendees,
   removeAttendee,
   getAttendedOrNot,
   getHostinAdd,

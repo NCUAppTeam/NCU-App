@@ -165,8 +165,8 @@ function Manage ({ route, navigation }) {
                     }}
                     onPress={() => {
                       setShowDialog1(false)
-                      ActiveController.deleteOneActive(passedID)
                       ActiveController.deleteEverySingleAttendee(passedID)
+                      ActiveController.deleteOneActive(passedID)
                     }}
                   >
                     刪除

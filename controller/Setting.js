@@ -22,13 +22,8 @@ const app = getApp()
 const storage = getStorage()
 
 /**
- *
- * @param {*} rawdata
- * @returns
- */
-
-/**
- *
+ *Image url link processing
+ * 
  * @param {*} imageUri
  * @returns
  */

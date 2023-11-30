@@ -31,8 +31,8 @@ function ActivityCard (props) {
       border="1"
       borderRadius="md"
       key={key}
-      width="180px"
-      height="100%"
+      width="185px"
+      height="105%"
       mx={2}
       bg="white"
       shadow="2"

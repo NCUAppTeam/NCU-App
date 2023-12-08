@@ -8,7 +8,7 @@ import {
 import Dialog, { DialogContent } from 'react-native-popup-dialog'
 import { AntDesign, Feather } from '@expo/vector-icons'
 import {
-  Box, Divider, Heading, VStack, HStack, FlatList, NativeBaseProvider, Pressable, Button
+  Box, Divider, Heading, VStack, HStack, FlatList, NativeBaseProvider, Pressable, Button,
 } from 'native-base'
 import { LinearGradient } from 'expo-linear-gradient'
 import ActiveController from '../../controller/Active'
@@ -321,7 +321,7 @@ function Manage ({ route, navigation }) {
         <Box style={{ flex: 1 }}>
           <FlatList
             data={attendeeINFO}
-            keyExtractor={(item) => item.studentID}
+            keyExtractor={(item) => item.uid}
             refreshControl={(
               <RefreshControl
                 refreshing={refreshing}
@@ -343,8 +343,8 @@ function Manage ({ route, navigation }) {
                         {/* <Title style={styles.signupIndex}>
                               {item.signupindex}
                             </Title> */}
-                        <Text style={{ fontWeight: '700', fontSize: 18 }}>
-                          {item.name}
+                        <Text style={{ fontWeight: '700', fontSize: 16 }}>
+                          {(item.name.length < 9) ? item.name : `${item.name.substring(0, 7)}...`}
                         </Text>
                         <HStack>
                           <Text style={{ textAlign: 'left', fontWeight: '400', fontSize: 10 }}>

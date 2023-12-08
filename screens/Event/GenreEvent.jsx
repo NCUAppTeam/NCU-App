@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import {
-  Text, RefreshControl, Image
+  RefreshControl, Image
 } from 'react-native'
 import { Title } from 'react-native-paper'
 import {
   Ionicons, FontAwesome5, AntDesign, Feather, Octicons
 } from '@expo/vector-icons'
 import {
-  NativeBaseProvider, Box, FlatList, VStack, Pressable, HStack, Center, ZStack
+  NativeBaseProvider, Box, FlatList, VStack, Pressable, HStack, Center, ZStack, Badge, Text
 } from 'native-base'
 import styles from './style_folder/Styles_moreEvent'
 import ActiveController from '../../controller/Active'
@@ -107,6 +107,7 @@ function Genre ({ navigation, route }) {
           </HStack>
         </Box>
         <Box style={styles.bodyContainer}>
+        {((active.length != 0) ? (
           <FlatList
             numColumns={2}
             data={active}
@@ -124,42 +125,29 @@ function Genre ({ navigation, route }) {
                 navigation.navigate('details', { Cd: item.id, prepage: 'more' })
               }}
               >
-                <VStack style={styles.CardInMore}>
-                  <Image
-                    style={styles.pic}
-                    source={{
-                      uri: item.imageUri1
-                    }}
-                  />
-                  <Title style={styles.CardTitle}>
-                    {item.name}
-                  </Title>
-                  <Box style={styles.CardStartTime}>
-                    <AntDesign
-                      name="clockcircleo"
-                      size={12}
-                      color="rgba(40, 82, 122, 0.65)"
+                <ZStack style={styles.CardInMore}>
+                  <VStack w={'100%'}>
+                    <Image
+                        style={styles.pic}
+                        source={{
+                          uri: item.imageUri1
+                        }}
                     />
-                    <Text style={styles.CardTimeText}>
-                      {'   '}
-                      {item.startTime}
-                    </Text>
-                  </Box>
-                  <Box style={styles.CardPlace}>
-                    <Ionicons
-                      name="location-outline"
-                      size={15}
-                      color="rgba(40, 82, 122, 0.65)"
-                    />
-                    <Text style={styles.cardPlaceText}>
-                      {'  '}
-                      {item.place}
-                    </Text>
-                  </Box>
-                </VStack>
+                      <VStack p={2}>
+                        <Text fontSize="xs" bold color="gray.600">
+                          {item.startTimeWeekday}
+                        </Text>
+                        <Text fontSize="md" bold color="primary.600">
+                          {item.name}
+                        </Text>
+                      </VStack>
+                    </VStack>
+                  <Box alignSelf={'flex-end'}>{(item.finish && (<Badge variant={'solid'}>已結束</Badge>))}</Box>
+                </ZStack>
               </Pressable>
             )}
-          />
+          />) 
+          : (<Box w={'full'} h={'full'} justifyContent={'center'}><Center><Text fontSize="xl">目前尚無任何活動</Text></Center></Box>))}
         </Box>
 
     </Box>

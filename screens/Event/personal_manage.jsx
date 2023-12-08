@@ -9,7 +9,7 @@ import {
   Ionicons, AntDesign, Feather
 } from '@expo/vector-icons'
 import {
-  Box, ZStack, VStack, FlatList, Pressable, Text
+  Box, ZStack, VStack, FlatList, Pressable, Text, Badge
 } from 'native-base'
 import { LinearGradient } from 'expo-linear-gradient'
 import ActiveController from '../../controller/Active'
@@ -234,80 +234,83 @@ function Personal ({ navigation }) {
             )}
             renderItem={({ item }) => (
               <Box style={{ flexDirection: 'column' }}>
-                <Card
-                  key={item.id}
-                  style={styles.cardManage}
-                  onPress={() => {
-                    navigation.navigate('manage', { Cd: item.id })
-                  }}
-                >
-                  <Card.Content style={{ padding: 0 }}>
-                    <Box style={{ flexDirection: 'row', margin: -15 }}>
-                      <Box style={{ aspectRatio: 1 }}>
-                        <Image
-                          style={styles.cardManagepic}
-                          source={{
-                            uri: item.imageUri1
-                          }}
-                        />
-                      </Box>
-                      <Box style={{ flexDirection: 'column' }}>
-                        <Title style={styles.cardManageTitle}>
-                          {item.name}
-                        </Title>
-                        <Box style={styles.cardManageDetails}>
-                          <AntDesign
-                            name="clockcircleo"
-                            size={15}
-                            style={{ alignSelf: 'center' }}
+                  <ZStack style={styles.cardManage}>
+                  <Card
+                    key={item.id}
+                    style={styles.cardManage}
+                    onPress={() => {
+                      navigation.navigate('manage', { Cd: item.id })
+                    }}
+                  >
+                    <Card.Content style={{ padding: 0 }}>
+                      <Box style={{ flexDirection: 'row', margin: -15 }}>
+                        <Box style={{ aspectRatio: 1 }}>
+                          <Image
+                            style={styles.cardManagepic}
+                            source={{
+                              uri: item.imageUri1
+                            }}
                           />
-                          <Text style={styles.cardManageText}>
-                            {'   開始 ：'}
-                            {item.startTimeInNum}
-                          </Text>
                         </Box>
-                        <Box style={styles.cardManageLocation}>
-                          <Ionicons
-                            name="location-outline"
-                            size={17}
-                            color="black"
-                            style={{ alignSelf: 'center' }}
-                          />
-                          <Text style={styles.cardManageTextLocation}>
-                            {'  '}
-                            {item.place}
-                          </Text>
-                        </Box>
-                        <Box style={styles.cardManageDetails}>
-                          <Feather
-                            name="users"
-                            size={16}
-                            color="black"
-                            style={{ alignSelf: 'center' }}
-                          />
-                          {item.limitNum !== '0' && (
+                        <Box style={{ flexDirection: 'column' }}>
+                          <Title style={styles.cardManageTitle}>
+                            {item.name}
+                          </Title>
+                          <Box style={styles.cardManageDetails}>
+                            <AntDesign
+                              name="clockcircleo"
+                              size={15}
+                              style={{ alignSelf: 'center' }}
+                            />
                             <Text style={styles.cardManageText}>
-                              {'   '}
-                              {item.num}
-                              {' / '}
-                              {item.limitNum}
-                              人
+                              {'   開始 ：'}
+                              {item.startTimeInNum}
                             </Text>
-                          )}
-                          {item.limitNum === '0' && (
-                            <Text style={styles.cardManageText}>
-                              {'   '}
-                              {item.num}
-                              &ensp;
-                              (無上限)
+                          </Box>
+                          <Box style={styles.cardManageLocation}>
+                            <Ionicons
+                              name="location-outline"
+                              size={17}
+                              color="black"
+                              style={{ alignSelf: 'center' }}
+                            />
+                            <Text style={styles.cardManageTextLocation}>
+                              {'  '}
+                              {item.place}
                             </Text>
-                          )}
+                          </Box>
+                          <Box style={styles.cardManageDetails}>
+                            <Feather
+                              name="users"
+                              size={16}
+                              color="black"
+                              style={{ alignSelf: 'center' }}
+                            />
+                            {item.limitNum !== '0' && (
+                              <Text style={styles.cardManageText}>
+                                {'   '}
+                                {item.num}
+                                {' / '}
+                                {item.limitNum}
+                                人
+                              </Text>
+                            )}
+                            {item.limitNum === '0' && (
+                              <Text style={styles.cardManageText}>
+                                {'   '}
+                                {item.num}
+                                &ensp;
+                                (無上限)
+                              </Text>
+                            )}
 
+                          </Box>
                         </Box>
                       </Box>
-                    </Box>
-                  </Card.Content>
-                </Card>
+                    </Card.Content>
+                  </Card>
+                  <Box right={'0'} alignSelf={'flex-end'}>{(item.finish && (<Badge variant={'solid'}>已結束</Badge>))}</Box>
+                  </ZStack>
               </Box>
             )}
           />
@@ -329,39 +332,20 @@ function Personal ({ navigation }) {
             renderItem={({ item }) => (
               <Pressable onPress={() => { navigation.navigate('details', { Cd: item.id, prepage: 'personal' }) }}>
                 <VStack style={styles.CardInPersonal}>
-                  <Image
-                    style={styles.pic}
-                    source={{
-                      uri: item.imageUri1
-                    }}
-                  />
-                  <Title style={styles.CardTitle}>
-                    {item.name}
-                  </Title>
-                  <Box style={styles.CardStartTime}>
-                    <AntDesign
-                      name="clockcircleo"
-                      size={12}
-                      color="rgba(40, 82, 122, 0.65)"
-                      style={{ alignSelf: 'center' }}
+                    <Image
+                        style={styles.pic}
+                        source={{
+                          uri: item.imageUri1
+                        }}
                     />
-                    <Text style={styles.CardTimeText}>
-                      {'   '}
-                      {item.startTimeInNum}
-                    </Text>
-                  </Box>
-                  <Box style={styles.CardPlace}>
-                    <Ionicons
-                      name="location-outline"
-                      size={15}
-                      color="rgba(40, 82, 122, 0.65)"
-                      style={{ alignSelf: 'center' }}
-                    />
-                    <Text style={styles.cardPlaceText}>
-                      {'  '}
-                      {item.place}
-                    </Text>
-                  </Box>
+                    <VStack p={2}>
+                      <Text fontSize="11px" bold color="gray.600">
+                        {item.startTimeWeekday}
+                      </Text>
+                      <Text fontSize="md" bold color="primary.600">
+                        {item.name}
+                      </Text>
+                    </VStack>
                 </VStack>
               </Pressable>
             )}
@@ -384,39 +368,20 @@ function Personal ({ navigation }) {
             renderItem={({ item }) => (
               <Pressable onPress={() => { navigation.navigate('details', { Cd: item.id, prepage: 'personal' }) }}>
                 <VStack style={styles.CardInPersonal}>
-                  <Image
-                    style={styles.pic}
-                    source={{
-                      uri: item.imageUri1
-                    }}
-                  />
-                  <Title style={styles.CardTitle}>
-                    {item.name}
-                  </Title>
-                  <Box style={styles.CardStartTime}>
-                    <AntDesign
-                      name="clockcircleo"
-                      size={12}
-                      color="rgba(40, 82, 122, 0.65)"
-                      style={{ alignSelf: 'center' }}
+                    <Image
+                        style={styles.pic}
+                        source={{
+                          uri: item.imageUri1
+                        }}
                     />
-                    <Text style={styles.CardTimeText}>
-                      {'   '}
-                      {item.startTimeInNum}
-                    </Text>
-                  </Box>
-                  <Box style={styles.CardPlace}>
-                    <Ionicons
-                      name="location-outline"
-                      size={15}
-                      color="rgba(40, 82, 122, 0.65)"
-                      style={{ alignSelf: 'center' }}
-                    />
-                    <Text style={styles.cardPlaceText}>
-                      {'  '}
-                      {item.place}
-                    </Text>
-                  </Box>
+                    <VStack p={2}>
+                      <Text fontSize="11px" bold color="gray.600">
+                        {item.startTimeWeekday}
+                      </Text>
+                      <Text fontSize="md" bold color="primary.600">
+                        {item.name}
+                      </Text>
+                    </VStack>
                 </VStack>
               </Pressable>
             )}

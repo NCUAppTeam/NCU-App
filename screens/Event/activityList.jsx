@@ -11,7 +11,9 @@ import {
   Button,
   Pressable,
   ScrollView,
-  Image
+  Image,
+  ZStack,
+  Badge
 } from 'native-base'
 import styles from './style_folder/Styles_activityList'
 import ActiveController from '../../controller/Active'
@@ -24,15 +26,15 @@ function ActivityCard (props) {
   const imageUri1 = props.imageUri1
   const place = props.place
   const startTimeWeekday = props.startTimeWeekday
+  const finish = props.finish
   const navigation = props.navigation
+
 
   return (
     <Pressable
       border="1"
-      borderRadius="md"
+      borderRadius='xl'
       key={key}
-      width="185px"
-      height="105%"
       mx={2}
       bg="white"
       shadow="2"
@@ -40,23 +42,26 @@ function ActivityCard (props) {
         navigation.navigate('details', { Cd: id, prepage: 'list' })
       }}
     >
-      <VStack divider={<Divider />}>
-        <Image
-          alt="eventPic"
-          style={styles.pic}
-          source={{
-            uri: imageUri1
-          }}
-        />
-        <VStack p={2}>
-          <Text fontSize="xs" bold color="gray.600">
-            {startTimeWeekday}
-          </Text>
-          <Text fontSize="md" bold color="primary.600">
-            {name}
-          </Text>
+      <ZStack width="185px" height="93%">
+        <VStack divider={<Divider />} w={'100%'}>
+          <Image
+            alt="eventPic"
+            style={styles.pic}
+            source={{
+              uri: imageUri1
+            }}
+          />
+          <VStack p={2}>
+            <Text fontSize="xs" bold color="gray.600">
+              {startTimeWeekday}
+            </Text>
+            <Text fontSize="md" bold color="primary.600">
+              {name}
+            </Text>
+          </VStack>
         </VStack>
-      </VStack>
+        <Box alignSelf={'flex-end'}>{(finish && (<Badge variant={'solid'}>已結束</Badge>))}</Box>
+      </ZStack>
     </Pressable>
   )
 }
@@ -97,12 +102,13 @@ function List ({ navigation }) {
 
       <Box style={styles.body}>
         <ScrollView
+          backgroundColor={'blue'}
           showsVerticalScrollIndicator={false}
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }
         >
-          <VStack>
+          <VStack height={'300px'}>
             <VStack mx={4} my={2}>
               <HStack style={{ flexDirection: 'row' }}>
                 <Text flex={10} fontSize="xl" bold color="primary.600">
@@ -134,7 +140,7 @@ function List ({ navigation }) {
                   }}
                 >
                   {active1.map(
-                    ({ id, name, imageUri1, place, startTimeWeekday }) => (
+                    ({ id, name, imageUri1, place, startTimeWeekday, finish }) => (
                       <ActivityCard
                         key={id}
                         id={id}
@@ -142,6 +148,7 @@ function List ({ navigation }) {
                         imageUri1={imageUri1}
                         place={place}
                         startTimeWeekday={startTimeWeekday}
+                        finish={finish}
                         navigation={navigation}
                       />
                     )
@@ -150,7 +157,7 @@ function List ({ navigation }) {
               </ScrollView>
             </Box>
           </VStack>
-          <VStack>
+          <VStack my={8} height={'300px'}>
             <VStack mx={4} my={2}>
               <HStack style={{ flexDirection: 'row' }}>
                 <Text flex={10} fontSize="xl" bold color="primary.600">
@@ -182,7 +189,7 @@ function List ({ navigation }) {
                   }}
                 >
                   {active2.map(
-                    ({ id, name, imageUri1, place, startTimeWeekday }) => (
+                    ({ id, name, imageUri1, place, startTimeWeekday, finish }) => (
                       <ActivityCard
                         key={id}
                         id={id}
@@ -190,6 +197,7 @@ function List ({ navigation }) {
                         imageUri1={imageUri1}
                         place={place}
                         startTimeWeekday={startTimeWeekday}
+                        finish={finish}
                         navigation={navigation}
                       />
                     )

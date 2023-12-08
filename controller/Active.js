@@ -732,23 +732,27 @@ async function deleteOneActive (deleteDocId) {
 
 async function getAllAttendees (docID) {
   const db = getFirestore(app)
-  const infoRef = query(collection(db, 'attendees'))
   const activesDoc = doc(db, `activities/${docID}`)
 
-  const querySnapshot = await getDocs(infoRef)
   const activesSnapshot = await getDoc(activesDoc)
   const IDlist = activesSnapshot.data().participant
   let info = []
 
   for (let j = 0; j < IDlist.length; j += 1) {
     const infoDoc = doc(db, `attendees/${IDlist[j]}`)
-    const querySnapshot2 = await getDoc(infoDoc)
+    const querySnapshot = await getDoc(infoDoc)
+    const signUpTime = await getDoc(doc(db, `attendees/${IDlist[j]}/attendedEvent/${docID}`))
     info.push({ 
-      uid: querySnapshot2.id, 
-      ...querySnapshot2.data() 
+      uid: querySnapshot.id, 
+      signupTimestamp: signUpTime.data().signUpTime,
+      signUpTime: toDateString(signUpTime.data().signUpTime.toDate()),
+      ...querySnapshot.data() 
     })
   }
-  return info
+  console.log(info)
+  // 按照報名時間排序 - 由先報名的 到 後報名的
+  var sortedInfo = info.sort((a, b) => { return a.signupTimestamp - b.signupTimestamp })
+  return sortedInfo
 }
 
 /**

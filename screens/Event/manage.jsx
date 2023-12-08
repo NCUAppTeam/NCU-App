@@ -357,6 +357,11 @@ function Manage ({ route, navigation }) {
                             年級
                           </Text>
                         </HStack>
+                        <HStack>
+                          <Text style={{ textAlign: 'left', fontWeight: '400', fontSize: 10 }}>
+                            於{item.signUpTime}報名
+                          </Text>
+                        </HStack>
                       </VStack>
                     </HStack>
                   </Box>

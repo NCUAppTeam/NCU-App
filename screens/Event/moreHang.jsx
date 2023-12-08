@@ -6,7 +6,7 @@ import {
   FontAwesome5, AntDesign, Feather, Octicons, Ionicons
 } from '@expo/vector-icons'
 import {
-  Divider, Box, FlatList, VStack, Pressable, HStack, Text, ZStack, Center
+  Divider, Box, FlatList, VStack, Pressable, HStack, Text, ZStack, Center, Badge
 } from 'native-base'
 import styles from './style_folder/Styles_moreEvent'
 import ActiveController from '../../controller/Active'
@@ -18,40 +18,36 @@ function ActivityCard (props) {
   const name = props.name
   const imageUri1 = props.imageUri1
   const place = props.place
-  const startTime = props.startTime
+  const startTimeWeekday = props.startTimeWeekday
+  const finish = props.finish
   const navigation = props.navigation
 
   return (
     <Pressable
-      border="1"
-      borderRadius="md"
-      key={key}
-      width="180px"
-      height="99%"
-      mx={2}
-      bgColor={'white'}
-      shadow="2"
       onPress={() => {
         navigation.navigate('details', { Cd: id, prepage: 'list' })
       }}
     >
-      <VStack divider={<Divider />}>
-        <Image
-          alt="eventPic"
-          style={styles.pic}
-          source={{
-            uri: imageUri1
-          }}
-        />
-        <VStack p={2}>
-          <Text fontSize="xs" bold color="gray.600">
-            {startTime}
-          </Text>
-          <Text fontSize="md" bold color="primary.600">
-            {name}
-          </Text>
+      <ZStack style={styles.CardInMore}>
+        <VStack divider={<Divider />} w={'100%'}>
+          <Image
+            alt="eventPic"
+            style={styles.pic}
+            source={{
+              uri: imageUri1
+            }}
+          />
+          <VStack p={2}>
+            <Text fontSize="xs" bold color="gray.600">
+              {startTimeWeekday}
+            </Text>
+            <Text fontSize="md" bold color="primary.600">
+              {name}
+            </Text>
+          </VStack>
         </VStack>
-      </VStack>
+        <Box alignSelf={'flex-end'}>{(finish && (<Badge variant={'solid'}>已結束</Badge>))}</Box>
+      </ZStack>
     </Pressable>
   )
 }
@@ -165,7 +161,8 @@ function MoreHang ({ navigation, route }) {
                       name={item.name}
                       imageUri1={item.imageUri1}
                       place={item.place}
-                      startTime={item.startTime}
+                      startTimeWeekday={item.startTimeWeekday}
+                      finish={item.finish}
                       navigation={navigation}
                     />
               )

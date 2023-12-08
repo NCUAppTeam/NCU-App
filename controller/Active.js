@@ -6,7 +6,7 @@
 import { getApp } from 'firebase/app'
 import {
   getFirestore, collection, query, getDoc, getDocs, addDoc,
-  setDoc, doc, orderBy, where, deleteDoc, deleteField, updateDoc, FieldValue, arrayRemove
+  setDoc, doc, orderBy, where, deleteDoc, deleteField, updateDoc, arrayRemove,
 } from 'firebase/firestore'
 import {
   getStorage,
@@ -382,9 +382,6 @@ async function getAllActive () {
       limitNum: doc1.data().limitNum,
       genre: doc1.data().genre,
       link: doc1.data().link,
-      hostName: doc1.data().hostName,
-      hostPhone: doc1.data().hostPhone,
-      hostMail: doc1.data().hostMail,
       details: doc1.data().details
     })
   })
@@ -397,6 +394,7 @@ async function getAllActive () {
  * @property {*} db - the reference of the firestore
  * @property {*} activesRef - the reference of the activities collection
  * @property {*} querySnapshot - the snapshot of the activesRef
+ * @property {timestamp} current - the current time
  * 
  * @returns {object} GenreArray - the array of all activities
  */
@@ -406,6 +404,7 @@ async function getGenreActive (genre) {
   const activesRef = query(collection(db, 'activities'), where('genre', '==', genre))
   const GenreArray = []
   const querySnapshot = await getDocs(activesRef)
+  const current = new Date()
 
   querySnapshot.forEach((doc1) => {
     GenreArray.push({
@@ -414,6 +413,7 @@ async function getGenreActive (genre) {
       imageUri1: doc1.data().imageUri1,
       imageUri2: doc1.data().imageUri2,
       imageUri3: doc1.data().imageUri3,
+      endtimeTimestamp: doc1.data().endTime.toDate(),
       startTime: toDateString(doc1.data().startTime.toDate()),
       endTime: toDateString(doc1.data().endTime.toDate()),
       startTimeWeekday: dateToWeekday(doc1.data().startTime.toDate()),
@@ -423,13 +423,13 @@ async function getGenreActive (genre) {
       limitNum: doc1.data().limitNum,
       genre: doc1.data().genre,
       link: doc1.data().link,
-      hostName: doc1.data().hostName,
-      hostPhone: doc1.data().hostPhone,
-      hostMail: doc1.data().hostMail,
-      details: doc1.data().details
+      details: doc1.data().details,
+      finish: doc1.data().endTime.toDate() < current
     })
   })
-  return GenreArray
+  // 按照結束時間排序 - 由未結束到已結束
+  var sortedGenreArray = GenreArray.sort((a, b) => { return b.endtimeTimestamp - a.endtimeTimestamp })
+  return sortedGenreArray
 }
 
 /**
@@ -468,6 +468,7 @@ async function getParticipatedActive () {
         name: result.data().name,
         imageUri1: result.data().imageUri1,
         time: dateToWeekdayWithoutTime(result.data().startTime.toDate()),
+        starttimeTimestamp: result.data().startTime.toDate(),
         startTimeWeekday: dateToWeekday(result.data().startTime.toDate()),
         startTimeInNum: toDateString(result.data().startTime.toDate()),
         place: result.data().place.length < 10 ? result.data().place : result.data().place.slice(0, 8) + '...',
@@ -475,15 +476,14 @@ async function getParticipatedActive () {
         limitNum: result.data().limitNum,
         genre: result.data().genre,
         link: result.data().link,
-        hostName: result.data().hostName,
-        hostPhone: result.data().hostPhone,
-        hostMail: result.data().hostMail,
         details: result.data().details,
         num: result.data().totalAttendee
       })
     }
   }
-  return activeArray
+  // 按照開始時間排序 - 由近到遠
+  var sortedActiveArray = activeArray.sort((a, b) => { return a.starttimeTimestamp - b.starttimeTimestamp })
+  return sortedActiveArray
 }
 
 /**
@@ -526,14 +526,14 @@ async function getFinishedActive () {
         limitNum: result.data().limitNum,
         genre: result.data().genre,
         link: result.data().link,
-        hostName: result.data().hostName,
-        hostPhone: result.data().hostPhone,
-        hostMail: result.data().hostMail,
         details: result.data().details,
-        num: result.data().totalAttendee
+        num: result.data().totalAttendee,
+        endtimeTimestamp: result.data().endTime.toDate()
       })
     }
   }
+  // 按照結束時間排序 - 由先結束的 到 後結束的
+  var sortedActiveArray = activeArray.sort((a, b) => { return a.endtimeTimestamp - b.endtimeTimestamp })
   return activeArray
 }
 
@@ -569,9 +569,6 @@ async function getOneActive (id) {
     genre: querySnapshot.data().genre,
     genreIndex: querySnapshot.data().genreIndex,
     link: querySnapshot.data().link,
-    hostName: querySnapshot.data().hostName,
-    hostPhone: querySnapshot.data().hostPhone,
-    hostMail: querySnapshot.data().hostMail,
     details: querySnapshot.data().details,
     totalAttendee: querySnapshot.data().totalAttendee,
     CloseEvent: querySnapshot.data().CloseEvent
@@ -592,6 +589,7 @@ async function getOneActive (id) {
  * @property {*} db - the reference of the firestore
  * @property {*} activesRef - the reference of the activity
  * @property {*} querySnapshot - the snapshot of the activesRef
+ * @property {timestamp} current - the current time
  * 
  * @returns {object} GenreArray - the array of activities of corresponding genre
  */
@@ -601,6 +599,8 @@ async function getHangOutActive () {
   const activesRef = query(collection(db, 'activities'), where('genre', 'in', ['揪人遊戲', '揪人共乘', '揪人運動']))
   const GenreArray = []
   const querySnapshot = await getDocs(activesRef)
+  const current = new Date()
+
   querySnapshot.forEach((doc1) => {
     GenreArray.push({
       id: doc1.id,
@@ -608,6 +608,7 @@ async function getHangOutActive () {
       imageUri1: doc1.data().imageUri1,
       imageUri2: doc1.data().imageUri2,
       imageUri3: doc1.data().imageUri3,
+      endtimeTimestamp: doc1.data().endTime.toDate(),
       startTime: toDateString(doc1.data().startTime.toDate()),
       endTime: toDateString(doc1.data().endTime.toDate()),
       startTimeWeekday: dateToWeekday(doc1.data().startTime.toDate()),
@@ -617,14 +618,13 @@ async function getHangOutActive () {
       limitNum: doc1.data().limitNum,
       genre: doc1.data().genre,
       link: doc1.data().link,
-      hostName: doc1.data().hostName,
-      hostPhone: doc1.data().hostPhone,
-      hostMail: doc1.data().hostMail,
-      details: doc1.data().details
+      details: doc1.data().details,
+      finish: doc1.data().endTime.toDate() < current
     })
   })
-  console.log('GenreArray', GenreArray)
-  return GenreArray
+  // 按照結束時間排序 - 由未結束到已結束
+  var sortedGenreArray = GenreArray.sort((a, b) => { return b.endtimeTimestamp - a.endtimeTimestamp })
+  return sortedGenreArray
 }
 
 
@@ -634,6 +634,7 @@ async function getHangOutActive () {
  * @property {*} db - the reference of the firestore
  * @property {*} activesRef - the reference of the activity
  * @property {*} querySnapshot - the snapshot of the activesRef
+ * @property {timestamp} current - the current time
  * 
  * @returns {object} EventArray - the array of activities of corresponding genre
  */
@@ -643,6 +644,8 @@ async function getEventActive () {
   const activesRef = query(collection(db, 'activities'), where('genre', 'in', ['校園活動', '系上活動', '社團活動']))
   const EventArray = []
   const querySnapshot = await getDocs(activesRef)
+  const current = new Date()
+
   querySnapshot.forEach((doc1) => {
     EventArray.push({
       id: doc1.id,
@@ -650,6 +653,7 @@ async function getEventActive () {
       imageUri1: doc1.data().imageUri1,
       imageUri2: doc1.data().imageUri2,
       imageUri3: doc1.data().imageUri3,
+      endtimeTimestamp: doc1.data().endTime.toDate(),
       startTime: toDateString(doc1.data().startTime.toDate()),
       endTime: toDateString(doc1.data().endTime.toDate()),
       startTimeWeekday: dateToWeekday(doc1.data().startTime.toDate()),
@@ -659,10 +663,13 @@ async function getEventActive () {
       limitNum: doc1.data().limitNum,
       genre: doc1.data().genre,
       link: doc1.data().link,
-      details: doc1.data().details
+      details: doc1.data().details,
+      finish: doc1.data().endTime.toDate() < current
     })
   })
-  return EventArray
+  // 按照結束時間排序 - 由未結束到已結束
+  var sortedEventArray = EventArray.sort((a, b) => { return b.endtimeTimestamp - a.endtimeTimestamp })
+  return sortedEventArray
 }
 
 /**
@@ -736,7 +743,10 @@ async function getAllAttendees (docID) {
   for (let j = 0; j < IDlist.length; j += 1) {
     const infoDoc = doc(db, `attendees/${IDlist[j]}`)
     const querySnapshot2 = await getDoc(infoDoc)
-    info.push({ uid: querySnapshot2.id, ...querySnapshot2.data() })
+    info.push({ 
+      uid: querySnapshot2.id, 
+      ...querySnapshot2.data() 
+    })
   }
   return info
 }
@@ -884,13 +894,14 @@ async function getHostedEvent () {
       limitNum: result.data().limitNum,
       genre: result.data().genre,
       link: result.data().link,
-      hostName: result.data().hostName,
-      hostPhone: result.data().hostPhone,
-      hostMail: result.data().hostMail,
       details: result.data().details,
-      num: result.data().totalAttendee
+      num: result.data().totalAttendee,
+      finish: result.data().endTime.toDate() < new Date(),
+      endtimeTimestamp: result.data().endTime.toDate()
     })
   }
+    // 按照時間排序 - 由未結束到已結束
+    var sortedEventArray = eventArray.sort((a, b) => { return b.endtimeTimestamp - a.endtimeTimestamp })
   return eventArray
 }
 

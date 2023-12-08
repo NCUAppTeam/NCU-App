@@ -57,7 +57,7 @@ export default StyleSheet.create({
   },
   CardInPersonal: {
     height: 'auto',
-    width: Dimensions.get('window').width * 0.42,
+    width: Dimensions.get('window').width * 0.41,
     borderRadius: 10,
     shadowColor: 'black',
     shadowOffset: {

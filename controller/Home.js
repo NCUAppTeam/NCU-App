@@ -94,7 +94,7 @@ async function getCalender () {
 async function getTutorial () {
   const app = getApp()
   const db = getFirestore(app)
-  const tutorialRef = query(collection(db, 'NCU-APP corner'), orderBy('upload', 'desc'))
+  const tutorialRef = query(collection(db, 'ncuappcorner'), orderBy('upload', 'desc'))
   const querySnapshot = await getDocs(tutorialRef)
 
   const result = []

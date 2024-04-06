@@ -11,6 +11,7 @@ import {
 import styles from './style_folder/Styles_moreEvent'
 import ActiveController from '../../controller/Active'
 import MessageController from '../../controller/Message'
+import { getAuth } from 'firebase/auth'
 
 function ActivityCard (props) {
   const key = props.id
@@ -53,6 +54,7 @@ function ActivityCard (props) {
 }
 
 function MoreHang ({ navigation, route }) {
+  const auth = getAuth()
   const [Messagenum, setMessageNum] = useState(0)
   useEffect(() => {
     MessageController.countUnreadMessage().then((num) => {
@@ -101,7 +103,7 @@ function MoreHang ({ navigation, route }) {
                 近期揪人
               </Text>
             </Box>
-            <Pressable
+            {!auth.currentUser.isAnonymous ? <><Pressable
               onPress={() => { navigation.navigate('message', { prepage: 'list' }) }}
             >
               <Center>
@@ -138,7 +140,10 @@ function MoreHang ({ navigation, route }) {
                   color="#476685"
                 />
               </Box>
-            </Pressable>
+            </Pressable></>
+            :
+            <Box flex={2}></Box>
+            }
           </HStack>
         </Box>
         <Box style={styles.bodyContainer}>

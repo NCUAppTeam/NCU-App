@@ -12,8 +12,12 @@ import {
 import styles from '../../styles_folder/Styles'
 import UserController from '../../../../controller/getStudentId'
 import MessageController from '../../../../controller/Message'
+import { getAuth } from 'firebase/auth'
 
 export function HomeHeader ({ navigation }) {
+  const auth = getAuth()
+  const defaultAvatar = 'https://firebasestorage.googleapis.com/v0/b/ncu-app-test.appspot.com/o/avatar%2FdefaultAvatar.webp?alt=media&token=a41c5523-e38b-4c77-85d7-32a730356d57'
+  const defaultName = '臨時使用者'
   const [Messagenum, setMessageNum] = useState(0)
   const [userInfo, setUserInfo] = useState({})
   const userUid = UserController.getUid()
@@ -73,16 +77,16 @@ export function HomeHeader ({ navigation }) {
           <Image
             style={styles.avatar}
             source={{
-              uri: userInfo.avatar
+              uri: userInfo.avatar ? userInfo.avatar : defaultAvatar
             }}
           />
           <Box style={styles.topGreet}>
             <Text style={styles.topTextGreet}>{greetText}</Text>
-            <Text style={styles.topTextName}>{userInfo.name}</Text>
+            <Text style={styles.topTextName}>{userInfo.name ? userInfo.name: defaultName}</Text>
           </Box>
       </Box>
       <Center style={styles.topLeftRight}>
-          <Pressable onPress={() => { navigation.navigate('hmessage', { prepage: 'homepage' }) }}>
+          {!auth.currentUser.isAnonymous && <Pressable onPress={() => { navigation.navigate('hmessage', { prepage: 'homepage' }) }}>
             <ZStack size={'25'} ml={'3'} alignItems="center" justifyContent="center">
               <Box>
                 <Octicons
@@ -102,7 +106,7 @@ export function HomeHeader ({ navigation }) {
                 />
               </Box>
             </ZStack>
-          </Pressable>
+          </Pressable>}
             <Ionicons
               name="settings-outline"
               size={25}

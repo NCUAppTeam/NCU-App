@@ -5,8 +5,7 @@
 /* eslint-disable no-await-in-loop */
 import { getApp } from 'firebase/app'
 import {
-  getFirestore, collection, query, getDoc, getDocs, addDoc,
-  setDoc, doc, orderBy, where, deleteDoc, deleteField, updateDoc
+  getFirestore, query, getDoc, doc, deleteDoc, updateDoc
 } from 'firebase/firestore'
 import {
   getStorage,
@@ -72,7 +71,21 @@ async function updateInfo (uid, newUserInfo) {
     })
 }
 
+async function deleteUserInfo(uid) {
+  const db = getFirestore(app)
+  
+  // delete user info in the database
+  await deleteDoc(doc(db, 'attendees', `${uid}`))
+    .then(console.log('delete user info succeed'))
+    .catch((error) => {
+      console.log(error)
+    })
+
+}
+
+
 export default {
   changeAvatar,
-  updateInfo
+  updateInfo, 
+  deleteUserInfo
 }

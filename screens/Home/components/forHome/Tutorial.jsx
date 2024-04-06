@@ -6,7 +6,7 @@ export function Tutorial ({ card }) {
   return (
     <Box borderRadius={10} borderColor='#E5EBF1'>
       <Box marginBottom={2}>
-          <Text fontSize="lg" bold>NCU-APP Corner 公告版</Text>
+          <Text fontSize="lg" bold> 公告版</Text>
       </Box>
         <FlatList
           nestedScrollEnabled
@@ -51,7 +51,7 @@ export function Tutorial ({ card }) {
                       {item.title}
                     </Heading>
                     <Text w={200} fontWeight="400">
-                      {item.content}
+                      {item.content.length > 50 ? item.content.slice(0, 50) + '...' : item.content}
                     </Text>
                     </Stack>
 

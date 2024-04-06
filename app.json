@@ -3,7 +3,7 @@
     "name": "ncu-app",
     "slug": "ncu-app",
     "scheme": "ncu-app",
-    "version": "2.0.3",
+    "version": "2.0.4",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -26,7 +26,7 @@
     },
     "android": {
       "package": "tw.edu.ncu.app",
-      "versionCode": 13,
+      "versionCode": 14,
       "config": {
         "googleMaps": {
           "apiKey": "AIzaSyBA-fvYndAZdoDJ8GqjaBj1rm6Yh1y9VUI"

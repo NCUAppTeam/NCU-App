@@ -19,7 +19,7 @@ import {
   InputGroup,
   InputRightAddon
 } from 'native-base'
-import { createUserWithEmailAndPassword } from 'firebase/auth'
+import { createUserWithEmailAndPassword, sendEmailVerification, signOut, getAuth } from 'firebase/auth'
 import * as ImagePicker from 'expo-image-picker'
 import ActiveController from '../../controller/Active'
 import { auth } from '../../config'
@@ -67,7 +67,16 @@ export function RegisterScreen () {
       .then((userCredential) => {
         // Signed in
         const { user } = userCredential
-        ActiveController.addUser(user.uid, registerData)
+        sendEmailVerification(auth.currentUser).then(() => {
+          // Email verification sent!
+          console.log('Email verification sent!')
+          ActiveController.addUser(user.uid, registerData)
+        }).then
+          console.log(getAuth().currentUser.emailVerified)
+          signOut(getAuth()).then(() => {
+            
+            console.log('Sign-out successful.')
+          })
       })
       .catch((err) => {
         setMsg(localizeMsg[err.code])
@@ -98,9 +107,10 @@ export function RegisterScreen () {
                 justifyContent={'center'}
               >
                 <Heading my={'20px'}>註冊帳號</Heading>
+                <Text>Tips: 若您為校外或是已畢業人士，可視意願選擇填寫“無”或是“您曾經的在學資料”</Text>
                 <Box my={3}>
                   <Heading size={'sm'} mb={2}>
-                    姓名<Text color="red.600">*</Text>
+                    姓名 Name<Text color="red.600">*</Text>
                   </Heading>
                   <Input
                     w={'95%'}
@@ -116,7 +126,7 @@ export function RegisterScreen () {
                 </Box>
                 <Box my={3}>
                   <Heading size={'sm'} mb={2}>
-                    科系<Text color="red.600">*</Text>
+                    科系 Major<Text color="red.600">*</Text>
                   </Heading>
                   <Input
                     w={'95%'}
@@ -132,7 +142,7 @@ export function RegisterScreen () {
                 </Box>
                 <Box my={3}>
                   <Heading size={'sm'} mb={2}>
-                    年級<Text color="red.600">*</Text>
+                    年級 Grade<Text color="red.600">*</Text>
                   </Heading>
                   <Input
                     w={'95%'}
@@ -148,7 +158,7 @@ export function RegisterScreen () {
                 </Box>
                 <Box my={3}>
                   <Heading size={'sm'} mb={2}>
-                    學號<Text color="red.600">*</Text>
+                    學號 StudentId<Text color="red.600">*</Text>
                   </Heading>
                   <Input
                     w={'95%'}
@@ -165,7 +175,7 @@ export function RegisterScreen () {
                 </Box>
                 <Box my={3}>
                   <Heading size={'sm'} mb={2}>
-                    電話<Text color="red.600">*</Text>
+                    電話 Phone Number<Text color="red.600">*</Text>
                   </Heading>
                   <Input
                     w={'95%'}
@@ -182,28 +192,25 @@ export function RegisterScreen () {
                 </Box>
                 <Box my={3}>
                   <Heading size={'sm'} mb={2}>
-                    Portal帳號信箱<Text color="red.600">*</Text>
+                    有效電子信箱 Valid Email<Text color="red.600">*</Text>
                   </Heading>
-                  <InputGroup w={{ base: '95%' }}>
-                    <Input
-                      w={{ base: '65%' }} size="md"
-                      py={2}
-                      alignSelf={'center'}
+
+                    <Input w={{ base: '95%' }}
+                       size="md"
+                      py={2}                      
                       placeholder="Your studentID"
                       wx="100%"
                       onChangeText={(text) => {
-                        setEmail(text + '@cc.ncu.edu.tw')
-                        setRegisterData({ ...registerData, email: text + '@cc.ncu.edu.tw' })
+                        setEmail(text)
+                        setRegisterData({ ...registerData, email: text })
                       }}
                     />
-                    <InputRightAddon w={'35%'} py={2}>
-                      @cc.ncu.edu.tw
-                    </InputRightAddon>
-                  </InputGroup>
+                    
+                  <Text>將發送驗證信，請填入真實信箱。{'\n'}We'll send verification email, please enter your real email.</Text>
                 </Box>
                 <Box my={3}>
                   <Heading size={'sm'} mb={2}>
-                    設定密碼<Text color="red.600">*</Text>
+                    設定密碼 Password<Text color="red.600">*</Text>
                   </Heading>
                   <Input
                     w={'95%'}
@@ -232,7 +239,7 @@ export function RegisterScreen () {
                 </Box>
                 <Box my={3}>
                   <Heading size={'sm'} mb={2}>
-                    確認密碼<Text color="red.600">*</Text>
+                    確認密碼 Check your password again<Text color="red.600">*</Text>
                   </Heading>
                   <Input
                     w={'95%'}
@@ -275,7 +282,7 @@ export function RegisterScreen () {
                     color: '#737373'
                   }}
                 >
-                  已有帳號
+                  已有帳號, 前往登入
                 </Link>
                 </Pressable>
 
@@ -283,7 +290,7 @@ export function RegisterScreen () {
 
                 <Box my={8}>
                   <Heading size={'sm'} mb={2}>
-                    新增頭貼<Text color="red.600">*</Text>
+                    新增頭貼 Add Avatar Image<Text color="red.600">*</Text>
                   </Heading>
                   <Pressable onPress={pickImage}>
                     <ZStack alignItems={'flex-end'} size={120} marginLeft={4}>
@@ -324,7 +331,7 @@ export function RegisterScreen () {
                       color: '#28537A'
                     }}
                   >
-                    完成
+                    完成 Finish
                   </Button>
                     )
                   : (
@@ -341,7 +348,7 @@ export function RegisterScreen () {
                       color: '#fbeeac'
                     }}
                   >
-                    完成
+                    完成 Finish
                   </Button>
                     )}
               </Box>

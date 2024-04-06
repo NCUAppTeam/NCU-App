@@ -6,8 +6,11 @@ import {
   Box, Center, HStack, Image, Pressable, Text, VStack
 } from 'native-base'
 import UserController from '../../../../controller/getStudentId'
+import { getAuth } from 'firebase/auth'
 
 export function Info ({ userInfo, navigation }) {
+  const auth = getAuth()
+  const defaultAvatar = 'https://firebasestorage.googleapis.com/v0/b/ncu-app-test.appspot.com/o/avatar%2FdefaultAvatar.webp?alt=media&token=a41c5523-e38b-4c77-85d7-32a730356d57'
   const userUid = UserController.getUid()
   const [refreshing, setRefreshing] = useState(false)
   const [info, setInfo] = useState(userInfo)
@@ -37,9 +40,9 @@ export function Info ({ userInfo, navigation }) {
                     <VStack w={'40%'} marginTop={'8'}>
                         <Center justifyContent={'center'} >
                             <Box>
-                                <Image size={20} borderRadius={50} alt={'userAvatar'} source={{ uri: info.avatar }} />
+                                <Image marginTop={auth.currentUser.isAnonymous ? 5 : 0} size={20} borderRadius={50} alt={'userAvatar'} source={{ uri: info.avatar ? info.avatar : defaultAvatar }} />
                             </Box>
-                            <Pressable
+                            {!auth.currentUser.isAnonymous && <Pressable
                                 width='75px'
                                 h="35px"
                                 borderWidth={1}
@@ -57,10 +60,16 @@ export function Info ({ userInfo, navigation }) {
                                     style={{ alignSelf: 'center' }}
                                 />
                                 <Text fontSize="sm" textAlign="center" alignSelf={'center'}>編輯</Text>
-                            </Pressable>
+                            </Pressable>}
                         </Center>
                     </VStack>
-                    <VStack w={'39%'} alignSelf={'flex-start'} justifyContent={'center'} marginTop={'5'}>
+                    {auth.currentUser.isAnonymous ? 
+                      // anonymous user
+                      (<Box justifyContent={'center'} marginTop={'12'}>
+                          <Text fontSize={'md'} textAlign="center" color={'#28527A'} bold >註冊後即可編輯您的個人檔案</Text>
+                      </Box>) 
+                      // normal user
+                      : (<VStack w={'39%'} alignSelf={'flex-start'} justifyContent={'center'} marginTop={'5'}>
                         <Box flexDirection={'row'}>
                             <Text fontSize={'md'} textAlign="center" color={'#28527A'} bold >姓名</Text>
                             <Text marginLeft={'5'} textAlign={'center'}>{info.name}</Text>
@@ -85,7 +94,7 @@ export function Info ({ userInfo, navigation }) {
                             <Text fontSize="md" textAlign="center" bold>信箱</Text>
                             <Text marginLeft={'5'} textAlign={'center'}>{info.email}</Text>
                         </Box>
-                    </VStack>
+                    </VStack>)}
                 </HStack>
             </Box>
         </Center>

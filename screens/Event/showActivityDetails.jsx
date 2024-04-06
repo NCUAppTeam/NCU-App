@@ -34,6 +34,7 @@ import ActiveController from '../../controller/Active'
 import MessageController from '../../controller/Message'
 import UserController from '../../controller/getStudentId'
 import * as Linking from 'expo-linking'
+import { getAuth } from 'firebase/auth'
 
 const NavigationBar = (props) => (
   <ZStack width="100%" height="8%">
@@ -364,6 +365,7 @@ const HostDetail = ({
 }) => {
   const user = UserController.getUid()
   const current = new Date()
+  const auth = getAuth()
 
   return (
     <VStack mx={6} mb={10}>
@@ -409,6 +411,9 @@ const HostDetail = ({
               fontSize="sm"
               underline
               onPress={() => {
+                if(auth.currentUser.isAnonymous){
+                  return Alert.alert('請先完成註冊，才能與主辦人聯絡喔～')
+                }
                 if (uid !== user) {
                   MessageController.addChatroom(uid, user).then((res) => {
                     navigation.navigate('send', {
@@ -439,6 +444,9 @@ const HostDetail = ({
               py="4px"
               bg="#476685"
               onPress={() => {
+                if(auth.currentUser.isAnonymous){
+                  return Alert.alert('請先完成註冊，才能報名活動喔～')
+                }
                 if (!SignUp) {
                   Alert.alert(
                     '確認報名?',

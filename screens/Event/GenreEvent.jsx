@@ -13,8 +13,10 @@ import styles from './style_folder/Styles_moreEvent'
 import ActiveController from '../../controller/Active'
 import MessageController from '../../controller/Message'
 import { BaseTheme } from '../../theme'
+import { getAuth } from 'firebase/auth'
 
 function Genre ({ navigation, route }) {
+  const auth = getAuth()
   const { GenreName } = route.params
   const [Messagenum, setMessageNum] = useState(0)
   useEffect(() => {
@@ -66,44 +68,42 @@ function Genre ({ navigation, route }) {
                 {GenreName}
               </Text>
             </Box>
-            <Pressable
-              onPress={() => { navigation.navigate('message', { prepage: 'list' }) }}
-            >
-              <Center>
-                <ZStack size={25} ml={3} alignItems="center" justifyContent="center">
-                  <Box>
-                    <Octicons
-                      name="dot-fill"
-                      size={16}
-                      color={Messagenum !== 0 ? '#EB6F6F' : 'transparent'}
-                      style={{
-                        transform: [{ translateX: 12 }, { translateY: -10 }]
-                      }}
-                    />
-                  </Box>
-                  <Box>
-                    <FontAwesome5
-                      name="comment"
-                      size={25}
-                      color="#476685"
-                    />
-                  </Box>
+            {!auth.currentUser.isAnonymous ? <><Pressable
+            onPress={() => { navigation.navigate('message', { prepage: 'list' }) } }
+          >
+            <Center>
+              <ZStack size={25} ml={3} alignItems="center" justifyContent="center">
+                <Box>
+                  <Octicons
+                    name="dot-fill"
+                    size={16}
+                    color={Messagenum !== 0 ? '#EB6F6F' : 'transparent'}
+                    style={{
+                      transform: [{ translateX: 12 }, { translateY: -10 }]
+                    }} />
+                </Box>
+                <Box>
+                  <FontAwesome5
+                    name="comment"
+                    size={25}
+                    color="#476685" />
+                </Box>
 
-                  {/* // 要記得變0 */}
-                </ZStack>
-              </Center>
-            </Pressable>
-            <Pressable
-              onPress={() => { navigation.navigate('personal') }}
-            >
+                {/* // 要記得變0 */}
+              </ZStack>
+            </Center>
+          </Pressable><Pressable
+            onPress={() => { navigation.navigate('personal') } }
+          >
               <Box size={26} mx={3}>
                 <Feather
                   name="user"
                   size={26}
-                  color="#476685"
-                />
+                  color="#476685" />
               </Box>
-            </Pressable>
+            </Pressable></>
+            :
+            <Box flex={2}></Box>}
           </HStack>
         </Box>
         <Box style={styles.bodyContainer}>

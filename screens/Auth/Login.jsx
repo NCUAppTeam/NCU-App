@@ -3,10 +3,11 @@ import React, { useState } from 'react'
 import {
   Box, Button, Heading, Input, Actionsheet, useDisclose, Center, VStack, Pressable, Icon, Link, HStack, Text
 } from 'native-base'
-import { signInWithEmailAndPassword } from 'firebase/auth'
+import { signInWithEmailAndPassword, signOut, getAuth } from 'firebase/auth'
 import { auth } from '../../config'
 import { MaterialIcons } from '@expo/vector-icons'
 import { ResetScreen } from './ResetPwd'
+import { Alert } from 'react-native'
 
 export function LoginScreen () {
   const [email, setEmail] = useState('')
@@ -25,13 +26,22 @@ export function LoginScreen () {
   }
 
   const login = () => {
-    signInWithEmailAndPassword(auth, email, password)
-      .catch((err) => {
-        setMsg(localizeMsg[err.code])
-      })
-    setTimeout(() => {
-      setMsg('')
-    }, 5000)
+    signInWithEmailAndPassword(auth, email, password).then(() => {
+      console.log(getAuth().currentUser.emailVerified)
+      if(getAuth().currentUser.emailVerified) {
+        console.log('login success')
+      }
+      else {
+        signOut(auth).then(() => {
+          Alert.alert('請至信箱驗證信件或是完成註冊')
+        })
+      } 
+    })
+    .catch((error) => {
+      const errorCode = error.code
+      const errorMessage = error.message
+      setMsg(localizeMsg[errorCode] || errorMessage)
+    })
   }
 
   return (
@@ -44,7 +54,7 @@ export function LoginScreen () {
             <Box flex={1.5} alignItems="flex-start" justifyContent={'center'} w={'80%'}>
               <Heading size={'lg'} marginY={'20px'}>登入帳號</Heading>
 
-              <Heading size={'sm'} marginBottom={'10px'}>Portal 帳號</Heading>
+              <Heading size={'sm'} marginBottom={'10px'}>註冊時使用之信箱</Heading>
               <Box my={3}>
                 <Input
                   w={'100%'}

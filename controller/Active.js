@@ -844,7 +844,6 @@ async function removeAttendee (docID, studentUid) { // remove attendee
 
 async function addUser (uid, newUserInfo) {
   const db = getFirestore(app)
-  const attendeeRef = query(collection(db, 'attendees'))
   const memberInfo = newUserInfo
   const imageAddress = `avatar/${imagePos(newUserInfo.avatar)}`
   const storageRef = ref(storage, imageAddress)
@@ -852,12 +851,9 @@ async function addUser (uid, newUserInfo) {
   const blob = await response.blob()
   const uploadTask = await uploadBytes(storageRef, blob)
   memberInfo.avatar = await getDownloadURL(uploadTask.ref)
-  console.log(memberInfo)
 
   setDoc(doc(db, 'attendees', `${uid}`), memberInfo, { merge: true })
     .then(console.log('succeed'))
-  const result = await getDocs(attendeeRef)
-  result.forEach((doc1) => console.log(doc1.data()))
 }
 
 /**

@@ -11,8 +11,10 @@ import {
 } from 'native-base'
 import MessageController from '../../../controller/Message'
 import UserController from '../../../controller/getStudentId'
+import { getAuth } from 'firebase/auth'
 
 export function SearchHeader ({ navigation }) {
+  const auth = getAuth()
   const [Messagenum, setMessageNum] = useState(0)
   const userid = UserController.getUid()
 
@@ -62,8 +64,9 @@ export function SearchHeader ({ navigation }) {
             />
           </Center>
         </Pressable>
-        <Pressable
-          onPress={() => { navigation.navigate('message', { prepage: 'list' }) }}
+        
+        {!auth.currentUser.isAnonymous && <><Pressable
+          onPress={() => { navigation.navigate('message', { prepage: 'list' }) } }
         >
           <Center>
             <ZStack size={25} ml={3} alignItems="center" justifyContent="center">
@@ -74,32 +77,28 @@ export function SearchHeader ({ navigation }) {
                   color={Messagenum !== 0 ? '#EB6F6F' : 'transparent'}
                   style={{
                     transform: [{ translateX: 12 }, { translateY: -10 }]
-                  }}
-                />
+                  }} />
               </Box>
               <Box>
                 <FontAwesome5
                   name="comment"
                   size={25}
-                  color="#476685"
-                />
+                  color="#476685" />
               </Box>
 
               {/* // 要記得變0 */}
             </ZStack>
           </Center>
-        </Pressable>
-        <Pressable
-          onPress={() => { navigation.navigate('personal') }}
+        </Pressable><Pressable
+          onPress={() => { navigation.navigate('personal') } }
         >
-          <Box size={26} mx={3}>
-            <Feather
-              name="user"
-              size={26}
-              color="#476685"
-            />
-          </Box>
-        </Pressable>
+            <Box size={26} mx={3}>
+              <Feather
+                name="user"
+                size={26}
+                color="#476685" />
+            </Box>
+          </Pressable></>}
       </HStack>
     </Center>
   )

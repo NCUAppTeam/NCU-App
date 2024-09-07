@@ -1,3 +1,0 @@
-{
-    "extends": ["universe", "plugin:react-hooks/recommended"]
-}

@@ -1,4 +1,4 @@
-<p align="center"><img src="https://github.com/NCUAppTeam/NCU-App/blob/main/assets/icon.png?raw=true" width = "200" height="200" ></img> </p>
+<p align="center"><img src="https://github.com/NCUAppTeam/NCU-App/blob/main/src/assets/logo.png?raw=true" width = "200" height="200" ></img> </p>
 
 # NCU-APP
 

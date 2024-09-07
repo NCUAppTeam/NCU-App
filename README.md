@@ -31,11 +31,11 @@ NCU-APP 是為國立中央大學（NCU）學生所打造的應用程式，旨在
 
 1. **複製程式碼**：
    ```bash
-   git clone https://github.com/yourusername/NCU-APP.git
+   git clone https://github.com/NCUAppTeam/NCU-App.git
    ```
 2. **進入專案**：
    ```bash
-   cd NCU-APP
+   cd NCU-App
    ```
 3. **安裝依賴套件**：
    ```bash
@@ -83,6 +83,11 @@ SUPABASE_ANON_KEY=your-supabase-key
 ### Edge Functions
 
 Supabase 提供 **Edge Functions**，這些是基於 [Deno](https://deno.land/) 構建的雲端函式，可以用來執行不方便在使用者的裝置上跑的程式碼。
+
+### Local Development
+
+如果你想修改資料庫欄位，請在本地端先進行開發測試，新增 migration 後再提 PR 請求更動正式伺服器。
+請參考 Supabase 官方文件的 [Database Migration](https://supabase.com/docs/guides/cli/local-development#database-migrations) 部分
 
 ## 開發
 

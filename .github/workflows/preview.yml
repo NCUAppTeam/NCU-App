@@ -26,8 +26,5 @@ jobs:
       - name: 🚀 Deploy preview
         uses: rossjrw/pr-preview-action@v1
         with:
-          deploy-repository: NCUAppTeam/preview
-          token: ${{ secrets.PREVIEW_TOKEN }}
           source-dir: ./dist/
-          preview-branch: main
-          umbrella-dir: .
+          preview-branch: previews

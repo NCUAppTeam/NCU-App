@@ -8,15 +8,12 @@ on:
       - synchronize
       - closed
 
-permissions: write-all
-concurrency: preview-${{ github.ref }}
-
 jobs:
   deploy-preview:
     runs-on: ubuntu-latest
     steps:
       - name: 🚚 Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: 🔨 Install and Build
         if: github.event.action != 'closed' # You might want to skip the build if the PR has been closed
@@ -29,4 +26,3 @@ jobs:
         with:
           source-dir: ./dist/
           preview-branch: previews
-        #   token: ${{ secrets.GITHUB_TOKEN }}

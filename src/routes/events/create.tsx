@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import { Button } from '../../components/Button';
 import { UserController } from '../../controllers/user';
 import { AuthGuard } from '../../utils/auth';
 import { supabase } from '../../utils/supabase';
@@ -149,7 +150,7 @@ function CreateEventScreen() {
           )}
       </div>
       <div className='mt-3'>
-        <button className='text-white' type='submit'>確認新增</button>
+        <Button type='submit'>確認新增</Button>
       </div>
     </form>
   );

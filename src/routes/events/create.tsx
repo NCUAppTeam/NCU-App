@@ -1,7 +1,11 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import { UserController } from '../../controllers/user';
+import { AuthGuard } from '../../utils/auth';
+import { supabase } from '../../utils/supabase';
 
 export const Route = createFileRoute('/events/create')({
+  beforeLoad: AuthGuard,
   component: CreateEventScreen
 })
 
@@ -25,8 +29,12 @@ const styles = {
 }
 
 function CreateEventScreen() {
+  const navigate = Route.useNavigate()
   const [selectedPhotos, setSelectedPhotos] = useState<File>()
   const [preview, setPreview] = useState<string>()
+  const [inputs, setInputs] = useState({
+    name: '',
+  })
 
   // create a preview as a side effect, whenever selected file is changed
   useEffect(() => {
@@ -50,8 +58,32 @@ function CreateEventScreen() {
     setSelectedPhotos(e.target.files[0])
   }
 
+
+  async function addEvent(e: FormEvent) {
+    e.preventDefault()
+    const { data, error } = await supabase
+      .from('events')
+      .insert({
+        ...inputs,
+        user_id: (await UserController.get()).id
+      })
+      .select('*')
+      .single()
+
+    if (error !== null) {
+      throw error
+    }
+
+    navigate({
+      to: '/events/$eventId',
+      params: {
+        'eventId': data.id.toString()
+      }
+    })
+  }
+
   return (
-    <div style={styles.container}>
+    <form style={styles.container} onSubmit={addEvent}>
       <div className='flex'>
         <Link to="/events">
           <button className='ms-2 text-white'>返回</button>
@@ -64,6 +96,8 @@ function CreateEventScreen() {
           style={styles.input}
           className='rounded'
           placeholder="請輸入活動名稱"
+          value={inputs.name}
+          onChange={(text) => { setInputs({ ...inputs, name: text.target.value }) }}
         />
         <div className="flex gap-3 mt-3 ms-4">
           <p style={styles.text}>開始時間</p>
@@ -115,8 +149,8 @@ function CreateEventScreen() {
           )}
       </div>
       <div className='mt-3'>
-        <button className='text-white'>確認新增</button>
+        <button className='text-white' type='submit'>確認新增</button>
       </div>
-    </div>
+    </form>
   );
 }

@@ -76,8 +76,8 @@ Tailwind 的配置檔位於 `tailwind.config.js`。
 要與 Supabase 資料庫互動，你需要設置 `.env.local` 檔案，並填入以下變數：
 
 ```
-SUPABASE_URL=your-supabase-url
-SUPABASE_ANON_KEY=your-supabase-key
+VITE_SUPABASE_URL=your-supabase-url
+VITE_SUPABASE_ANON_KEY=your-supabase-key
 ```
 
 ### Edge Functions

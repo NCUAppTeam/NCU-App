@@ -89,6 +89,13 @@ Supabase 提供 **Edge Functions**，這些是基於 [Deno](https://deno.land/) 
 如果你想修改資料庫欄位，請在本地端先進行開發測試，新增 migration 後再提 PR 請求更動正式伺服器。
 請參考 Supabase 官方文件的 [Database Migration](https://supabase.com/docs/guides/cli/local-development#database-migrations) 部分
 
+開發完成後，請將變更記錄到 Repository 裡面
+
+```sh
+npx supabase gen types typescript --local > src/utils/database.types.ts
+npx supabase db pull --local
+```
+
 ## 開發
 
 我們使用 **ESLint** 來維護程式碼品質，並使用 **TypeScript** 進行型別檢查。這有助於提前發現錯誤，並使程式碼更容易理解。

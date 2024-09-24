@@ -1,5 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
+import { VStack } from '../components'
 import { supabase } from '../utils/supabase'
 
 export const Route = createFileRoute('/login')({
@@ -33,10 +34,16 @@ function LoginPage() {
 
   return (
     <div>
-      <label>Email: </label>
-      <input className='border' type="email" onChange={(e) => { setEmail(e.target.value) }} />
-      <label>Password:</label>
-      <input className='border' type="password" onChange={(e) => { setPassword(e.target.value) }} />
+      <VStack>
+        <div>
+          <label>Email: </label>
+          <input className='border' type="email" onChange={(e) => { setEmail(e.target.value) }} />
+        </div>
+        <div>
+          <label>Password:</label>
+          <input className='border' type="password" onChange={(e) => { setPassword(e.target.value) }} />
+        </div>
+      </VStack>
       <button onClick={login}>Login</button>
     </div>
   )

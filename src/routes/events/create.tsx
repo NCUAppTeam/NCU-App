@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
-import { Button } from '../../components/Button';
+import { Button } from '../../components/Common/customButton';
 import { UserController } from '../../controllers/user';
 import { AuthGuard } from '../../utils/auth';
 import { supabase } from '../../utils/supabase';

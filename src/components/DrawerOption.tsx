@@ -1,13 +1,14 @@
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { CalendarIcon, HStack, SidebarArrowDownIcon, SidebarArrowRightIcon, VStack } from "../components";
+import { HStack, SidebarArrowDownIcon, SidebarArrowRightIcon, VStack } from "../components";
 
 const options = [
-    { name: "活動/揪人", engName: "Events", pageNav: "/events", icon: CalendarIcon },
-    { name: "拍賣", engName: "Market", pageNav: "/sales", icon: CalendarIcon },
-    { name: "行事曆", engName: "Calendar", pageNav: "/calendar", icon: CalendarIcon },
-    { name: "地圖", engName: "Map", pageNav: "/map", icon: CalendarIcon },
-    { name: "今晚吃什麼", engName: "Dinner Decider", pageNav: "/dinner", icon: CalendarIcon },
+    { name: "首頁", engName: "Home", pageNav: "/" },
+    { name: "活動/揪人", engName: "Events", pageNav: "/events" },
+    { name: "拍賣", engName: "Market", pageNav: "/sales" },
+    { name: "行事曆", engName: "Calendar", pageNav: "/calendar" },
+    { name: "地圖", engName: "Map", pageNav: "/map" },
+    { name: "今晚吃什麼", engName: "Dinner Decider", pageNav: "/dinner" },
 ];
 
 export const DrawerOption = () => {
@@ -36,7 +37,7 @@ export const DrawerOption = () => {
                     <Link to={option.pageNav}>
                         <li className="bg-white">
                             <VStack className="justify-start">
-                                <a className="bg-green-100">{option.name}({option.engName})</a>
+                                <p className="bg-green-100">{option.name}({option.engName})</p>
                             </VStack>
                         </li>
                     </Link>

@@ -3,8 +3,8 @@ import React from 'react';
 import IconProps from '../interface/IconProps';
 import { BasicIcon } from './BasicIcon';
 
-export const LogoutIcon: React.FC<IconProps> = ({ color, size }) => (
-    <BasicIcon color={color} size={size}>
+export const LogoutIcon: React.FC<IconProps> = ({ fill, stroke, size }) => (
+    <BasicIcon fill={fill} stroke={stroke} size={size}>
         <path
             strokeLinecap="round"
             strokeLinejoin="round"

@@ -11,20 +11,18 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as LogoutImport } from './routes/logout'
 import { Route as LoginImport } from './routes/login'
 import { Route as IndexImport } from './routes/index'
+import { Route as SalesIndexImport } from './routes/sales/index'
+import { Route as MapIndexImport } from './routes/map/index'
 import { Route as EventsIndexImport } from './routes/events/index'
+import { Route as DinnerIndexImport } from './routes/dinner/index'
+import { Route as CalendarIndexImport } from './routes/calendar/index'
 import { Route as HomeInfoCardImport } from './routes/home/infoCard'
 import { Route as EventsCreateImport } from './routes/events/create'
 import { Route as EventsEventIdImport } from './routes/events/$eventId'
 
 // Create/Update Routes
-
-const LogoutRoute = LogoutImport.update({
-  path: '/logout',
-  getParentRoute: () => rootRoute,
-} as any)
 
 const LoginRoute = LoginImport.update({
   path: '/login',
@@ -36,8 +34,28 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const SalesIndexRoute = SalesIndexImport.update({
+  path: '/sales/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const MapIndexRoute = MapIndexImport.update({
+  path: '/map/',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const EventsIndexRoute = EventsIndexImport.update({
   path: '/events/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const DinnerIndexRoute = DinnerIndexImport.update({
+  path: '/dinner/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const CalendarIndexRoute = CalendarIndexImport.update({
+  path: '/calendar/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -74,13 +92,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginImport
       parentRoute: typeof rootRoute
     }
-    '/logout': {
-      id: '/logout'
-      path: '/logout'
-      fullPath: '/logout'
-      preLoaderRoute: typeof LogoutImport
-      parentRoute: typeof rootRoute
-    }
     '/events/$eventId': {
       id: '/events/$eventId'
       path: '/events/$eventId'
@@ -102,11 +113,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HomeInfoCardImport
       parentRoute: typeof rootRoute
     }
+    '/calendar/': {
+      id: '/calendar/'
+      path: '/calendar'
+      fullPath: '/calendar'
+      preLoaderRoute: typeof CalendarIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/dinner/': {
+      id: '/dinner/'
+      path: '/dinner'
+      fullPath: '/dinner'
+      preLoaderRoute: typeof DinnerIndexImport
+      parentRoute: typeof rootRoute
+    }
     '/events/': {
       id: '/events/'
       path: '/events'
       fullPath: '/events'
       preLoaderRoute: typeof EventsIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/map/': {
+      id: '/map/'
+      path: '/map'
+      fullPath: '/map'
+      preLoaderRoute: typeof MapIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/sales/': {
+      id: '/sales/'
+      path: '/sales'
+      fullPath: '/sales'
+      preLoaderRoute: typeof SalesIndexImport
       parentRoute: typeof rootRoute
     }
   }
@@ -117,32 +156,41 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
-  '/logout': typeof LogoutRoute
   '/events/$eventId': typeof EventsEventIdRoute
   '/events/create': typeof EventsCreateRoute
   '/home/infoCard': typeof HomeInfoCardRoute
+  '/calendar': typeof CalendarIndexRoute
+  '/dinner': typeof DinnerIndexRoute
   '/events': typeof EventsIndexRoute
+  '/map': typeof MapIndexRoute
+  '/sales': typeof SalesIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
-  '/logout': typeof LogoutRoute
   '/events/$eventId': typeof EventsEventIdRoute
   '/events/create': typeof EventsCreateRoute
   '/home/infoCard': typeof HomeInfoCardRoute
+  '/calendar': typeof CalendarIndexRoute
+  '/dinner': typeof DinnerIndexRoute
   '/events': typeof EventsIndexRoute
+  '/map': typeof MapIndexRoute
+  '/sales': typeof SalesIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
-  '/logout': typeof LogoutRoute
   '/events/$eventId': typeof EventsEventIdRoute
   '/events/create': typeof EventsCreateRoute
   '/home/infoCard': typeof HomeInfoCardRoute
+  '/calendar/': typeof CalendarIndexRoute
+  '/dinner/': typeof DinnerIndexRoute
   '/events/': typeof EventsIndexRoute
+  '/map/': typeof MapIndexRoute
+  '/sales/': typeof SalesIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -150,50 +198,65 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/login'
-    | '/logout'
     | '/events/$eventId'
     | '/events/create'
     | '/home/infoCard'
+    | '/calendar'
+    | '/dinner'
     | '/events'
+    | '/map'
+    | '/sales'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/login'
-    | '/logout'
     | '/events/$eventId'
     | '/events/create'
     | '/home/infoCard'
+    | '/calendar'
+    | '/dinner'
     | '/events'
+    | '/map'
+    | '/sales'
   id:
     | '__root__'
     | '/'
     | '/login'
-    | '/logout'
     | '/events/$eventId'
     | '/events/create'
     | '/home/infoCard'
+    | '/calendar/'
+    | '/dinner/'
     | '/events/'
+    | '/map/'
+    | '/sales/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   LoginRoute: typeof LoginRoute
-  LogoutRoute: typeof LogoutRoute
   EventsEventIdRoute: typeof EventsEventIdRoute
   EventsCreateRoute: typeof EventsCreateRoute
   HomeInfoCardRoute: typeof HomeInfoCardRoute
+  CalendarIndexRoute: typeof CalendarIndexRoute
+  DinnerIndexRoute: typeof DinnerIndexRoute
   EventsIndexRoute: typeof EventsIndexRoute
+  MapIndexRoute: typeof MapIndexRoute
+  SalesIndexRoute: typeof SalesIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   LoginRoute: LoginRoute,
-  LogoutRoute: LogoutRoute,
   EventsEventIdRoute: EventsEventIdRoute,
   EventsCreateRoute: EventsCreateRoute,
   HomeInfoCardRoute: HomeInfoCardRoute,
+  CalendarIndexRoute: CalendarIndexRoute,
+  DinnerIndexRoute: DinnerIndexRoute,
   EventsIndexRoute: EventsIndexRoute,
+  MapIndexRoute: MapIndexRoute,
+  SalesIndexRoute: SalesIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -210,11 +273,14 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/login",
-        "/logout",
         "/events/$eventId",
         "/events/create",
         "/home/infoCard",
-        "/events/"
+        "/calendar/",
+        "/dinner/",
+        "/events/",
+        "/map/",
+        "/sales/"
       ]
     },
     "/": {
@@ -222,9 +288,6 @@ export const routeTree = rootRoute
     },
     "/login": {
       "filePath": "login.tsx"
-    },
-    "/logout": {
-      "filePath": "logout.tsx"
     },
     "/events/$eventId": {
       "filePath": "events/$eventId.tsx"
@@ -235,8 +298,20 @@ export const routeTree = rootRoute
     "/home/infoCard": {
       "filePath": "home/infoCard.tsx"
     },
+    "/calendar/": {
+      "filePath": "calendar/index.tsx"
+    },
+    "/dinner/": {
+      "filePath": "dinner/index.tsx"
+    },
     "/events/": {
       "filePath": "events/index.tsx"
+    },
+    "/map/": {
+      "filePath": "map/index.tsx"
+    },
+    "/sales/": {
+      "filePath": "sales/index.tsx"
     }
   }
 }

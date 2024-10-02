@@ -34,6 +34,21 @@ export type Database = {
   }
   public: {
     Tables: {
+      event_type: {
+        Row: {
+          type_id: number
+          type_name: string | null
+        }
+        Insert: {
+          type_id?: number
+          type_name?: string | null
+        }
+        Update: {
+          type_id?: number
+          type_name?: string | null
+        }
+        Relationships: []
+      }
       events: {
         Row: {
           created_at: string
@@ -43,6 +58,7 @@ export type Database = {
           id: number
           name: string | null
           start_time: string | null
+          type: number | null
           user_id: string
         }
         Insert: {
@@ -53,6 +69,7 @@ export type Database = {
           id?: number
           name?: string | null
           start_time?: string | null
+          type?: number | null
           user_id: string
         }
         Update: {
@@ -63,13 +80,81 @@ export type Database = {
           id?: number
           name?: string | null
           start_time?: string | null
+          type?: number | null
           user_id?: string
         }
         Relationships: [
           {
+            foreignKeyName: "events_type_fkey"
+            columns: ["type"]
+            isOneToOne: false
+            referencedRelation: "event_type"
+            referencedColumns: ["type_id"]
+          },
+          {
             foreignKeyName: "events_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      identities: {
+        Row: {
+          identity_name: string
+          identity_no: number
+        }
+        Insert: {
+          identity_name?: string
+          identity_no?: number
+        }
+        Update: {
+          identity_name?: string
+          identity_no?: number
+        }
+        Relationships: []
+      }
+      members: {
+        Row: {
+          avatar: string
+          created_at: string
+          fk_email: string
+          fk_identity: number
+          grad_time: string | null
+          name: string
+          uuid: string
+        }
+        Insert: {
+          avatar?: string
+          created_at?: string
+          fk_email?: string
+          fk_identity?: number
+          grad_time?: string | null
+          name: string
+          uuid?: string
+        }
+        Update: {
+          avatar?: string
+          created_at?: string
+          fk_email?: string
+          fk_identity?: number
+          grad_time?: string | null
+          name?: string
+          uuid?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "members_fk_identity_fkey"
+            columns: ["fk_identity"]
+            isOneToOne: false
+            referencedRelation: "identities"
+            referencedColumns: ["identity_no"]
+          },
+          {
+            foreignKeyName: "members_uuid_fkey"
+            columns: ["uuid"]
+            isOneToOne: true
             referencedRelation: "users"
             referencedColumns: ["id"]
           },

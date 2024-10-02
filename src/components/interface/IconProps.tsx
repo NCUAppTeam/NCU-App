@@ -1,5 +1,6 @@
 interface IconProps {
-    color?: string;
+    fill?: string | 'currentColor' | 'none';
+    stroke?: string;
     size?: number;
 }
 

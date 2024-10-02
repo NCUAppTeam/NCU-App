@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
-import { CalendarIcon, VStack } from "../components";
+import { useState } from "react";
+import { CalendarIcon, HStack, SidebarArrowDownIcon, SidebarArrowRightIcon, VStack } from "../components";
 
 const options = [
     { name: "活動/揪人", engName: "Events", pageNav: "/events", icon: CalendarIcon },
@@ -10,17 +11,36 @@ const options = [
 ];
 
 export const DrawerOption = () => {
+    const [openOptions, setOpenOptions] = useState<{ [key: string]: boolean }>({});
+
+    const toggleOption = (name: string) => {
+        setOpenOptions((prev) => {
+            return {
+                ...prev,
+                [name]: !prev[name],
+            };
+        });
+    };
+
     return (
         <VStack id="all-nav-func">
             {options.map((option) => (
-                <Link to={option.pageNav}>
-                    <li key={option.name}>
-                        <VStack className="justify-start">
-                            <a>{option.name}</a>
-                            <a>{option.engName}</a>
-                        </VStack>
-                    </li>
-                </Link>
+                <HStack className="bg-blue-200" key={option.name}>
+                    <div className="flex items-center" onClick={() => toggleOption(option.name)}>
+                        {openOptions[option.name] ? (
+                            <SidebarArrowDownIcon fill="currentColor" stroke={"#B1B1B1"} size={20} />
+                        ) : (
+                            <SidebarArrowRightIcon fill="currentColor" stroke={"#B1B1B1"} size={20} />
+                        )}
+                    </div>
+                    <Link to={option.pageNav}>
+                        <li className="bg-white">
+                            <VStack className="justify-start">
+                                <a className="bg-green-100">{option.name}({option.engName})</a>
+                            </VStack>
+                        </li>
+                    </Link>
+                </HStack>
             ))}
         </VStack>
     );

@@ -7,4 +7,6 @@ export { VStack } from './Common/VStack';
 // Icons
 export { CalendarIcon } from './icons/CalendarIcon';
 export { LogoutIcon } from './icons/LogoutIcon';
+export { SidebarArrowDownIcon } from './icons/SidebarArrowDownIcon';
+export { SidebarArrowRightIcon } from './icons/SidebarArrowRightIcon';
 

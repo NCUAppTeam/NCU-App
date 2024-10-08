@@ -1,5 +1,4 @@
 // Common Components
-export { Center } from './Common/Center';
 export { Button } from './Common/customButton';
 export { HStack } from './Common/HStack';
 export { Image } from './Common/Image';

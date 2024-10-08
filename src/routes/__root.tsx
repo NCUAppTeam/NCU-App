@@ -6,8 +6,8 @@ export const Route = createRootRoute({
 
 function RootComponent() {
   return (
-    <>
+    <div className='w-full'>
       <Outlet />
-    </ >
+    </div>
   )
 }

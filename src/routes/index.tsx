@@ -3,13 +3,6 @@ import { Header } from '../components';
 import { AuthGuard } from '../utils/auth';
 import { supabase } from '../utils/supabase';
 
-const styles = {
-    container: {
-        flex: 1,
-        backgroundColor: '#ffffff',
-    },
-};
-
 export const Route = createFileRoute('/')({
     beforeLoad: AuthGuard,
     loader: async () => {
@@ -37,7 +30,8 @@ function HomeIndex() {
     return (
         <>
             <Header />
-            <div style={styles.container} className='mx-auto space-y-4'>
+
+            <div className='grid justify-items-center w-full space-y-4'>
 
                 <div key={user[0].uuid} className='bg-blue-100 grid place-items-center'>
                     <h1>Name: {user[0].name}</h1>

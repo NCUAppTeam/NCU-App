@@ -40,7 +40,11 @@ function EventIndex() {
             ))
           }
         </div>
-        <button className="btn btn-circle fixed right-4 bottom-4" onClick={()=>document.getElementById('my_modal_4').showModal()}>
+        <button className="btn btn-circle fixed right-4 bottom-4" onClick={()=>{
+          if(document){
+            (document.getElementById('my_modal_4') as HTMLFormElement).showModal();
+            }
+          }}>
           <PlusIcon />
           <dialog id="my_modal_4" className="modal">
             <div className="modal-box w-11/12 max-w-5xl">

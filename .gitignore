@@ -17,6 +17,7 @@ dev-dist
 .idea
 .DS_Store
 .env
+
 *.suo
 *.ntvs*
 *.njsproj

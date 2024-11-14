@@ -1,14 +1,20 @@
-import { createFileRoute, Link } from '@tanstack/react-router';
-import { BellIcon, Header, PlusIcon } from '../../components';
+import { createFileRoute } from '@tanstack/react-router';
+import { BellIcon, ClockIcon, Header, PinIcon, PlusIcon } from '../../components';
 import { AuthGuard } from '../../utils/auth';
 import { supabase } from '../../utils/supabase';
+interface Event {
+    created_at: string;
+    description: string | null;
+    end_time: string | null;
+    fee: number | null;
+    id: number;
+    name: string | null;
+    start_time: string | null;
+    type: number | null;
+    user_id: string;
+    location: string | null;
+}
 
-const styles = {
-  container: {
-    flex: 1,
-    backgroundColor: '#333333',
-  },
-};
 export const Route = createFileRoute('/events/')({
   beforeLoad: AuthGuard,
   loader: async () => {
@@ -19,7 +25,6 @@ export const Route = createFileRoute('/events/')({
     if (error !== null) {
       throw error
     }
-
     return { events: data }
   },
   component: EventIndex
@@ -28,18 +33,28 @@ export const Route = createFileRoute('/events/')({
 function EventIndex() {
   const { events } = Route.useLoaderData()
   const navigate = Route.useNavigate();
+
+  // console.log(events[0].start_time)
+
   return (
     <>
       <div className="container mx-auto">
         <Header />
-        <div style={styles.container}>
-          <h1 style={{ marginLeft: 140 }} className='text-lg text-white'>活動列表</h1>
-          {
-            events.map((event) => (
-              <Link key={event.id} to='/events/$eventId' params={{ eventId: event.id.toString() }} >{event.name}</Link>
-            ))
-          }
-        </div>
+        <div className="flex-1 bg-gray-800 p-4">
+          <h1 className="ml-4 text-xl text-white">最新揪人</h1>
+          <div className="grid grid-cols-2 gap-4 mt-2">
+            {events.map((event) => (
+              <EventCard key={event.id} event={event} />
+            ))}
+          </div>
+
+          <h1 className="ml-4 text-xl text-white mt-8">最新活動</h1>
+          <div className="grid grid-cols-2 gap-4 mt-2">
+            {events.map((event) => (
+              <EventCard key={event.id} event={event} />
+            ))}
+          </div>
+      </div>
         <button className="btn btn-circle fixed right-4 bottom-4" onClick={()=>{
           if(document){
             (document.getElementById('my_modal_4') as HTMLFormElement).showModal();
@@ -66,4 +81,29 @@ function EventIndex() {
       </div>
     </>
   )
+}
+
+function EventCard({ event }: { event: Event }) {
+  const startTime = event.start_time ? new Date(event.start_time) : new Date();
+  return (
+    <div className="bg-gray-700 rounded-lg overflow-hidden text-white">
+      <div className="h-32 bg-gray-500" />
+      <div className="p-2">
+        <h3 className="text-lg mb-1">{event.name}</h3>
+        <p className="text-sm flex items-center">
+          <ClockIcon fill="currentColor" stroke="#ffffff" size={24} />
+          {startTime.toLocaleString('zh-TW', {
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+          })}
+        </p>
+        <p className="text-sm flex items-center">
+          <PinIcon fill="currentColor" stroke="#ffffff" size={24} />
+          {event.location}
+        </p>
+      </div>
+    </div>
+  );
 }

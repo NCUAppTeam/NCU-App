@@ -56,6 +56,7 @@ export type Database = {
           end_time: string | null
           fee: number | null
           id: number
+          location: string | null
           name: string | null
           start_time: string | null
           type: number | null
@@ -67,6 +68,7 @@ export type Database = {
           end_time?: string | null
           fee?: number | null
           id?: number
+          location?: string | null
           name?: string | null
           start_time?: string | null
           type?: number | null
@@ -78,6 +80,7 @@ export type Database = {
           end_time?: string | null
           fee?: number | null
           id?: number
+          location?: string | null
           name?: string | null
           start_time?: string | null
           type?: number | null

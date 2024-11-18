@@ -37,7 +37,16 @@ jobs:
         env:
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
-          
+
+      # Debug - Verify .env file creation
+      - name: Debug - Verify .env file creation
+        run: |
+          if [ -f .env ]; then
+            echo ".env file exists!"
+          else
+            echo ".env file does not exist!"
+          fi
+      
       - name: Build with Vite
         run: npm ci && npm run build
       - name: Upload artifact

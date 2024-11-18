@@ -45,9 +45,11 @@ jobs:
         run: |
           if [ -f .env ]; then
             echo ".env file exists!"
+            cat .env
           else
             echo ".env file does not exist!"
           fi
+          
       
       - name: Build with Vite
         run: npm ci && npm run build
@@ -55,7 +57,6 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: dist/
-
   # Deployment job
   deploy:
     environment:

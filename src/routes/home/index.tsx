@@ -1,19 +1,19 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { VStack } from '../../components'
+// import { VStack } from '../../components'
 
-const homeItems = [
-  { title: "test", description: "Hello world." },
-  { title: "test", description: "Hello world." },
-  { title: "test", description: "Hello world." },
-  { title: "test", description: "Hello world." },
-  { title: "test", description: "Hello world." },
-  { title: "test", description: "Hello world." },
-  { title: "test", description: "Hello world." },
-  { title: "test", description: "Hello world." },
-  { title: "test", description: "Hello world." },
-  { title: "test", description: "Hello world." },
-  { title: "test", description: "Hello world." },
-]
+// const homeItems = [
+//   { title: "test", description: "Hello world." },
+//   { title: "test", description: "Hello world." },
+//   { title: "test", description: "Hello world." },
+//   { title: "test", description: "Hello world." },
+//   { title: "test", description: "Hello world." },
+//   { title: "test", description: "Hello world." },
+//   { title: "test", description: "Hello world." },
+//   { title: "test", description: "Hello world." },
+//   { title: "test", description: "Hello world." },
+//   { title: "test", description: "Hello world." },
+//   { title: "test", description: "Hello world." },
+// ]
 
 // User.fetchSingle().then(user => {
 //   console.log(user)
@@ -67,23 +67,5 @@ export const Route = createFileRoute('/home/')({
         變更個人檔案
       </span>
     </section>
-
-    <VStack className='px-[10px] gap-[20px]'>
-
-
-      {/* {homeItems.map((item, index) => (
-        <WelcomeCard title={item.title} description={item.description} />
-      ))} */}
-
-      {/* <NcuInput />
-
-      <NcuTextarea>
-        Hello
-      </NcuTextarea>
-
-      <NcuSwitch label="test">X</NcuSwitch>
-
-      <NcuButton>Test</NcuButton> */}
-    </VStack>
-  </div>,
+  </div >,
 })

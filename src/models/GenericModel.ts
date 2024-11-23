@@ -8,5 +8,6 @@ export default abstract class GenericModel {
     // Abstract method for parsing JSON
     static parseJson(json: any): GenericModel {
         throw new Error("parseJson method not implemented.");
+        return json
     }
 }

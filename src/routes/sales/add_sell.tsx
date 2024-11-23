@@ -36,18 +36,21 @@ const styles = {
     color: 'black',
   },
   grid: {
-    padding: 10,
+    padding: '10px',
     display: 'flex',
+    flexWrap: 'wrap',
+    gap: '10px',
     justifyContent: 'space-between',
-    gap: 10,
   },
   card: {
-    width: '50%',
-    marginBottom: 10,
-    padding: 10,
+    flex: '1 1 calc(25% - 10px)',
+    maxWidth: 'calc(25% - 10px)',
+    marginBottom: '10px',
+    padding: '10px',
     backgroundColor: '#555',
-    borderRadius: 10,
+    borderRadius: '10px',
     color: 'white',
+    boxSizing: 'border-box',
   },
   productName: {
     fontSize: 16,
@@ -110,13 +113,6 @@ function EventSale() {
           </div>
           <div style={styles.grid}>
             {
-              sales.map((p) => (
-                <div key={p.id} style={styles.card}>
-                  <h1 style={styles.productName}>{p.product}</h1>
-                  <p style={styles.productInfo}>價格: {p.price} 元</p>
-                </div>
-              ))
-            }{
               sales.map((p) => (
                 <div key={p.id} style={styles.card}>
                   <h1 style={styles.productName}>{p.product}</h1>

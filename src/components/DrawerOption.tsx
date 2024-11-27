@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
+import { CaretDown, CaretRight } from "flowbite-react-icons/solid";
 import { useState } from "react";
-import { HStack, SidebarArrowDownIcon, SidebarArrowRightIcon, VStack } from "../components";
+import { HStack, VStack } from "../components";
 
 const options = [
     { name: "首頁", engName: "Home", pageNav: "/" },
@@ -29,9 +30,9 @@ export const DrawerOption = () => {
                 <HStack className="bg-blue-200" key={option.name}>
                     <div className="flex items-center" onClick={() => toggleOption(option.name)}>
                         {openOptions[option.name] ? (
-                            <SidebarArrowDownIcon fill="currentColor" stroke={"#B1B1B1"} size={20} />
+                            <CaretDown />
                         ) : (
-                            <SidebarArrowRightIcon fill="currentColor" stroke={"#B1B1B1"} size={20} />
+                            <CaretRight />
                         )}
                     </div>
                     <Link to={option.pageNav}>

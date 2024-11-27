@@ -115,7 +115,7 @@ function EventCard({ event }: { event: Event }) {
         </p>
         <p className="text-sm flex items-center">
           <PinIcon fill="currentColor" stroke="#ffffff" size={24} />
-          {event.location}
+          {event.location || '位置未提供'}
         </p>
       </div>
     </div>

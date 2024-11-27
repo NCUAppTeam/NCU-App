@@ -98,7 +98,7 @@ function EventIndex() {
 }
 
 function EventCard({ event }: { event: Event }) {
-  const startTime = event.start_time ? new Date(event.start_time) : null;
+  const startTime = event.start_time ? new Date(event.start_time) : new Date();
   return (
     <div className="flex-shrink-0 w-40 bg-gray-700 rounded-lg overflow-hidden text-white">
       <div className="h-32 bg-gray-500" />

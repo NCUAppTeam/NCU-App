@@ -35,6 +35,11 @@ function CreateEventScreen() {
   const [preview, setPreview] = useState<string>()
   const [inputs, setInputs] = useState({
     name: '',
+    start_time: '',
+    end_time: '',
+    location: '',
+    fee: 0,
+    description: ''
   })
 
   // create a preview as a side effect, whenever selected file is changed
@@ -106,6 +111,8 @@ function CreateEventScreen() {
             type="datetime-local"
             id="start-time"
             name="start-time"
+            value={inputs.start_time}
+            onChange={(text) => { setInputs({ ...inputs, start_time: text.target.value }) }}
           />
         </div>
         <div className="flex gap-3 mt-3 ms-4">
@@ -114,6 +121,8 @@ function CreateEventScreen() {
             type="datetime-local"
             id="end-time"
             name="end-time"
+            value={inputs.end_time}
+            onChange={(text) => { setInputs({ ...inputs, end_time: text.target.value }) }}
           />
         </div>
         <p style={styles.text}>活動地點</p>
@@ -121,18 +130,24 @@ function CreateEventScreen() {
           style={styles.input}
           className="rounded"
           placeholder="請輸入活動地點"
+          value={inputs.location}
+          onChange={(text) => { setInputs({ ...inputs, location: text.target.value }) }}
         />
         <p style={styles.text}>參加費用</p>
         <input
           style={styles.input}
           className="rounded"
           placeholder="請輸入參加費用(請輸入數字，無則填0)"
+          value={inputs.fee}
+          onChange={(text) => { setInputs({ ...inputs, fee: Number(text.target.value) }) }}
         />
         <p style={styles.text}>活動介紹</p>
         <input
           style={styles.input}
           className="rounded"
           placeholder="請介紹你的活動"
+          value={inputs.description}
+          onChange={(text) => { setInputs({ ...inputs, description: text.target.value }) }}
         />
       </div>
       <div className='mt-3 ms-2'>

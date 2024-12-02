@@ -21,6 +21,6 @@ declare module '@tanstack/react-router' {
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <RouterProvider router={router} basename="https://ncuappteam.github.io/"/>
+    <RouterProvider router={router} basename="/ncuappteam.github.io"/>
   </React.StrictMode>,
 )

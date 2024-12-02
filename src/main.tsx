@@ -10,6 +10,7 @@ import { routeTree } from './routeTree.gen'
 const router = createRouter({
   routeTree,
   defaultPreload: 'intent',
+  basepath: '/ncuappteam.github.io',
 })
 
 // Register the router instance for type safety
@@ -21,6 +22,6 @@ declare module '@tanstack/react-router' {
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <RouterProvider router={router} basename="/ncuappteam.github.io"/>
+    <RouterProvider router={router} />
   </React.StrictMode>,
 )

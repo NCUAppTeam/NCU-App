@@ -10,7 +10,7 @@ import { routeTree } from './routeTree.gen'
 const router = createRouter({
   routeTree,
   defaultPreload: 'intent',
-  basepath: '/ncuappteam.github.io',
+  basepath: '/',
 })
 
 // Register the router instance for type safety

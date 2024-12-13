@@ -21,34 +21,45 @@ interface Event {
 export const Route = createFileRoute('/events/')({
   beforeLoad: AuthGuard,
   loader: async () => {
-    const { data, error } = await supabase.from('events').select('*');
+    const { data: events, error: eventsError } = await supabase.from('events').select('*');
+    if (eventsError) throw eventsError;
 
-    if (error !== null) {
-      throw error;
-    }
-    return { events: data };
+    const { data: eventTypesData, error: eventTypesError } = await supabase.from('event_type').select('*').order('type_id', { ascending: true });
+    if (eventTypesError) throw eventTypesError;
+    console.log(eventTypesData);
+    return { events, eventTypes: eventTypesData };
   },
   component: EventIndex,
 });
 
 function EventIndex() {
-  const { events } = Route.useLoaderData();
-  const navigate = Route.useNavigate();
+  const { events, eventTypes } = Route.useLoaderData() as {
+    events: Event[];
+    eventTypes: { type_id: number; type_name: string }[];
+  };
 
+  const navigate = Route.useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   const [isFocused, setIsFocused] = useState(false);
+  const [selectedType, setSelectedType] = useState("All");
 
-  const filteredEvents = events.filter(
-    (event) =>
-      event.name &&
-      event.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredEvents = events.filter((event) => {
+    const matchesSearch = event.name && event.name.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesType = selectedType === "All"
+      ? true
+      : event.type === Number(selectedType);
+    return matchesSearch && matchesType;
+  });
+
+  const handleFilterSelect = (type: string) => {
+    setSelectedType(type);
+  };
 
   return (
     <>
       <div className="container mx-auto">
         <Header />
-        <div className="search-bar p-4 relative">
+        <div className="search-bar pt-4 pb-2 pl-4 pr-4 relative">
           <input
             type="text"
             placeholder={isFocused ? '請輸入關鍵字' : ''}
@@ -68,8 +79,32 @@ function EventIndex() {
             <button
               className="absolute right-6 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
               onClick={() => setSearchTerm('')}
-            >清除</button>
+            >
+              清除
+            </button>
           )}
+        </div>
+
+        <div className="px-2 py-2 overflow-x-auto whitespace-nowrap">
+          <div className="flex space-x-1">
+            <button
+              onClick={() => handleFilterSelect("All")}
+              className={`px-4 py-1 text-sm rounded text-gray-500 hover:bg-gray-600
+                ${selectedType === "All" ? 'text-white bg-gray-200 font-semibold' : 'bg-gray-200'}`}
+            >
+              All
+            </button>
+            {eventTypes.map(({ type_id, type_name }) => (
+              <button
+                key={type_id}
+                onClick={() => handleFilterSelect(String(type_id))}
+                className={`px-4 py-1 text-sm rounded text-gray-500 hover:bg-gray-600
+                  ${selectedType === String(type_id) ? 'text-white bg-gray-200 font-semibold' : 'bg-gray-200'}`}
+              >
+                {type_name}
+              </button>
+            ))}
+          </div>
         </div>
 
         <div className="flex-1 bg-gray-800 p-4">
@@ -81,7 +116,6 @@ function EventIndex() {
               ))}
             </div>
           </div>
-
           <h1 className="ml-4 text-xl text-white mt-8">最新活動</h1>
           <div className="overflow-x-auto mt-2">
             <div className="flex space-x-4">
@@ -125,6 +159,7 @@ function EventIndex() {
             </div>
           </dialog>
         </button>
+
       </div>
     </>
   );

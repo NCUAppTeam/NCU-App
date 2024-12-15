@@ -18,6 +18,7 @@ import { Route as MapIndexImport } from './routes/map/index'
 import { Route as EventsIndexImport } from './routes/events/index'
 import { Route as DinnerIndexImport } from './routes/dinner/index'
 import { Route as CalendarIndexImport } from './routes/calendar/index'
+import { Route as SalesAddsellImport } from './routes/sales/add_sell'
 import { Route as HomeInfoCardImport } from './routes/home/infoCard'
 import { Route as EventsCreateImport } from './routes/events/create'
 import { Route as EventsEventIdImport } from './routes/events/$eventId'
@@ -63,6 +64,11 @@ const DinnerIndexRoute = DinnerIndexImport.update({
 const CalendarIndexRoute = CalendarIndexImport.update({
   id: '/calendar/',
   path: '/calendar/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const SalesAddsellRoute = SalesAddsellImport.update({
+  path: '/sales/add_sell',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -123,6 +129,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HomeInfoCardImport
       parentRoute: typeof rootRoute
     }
+    '/sales/add_sell': {
+      id: '/sales/add_sell'
+      path: '/sales/add_sell'
+      fullPath: '/sales/add_sell'
+      preLoaderRoute: typeof SalesAddsellImport
+      parentRoute: typeof rootRoute
+    }
     '/calendar/': {
       id: '/calendar/'
       path: '/calendar'
@@ -169,6 +182,7 @@ export interface FileRoutesByFullPath {
   '/events/$eventId': typeof EventsEventIdRoute
   '/events/create': typeof EventsCreateRoute
   '/home/infoCard': typeof HomeInfoCardRoute
+  '/sales/add_sell': typeof SalesAddsellRoute
   '/calendar': typeof CalendarIndexRoute
   '/dinner': typeof DinnerIndexRoute
   '/events': typeof EventsIndexRoute
@@ -182,6 +196,7 @@ export interface FileRoutesByTo {
   '/events/$eventId': typeof EventsEventIdRoute
   '/events/create': typeof EventsCreateRoute
   '/home/infoCard': typeof HomeInfoCardRoute
+  '/sales/add_sell': typeof SalesAddsellRoute
   '/calendar': typeof CalendarIndexRoute
   '/dinner': typeof DinnerIndexRoute
   '/events': typeof EventsIndexRoute
@@ -196,6 +211,7 @@ export interface FileRoutesById {
   '/events/$eventId': typeof EventsEventIdRoute
   '/events/create': typeof EventsCreateRoute
   '/home/infoCard': typeof HomeInfoCardRoute
+  '/sales/add_sell': typeof SalesAddsellRoute
   '/calendar/': typeof CalendarIndexRoute
   '/dinner/': typeof DinnerIndexRoute
   '/events/': typeof EventsIndexRoute
@@ -211,6 +227,7 @@ export interface FileRouteTypes {
     | '/events/$eventId'
     | '/events/create'
     | '/home/infoCard'
+    | '/sales/add_sell'
     | '/calendar'
     | '/dinner'
     | '/events'
@@ -223,6 +240,7 @@ export interface FileRouteTypes {
     | '/events/$eventId'
     | '/events/create'
     | '/home/infoCard'
+    | '/sales/add_sell'
     | '/calendar'
     | '/dinner'
     | '/events'
@@ -235,6 +253,7 @@ export interface FileRouteTypes {
     | '/events/$eventId'
     | '/events/create'
     | '/home/infoCard'
+    | '/sales/add_sell'
     | '/calendar/'
     | '/dinner/'
     | '/events/'
@@ -249,6 +268,7 @@ export interface RootRouteChildren {
   EventsEventIdRoute: typeof EventsEventIdRoute
   EventsCreateRoute: typeof EventsCreateRoute
   HomeInfoCardRoute: typeof HomeInfoCardRoute
+  SalesAddsellRoute: typeof SalesAddsellRoute
   CalendarIndexRoute: typeof CalendarIndexRoute
   DinnerIndexRoute: typeof DinnerIndexRoute
   EventsIndexRoute: typeof EventsIndexRoute
@@ -262,6 +282,7 @@ const rootRouteChildren: RootRouteChildren = {
   EventsEventIdRoute: EventsEventIdRoute,
   EventsCreateRoute: EventsCreateRoute,
   HomeInfoCardRoute: HomeInfoCardRoute,
+  SalesAddsellRoute: SalesAddsellRoute,
   CalendarIndexRoute: CalendarIndexRoute,
   DinnerIndexRoute: DinnerIndexRoute,
   EventsIndexRoute: EventsIndexRoute,
@@ -284,6 +305,7 @@ export const routeTree = rootRoute
         "/events/$eventId",
         "/events/create",
         "/home/infoCard",
+        "/sales/add_sell",
         "/calendar/",
         "/dinner/",
         "/events/",
@@ -305,6 +327,9 @@ export const routeTree = rootRoute
     },
     "/home/infoCard": {
       "filePath": "home/infoCard.tsx"
+    },
+    "/sales/add_sell": {
+      "filePath": "sales/add_sell.tsx"
     },
     "/calendar/": {
       "filePath": "calendar/index.tsx"

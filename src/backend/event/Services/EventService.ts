@@ -12,7 +12,7 @@ export default class EventService {
         event.startTime         = record.start_time ?? ""
         event.endTime           = record.end_time ?? ""
         event.location          = record.location ?? ""
-        event.fee               = record.fee ?? : 0
+        event.fee               = record.fee ?? 0
         event.userID            = record.user_id
         event.createdAt         = record.created_at
 

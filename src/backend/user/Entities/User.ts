@@ -27,6 +27,10 @@ export default class User {
 
     public convertIdentity(): string {
         switch (this.identity) {
+            case 1: return "管理員"
+            case 2: return "學生"
+            case 3: return "校友"
+            case 4: return "教職員"
             default: return "用戶"
         }
     }

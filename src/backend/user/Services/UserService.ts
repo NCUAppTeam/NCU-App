@@ -11,10 +11,13 @@ const UserService = {
      * @author Henry C. (@yeahlowflicker)
      */
     parseUser(record: DBUser) : User {
-        const user          = new User()
+        if (!record || typeof record !== 'object')
+            throw new Error('Invalid record provided')
 
         if (!record.uuid)
             throw new Error('uuid is a required field');
+
+        const user          = new User()
 
         user.id             = record.uuid
         user.username       = record.name

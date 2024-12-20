@@ -47,7 +47,7 @@ export default class EventController {
         if (orderBy)
             query.order(orderBy, { ascending: !orderDescending })
         
-        if (rangeStart && rangeEnd)
+        if (rangeStart !== undefined && rangeEnd !== undefined)
             query.range(rangeStart, rangeEnd)
             
         const { data, error } = await query
@@ -103,6 +103,9 @@ export default class EventController {
             ErrorHandler.handleSupabaseError(error)
             return null
         }
+
+        if (!data)
+            return null
 
         // Type conversion: DBEvent -> Event
         const event : Event = EventService.parseEvent(data)

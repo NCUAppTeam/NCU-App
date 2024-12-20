@@ -46,7 +46,7 @@ export default class UserController {
         if (orderBy)
             query.order(orderBy, { ascending: !orderDescending })
 
-        if (rangeStart && rangeEnd)
+        if (rangeStart !== undefined && rangeEnd !== undefined)
             query.range(rangeStart, rangeEnd)
         
         const { data, error } = await query
@@ -103,6 +103,9 @@ export default class UserController {
             return null
         }
 
+        if (!data)
+            return null
+        
         // Type conversion: DBUser -> User
         const user : User = UserService.parseUser(data)
 

@@ -1,6 +1,6 @@
 import User, { DBUser } from "../Entities/User";
 
-export default class UserService {
+const UserService = {
 
     /**
      * Convert a user from default Supabase type to User entity
@@ -10,8 +10,12 @@ export default class UserService {
      * 
      * @author Henry C. (@yeahlowflicker)
      */
-    public static parseUser(record: DBUser) : User {
+    parseUser(record: DBUser) : User {
         const user          = new User()
+
+        if (!record.uuid)
+            throw new Error('uuid is a required field');
+
         user.id             = record.uuid
         user.username       = record.name
         user.email          = record.fk_email
@@ -22,3 +26,5 @@ export default class UserService {
     }
     
 }
+
+export default UserService

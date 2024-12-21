@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useRouter } from '@tanstack/react-router'
+import { createFileRoute, Link } from '@tanstack/react-router'
 import { useState, useEffect } from 'react'
 
 import ScaleContent from '../../components/pages/select/scale'
@@ -10,8 +10,9 @@ export const Route = createFileRoute('/events/select')({
 })
 
 function SelectContent() {
-  const router = useRouter();
-
+  
+  const navigate = Route.useNavigate();
+  
   const [step, setStep] = useState(0)
 
   const handleNextStep = () => {
@@ -20,9 +21,10 @@ function SelectContent() {
 
   useEffect(() => {
     if (step >= 3) {
-      router.navigate('/events/create')
+      console.log('Redirecting to /events/create')
+      navigate({ to: '/events/create' })
     }
-  }, [step, router]);
+  }, [step]);
 
   return (
     <div className="flex flex-col items-center h-screen">
@@ -35,13 +37,18 @@ function SelectContent() {
       {/* Content */}
       <div className="h-full w-96 flex flex-col justify-between py-6">
         {/* Render Content Based on Step */}
-        {step === 0 ? (
-          <ScaleContent onNext={handleNextStep} />
-        ) : step === 1 ? (
-          <TypeContent onNext={handleNextStep} />
-        ) : step === 2 ? (
-          <BelongContent onNext={handleNextStep} />
-        ) : null}
+        {(() => {
+          switch (step) {
+            case 0:
+              return <ScaleContent onNext={handleNextStep} />;
+            case 1:
+              return <TypeContent onNext={handleNextStep} />;
+            case 2:
+              return <BelongContent onNext={handleNextStep} />;
+            default:
+              return null;
+          }
+        })()}
 
         {/* Steps */}
         <ul className="steps steps-vertical lg:steps-horizontal">

@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 
 import ScaleContent from '../../components/pages/select/scale'
 import TypeContent from '../../components/pages/select/type'
@@ -11,21 +11,12 @@ export const Route = createFileRoute('/events/select')({
 
 function SelectContent() {
   
-  const navigate = Route.useNavigate();
-  
   const [step, setStep] = useState(0)
 
   const handleNextStep = () => {
     setStep((prevStep) => Math.min(prevStep + 1, 3))
   }
-
-  useEffect(() => {
-    if (step >= 3) {
-      console.log('Redirecting to /events/create')
-      navigate({ to: '/events/create' })
-    }
-  }, [step]);
-
+  
   return (
     <div className="flex flex-col items-center h-screen">
       {/* Header */}

@@ -1,3 +1,5 @@
+import { Link } from "@tanstack/react-router";
+
 const belongOptions = [
   { value: 'campus', label: '校園活動', ariaLabel: 'Select campus event' },
   { value: 'club', label: '社團活動', ariaLabel: 'Select club event' },
@@ -26,11 +28,13 @@ const SelectionContent: React.FC<SelectionContentProps> = ({options, onSelect}) 
       <div className="flex w-full flex-col">
         {options.map(({ value, label }) => (
           <button
-            className="card bg-neutral-content rounded-box grid h-20 place-items-center text-gray-800 font-bold text-2xl mb-8 hover:scale-105 transition-transform"
+            className="card bg-neutral-content rounded-box h-20 text-gray-800 font-bold text-2xl mb-8 hover:scale-105 transition-transform"
             key={value}
             onClick={() => onSelect(value)}
             >
-            { label }
+            <Link className="w-full h-full flex justify-center items-center" key={value} to={`/events/create`}>
+              { label }
+            </Link>
           </button>
         ))}
       </div>

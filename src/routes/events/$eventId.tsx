@@ -42,12 +42,13 @@ const styles = {
 function EventDetails() {
   const { event } = Route.useLoaderData()
   const [join, setJoin] = useState(false)
+  const [isFavorite, setIsFavorite] = useState(false)
   return (
-    // <div style={styles.body}>
     <div className="container mx-auto">
-      <Header />
+      <div className="relative z-10">
+        <Header />
+      </div>      
       <div className='bg-gray-800'>
-        {/* 不確定why不設置position就會蓋住header */}
 
         {/* 圖片 */}
         {/* 之後改用map */}
@@ -65,34 +66,34 @@ function EventDetails() {
             <div id="item4" className="carousel-item w-full">
               <img src="https://i.pinimg.com/originals/fc/b4/ee/fcb4ee6e201ec8f0de461a9f1ac65d2e.gif" className="w-full" />
             </div>
+            {/* 換頁點點-要根據使用者提供的張數更改個數 */}
           </div>
-          {/* 換頁點點-要根據使用者提供的張數更改個數 */}
-          <div className="absolute bottom-11 flex w-full justify-center gap-2">
+          <div className="bottom-12 flex w-full justify-center gap-2 absolute">
             <a href="#item1" className="btn btn-xs">1</a>
             <a href="#item2" className="btn btn-xs">2</a>
             <a href="#item3" className="btn btn-xs">3</a>
             <a href="#item4" className="btn btn-xs">4</a>
           </div>
         </div>
-
+            
         <div className='-translate-y-12'>
 
           {/* 活動資訊 */}
-          <div className='static relative' style={styles.card}>
+          <div className='' style={styles.card}>
             {/* 活動名稱 */}
-            <div className='flex place-content-between'>
-              <h1 className='text-xl m-1 font-bold'>{event.name}</h1>
+            <div className='flex items-center justify-between'>
+              <h1 className='text-2xl m-1 font-bold'>{event.name}</h1>
               {/* 收藏 */}
-              <div>
-                <label className='swap'>
-                  <input type="checkbox" />
-                  <svg style={styles.icon} className="swap-off w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12.01 6.001C6.5 1 1 8 5.782 13.001L12.011 20l6.23-7C23 8 17.5 1 12.01 6.002Z"/>
-                  </svg>
-                  <svg style={styles.icon} className="swap-on w-6 h-6 text-red-500 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+              <div onClick={() => setIsFavorite(!isFavorite)} className="cursor-pointer">
+                {isFavorite ? (
+                  <svg style={styles.icon} className="w-8 h-8 text-red-500 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
                     <path d="m12.75 20.66 6.184-7.098c2.677-2.884 2.559-6.506.754-8.705-.898-1.095-2.206-1.816-3.72-1.855-1.293-.034-2.652.43-3.963 1.442-1.315-1.012-2.678-1.476-3.973-1.442-1.515.04-2.825.76-3.724 1.855-1.806 2.201-1.915 5.823.772 8.706l6.183 7.097c.19.216.46.34.743.34a.985.985 0 0 0 .743-.34Z"/>
                   </svg>
-                </label>
+                ) : (
+                  <svg style={styles.icon} className="w-8 h-8 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12.01 6.001C6.5 1 1 8 5.782 13.001L12.011 20l6.23-7C23 8 17.5 1 12.01 6.002Z"/>
+                  </svg>
+                )}
               </div>
             </div>
             {/* 時間 */}
@@ -108,26 +109,28 @@ function EventDetails() {
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/>
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.8 13.938h-.011a7 7 0 1 0-11.464.144h-.016l.14.171c.1.127.2.251.3.371L12 21l5.13-6.248c.194-.209.374-.429.54-.659l.13-.155Z"/>
               </svg>
+              <p>{event.location}</p>
             </div>
             {/* 活動價格 */}
-            <div className='flex p-2 items-center'>
-              
-              <svg style={styles.icon} className="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 17.345a4.76 4.76 0 0 0 2.558 1.618c2.274.589 4.512-.446 4.999-2.31.487-1.866-1.273-3.9-3.546-4.49-2.273-.59-4.034-2.623-3.547-4.488.486-1.865 2.724-2.899 4.998-2.31.982.236 1.87.793 2.538 1.592m-3.879 12.171V21m0-18v2.2"/>
-              </svg>
-              <p>活動價格</p>
-              
+            <div className='flex p-2 items-center justify-between'> 
+              <div className='flex items-center'>
+                <svg style={styles.icon} className="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 17.345a4.76 4.76 0 0 0 2.558 1.618c2.274.589 4.512-.446 4.999-2.31.487-1.866-1.273-3.9-3.546-4.49-2.273-.59-4.034-2.623-3.547-4.488.486-1.865 2.724-2.899 4.998-2.31.982.236 1.87.793 2.538 1.592m-3.879 12.171V21m0-18v2.2"/>
+                </svg>
+                <p>{event.fee} 元</p> 
+              </div>           
+
+              <button className="btn bottom-1 right-1"
+                onClick={() => {
+                  if (join) {
+                    (document.getElementById("cancel_modal") as HTMLFormElement).showModal();
+                  } else {
+                    (document.getElementById("join_modal") as HTMLFormElement).showModal();
+                  }
+                }}>
+                {join ? "已報名" : "報名活動"}
+              </button>
             </div>
-            <button className="btn absolute bottom-1 right-1"
-              onClick={() => {
-                if (join) {
-                  (document.getElementById("cancel_modal") as HTMLFormElement).showModal();
-                } else {
-                  (document.getElementById("join_modal") as HTMLFormElement).showModal();
-                }
-              }}>
-              {join ? "已報名" : "報名活動"}
-            </button>
 
             <dialog id="join_modal" className="modal">
               <div className="modal-box w-11/12 max-w-5xl">
@@ -218,7 +221,7 @@ function EventDetails() {
             
             {/* 辦理單位 */}
             <div className='flex items-center'>
-              <svg style={styles.icon} className="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <svg style={styles.icon} className="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 22 22">
                 <path stroke="currentColor" stroke-width="2" d="M7 17v1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1a3 3 0 0 0-3-3h-4a3 3 0 0 0-3 3Zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
               </svg>
 
@@ -230,17 +233,17 @@ function EventDetails() {
 
             {/* 學生學習護照 */}
             <div className='flex items-center'>
-              <svg style={styles.icon} className="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+              <svg style={styles.icon} className="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                 <path stroke="currentColor" stroke-width="2" d="M11.083 5.104c.35-.8 1.485-.8 1.834 0l1.752 4.022a1 1 0 0 0 .84.597l4.463.342c.9.069 1.255 1.2.556 1.771l-3.33 2.723a1 1 0 0 0-.337 1.016l1.03 4.119c.214.858-.71 1.552-1.474 1.106l-3.913-2.281a1 1 0 0 0-1.008 0L7.583 20.8c-.764.446-1.688-.248-1.474-1.106l1.03-4.119A1 1 0 0 0 6.8 14.56l-3.33-2.723c-.698-.571-.342-1.702.557-1.771l4.462-.342a1 1 0 0 0 .84-.597l1.753-4.022Z"/>
               </svg>
               <div className='p-2 items-center'>
                 <p>學生學習護照</p>
-                <p>實數類型 {event.fee} 小時</p>
+                <p>時數類型 {event.fee} 小時</p>
               </div>          
             </div>
             {/* 條件限制 */}
             <div className='flex items-center'>
-              <svg style={styles.icon} className="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+              <svg style={styles.icon} className="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 11.917 9.724 16.5 19 7.5"/>
               </svg>
 
@@ -272,4 +275,3 @@ function EventDetails() {
 // supabase 時區顯示問題
 // carousel 的顯示鈕
 // 收藏的函式
-// header無法正常顯示

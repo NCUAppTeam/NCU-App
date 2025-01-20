@@ -1,7 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { Clock, Search } from "flowbite-react-icons/outline";
+import { Clock, MapPinAlt, Plus, Search } from "flowbite-react-icons/outline";
 import { useState } from 'react';
-import { BellIcon, Header, PinIcon, PlusIcon } from '../../components';
+import { Header } from '../../components';
+import { DialogBox } from '../../components/DialogBox';
 import { AuthGuard } from '../../utils/auth';
 import { supabase } from '../../utils/supabase';
 
@@ -33,7 +34,6 @@ export const Route = createFileRoute('/events/')({
 
 function EventIndex() {
   const { events } = Route.useLoaderData();
-  const navigate = Route.useNavigate();
 
   const [searchTerm, setSearchTerm] = useState('');
   const [isFocused, setIsFocused] = useState(false);
@@ -93,38 +93,24 @@ function EventIndex() {
         </div>
 
         <button
-          className="btn btn-circle fixed right-4 bottom-4"
+          className="grid place-items-center btn btn-circle fixed right-4 bottom-4 "
           onClick={() => {
             if (document) {
               (
-                document.getElementById('my_modal_4') as HTMLFormElement
+                document.getElementById('ncuapp_modal') as HTMLFormElement
               ).showModal();
             }
           }}
         >
-          <PlusIcon />
-          <dialog id="my_modal_4" className="modal">
-            <div className="modal-box w-11/12 max-w-5xl">
-              <div className="flex items-center justify-center">
-                <BellIcon />
-                <h3 className="font-bold text-2xl">通知</h3>
-              </div>
-              <p className="py-4 text-xl">確定要新增嗎？</p>
-              <div className="modal-action flex justify-between">
-                <button
-                  className="btn w-1/2"
-                  onClick={() => navigate({ to: '/events/create' })}
-                >
-                  好
-                </button>
-                <form method="dialog" className="w-1/2">
-                  {/* This button will close the dialog */}
-                  <button className="btn w-full">取消</button>
-                </form>
-              </div>
-            </div>
-          </dialog>
+          <Plus className='m-auto' />
         </button>
+
+        <DialogBox
+          message="確定要新增嗎？"
+          navigateTo="/events/create"
+          type="inquiry"
+        />
+
       </div>
     </>
   );
@@ -135,12 +121,12 @@ function EventCard({ event }: { event: Event }) {
     ? new Date(event.start_time)
     : new Date();
   return (
-    <div className="flex-shrink-0 w-40 bg-gray-700 rounded-lg overflow-hidden text-white">
+    <div className="flex-shrink-0 w-40 rounded-lg overflow-hidden text-white">
       <div className="h-32 bg-gray-500" />
-      <div className="p-2">
-        <h3 className="text-lg mb-1">{event.name}</h3>
-        <p className="text-sm flex items-center">
-          <Clock fill="currentColor" stroke="#ffffff" size={24} />
+      <div className="p-2 bg-white">
+        <h3 className="text-lg mb-1 text-black">{event.name}</h3>
+        <p className="text-sm flex items-center text-black">
+          <Clock size={24} />
           {startTime.toLocaleString('zh-TW', {
             month: '2-digit',
             day: '2-digit',
@@ -148,8 +134,8 @@ function EventCard({ event }: { event: Event }) {
             minute: '2-digit',
           })}
         </p>
-        <p className="text-sm flex items-center">
-          <PinIcon fill="currentColor" stroke="#ffffff" size={24} />
+        <p className="text-sm flex items-center text-black">
+          <MapPinAlt size={24} />
           {event.location || '位置未提供'}
         </p>
       </div>

@@ -7,7 +7,6 @@ const belongOptions = [
 ];
 
 interface BelongContentProps {
-interface BelongContentProps {
   onNext: () => void; // 定义 onNext 是一个接收字符串参数、无返回值的函数
 }
 

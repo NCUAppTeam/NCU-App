@@ -42,7 +42,7 @@ function SelectContent() {
         })()}
 
         {/* Steps */}
-        <ul className="steps steps-vertical lg:steps-horizontal">
+        <ul className="steps steps-horizontal">
           <li className={`step ${step >= 0 ? 'step-primary' : ''}`}>規模</li>
           <li className={`step ${step >= 1 ? 'step-primary' : ''}`}>類型</li>
           <li className={`step ${step >= 2 ? 'step-primary' : ''}`}>性質</li>

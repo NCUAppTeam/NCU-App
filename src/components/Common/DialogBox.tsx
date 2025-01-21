@@ -16,9 +16,9 @@ export const DialogBox: React.FC<AlertDialogProps> = ({ message, navigateTo, typ
                 <div className="modal-box w-11/12 max-w-5xl">
                     <div className="flex items-center justify-center">
                         <Bell />
-                        <h3 className="font-bold text-2xl">通知</h3>
+                        <h3 id="dialog-title" className="font-bold text-2xl">通知</h3>
                     </div>
-                    <p className="py-4 text-xl">{message}</p>
+                    <p id="dialog-description" className="py-4 text-xl">{message}</p>
 
                     {type === 'alert' ? (
                         /* Alert Type Dialog Modal */

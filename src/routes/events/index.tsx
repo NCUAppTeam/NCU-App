@@ -2,7 +2,7 @@ import { createFileRoute } from '@tanstack/react-router';
 import { Clock, MapPinAlt, Plus, Search } from "flowbite-react-icons/outline";
 import { useState } from 'react';
 import { Header } from '../../components';
-import { DialogBox } from '../../components/DialogBox';
+import { DialogBox } from '../../components/Common/DialogBox';
 import { AuthGuard } from '../../utils/auth';
 import { supabase } from '../../utils/supabase';
 

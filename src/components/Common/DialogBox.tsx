@@ -4,12 +4,8 @@
 import { useNavigate } from '@tanstack/react-router';
 import { Bell } from 'flowbite-react-icons/outline';
 import React from 'react';
+import AlertDialogProps from '../interface/AlertDialogProps';
 
-interface AlertDialogProps {
-    message: string;
-    navigateTo: string;
-    type: 'alert' | 'inquiry'
-}
 
 export const DialogBox: React.FC<AlertDialogProps> = ({ message, navigateTo, type }) => {
     const navigate = useNavigate();

@@ -128,12 +128,10 @@ function EventIndex() {
 
         <button
           className="grid place-items-center btn btn-circle fixed right-4 bottom-4 "
+          aria-label="Create new event"
           onClick={() => {
-            if (document) {
-              (
-                document.getElementById('ncuapp_modal') as HTMLFormElement
-              ).showModal();
-            }
+            const dialog = document.querySelector('dialog.modal') as HTMLDialogElement;
+            if (dialog) dialog.showModal();
           }}
         >
           <Plus className='m-auto' />

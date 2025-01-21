@@ -9,10 +9,21 @@ import AlertDialogProps from '../interface/AlertDialogProps';
 
 export const DialogBox: React.FC<AlertDialogProps> = ({ message, navigateTo, type }) => {
     const navigate = useNavigate();
+    const handleKeyDown = (e: React.KeyboardEvent) => {
+        if (e.key === 'Escape') {
+            const dialog = document.querySelector('dialog.modal') as HTMLDialogElement;
+            if (dialog) dialog.close();
+        }
+    };
 
     return (
-        <div className='z-10 bg-black'>
-            <dialog id="ncuapp_modal" className="modal">
+        <div className='z-10 bg-black' onKeyDown={handleKeyDown}>
+            <dialog
+                id="ncuapp_modal"
+                className="modal"
+                aria-labelledby="dialog-title"
+                aria-describedby="dialog-description"
+            >
                 <div className="modal-box w-11/12 max-w-5xl">
                     <div className="flex items-center justify-center">
                         <Bell />

@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
+import { Heart } from 'flowbite-react-icons/outline';
 import { Header } from '../../components';
-import { BasicIcon } from '../../components/icons/BasicIcon';
 import { AuthGuard } from '../../utils/auth';
 import { supabase } from '../../utils/supabase';
 
@@ -38,7 +38,6 @@ const styles = {
   grid: {
     padding: '10px',
     display: 'flex',
-    flexWrap: 'wrap',
     gap: '10px',
     justifyContent: 'space-between',
   },
@@ -49,8 +48,7 @@ const styles = {
     padding: '10px',
     backgroundColor: '#555',
     borderRadius: '10px',
-    color: 'white',
-    boxSizing: 'border-box',
+    color: 'white'
   },
   productName: {
     fontSize: 16,
@@ -95,31 +93,28 @@ function EventSale() {
     return (
       <>
         <Header />
-        <div style={styles.container}>
-          <div style={styles.searchSection}>
-            <BasicIcon size={24}>
-              <circle cx="12" cy="12" r="14" />
-            </BasicIcon>
-              <input style={styles.searchInput} placeholder="搜尋" />
-            <BasicIcon size={24}>
-              <circle cx="12" cy="12" r="14" />
-            </BasicIcon>
-          </div>
+        <div className="container mx-auto">
+        <textarea className="textarea textarea-primary w-full h-7 text-lg py-3" placeholder="Search..."></textarea>
           <div style={styles.categories}>
             <button style={styles.categoryButton}>全部</button>
             <button style={styles.categoryButton}>五金</button>
             <button style={styles.categoryButton}>飲料</button>
             <button style={styles.categoryButton}>贈品</button>
           </div>
-          <div style={styles.grid}>
-            {
-              sales.map((p) => (
-                <div key={p.id} style={styles.card}>
-                  <h1 style={styles.productName}>{p.product}</h1>
-                  <p style={styles.productInfo}>價格: {p.price} 元</p>
-                </div>
-              ))
-            }
+          <div className='w-full py-6 px-3'>
+            <h1 className='text-white font-bold text-2xl'>拍賣</h1>
+            <div className='grid grid-cols-2 gap-1'>
+              { sales.map((p) => ( 
+                  <div className='h-80 p-10 bg-stone-500 hover:bg-stone-600 active:bg-stone-700 focus:outline-none focus:ring focus:ring-violet-300 scale-90 hover:scale-100 relative'>
+                    <h1 className='text-slate-50 font-semibold text-xl absolute left-1 bottom-7'>{p.product}</h1>
+                    <Heart size={24} />
+                    <h1 className='text-slate-300 font-semibold text-xl absolute left-1 bottom-1'>{p.price} 元</h1>
+                  </div> 
+                  
+                ) 
+              )
+              } 
+            </div>
           </div>
         </div>
       </>

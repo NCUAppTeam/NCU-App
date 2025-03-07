@@ -105,7 +105,7 @@ function EventSale() {
             <h1 className='text-white font-bold text-2xl'>拍賣</h1>
             <div className='grid grid-cols-2 gap-1'>
               { sales.map((p) => ( 
-                  <div className='h-80 p-10 bg-stone-500 hover:bg-stone-600 active:bg-stone-700 focus:outline-none focus:ring focus:ring-violet-300 scale-90 hover:scale-100 relative'>
+                  <div key={p.id} className='h-80 p-10 bg-stone-500 hover:bg-stone-600 active:bg-stone-700 focus:outline-none focus:ring focus:ring-violet-300 scale-90 hover:scale-100 relative'>
                     <h1 className='text-slate-50 font-semibold text-xl absolute left-1 bottom-7'>{p.product}</h1>
                     <Heart size={24} />
                     <h1 className='text-slate-300 font-semibold text-xl absolute left-1 bottom-1'>{p.price} 元</h1>

@@ -36,16 +36,19 @@ export type Database = {
     Tables: {
       event_type: {
         Row: {
+          hashtag_relation: number[]
           type_id: number
-          type_name: string | null
+          type_name: string
         }
         Insert: {
+          hashtag_relation?: number[]
           type_id?: number
-          type_name?: string | null
+          type_name: string
         }
         Update: {
+          hashtag_relation?: number[]
           type_id?: number
-          type_name?: string | null
+          type_name?: string
         }
         Relationships: []
       }

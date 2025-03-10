@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, Link } from '@tanstack/react-router';
 import { Clock, MapPinAlt, Plus, Search } from "flowbite-react-icons/outline";
 import { useState } from 'react';
 import { Header } from '../../components';
@@ -153,7 +153,11 @@ function EventCard({ event }: { event: Event }) {
     ? new Date(event.start_time)
     : new Date();
   return (
-    <div className="flex-shrink-0 w-40 rounded-lg overflow-hidden text-white">
+    <Link
+      to="/events/$eventId"
+      params={{ eventId: String(event.id) }}
+      className="flex-shrink-0 w-40 rounded-lg overflow-hidden text-white cursor-pointer hover:shadow-lg transition-shadow duration-300"
+    >
       <div className="h-32 bg-gray-500" />
       <div className="p-2 bg-white">
         <h3 className="text-lg mb-1 text-black">{event.name}</h3>
@@ -171,6 +175,6 @@ function EventCard({ event }: { event: Event }) {
           {event.location || '位置未提供'}
         </p>
       </div>
-    </div>
+    </Link>
   );
 }

@@ -25,7 +25,7 @@ function Callback() {
           client_id: import.meta.env.VITE_NCU_PORTAL_CLIENT_ID,
           client_secret: import.meta.env.VITE_NCU_PORTAL_CLIENT_SECRET,
           code: code,
-          redirect_uri: 'http://ncuappteam/callback',
+          redirect_uri: 'https://ncuappteam.github.io/callback',
           grant_type: 'authorization_code',
         });
 

@@ -3,7 +3,7 @@ name: Deploy Vite with GitHub Pages dependencies preinstalled
 on:
   # Runs on pushes targeting the default branch
   push:
-    branches: ["main"]
+    branches: ["login-test"]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -35,9 +35,15 @@ jobs:
         run: |
              echo "VITE_SUPABASE_URL=${{ secrets.VITE_SUPABASE_URL }}" > .env
              echo "VITE_SUPABASE_ANON_KEY=${{ secrets.VITE_SUPABASE_ANON_KEY }}" >> .env
+             echo "VITE_NCU_PORTAL_CLIENT_ID=${{ secrets.VITE_NCU_PORTAL_CLIENT_ID }}" >> .env
+             echo "VITE_NCU_PORTAL_SECRET=${{ secrets.VITE_NCU_PORTAL_SECRET }}" >> .env
         env:
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+          VITE_NCU_PORTAL_CLIENT_ID: ${{ secrets.VITE_NCU_PORTAL_CLIENT_ID }}
+          VITE_NCU_PORTAL_SECRET: ${{ secrets.VITE_NCU_PORTAL_SECRET }}
+          
+          
 
       # Debug - Verify .env file creation
       - name: Debug - Verify .env file creation

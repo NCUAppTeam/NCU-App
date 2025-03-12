@@ -36,11 +36,7 @@ function Callback() {
         const tokenResponse = await fetch('https://portal.ncu.edu.tw/oauth2/token', {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
             'Accept': 'application/json',
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Supabase-Api-Version, X-Client-Info, Apikey, Accept-Profile',
-            'Access-Control-Allow-Credentials': 'true'
           },
           body: body.toString(),
         });

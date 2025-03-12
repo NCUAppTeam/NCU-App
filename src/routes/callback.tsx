@@ -33,9 +33,10 @@ function Callback() {
           grant_type: 'authorization_code',
         });
 
-        const tokenResponse = await fetch('https://portal.ncu.edu.tw/oauth2/token', {
+        const tokenResponse = await fetch('https://ncuappteam.github.io/api/oauth/token', {
           method: 'POST',
           headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
             'Accept': 'application/json',
           },
           body: body.toString(),
@@ -50,7 +51,7 @@ function Callback() {
         const accessToken = tokenData.access_token;
 
         // 使用 access_token 取得使用者資訊
-        const userInfoResponse = await fetch('https://portal.ncu.edu.tw/oauth2/userinfo', {
+        const userInfoResponse = await fetch('https://ncuappteam.github.io/api/oauth/info', {
           headers: { Authorization: `Bearer ${accessToken}` },
         });
 

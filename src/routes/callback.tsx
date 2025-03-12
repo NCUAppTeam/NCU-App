@@ -22,6 +22,9 @@ function Callback() {
 
       try {
         // 交換 access_token
+        if(import.meta.env.VITE_NCU_PORTAL_CLIENT_ID){
+          console.log(import.meta.env.VITE_NCU_PORTAL_CLIENT_ID)
+        }
         const body = new URLSearchParams({
           client_id: import.meta.env.VITE_NCU_PORTAL_CLIENT_ID,
           client_secret: import.meta.env.VITE_NCU_PORTAL_CLIENT_SECRET,

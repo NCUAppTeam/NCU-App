@@ -11,7 +11,9 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as SignupImport } from './routes/signup'
 import { Route as LoginImport } from './routes/login'
+import { Route as CallbackImport } from './routes/callback'
 import { Route as IndexImport } from './routes/index'
 import { Route as SalesIndexImport } from './routes/sales/index'
 import { Route as MapIndexImport } from './routes/map/index'
@@ -26,8 +28,18 @@ import { Route as EventsEventIdImport } from './routes/events/$eventId'
 
 // Create/Update Routes
 
+const SignupRoute = SignupImport.update({
+  path: '/signup',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const LoginRoute = LoginImport.update({
   path: '/login',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const CallbackRoute = CallbackImport.update({
+  path: '/callback',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -97,11 +109,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
+    '/callback': {
+      id: '/callback'
+      path: '/callback'
+      fullPath: '/callback'
+      preLoaderRoute: typeof CallbackImport
+      parentRoute: typeof rootRoute
+    }
     '/login': {
       id: '/login'
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginImport
+      parentRoute: typeof rootRoute
+    }
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupImport
       parentRoute: typeof rootRoute
     }
     '/events/$eventId': {
@@ -181,7 +207,9 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/callback': typeof CallbackRoute
   '/login': typeof LoginRoute
+  '/signup': typeof SignupRoute
   '/events/$eventId': typeof EventsEventIdRoute
   '/events/create': typeof EventsCreateRoute
   '/events/select': typeof EventsSelectRoute
@@ -196,7 +224,9 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/callback': typeof CallbackRoute
   '/login': typeof LoginRoute
+  '/signup': typeof SignupRoute
   '/events/$eventId': typeof EventsEventIdRoute
   '/events/create': typeof EventsCreateRoute
   '/events/select': typeof EventsSelectRoute
@@ -212,7 +242,9 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/callback': typeof CallbackRoute
   '/login': typeof LoginRoute
+  '/signup': typeof SignupRoute
   '/events/$eventId': typeof EventsEventIdRoute
   '/events/create': typeof EventsCreateRoute
   '/events/select': typeof EventsSelectRoute
@@ -229,7 +261,9 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/callback'
     | '/login'
+    | '/signup'
     | '/events/$eventId'
     | '/events/create'
     | '/events/select'
@@ -243,7 +277,9 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/callback'
     | '/login'
+    | '/signup'
     | '/events/$eventId'
     | '/events/create'
     | '/events/select'
@@ -257,7 +293,9 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/callback'
     | '/login'
+    | '/signup'
     | '/events/$eventId'
     | '/events/create'
     | '/events/select'
@@ -273,7 +311,9 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CallbackRoute: typeof CallbackRoute
   LoginRoute: typeof LoginRoute
+  SignupRoute: typeof SignupRoute
   EventsEventIdRoute: typeof EventsEventIdRoute
   EventsCreateRoute: typeof EventsCreateRoute
   EventsSelectRoute: typeof EventsSelectRoute
@@ -288,7 +328,9 @@ export interface RootRouteChildren {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CallbackRoute: CallbackRoute,
   LoginRoute: LoginRoute,
+  SignupRoute: SignupRoute,
   EventsEventIdRoute: EventsEventIdRoute,
   EventsCreateRoute: EventsCreateRoute,
   EventsSelectRoute: EventsSelectRoute,
@@ -314,7 +356,9 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/callback",
         "/login",
+        "/signup",
         "/events/$eventId",
         "/events/create",
         "/events/select",
@@ -330,8 +374,14 @@ export const routeTree = rootRoute
     "/": {
       "filePath": "index.tsx"
     },
+    "/callback": {
+      "filePath": "callback.tsx"
+    },
     "/login": {
       "filePath": "login.tsx"
+    },
+    "/signup": {
+      "filePath": "signup.tsx"
     },
     "/events/$eventId": {
       "filePath": "events/$eventId.tsx"

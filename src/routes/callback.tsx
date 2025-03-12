@@ -38,6 +38,9 @@ function Callback() {
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
             'Accept': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Supabase-Api-Version, X-Client-Info, Apikey, Accept-Profile',
+            'Access-Control-Allow-Credentials': 'true'
           },
           body: body.toString(),
         });

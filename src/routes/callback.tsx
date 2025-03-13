@@ -36,7 +36,7 @@ function Callback() {
           redirect_uri: 'http://ncuappteam.github.io/callback',
           grant_type: 'authorization_code',
         });
-        const request: RequestInfo = new Request('https://ncuapp.davidday.tw/oauth2/token', {
+        const request: RequestInfo = new Request('https://ncuappteam.github.io/oauth2/token', {
           // We need to set the `method` to `POST` and assign the headers
           method: 'POST',
           headers: headers,

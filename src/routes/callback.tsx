@@ -13,6 +13,7 @@ function Callback() {
     async function handleOAuthCallback() {
       const urlParams = new URLSearchParams(window.location.search);
       const code = urlParams.get('code');  // 取得 OAuth 授權碼
+      console.log('code:', code);
 
       if (!code) {
         console.error('授權碼缺失');
@@ -22,48 +23,41 @@ function Callback() {
 
       try {
         // 交換 access_token
-        if(import.meta.env.VITE_NCU_PORTAL_CLIENT_ID){
-          console.log(import.meta.env.VITE_NCU_PORTAL_CLIENT_ID)
-        }
+        const headers: Headers = new Headers();
+        const client_id = import.meta.env.VITE_NCU_PORTAL_CLIENT_ID;
+        const client_secret = import.meta.env.VITE_NCU_PORTAL_CLIENT_SECRET;
+        const authHeader = btoa(`${client_id}:${client_secret}`);
+        headers.append('Accept', 'application/json');
+        headers.append('Content-Type', 'application/x-www-form-urlencoded');
+        headers.append('Authorization', `Basic ${authHeader}`);
+
         const body = new URLSearchParams({
-          client_id: import.meta.env.VITE_NCU_PORTAL_CLIENT_ID,
-          client_secret: import.meta.env.VITE_NCU_PORTAL_CLIENT_SECRET,
           code: code,
-          redirect_uri: 'https://ncuappteam.github.io/callback',
+          redirect_uri: 'http://ncuappteam.github.io/callback',
           grant_type: 'authorization_code',
         });
-
-        const tokenResponse = await fetch('https://ncuappteam.github.io/oauth/token', {
+        const request: RequestInfo = new Request('https://ncuappteam.github.io/oauth2/token', {
+          // We need to set the `method` to `POST` and assign the headers
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Accept': 'application/json',
-          },
+          headers: headers,
+          // Convert the user object to JSON and pass it as the body
           body: body.toString(),
-        });
-        console.log('tokenResponse:', tokenResponse);
+        })
 
-        if (!tokenResponse.ok) {
-          throw new Error(`交換 access_token 失敗: ${tokenResponse.status}`);
+        // const tokenResponse = await fetch('', {
+        //   method: 'POST',
+        //   headers: headers,
+        //   body: body.toString(),
+        // });
+        const responseData = await fetch(request);
+        console.log('responseData:', responseData);
+        if (responseData) {
+          // localStorage.setItem('accessToken', accessToken);
+          console.log('accessToken:', responseData.json());
         }
-
-        const tokenData = await tokenResponse.json();
-        const accessToken = tokenData.access_token;
-
-        // 使用 access_token 取得使用者資訊
-        const userInfoResponse = await fetch('https://ncuappteam.github.io/apis/oauth/v1/info', {
-          headers: { Authorization: `Bearer ${accessToken}` },
-        });
-
-        if (!userInfoResponse.ok) {
-          throw new Error('獲取使用者資訊失敗');
+        else {
+          console.error('取得 access_token 失敗');
         }
-
-        const userInfo = await userInfoResponse.json();
-        console.log('使用者資訊:', userInfo);
-
-        // 這裡可以將 userInfo 存入全域狀態或 localStorage
-        localStorage.setItem('user', JSON.stringify(userInfo));
 
         // 跳轉到首頁或其他頁面
         navigate({ to: '/' });

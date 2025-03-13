@@ -51,9 +51,10 @@ function Callback() {
         // });
         const responseData = await fetch(request);
         console.log('responseData:', responseData);
-        if (responseData) {
+        const responseJson = await responseData.json()
+        if (responseJson) {
           // localStorage.setItem('accessToken', accessToken);
-          console.log('accessToken:', responseData.json());
+          console.log('accessToken:', responseJson);
         }
         else {
           console.error('取得 access_token 失敗');

@@ -17,7 +17,10 @@ function LoginPage() {
   const [isRemember, setIsRemember] = useState(false);
   const [isError, setIsError] = useState(false);
   const { redirect: redirectUrl } = Route.useSearch()
-
+  const CLIENT_ID = "xxClientId"; // client id
+  const REDIRECT_URI = "/sign_up"; // redirect uri
+  const AUTH_URL = `https://portal.ncu.edu.tw/oauth2/authorization?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&scope=id identifier chinese-name email`;
+  
   async function login(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const { data: { session }, error } = await supabase.auth.signInWithPassword({ email, password });
@@ -85,6 +88,13 @@ function LoginPage() {
       >
         {Labels.login}
       </button>
+      <button
+          type='button'
+          className='w-full h-14 bg-blue-500 text-white font-bold text-xl rounded-md'
+          onClick={() => (window.location.href = AUTH_URL)}
+        >
+          {Labels.signUp}
+      </button>
     </form>
   )
 }
@@ -96,5 +106,6 @@ class Labels {
   static readonly password = '密碼';
   static readonly remember = '保持我的登入狀態';
   static readonly login = '登入';
+  static readonly signUp = '以中大portal註冊帳號';
   static readonly wrongAccountOrPassword = '帳號或密碼錯誤';
 }

@@ -22,7 +22,7 @@ function Callback() {
 
       try {
         // 交換 access_token
-        const response = await fetch('https://ncuappteam.github.io/oauth2/token', {
+        const response = await fetch('https://ncuapp.davidday.tw/oauth2/token', {
           method: 'POST',
           headers: {
             'Accept': 'application/json',

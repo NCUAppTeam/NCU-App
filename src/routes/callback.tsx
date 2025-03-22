@@ -46,7 +46,7 @@ function Callback() {
         console.log('Access Token:', tokenData.access_token);
 
         // 取得使用者資訊
-        const userResponse = await fetch('https://portal.ncu.edu.tw/apis/oauth/v1/info', {
+        const userResponse = await fetch('https://ncuapp.davidday.tw/oauth2/userinfo', {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${tokenData.access_token}`,

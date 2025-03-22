@@ -42,9 +42,7 @@ function Callback() {
           console.error('取得 access_token 失敗', tokenData);
           return;
         }
-
-        console.log('Access Token:', tokenData.access_token);
-
+        
         // 取得使用者資訊
         const userResponse = await fetch('https://ncuapp.davidday.tw/oauth2/userinfo', {
           method: 'GET',

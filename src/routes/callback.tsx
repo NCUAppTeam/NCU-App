@@ -12,61 +12,53 @@ function Callback() {
   useEffect(() => {
     async function handleOAuthCallback() {
       const urlParams = new URLSearchParams(window.location.search);
-      const code = urlParams.get('code');  // 取得 OAuth 授權碼
-      console.log('code:', code);
-
+      const code = urlParams.get('code');
+  
       if (!code) {
-        console.error('授權碼缺失');
-        window.location.href = '/' // 如果沒有授權碼，導回登入頁面
-        return;
+          console.error('授權碼缺失');
+          window.location.href = '/';
+          return;
       }
-
+  
       try {
-        // 交換 access_token
-        const headers: Headers = new Headers();
-        const client_id = import.meta.env.VITE_NCU_PORTAL_CLIENT_ID;
-        const client_secret = import.meta.env.VITE_NCU_PORTAL_CLIENT_SECRET;
-        const authHeader = btoa(`${client_id}:${client_secret}`);
-        headers.append('Accept', 'application/json');
-        headers.append('Content-Type', 'application/x-www-form-urlencoded');
-        headers.append('Authorization', `Basic ${authHeader}`);
-
-        const body = new URLSearchParams({
-          code: code,
-          redirect_uri: 'http://ncuappteam.github.io/callback',
-          grant_type: 'authorization_code',
-        });
-        const request: RequestInfo = new Request('https://ncuapp.davidday.tw/oauth2/token', {
-          // We need to set the `method` to `POST` and assign the headers
-          method: 'POST',
-          headers: headers,
-          // Convert the user object to JSON and pass it as the body
-          body: body.toString(),
-        })
-
-        // const tokenResponse = await fetch('', {
-        //   method: 'POST',
-        //   headers: headers,
-        //   body: body.toString(),
-        // });
-        const responseData = await fetch(request);
-        console.log('responseData:', responseData);
-        const responseJson = await responseData.json()
-        if (responseJson) {
-          // localStorage.setItem('accessToken', accessToken);
-          console.log('accessToken:', responseJson);
-        }
-        else {
-          console.error('取得 access_token 失敗');
-        }
-
-        // 跳轉到首頁或其他頁面
-        navigate({ to: '/' });
+          // 交換 access_token
+          const tokenResponse = await fetch('http://localhost:3001/api/oauth/token', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ code }),
+          });
+  
+          if (!tokenResponse.ok) {
+              throw new Error(`交換 access_token 失敗: ${tokenResponse.status}`);
+          }
+  
+          const tokenData = await tokenResponse.json();
+          const accessToken = tokenData.access_token;
+  
+          console.log('Token:', tokenData);
+  
+          // 使用 access_token 取得使用者資訊
+          const userInfoResponse = await fetch('https://portal.ncu.edu.tw/oauth2/userinfo', {
+              headers: { Authorization: `Bearer ${accessToken}` },
+          });
+  
+          if (!userInfoResponse.ok) {
+              throw new Error('獲取使用者資訊失敗');
+          }
+  
+          const userInfo = await userInfoResponse.json();
+          console.log('使用者資訊:', userInfo);
+  
+          // 儲存使用者資訊
+          localStorage.setItem('user', JSON.stringify(userInfo));
+  
+          // 導向首頁
+          navigate({ to: '/' });
       } catch (error) {
-        console.error('OAuth 登入失敗:', error);
-        navigate({ to: '/' });
+          console.error('OAuth 登入失敗:', error);
+          navigate({ to: '/' });
       }
-    }
+  }  
 
     handleOAuthCallback();
   }, [navigate]);

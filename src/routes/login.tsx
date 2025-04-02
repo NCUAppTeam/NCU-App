@@ -18,7 +18,7 @@ function LoginPage() {
   const [isError, setIsError] = useState(false);
   const { redirect: redirectUrl } = Route.useSearch()
   const CLIENT_ID = import.meta.env.VITE_NCU_PORTAL_CLIENT_ID;
-  const REDIRECT_URI = 'https://ncuappteam.github.io/callback';
+  const REDIRECT_URI = 'http://localhost:5173/callback';
 
   const handleLogin = () => {
     const oauthURL = `https://portal.ncu.edu.tw/oauth2/authorization?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&scope=chinese-name student-id email`;

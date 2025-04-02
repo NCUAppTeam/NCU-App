@@ -22,7 +22,7 @@ function Callback() {
 
       try {
         // 交換 access_token
-        const tokenResponse = await fetch('https://ncuapp.davidday.tw/oauth2/token', {
+        const tokenResponse = await fetch('http://localhost:3000/oauth2/token', {
           method: 'POST',
           headers: {
             'Accept': 'application/json',
@@ -32,19 +32,20 @@ function Callback() {
             code,
             client_id: import.meta.env.VITE_NCU_PORTAL_CLIENT_ID,
             client_secret: import.meta.env.VITE_NCU_PORTAL_CLIENT_SECRET,
-            redirect_uri: 'https://ncuappteam.github.io/callback',
+            redirect_uri: 'http://localhost:5173/callback',
             grant_type: 'authorization_code'
           })
         });
 
         const tokenData = await tokenResponse.json();
+
         if (!tokenData.access_token) {
           console.error('取得 access_token 失敗', tokenData);
           return;
         }
         
         // 取得使用者資訊
-        const userResponse = await fetch('https://ncuapp.davidday.tw/oauth2/userinfo', {
+        const userResponse = await fetch('http://localhost:3000/oauth2/userinfo', {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${tokenData.access_token}`,
@@ -55,8 +56,8 @@ function Callback() {
         const userData = await userResponse.json();
         console.log('使用者資訊:', userData);
         setUserInfo(userData);
-
-        navigate({ to: '/' }); // 取得資料後導航到首頁
+        
+        navigate({ to: '/signup', search: {userData: JSON.stringify(userData)}});
       } catch (error) {
         console.error('OAuth 登入失敗:', error);
         navigate({ to: '/' });

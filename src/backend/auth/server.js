@@ -1,94 +1,53 @@
-import express from 'express';
-import fetch from 'node-fetch';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import express from 'express';
+import fetch from 'node-fetch';
 
+// Load environment variables
 dotenv.config();
 
 const app = express();
-app.use(cors({
-    origin: "http://localhost:5173", 
-    credentials: true
-}));
+const PORT = process.env.PORT || 3001;
+
+// Middleware
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(cors({ origin: 'https://ncuappteam.github.io', credentials: true }));
 
-const CLIENT_ID = process.env.VITE_NCU_PORTAL_CLIENT_ID;
-const CLIENT_SECRET = process.env.VITE_NCU_PORTAL_CLIENT_SECRET;
-const REDIRECT_URI = "http://localhost:5173/callback";
-
-app.post('/oauth2/token', async (req, res) => {
-    // console.log("Received request body:", req.body); // Debugging log
-
+// OAuth Token Exchange Endpoint
+app.post('/api/oauth/token', async (req, res) => {
     const { code } = req.body;
-    // console.log(code);
+
     if (!code) {
-        console.error("Missing parameters:", req.body);
-        return res.status(400).json({ error: "invalid_request", message: "Missing required parameters" });
+        return res.status(400).json({ error: '缺少授權碼 (code)' });
     }
 
-    const authHeader = Buffer.from(`${CLIENT_ID}:${CLIENT_SECRET}`).toString('base64');
-    // console.log(CLIENT_ID);
-    // console.log(CLIENT_SECRET);
-
     try {
-        const response = await fetch("https://portal.ncu.edu.tw/oauth2/token", {
-            method: 'POST',
-            headers: {
-                'Authorization': `Basic ${authHeader}`,
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'Accept': 'application/json'
-            },
-            body: new URLSearchParams({
-                code,
-                client_id: CLIENT_ID,
-                client_secret: CLIENT_SECRET,
-                redirect_uri: REDIRECT_URI,
-                grant_type: 'authorization_code'
-            }).toString()
+        const body = new URLSearchParams({
+            client_id: process.env.VITE_NCU_PORTAL_CLIENT_ID,
+            client_secret: process.env.VITE_NCU_PORTAL_CLIENT_SECRET,
+            code,
+            redirect_uri: 'https://ncuappteam.github.io/callback',
+            grant_type: 'authorization_code',
         });
 
-        const data = await response.json();
-        if (!response.ok) {
-            return res.status(400).json({ error: data.error, message: "OAuth token exchange failed" });
+        const tokenResponse = await fetch('https://portal.ncu.edu.tw/oauth2/token', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: body.toString(),
+        });
+
+        if (!tokenResponse.ok) {
+            return res.status(tokenResponse.status).json({ error: 'OAuth token 交換失敗' });
         }
 
-        res.json(data);
+        const tokenData = await tokenResponse.json();
+        res.json(tokenData);
     } catch (error) {
-        console.error("OAuth error:", error);
-        res.status(500).json({ error: "server_error" });
+        console.error('伺服器錯誤:', error);
+        res.status(500).json({ error: '伺服器錯誤', details: error.message });
     }
 });
 
-app.get('/oauth2/userinfo', async (req, res) => {
-    const authHeader = req.headers.authorization;
-
-    if(!authHeader) {
-       return res.status(401).json({ error: "Unauthorized", message: "Missing Authorization header" });
-    }
-
-    try {
-       const response = await fetch("https://portal.ncu.edu.tw/apis/oauth/v1/info", {
-           method: 'GET',
-           headers: {
-               'Authorization': authHeader,
-               'Accept': 'application/json'
-           }
-       });
-
-       if(!response.ok) {
-          throw new Error(`Failed to fetch user info: ${response.statusText}`);
-       }
-
-       const userData = await response.json();
-       res.json(userData);
-    } catch(error) {
-        console.error("User info fetch error: ", error);
-        res.status(500).json({ error: "server_error", message: "Failed to retrieve user info" });
-    }
-});
-
-
-app.listen(3000, () => {
-    console.log("OAuth server running on http://localhost:3000");
+app.listen(PORT, () => {
+    console.log(`🚀 Server running at http://localhost:${PORT}`);
 });

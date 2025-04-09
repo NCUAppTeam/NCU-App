@@ -11,14 +11,14 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as SignupImport } from './routes/signup'
 import { Route as LoginImport } from './routes/login'
+import { Route as CallbackImport } from './routes/callback'
 import { Route as IndexImport } from './routes/index'
 import { Route as SalesIndexImport } from './routes/sales/index'
 import { Route as MapIndexImport } from './routes/map/index'
 import { Route as EventsIndexImport } from './routes/events/index'
-import { Route as DinnerIndexImport } from './routes/dinner/index'
 import { Route as CalendarIndexImport } from './routes/calendar/index'
-import { Route as SalesAddsellImport } from './routes/sales/add_sell'
 import { Route as HomeInfoCardImport } from './routes/home/infoCard'
 import { Route as EventsSelectImport } from './routes/events/select'
 import { Route as EventsCreateImport } from './routes/events/create'
@@ -26,8 +26,18 @@ import { Route as EventsEventIdImport } from './routes/events/$eventId'
 
 // Create/Update Routes
 
+const SignupRoute = SignupImport.update({
+  path: '/signup',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const LoginRoute = LoginImport.update({
   path: '/login',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const CallbackRoute = CallbackImport.update({
+  path: '/callback',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -51,18 +61,8 @@ const EventsIndexRoute = EventsIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const DinnerIndexRoute = DinnerIndexImport.update({
-  path: '/dinner/',
-  getParentRoute: () => rootRoute,
-} as any)
-
 const CalendarIndexRoute = CalendarIndexImport.update({
   path: '/calendar/',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const SalesAddsellRoute = SalesAddsellImport.update({
-  path: '/sales/add_sell',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -97,11 +97,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
+    '/callback': {
+      id: '/callback'
+      path: '/callback'
+      fullPath: '/callback'
+      preLoaderRoute: typeof CallbackImport
+      parentRoute: typeof rootRoute
+    }
     '/login': {
       id: '/login'
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginImport
+      parentRoute: typeof rootRoute
+    }
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupImport
       parentRoute: typeof rootRoute
     }
     '/events/$eventId': {
@@ -132,25 +146,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HomeInfoCardImport
       parentRoute: typeof rootRoute
     }
-    '/sales/add_sell': {
-      id: '/sales/add_sell'
-      path: '/sales/add_sell'
-      fullPath: '/sales/add_sell'
-      preLoaderRoute: typeof SalesAddsellImport
-      parentRoute: typeof rootRoute
-    }
     '/calendar/': {
       id: '/calendar/'
       path: '/calendar'
       fullPath: '/calendar'
       preLoaderRoute: typeof CalendarIndexImport
-      parentRoute: typeof rootRoute
-    }
-    '/dinner/': {
-      id: '/dinner/'
-      path: '/dinner'
-      fullPath: '/dinner'
-      preLoaderRoute: typeof DinnerIndexImport
       parentRoute: typeof rootRoute
     }
     '/events/': {
@@ -181,14 +181,14 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/callback': typeof CallbackRoute
   '/login': typeof LoginRoute
+  '/signup': typeof SignupRoute
   '/events/$eventId': typeof EventsEventIdRoute
   '/events/create': typeof EventsCreateRoute
   '/events/select': typeof EventsSelectRoute
   '/home/infoCard': typeof HomeInfoCardRoute
-  '/sales/add_sell': typeof SalesAddsellRoute
   '/calendar': typeof CalendarIndexRoute
-  '/dinner': typeof DinnerIndexRoute
   '/events': typeof EventsIndexRoute
   '/map': typeof MapIndexRoute
   '/sales': typeof SalesIndexRoute
@@ -196,14 +196,14 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/callback': typeof CallbackRoute
   '/login': typeof LoginRoute
+  '/signup': typeof SignupRoute
   '/events/$eventId': typeof EventsEventIdRoute
   '/events/create': typeof EventsCreateRoute
   '/events/select': typeof EventsSelectRoute
   '/home/infoCard': typeof HomeInfoCardRoute
-  '/sales/add_sell': typeof SalesAddsellRoute
   '/calendar': typeof CalendarIndexRoute
-  '/dinner': typeof DinnerIndexRoute
   '/events': typeof EventsIndexRoute
   '/map': typeof MapIndexRoute
   '/sales': typeof SalesIndexRoute
@@ -212,14 +212,14 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/callback': typeof CallbackRoute
   '/login': typeof LoginRoute
+  '/signup': typeof SignupRoute
   '/events/$eventId': typeof EventsEventIdRoute
   '/events/create': typeof EventsCreateRoute
   '/events/select': typeof EventsSelectRoute
   '/home/infoCard': typeof HomeInfoCardRoute
-  '/sales/add_sell': typeof SalesAddsellRoute
   '/calendar/': typeof CalendarIndexRoute
-  '/dinner/': typeof DinnerIndexRoute
   '/events/': typeof EventsIndexRoute
   '/map/': typeof MapIndexRoute
   '/sales/': typeof SalesIndexRoute
@@ -229,42 +229,42 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/callback'
     | '/login'
+    | '/signup'
     | '/events/$eventId'
     | '/events/create'
     | '/events/select'
     | '/home/infoCard'
-    | '/sales/add_sell'
     | '/calendar'
-    | '/dinner'
     | '/events'
     | '/map'
     | '/sales'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/callback'
     | '/login'
+    | '/signup'
     | '/events/$eventId'
     | '/events/create'
     | '/events/select'
     | '/home/infoCard'
-    | '/sales/add_sell'
     | '/calendar'
-    | '/dinner'
     | '/events'
     | '/map'
     | '/sales'
   id:
     | '__root__'
     | '/'
+    | '/callback'
     | '/login'
+    | '/signup'
     | '/events/$eventId'
     | '/events/create'
     | '/events/select'
     | '/home/infoCard'
-    | '/sales/add_sell'
     | '/calendar/'
-    | '/dinner/'
     | '/events/'
     | '/map/'
     | '/sales/'
@@ -273,14 +273,14 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CallbackRoute: typeof CallbackRoute
   LoginRoute: typeof LoginRoute
+  SignupRoute: typeof SignupRoute
   EventsEventIdRoute: typeof EventsEventIdRoute
   EventsCreateRoute: typeof EventsCreateRoute
   EventsSelectRoute: typeof EventsSelectRoute
   HomeInfoCardRoute: typeof HomeInfoCardRoute
-  SalesAddsellRoute: typeof SalesAddsellRoute
   CalendarIndexRoute: typeof CalendarIndexRoute
-  DinnerIndexRoute: typeof DinnerIndexRoute
   EventsIndexRoute: typeof EventsIndexRoute
   MapIndexRoute: typeof MapIndexRoute
   SalesIndexRoute: typeof SalesIndexRoute
@@ -288,14 +288,14 @@ export interface RootRouteChildren {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CallbackRoute: CallbackRoute,
   LoginRoute: LoginRoute,
+  SignupRoute: SignupRoute,
   EventsEventIdRoute: EventsEventIdRoute,
   EventsCreateRoute: EventsCreateRoute,
   EventsSelectRoute: EventsSelectRoute,
   HomeInfoCardRoute: HomeInfoCardRoute,
-  SalesAddsellRoute: SalesAddsellRoute,
   CalendarIndexRoute: CalendarIndexRoute,
-  DinnerIndexRoute: DinnerIndexRoute,
   EventsIndexRoute: EventsIndexRoute,
   MapIndexRoute: MapIndexRoute,
   SalesIndexRoute: SalesIndexRoute,
@@ -314,14 +314,14 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/callback",
         "/login",
+        "/signup",
         "/events/$eventId",
         "/events/create",
         "/events/select",
         "/home/infoCard",
-        "/sales/add_sell",
         "/calendar/",
-        "/dinner/",
         "/events/",
         "/map/",
         "/sales/"
@@ -330,8 +330,14 @@ export const routeTree = rootRoute
     "/": {
       "filePath": "index.tsx"
     },
+    "/callback": {
+      "filePath": "callback.tsx"
+    },
     "/login": {
       "filePath": "login.tsx"
+    },
+    "/signup": {
+      "filePath": "signup.tsx"
     },
     "/events/$eventId": {
       "filePath": "events/$eventId.tsx"
@@ -345,14 +351,8 @@ export const routeTree = rootRoute
     "/home/infoCard": {
       "filePath": "home/infoCard.tsx"
     },
-    "/sales/add_sell": {
-      "filePath": "sales/add_sell.tsx"
-    },
     "/calendar/": {
       "filePath": "calendar/index.tsx"
-    },
-    "/dinner/": {
-      "filePath": "dinner/index.tsx"
     },
     "/events/": {
       "filePath": "events/index.tsx"

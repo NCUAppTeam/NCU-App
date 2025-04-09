@@ -1,20 +1,24 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { useState } from 'react'
 
+import BelongContent from '../../components/pages/select/belong'
 import ScaleContent from '../../components/pages/select/scale'
 import TypeContent from '../../components/pages/select/type'
-import BelongContent from '../../components/pages/select/belong'
 
 export const Route = createFileRoute('/events/select')({
   component: SelectContent,
 })
 
 function SelectContent() {
-  
   const [step, setStep] = useState(0)
 
   const handleNextStep = () => {
     setStep((prevStep) => Math.min(prevStep + 1, 3))
+  }
+
+  const handleTypeSelect = () => {
+    // Just move to the next step, the type will be passed via the Link in TypeContent
+    handleNextStep()
   }
   
   return (
@@ -33,20 +37,13 @@ function SelectContent() {
             case 0:
               return <ScaleContent onNext={handleNextStep} />;
             case 1:
-              return <TypeContent onNext={handleNextStep} />;
+              return <TypeContent onNext={handleTypeSelect} />;
             case 2:
               return <BelongContent onNext={handleNextStep} />;
             default:
               return null;
           }
         })()}
-
-        {/* Steps */}
-        <ul className="steps steps-horizontal">
-          <li className={`step ${step >= 0 ? 'step-primary' : ''}`}>規模</li>
-          <li className={`step ${step >= 1 ? 'step-primary' : ''}`}>類型</li>
-          <li className={`step ${step >= 2 ? 'step-primary' : ''}`}>性質</li>
-        </ul>
       </div>
     </div>
   )

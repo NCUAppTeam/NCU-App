@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate, useRouterState } from '@tanstack/react-router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import zxcvbn from 'zxcvbn'; //記得要先安裝zxcvbn，輸入 npm install zxcvbn
 export const Route = createFileRoute('/signup')({
   component: SignUpPage,
@@ -9,13 +9,14 @@ function SignUpPage() {
   const navigate = useNavigate();
   const state = useRouterState({ select: (s) => s.location.state })
   const [userData, setUserData] = useState<UserInfo>()
-  if (!state.post?.userData) {
-    navigate({ to: '/' })
+  useEffect(() => {
+    if (!state.post?.userData) {
+      navigate({ to: '/' })
+    } else {
+      setUserData(JSON.parse(state.post.userData))
+    }
   }
-  else {
-    setUserData(JSON.parse(state.post.userData))
-  }
-
+    , [state.post?.userData, navigate])
 
   return (
     <div className="max-w-xl mx-auto mt-10 p-6 bg-white shadow-md rounded-lg">

@@ -5,11 +5,21 @@ import { UserController } from '../../controllers/user';
 import { AuthGuard } from '../../utils/auth';
 import { supabase } from '../../utils/supabase';
 
+interface EventTag {
+  type_id: number;
+  type_name: string;
+  hashtag_relation: number[];
+}
+
 export const Route = createFileRoute('/events/create')({
   beforeLoad: AuthGuard,
-  component: CreateEventScreen
+  component: CreateEventScreen,
+  validateSearch: (search: Record<string, unknown>) => {
+    return {
+      type: search.type as string
+    };
+  }
 })
-
 
 const styles = {
   container: {
@@ -30,17 +40,74 @@ const styles = {
 }
 
 function CreateEventScreen() {
-  const navigate = Route.useNavigate()
-  const [selectedPhotos, setSelectedPhotos] = useState<File>()
-  const [preview, setPreview] = useState<string>()
+  const navigate = Route.useNavigate();
+  const { type } = Route.useSearch();
+  const selectedType = type ? parseInt(type) : null;
+  const [selectedPhotos, setSelectedPhotos] = useState<File>();
+  const [preview, setPreview] = useState<string>();
   const [inputs, setInputs] = useState({
     name: '',
     start_time: '',
     end_time: '',
     location: '',
     fee: 0,
-    description: ''
-  })
+    description: '',
+    type: selectedType,
+  });
+  const [eventTypeInfo, setEventTypeInfo] = useState<{ type_id: number, type_name: string } | null>(null);
+  const [eventTags, setEventTags] = useState<EventTag[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedHashtags, setSelectedHashtags] = useState<number[]>([]);
+  // Fetch event type information
+  useEffect(() => {
+    async function fetchTypeInfo() {
+      if (selectedType) {
+        const { data, error } = await supabase
+          .from('event_type')
+          .select('type_id, type_name')
+          .eq('type_id', selectedType)
+          .single();
+          
+        if (!error && data) {
+          setEventTypeInfo(data);
+        }
+      }
+    }
+    
+    fetchTypeInfo();
+  }, [selectedType]);
+
+  useEffect(() => {
+    async function fetchEventTags() {
+      try {
+        setLoading(true);
+        
+        if (!selectedType) {
+          setEventTags([]);
+          return;
+        }
+        
+        // Find all hashtags that are associated with this event type
+        // These are records where hashtag_relation contains the selected type_id
+        const { data, error } = await supabase
+          .from('event_type')
+          .select('*')
+          .not('hashtag_relation', 'eq', [0])  // Exclude main event types
+          .contains('hashtag_relation', [selectedType])  // Find hashtags related to this event type
+          .order('type_id', { ascending: true });
+
+        if (error) throw error;
+        
+        setEventTags(data || []);
+      } catch (error) {
+        console.error('Error fetching event tags:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchEventTags();
+  }, [selectedType]);
 
   // create a preview as a side effect, whenever selected file is changed
   useEffect(() => {
@@ -64,28 +131,47 @@ function CreateEventScreen() {
     setSelectedPhotos(e.target.files[0])
   }
 
-
   async function addEvent(e: FormEvent) {
     e.preventDefault()
-    const { data, error } = await supabase
-      .from('events')
-      .insert({
-        ...inputs,
-        user_id: (await UserController.get()).id
-      })
-      .select('*')
-      .single()
-
-    if (error !== null) {
-      throw error
+    
+    if (!selectedType) {
+      alert('請先選擇活動類型');
+      navigate({ to: '/events/select' });
+      return;
     }
+    
+    try {
+      // Insert the event with the basic data and hashtags
+      const eventInsertData = {
+        ...inputs,
+        user_id: (await UserController.get()).id,
+        type: selectedType,
+        // Store the selected hashtags as an array (even if empty)
+        hashtags: selectedHashtags
+      };
+      
+      // Insert the event
+      const { data: createdEvent, error: eventError } = await supabase
+        .from('events')
+        .insert(eventInsertData)
+        .select('*')
+        .single();
 
-    navigate({
-      to: '/events/$eventId',
-      params: {
-        'eventId': data.id.toString()
-      }
-    })
+      if (eventError) throw eventError;
+      
+      console.log('Event created with hashtags:', selectedHashtags);
+
+      // Navigate to the event page
+      navigate({
+        to: '/events/$eventId',
+        params: {
+          'eventId': createdEvent.id.toString()
+        }
+      });
+    } catch (error) {
+      console.error('Error creating event:', error);
+      alert('建立活動時發生錯誤');
+    }
   }
 
   return (
@@ -96,6 +182,50 @@ function CreateEventScreen() {
         </Link>
         <h1 className='text-xl text-white' style={{ marginLeft: 60 }}>新增活動</h1>
       </div>
+      
+      {/* Display selected type */}
+      <div className="px-4 py-2">
+        <div className="bg-gray-700 rounded-lg p-3 mb-4">
+          <h3 className="text-white font-bold mb-2">已選擇的類型</h3>
+          <div className="flex flex-wrap gap-2">
+            {eventTypeInfo && (
+              <span className="badge badge-primary badge-lg">{eventTypeInfo.type_name}</span>
+            )}
+          </div>
+        </div>
+      </div>
+      
+      {/* Display hashtags selection */}
+      <div className="px-4 py-2">
+        <div className="bg-gray-700 rounded-lg p-3 mb-4">
+          <h3 className="text-white font-bold mb-2">選擇標籤 (可多選)</h3>
+          <div className="flex flex-wrap gap-2">
+            {loading ? (
+              <p className="text-white">載入中...</p>
+            ) : eventTags.length > 0 ? (
+              eventTags.map((tag) => (
+                <button
+                  key={tag.type_id}
+                  type="button" 
+                  className={`badge ${selectedHashtags.includes(tag.type_id) ? 'badge-primary' : 'badge-outline'} badge-lg cursor-pointer`}
+                  onClick={() => {
+                    setSelectedHashtags(prev => 
+                      prev.includes(tag.type_id)
+                        ? prev.filter(id => id !== tag.type_id)
+                        : [...prev, tag.type_id]
+                    );
+                  }}
+                >
+                  {tag.type_name}
+                </button>
+              ))
+            ) : (
+              <p className="text-white">沒有可用的標籤</p>
+            )}
+          </div>
+        </div>
+      </div>
+      
       <div className="grid gap-3 grid-cols-1">
         <h2 style={styles.text}>活動名稱</h2>
         <input

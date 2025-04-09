@@ -58,6 +58,7 @@ export type Database = {
           description: string | null
           end_time: string | null
           fee: number | null
+          hashtags: number[] | null
           id: number
           location: string | null
           name: string | null
@@ -70,6 +71,7 @@ export type Database = {
           description?: string | null
           end_time?: string | null
           fee?: number | null
+          hashtags?: number[] | null
           id?: number
           location?: string | null
           name?: string | null
@@ -82,6 +84,7 @@ export type Database = {
           description?: string | null
           end_time?: string | null
           fee?: number | null
+          hashtags?: number[] | null
           id?: number
           location?: string | null
           name?: string | null

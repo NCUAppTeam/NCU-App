@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 export const Route = createFileRoute('/callback')({
   component: Callback,
@@ -7,7 +7,6 @@ export const Route = createFileRoute('/callback')({
 
 function Callback() {
   const navigate = useNavigate();
-  const [userInfo, setUserInfo] = useState(null);
 
   useEffect(() => {
     async function handleOAuthCallback() {
@@ -43,7 +42,7 @@ function Callback() {
           console.error('取得 access_token 失敗', tokenData);
           return;
         }
-        
+
         // 取得使用者資訊
         const userResponse = await fetch('http://localhost:3000/oauth2/userinfo', {
           method: 'GET',
@@ -55,9 +54,8 @@ function Callback() {
 
         const userData = await userResponse.json();
         console.log('使用者資訊:', userData);
-        setUserInfo(userData);
-        
-        navigate({ to: '/signup', search: {userData: JSON.stringify(userData)}});
+        const stringifyData: string = JSON.stringify(userData);
+        navigate({ to: '/signup', state: { post: { userData: stringifyData } } }) // 導向註冊頁面，並傳遞使用者資訊
       } catch (error) {
         console.error('OAuth 登入失敗:', error);
         navigate({ to: '/' });
@@ -70,12 +68,6 @@ function Callback() {
   return (
     <div>
       <h2>正在處理登入...</h2>
-      {userInfo && (
-        <div>
-          <h3>使用者資訊：</h3>
-          <pre>{JSON.stringify(userInfo, null, 2)}</pre>
-        </div>
-      )}
     </div>
   );
 }

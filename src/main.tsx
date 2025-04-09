@@ -1,6 +1,6 @@
+import { RouterProvider, createRouter } from '@tanstack/react-router'
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import { RouterProvider, createRouter } from '@tanstack/react-router'
 import './index.css'
 
 // Import the generated route tree
@@ -17,6 +17,9 @@ const router = createRouter({
 declare module '@tanstack/react-router' {
   interface Register {
     router: typeof router
+  }
+  interface HistoryState {
+    post?: { userData: string };
   }
 }
 

@@ -11,18 +11,18 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as SignupImport } from./routes/signupgnup'
-import { Route as LoginImport } from './routes/login'
-import { Route as CallbackImport } from './routes/callback'
-import { Route as IndexImport } from './routes/index'
-import { Route as SalesIndexImport } from './routes/sales/index'
-import { Route as MapIndexImport } from './routes/map/index'
-import { Route as EventsIndexImport } from './routes/events/index'
 import { Route as CalendarIndexImport } from './routes/calendar/index'
-import { Route as HomeInfoCardImport } from './routes/home/infoCard'
-import { Route as EventsSelectImport } from './routes/events/select'
-import { Route as EventsCreateImport } from './routes/events/create'
+import { Route as CallbackImport } from './routes/callback'
 import { Route as EventsEventIdImport } from './routes/events/$eventId'
+import { Route as EventsCreateImport } from './routes/events/create'
+import { Route as EventsIndexImport } from './routes/events/index'
+import { Route as EventsSelectImport } from './routes/events/select'
+import { Route as HomeInfoCardImport } from './routes/home/infoCard'
+import { Route as IndexImport } from './routes/index'
+import { Route as LoginImport } from './routes/login'
+import { Route as MapIndexImport } from './routes/map/index'
+import { Route as SalesIndexImport } from './routes/sales/index'
+import { Route as SignupImport } from './routes/signup'
 
 // Create/Update Routes
 

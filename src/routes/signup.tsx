@@ -1,24 +1,34 @@
-import { createFileRoute, useRouterState } from '@tanstack/react-router'
-import { useState } from 'react'
+import { createFileRoute, useNavigate, useRouterState } from '@tanstack/react-router';
+import { useState } from 'react';
 import zxcvbn from 'zxcvbn'; //記得要先安裝zxcvbn，輸入 npm install zxcvbn
 export const Route = createFileRoute('/signup')({
   component: SignUpPage,
 })
 
 function SignUpPage() {
-  // 模擬從 OAuth 獲取的使用者資訊
+  const navigate = useNavigate();
   const state = useRouterState({ select: (s) => s.location.state })
-  const userInfo = state.post?.userData
-    ? JSON.parse(state.post.userData)
-    : {
-      chineseName: 'NCU APP Developer',
-      email: '111@gmail.com',
-      studentId: '110110110',
-    }
+  const [userData, setUserData] = useState<UserInfo>()
+  if (!state.post?.userData) {
+    navigate({ to: '/' })
+  }
+  else {
+    setUserData(JSON.parse(state.post.userData))
+  }
+
 
   return (
     <div className="max-w-xl mx-auto mt-10 p-6 bg-white shadow-md rounded-lg">
-      <SignUpForm userInfo={userInfo} />
+      {userData ?
+        (<SignUpForm userInfo={userData} />) :
+        // TODO：之後可以引入404頁面
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-900">Something Went Wrong! Please Contact ncuappteam@gmail.com</h1>
+          <p className="mt-2 text-sm text-gray-600">
+            無法取得使用者資訊，請重新登入
+          </p>
+        </div>
+      }
     </div>
   )
 }

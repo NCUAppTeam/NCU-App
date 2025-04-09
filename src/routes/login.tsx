@@ -17,10 +17,15 @@ function LoginPage() {
   const [isRemember, setIsRemember] = useState(false);
   const [isError, setIsError] = useState(false);
   const { redirect: redirectUrl } = Route.useSearch()
-  const CLIENT_ID = "xxClientId"; // client id
-  const REDIRECT_URI = "/sign_up"; // redirect uri
-  const AUTH_URL = `https://portal.ncu.edu.tw/oauth2/authorization?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&scope=id identifier chinese-name email`;
-  
+
+  const CLIENT_ID = import.meta.env.VITE_NCU_PORTAL_CLIENT_ID;
+  const REDIRECT_URI = 'http://localhost:5173/callback';
+
+  const handleLogin = () => {
+    const oauthURL = `https://portal.ncu.edu.tw/oauth2/authorization?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&scope=chinese-name student-id email`;
+    window.location.href = oauthURL;
+  };
+          
   async function login(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const { data: { session }, error } = await supabase.auth.signInWithPassword({ email, password });
@@ -89,11 +94,11 @@ function LoginPage() {
         {Labels.login}
       </button>
       <button
-          type='button'
-          className='w-full h-14 bg-blue-500 text-white font-bold text-xl rounded-md'
-          onClick={() => (window.location.href = AUTH_URL)}
-        >
-          {Labels.signUp}
+        type='button'
+        onClick={handleLogin}
+        className='w-full h-20 rounded-md bg-green-600 text-white font-extrabold text-5xl'
+      >
+        {Labels.signup}
       </button>
     </form>
   )

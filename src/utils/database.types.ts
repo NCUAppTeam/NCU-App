@@ -36,16 +36,19 @@ export type Database = {
     Tables: {
       event_type: {
         Row: {
+          hashtag_relation: number[]
           type_id: number
-          type_name: string | null
+          type_name: string
         }
         Insert: {
+          hashtag_relation?: number[]
           type_id?: number
-          type_name?: string | null
+          type_name: string
         }
         Update: {
+          hashtag_relation?: number[]
           type_id?: number
-          type_name?: string | null
+          type_name?: string
         }
         Relationships: []
       }
@@ -156,7 +159,6 @@ export type Database = {
         Row: {
           created_at: string
           id: number
-          image: string | null
           price: number | null
           product: string | null
           user_id: string | null
@@ -164,7 +166,6 @@ export type Database = {
         Insert: {
           created_at?: string
           id?: number
-          image?: string | null
           price?: number | null
           product?: string | null
           user_id?: string | null
@@ -172,7 +173,6 @@ export type Database = {
         Update: {
           created_at?: string
           id?: number
-          image?: string | null
           price?: number | null
           product?: string | null
           user_id?: string | null

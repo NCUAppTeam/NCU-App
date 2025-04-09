@@ -25,7 +25,7 @@ function LoginPage() {
     const oauthURL = `https://portal.ncu.edu.tw/oauth2/authorization?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&scope=chinese-name student-id email`;
     window.location.href = oauthURL;
   };
-          
+
   async function login(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const { data: { session }, error } = await supabase.auth.signInWithPassword({ email, password });
@@ -98,7 +98,7 @@ function LoginPage() {
         onClick={handleLogin}
         className='w-full h-20 rounded-md bg-green-600 text-white font-extrabold text-5xl'
       >
-        {Labels.signup}
+        {Labels.signUp}
       </button>
     </form>
   )

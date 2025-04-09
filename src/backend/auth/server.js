@@ -1,13 +1,13 @@
-import express from 'express';
-import fetch from 'node-fetch';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import express from 'express';
+import fetch from 'node-fetch';
 
 dotenv.config();
 
 const app = express();
 app.use(cors({
-    origin: "http://localhost:5173", 
+    origin: "http://localhost:5173",
     credentials: true
 }));
 app.use(express.json());
@@ -63,26 +63,26 @@ app.post('/oauth2/token', async (req, res) => {
 app.get('/oauth2/userinfo', async (req, res) => {
     const authHeader = req.headers.authorization;
 
-    if(!authHeader) {
-       return res.status(401).json({ error: "Unauthorized", message: "Missing Authorization header" });
+    if (!authHeader) {
+        return res.status(401).json({ error: "Unauthorized", message: "Missing Authorization header" });
     }
 
     try {
-       const response = await fetch("https://portal.ncu.edu.tw/apis/oauth/v1/info", {
-           method: 'GET',
-           headers: {
-               'Authorization': authHeader,
-               'Accept': 'application/json'
-           }
-       });
+        const response = await fetch("https://portal.ncu.edu.tw/apis/oauth/v1/info", {
+            method: 'GET',
+            headers: {
+                'Authorization': authHeader,
+                'Accept': 'application/json'
+            }
+        });
 
-       if(!response.ok) {
-          throw new Error(`Failed to fetch user info: ${response.statusText}`);
-       }
+        if (!response.ok) {
+            throw new Error(`Failed to fetch user info: ${response.statusText}`);
+        }
 
-       const userData = await response.json();
-       res.json(userData);
-    } catch(error) {
+        const userData = await response.json();
+        res.json(userData);
+    } catch (error) {
         console.error("User info fetch error: ", error);
         res.status(500).json({ error: "server_error", message: "Failed to retrieve user info" });
     }

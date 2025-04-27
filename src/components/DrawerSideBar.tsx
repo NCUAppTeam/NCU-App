@@ -11,7 +11,7 @@ const signOut = async () => {
 
 export const DrawerSideBar = ({ name, avatar }: { name: string, avatar: string }) => {
     return (
-        <div className="flex w-fit drawer">
+        <div className="flex w-fit drawer z-10">
             <input id="my-drawer" type="checkbox" className="drawer-toggle" />
 
 

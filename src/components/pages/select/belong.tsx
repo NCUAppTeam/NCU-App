@@ -32,7 +32,12 @@ const SelectionContent: React.FC<SelectionContentProps> = ({options, onSelect}) 
             key={value}
             onClick={() => onSelect(value)}
             >
-            <Link className="w-full h-full flex justify-center items-center" key={value} to={`/events/create`}>
+            <Link 
+              className="w-full h-full flex justify-center items-center" 
+              key={value} 
+              to="/events/create"
+              search={{ type: value }}
+            >
               { label }
             </Link>
           </button>

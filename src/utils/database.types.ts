@@ -36,16 +36,19 @@ export type Database = {
     Tables: {
       event_type: {
         Row: {
+          hashtag_relation: number[]
           type_id: number
-          type_name: string | null
+          type_name: string
         }
         Insert: {
+          hashtag_relation?: number[]
           type_id?: number
-          type_name?: string | null
+          type_name: string
         }
         Update: {
+          hashtag_relation?: number[]
           type_id?: number
-          type_name?: string | null
+          type_name?: string
         }
         Relationships: []
       }
@@ -95,6 +98,21 @@ export type Database = {
             referencedColumns: ["type_id"]
           },
         ]
+      }
+      food_category: {
+        Row: {
+          food_category: string
+          id: number
+        }
+        Insert: {
+          food_category: string
+          id?: number
+        }
+        Update: {
+          food_category?: string
+          id?: number
+        }
+        Relationships: []
       }
       identities: {
         Row: {
@@ -146,6 +164,50 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "identities"
             referencedColumns: ["identity_no"]
+          },
+        ]
+      }
+      restaurants: {
+        Row: {
+          address: string | null
+          fk_category: number
+          id: number
+          image: string | null
+          location: number | null
+          menu: string | null
+          openday: number[] | null
+          openhr: string
+          restaurant: string | null
+        }
+        Insert: {
+          address?: string | null
+          fk_category: number
+          id?: number
+          image?: string | null
+          location?: number | null
+          menu?: string | null
+          openday?: number[] | null
+          openhr: string
+          restaurant?: string | null
+        }
+        Update: {
+          address?: string | null
+          fk_category?: number
+          id?: number
+          image?: string | null
+          location?: number | null
+          menu?: string | null
+          openday?: number[] | null
+          openhr?: string
+          restaurant?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "restaurants_fk_category_fkey"
+            columns: ["fk_category"]
+            isOneToOne: false
+            referencedRelation: "food_category"
+            referencedColumns: ["id"]
           },
         ]
       }

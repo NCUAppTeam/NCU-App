@@ -6,7 +6,7 @@ export const Route = createRootRoute({
 
 function RootComponent() {
   return (
-    <div className='w-full'>
+    <div className='w-full lg:w-2/3 mx-auto'>
       <Outlet />
     </div>
   )

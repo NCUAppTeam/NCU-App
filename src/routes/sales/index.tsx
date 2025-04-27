@@ -105,13 +105,8 @@ function SaleIndex() {
             <div className='grid grid-cols-2 gap-1'>
             {sales.map((p) => ( 
               <div className='h-80 p-10 bg-stone-500 hover:bg-stone-600 active:bg-stone-700 focus:outline-none focus:ring focus:ring-violet-300 scale-95 hover:scale-100 relative overflow-hidden'>
-                  {
-                  p.image ? (
-                    <div className="absolute top-0 left-0 w-full h-full bg-cover bg-center" style={{ backgroundImage: `url('${p.image}')`, backgroundRepeat: "no-repeat"}}></div>
-                  ): (
-                    <div className="absolute top-0 left-0 w-full h-full bg-cover bg-center" style={{ backgroundImage: `url('https://i.imgur.com/vSLHiCS.png')`, backgroundRepeat: "no-repeat"}}></div>
-                  )
-                  }
+                  {/* 由於 image 欄位在資料庫不存在，使用預設圖片 */}
+                  <div className="absolute top-0 left-0 w-full h-full bg-cover bg-center" style={{ backgroundImage: `url('https://i.imgur.com/vSLHiCS.png')`, backgroundRepeat: "no-repeat"}}></div>
                   <h1 className='text-slate-50 font-semibold text-xl absolute left-1 bottom-7 z-10'>{p.product}</h1>
                   <Heart size={24} className="absolute top-3 right-3 z-10"/>
                   <h1 className='text-slate-300 font-semibold text-xl absolute left-1 bottom-1 z-10'>{p.price} 元</h1>

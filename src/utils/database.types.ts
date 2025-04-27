@@ -102,6 +102,21 @@ export type Database = {
           },
         ]
       }
+      food_category: {
+        Row: {
+          food_category: string
+          id: number
+        }
+        Insert: {
+          food_category: string
+          id?: number
+        }
+        Update: {
+          food_category?: string
+          id?: number
+        }
+        Relationships: []
+      }
       identities: {
         Row: {
           identity_name: string
@@ -152,6 +167,50 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "identities"
             referencedColumns: ["identity_no"]
+          },
+        ]
+      }
+      restaurants: {
+        Row: {
+          address: string | null
+          fk_category: number
+          id: number
+          image: string | null
+          location: number | null
+          menu: string | null
+          openday: number[] | null
+          openhr: string
+          restaurant: string | null
+        }
+        Insert: {
+          address?: string | null
+          fk_category: number
+          id?: number
+          image?: string | null
+          location?: number | null
+          menu?: string | null
+          openday?: number[] | null
+          openhr: string
+          restaurant?: string | null
+        }
+        Update: {
+          address?: string | null
+          fk_category?: number
+          id?: number
+          image?: string | null
+          location?: number | null
+          menu?: string | null
+          openday?: number[] | null
+          openhr?: string
+          restaurant?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "restaurants_fk_category_fkey"
+            columns: ["fk_category"]
+            isOneToOne: false
+            referencedRelation: "food_category"
+            referencedColumns: ["id"]
           },
         ]
       }

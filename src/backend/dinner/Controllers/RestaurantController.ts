@@ -53,7 +53,7 @@ export default class RestaurantController {
         // Initialize result array
         const restaurants : Array<Restaurant> = []        
         
-        // For each found DBUser, convert to User and append to result array
+        // For each found DBRestaurant, convert to Restaurant and append to result array
         data.forEach((record: DBRestaurant) => {
             restaurants.push(
                 RestaurantService.parseRestaurant(record)

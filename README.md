@@ -73,7 +73,7 @@ Tailwind 的配置檔位於 `tailwind.config.js`。
 
 ### 環境配置
 
-要與 Supabase 資料庫互動，你需要設置 `.env` 檔案（模板可參考`.env.exmaple`)，並填入以下變數：
+要與 Supabase 資料庫互動，你需要設置 `.env` 檔案（模板可參考`.env.example`)，並填入以下變數：
 
 ```
 VITE_SUPABASE_URL=your-supabase-url

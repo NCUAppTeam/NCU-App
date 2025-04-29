@@ -202,7 +202,6 @@ function SignUpForm({ userInfo }: { userInfo: UserInfo }) {
                 id="nickname"
                 value={formData.nickname}
                 onChange={handleChange}
-                required
                 className="mt-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-600 focus:ring-indigo-600 sm:text-sm"
                 placeholder="Enter your nickname"
               />
@@ -224,7 +223,6 @@ function SignUpForm({ userInfo }: { userInfo: UserInfo }) {
                   handleChange(e)
                   passwordCheck(e)
                 }}
-                required
                 className="mt-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-600 focus:ring-indigo-600 sm:text-sm"
                 placeholder="Enter your password"
               />
@@ -241,7 +239,6 @@ function SignUpForm({ userInfo }: { userInfo: UserInfo }) {
                 type="password"
                 ref={passwordCRef}
                 id="passwordC"
-                required
                 className="mt-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-600 focus:ring-indigo-600 sm:text-sm"
                 placeholder="Enter your password again"
               />

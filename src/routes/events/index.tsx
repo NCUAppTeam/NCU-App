@@ -1,7 +1,6 @@
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, Link } from '@tanstack/react-router';
 import { Clock, MapPinAlt, Plus, Search } from "flowbite-react-icons/outline";
 import { useState } from 'react';
-import { Header } from '../../components';
 import { DialogBox } from '../../components/Common/DialogBox';
 import { AuthGuard } from '../../utils/auth';
 import { supabase } from '../../utils/supabase';
@@ -25,7 +24,12 @@ export const Route = createFileRoute('/events/')({
     const { data: events, error: eventsError } = await supabase.from('events').select('*');
     if (eventsError) throw eventsError;
 
-    const { data: eventTypesData, error: eventTypesError } = await supabase.from('event_type').select('*').order('type_id', { ascending: true });
+    // Only fetch event types where hashtag_relation contains 0 (main event types, not hashtags)
+    const { data: eventTypesData, error: eventTypesError } = await supabase
+      .from('event_type')
+      .select('*')
+      .contains('hashtag_relation', [0])  // Use contains for array comparison
+      .order('type_id', { ascending: true });
     if (eventTypesError) throw eventTypesError;
     console.log(eventTypesData);
     return { events, eventTypes: eventTypesData };
@@ -38,6 +42,7 @@ function EventIndex() {
     events: Event[];
     eventTypes: { type_id: number; type_name: string }[];
   };
+  const navigate = Route.useNavigate();
 
   const [searchTerm, setSearchTerm] = useState('');
   const [isFocused, setIsFocused] = useState(false);
@@ -58,7 +63,7 @@ function EventIndex() {
   return (
     <>
       <div className="container mx-auto">
-        <Header />
+
         <div className="search-bar pt-4 pb-2 pl-4 pr-4 relative">
           <input
             type="text"
@@ -109,29 +114,30 @@ function EventIndex() {
 
         <div className="flex-1 bg-gray-800 p-4">
           <h1 className="ml-4 text-xl text-white">最新揪人</h1>
-          <div className="overflow-x-auto mt-2">
-            <div className="flex space-x-4">
+          <div className="mt-2">
+            <div className="grid grid-cols-2 gap-4">
               {filteredEvents.map((event) => (
                 <EventCard key={event.id} event={event} />
               ))}
             </div>
           </div>
+          {/* 
           <h1 className="ml-4 text-xl text-white mt-8">最新活動</h1>
-          <div className="overflow-x-auto mt-2">
-            <div className="flex space-x-4">
+          <div className="mt-2">
+            <div className="grid grid-cols-2 gap-4">
               {filteredEvents.map((event) => (
                 <EventCard key={event.id} event={event} />
               ))}
             </div>
           </div>
+          */}
         </div>
 
         <button
           className="grid place-items-center btn btn-circle fixed right-4 bottom-4 "
           aria-label="Create new event"
           onClick={() => {
-            const dialog = document.querySelector('dialog.modal') as HTMLDialogElement;
-            if (dialog) dialog.showModal();
+            navigate({ to: '/events/select' });
           }}
         >
           <Plus className='m-auto' />
@@ -139,7 +145,7 @@ function EventIndex() {
 
         <DialogBox
           message="確定要新增嗎？"
-          navigateTo="/events/create"
+          navigateTo="/events/select"
           type="inquiry"
         />
 
@@ -153,7 +159,11 @@ function EventCard({ event }: { event: Event }) {
     ? new Date(event.start_time)
     : new Date();
   return (
-    <div className="flex-shrink-0 w-40 rounded-lg overflow-hidden text-white">
+    <Link
+      to="/events/$eventId"
+      params={{ eventId: String(event.id) }}
+      className="w-full rounded-lg overflow-hidden text-white cursor-pointer hover:shadow-lg transition-shadow duration-300"
+    >
       <div className="h-32 bg-gray-500" />
       <div className="p-2 bg-white">
         <h3 className="text-lg mb-1 text-black">{event.name}</h3>
@@ -171,6 +181,6 @@ function EventCard({ event }: { event: Event }) {
           {event.location || '位置未提供'}
         </p>
       </div>
-    </div>
+    </Link>
   );
 }

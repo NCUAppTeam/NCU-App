@@ -1,4 +1,5 @@
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, Link } from '@tanstack/react-router';
+import { ArrowLeft } from "flowbite-react-icons/outline";
 import { useState } from 'react';
 import { Header } from '../../components';
 import { supabase } from '../../utils/supabase';
@@ -47,6 +48,13 @@ function EventDetails() {
     <div className="container mx-auto">
       <div className="relative z-10">
         <Header />
+        <Link
+          to="/events"
+          className="absolute top-4 left-4 w-10 h-10 flex items-center justify-center bg-white bg-opacity-70 rounded-full shadow-md hover:bg-opacity-100 transition-all duration-300"
+          aria-label="Return to events"
+        >
+          <ArrowLeft className="w-5 h-5" />
+        </Link>
       </div>      
       <div className='bg-gray-800'>
 

@@ -18,6 +18,7 @@ import { Route as IndexImport } from './routes/index'
 import { Route as SalesIndexImport } from './routes/sales/index'
 import { Route as MapIndexImport } from './routes/map/index'
 import { Route as EventsIndexImport } from './routes/events/index'
+import { Route as DinnerIndexImport } from './routes/dinner/index'
 import { Route as CalendarIndexImport } from './routes/calendar/index'
 import { Route as HomeInfoCardImport } from './routes/home/infoCard'
 import { Route as EventsSelectImport } from './routes/events/select'
@@ -58,6 +59,11 @@ const MapIndexRoute = MapIndexImport.update({
 
 const EventsIndexRoute = EventsIndexImport.update({
   path: '/events/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const DinnerIndexRoute = DinnerIndexImport.update({
+  path: '/dinner/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -153,6 +159,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CalendarIndexImport
       parentRoute: typeof rootRoute
     }
+    '/dinner/': {
+      id: '/dinner/'
+      path: '/dinner'
+      fullPath: '/dinner'
+      preLoaderRoute: typeof DinnerIndexImport
+      parentRoute: typeof rootRoute
+    }
     '/events/': {
       id: '/events/'
       path: '/events'
@@ -189,6 +202,7 @@ export interface FileRoutesByFullPath {
   '/events/select': typeof EventsSelectRoute
   '/home/infoCard': typeof HomeInfoCardRoute
   '/calendar': typeof CalendarIndexRoute
+  '/dinner': typeof DinnerIndexRoute
   '/events': typeof EventsIndexRoute
   '/map': typeof MapIndexRoute
   '/sales': typeof SalesIndexRoute
@@ -204,6 +218,7 @@ export interface FileRoutesByTo {
   '/events/select': typeof EventsSelectRoute
   '/home/infoCard': typeof HomeInfoCardRoute
   '/calendar': typeof CalendarIndexRoute
+  '/dinner': typeof DinnerIndexRoute
   '/events': typeof EventsIndexRoute
   '/map': typeof MapIndexRoute
   '/sales': typeof SalesIndexRoute
@@ -220,6 +235,7 @@ export interface FileRoutesById {
   '/events/select': typeof EventsSelectRoute
   '/home/infoCard': typeof HomeInfoCardRoute
   '/calendar/': typeof CalendarIndexRoute
+  '/dinner/': typeof DinnerIndexRoute
   '/events/': typeof EventsIndexRoute
   '/map/': typeof MapIndexRoute
   '/sales/': typeof SalesIndexRoute
@@ -237,6 +253,7 @@ export interface FileRouteTypes {
     | '/events/select'
     | '/home/infoCard'
     | '/calendar'
+    | '/dinner'
     | '/events'
     | '/map'
     | '/sales'
@@ -251,6 +268,7 @@ export interface FileRouteTypes {
     | '/events/select'
     | '/home/infoCard'
     | '/calendar'
+    | '/dinner'
     | '/events'
     | '/map'
     | '/sales'
@@ -265,6 +283,7 @@ export interface FileRouteTypes {
     | '/events/select'
     | '/home/infoCard'
     | '/calendar/'
+    | '/dinner/'
     | '/events/'
     | '/map/'
     | '/sales/'
@@ -281,6 +300,7 @@ export interface RootRouteChildren {
   EventsSelectRoute: typeof EventsSelectRoute
   HomeInfoCardRoute: typeof HomeInfoCardRoute
   CalendarIndexRoute: typeof CalendarIndexRoute
+  DinnerIndexRoute: typeof DinnerIndexRoute
   EventsIndexRoute: typeof EventsIndexRoute
   MapIndexRoute: typeof MapIndexRoute
   SalesIndexRoute: typeof SalesIndexRoute
@@ -296,6 +316,7 @@ const rootRouteChildren: RootRouteChildren = {
   EventsSelectRoute: EventsSelectRoute,
   HomeInfoCardRoute: HomeInfoCardRoute,
   CalendarIndexRoute: CalendarIndexRoute,
+  DinnerIndexRoute: DinnerIndexRoute,
   EventsIndexRoute: EventsIndexRoute,
   MapIndexRoute: MapIndexRoute,
   SalesIndexRoute: SalesIndexRoute,
@@ -322,6 +343,7 @@ export const routeTree = rootRoute
         "/events/select",
         "/home/infoCard",
         "/calendar/",
+        "/dinner/",
         "/events/",
         "/map/",
         "/sales/"
@@ -353,6 +375,9 @@ export const routeTree = rootRoute
     },
     "/calendar/": {
       "filePath": "calendar/index.tsx"
+    },
+    "/dinner/": {
+      "filePath": "dinner/index.tsx"
     },
     "/events/": {
       "filePath": "events/index.tsx"

@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate, useRouterState } from '@tanstack/react-router';
-import { FormEvent, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import zxcvbn from 'zxcvbn'; //記得要先安裝zxcvbn，輸入 npm install zxcvbn
 import  UserController  from '../backend/user/Controllers/UserController';
 import UserSignupData from '../backend/user/Entities/UserSignupData';

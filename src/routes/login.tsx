@@ -52,7 +52,7 @@ function LoginPage() {
         <h3 className='font-bold text-center my-4 text-sm sm:text-base md:text-lg lg:text-2xl'>歡迎來到 <span className='text-[#1784B2] font-bold'>NCU App</span></h3>
 
         <form
-          className='flex flex-col h-fit items-center justify-center px-5 gap-4'
+          className='flex flex-col h-fit items-center justify-center px-5'
           onSubmit={login}
         >
           <input
@@ -64,7 +64,7 @@ function LoginPage() {
           />
           <input
             type='password'
-            className='w-full h-12 rounded-xl bg-white border border-gray-400 focus:border focus:border-black px-6 text-black font-bold placeholder:text-gray-300 text-base'
+            className='mt-4 w-full h-12 rounded-xl bg-white border border-gray-400 focus:border focus:border-black px-6 text-black font-bold placeholder:text-gray-300 text-base'
             placeholder={Labels.password}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -75,7 +75,7 @@ function LoginPage() {
           {
             isError
               ? (
-                <span className='text-red-500 font-bold text-base lg:text-lg'>
+                <span className='w-full flex justify-start text-red-500 text-xs lg:text-sm -translaste-y-10'>
                   {isError ? Labels.wrongAccountOrPassword : ''}
                 </span>
               )
@@ -83,14 +83,14 @@ function LoginPage() {
           }
 
           <button
-            className="w-full h-12 rounded-md bg-[#28527A] hover:bg-[#3A6A9A] text-white font-bold border-0"
+            className="mt-4 w-full h-12 rounded-md bg-[#28527A] hover:bg-[#3A6A9A] text-white font-bold border-0"
             type='submit'
           >
             {Labels.login}
           </button>
           <button
             type='button'
-            className="w-full h-12 rounded-md bg-[#E5EBF1] hover:bg-[#D4DDE5] text-[#28527A] font-bold border-0"
+            className="mt-4 w-full h-12 rounded-md bg-[#E5EBF1] hover:bg-[#D4DDE5] text-[#28527A] font-bold border-0"
             onClick={handlePortalSignup}
           >
             {Labels.signUp}
@@ -108,12 +108,12 @@ function LoginPage() {
 class Labels {
   private constructor() { }
 
-  static readonly account = '註冊時的信箱';
+  static readonly account = '註冊使用信箱';
   static readonly password = '密碼';
   static readonly remember = '保持我的登入狀態';
   static readonly login = '登入';
   static readonly signUp = 'NCU Portal 快速註冊';
-  static readonly wrongAccountOrPassword = '帳號或密碼錯誤';
+  static readonly wrongAccountOrPassword = '帳號或密碼錯誤，請確認後再登入';
 }
 
 function IsRememberSection({ isRemember, setIsRemember }: { isRemember: boolean, setIsRemember: React.Dispatch<React.SetStateAction<boolean>> }) {

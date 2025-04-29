@@ -1,5 +1,4 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { Header } from '../../components'
 import { AuthGuard } from '../../utils/auth'
 
 export const Route = createFileRoute('/map/')({
@@ -10,7 +9,7 @@ export const Route = createFileRoute('/map/')({
 function MapIndex() {
     return (
         <>
-            <Header />
+            {/* <Header /> */}
             <div>Hello /map/!</div>
         </>
     )

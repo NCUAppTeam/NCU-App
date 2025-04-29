@@ -1,8 +1,10 @@
 import { createFileRoute, useNavigate, useRouterState } from '@tanstack/react-router';
-import { useEffect, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import zxcvbn from 'zxcvbn'; //記得要先安裝zxcvbn，輸入 npm install zxcvbn
+import  UserController  from '../backend/user/Controllers/UserController';
+import UserSignupData from '../backend/user/Entities/UserSignupData';
 export const Route = createFileRoute('/signup')({
-  component: SignUpPage,
+  component: SignUpPage, 
 })
 
 function SignUpPage() {
@@ -21,7 +23,7 @@ function SignUpPage() {
   return (
     <div className="max-w-xl mx-auto mt-10 p-6 bg-white shadow-md rounded-lg">
       {userData ?
-        (<SignUpForm userInfo={userData} />) :
+        (<SignUpForm userInfo={userData} navigate={navigate} />) :
         // TODO：之後可以引入404頁面
         <div className="text-center">
           <h1 className="text-2xl font-bold text-gray-900">Something Went Wrong! Please Contact ncuappteam@gmail.com</h1>
@@ -39,7 +41,7 @@ interface UserInfo {
   studentId: string
 }
 
-function SignUpForm({ userInfo }: { userInfo: UserInfo }) {
+function SignUpForm({ userInfo, navigate }: { userInfo: UserInfo; navigate: ReturnType<typeof useNavigate> }) {
   const [formData, setFormData] = useState({
     nickname: '',
     password: '',
@@ -97,19 +99,49 @@ function SignUpForm({ userInfo }: { userInfo: UserInfo }) {
       nickname: trimmedNickname,
       password: formData.password,
     })
-    // 加上 API 請求來提交「nickname」和「password」
+    
+    setIsLoading(true)
     try {
-      await new Promise((resolve) => setTimeout(resolve, 2000)) // 🔥 假裝等待伺服器回應
-      console.log('Submitted Data:', {
-        nickname: trimmedNickname,
+      const signupData: UserSignupData = {
+        name: userInfo.chineseName,  
+        email: userInfo.email,
         password: formData.password,
-      })
-      alert('註冊成功！')
+        username: trimmedNickname,
+        studentId: userInfo.studentId,
+      }
+      const user = await addUser(signupData)
+      if (!user) {
+        alert('註冊失敗，請檢查您的資料並重試。')
+        return
+      }
+      console.log('User created successfully:')
+      console.log(window.location.href)
+      
+      navigate({ to: "/login", search:{redirect: "/"}})
     } catch (error) {
+      console.log(error)
       console.error('註冊失敗:', error)
       alert('伺服器錯誤，請稍後再試')
     } finally {
-      setIsLoading(false) // 🔥 關閉 Loading
+      setIsLoading(false)
+    }
+  }
+
+  // send formData + userInfo to supabase
+  async function addUser(userSignupData: UserSignupData) {
+    
+    const signupInstance = new UserSignupData(userSignupData)
+    const userController = new UserController()
+    const user = await userController.createUser(signupInstance);
+    if (!user) {
+      // Handle error case
+      console.error("Failed to create user");
+      alert('註冊失敗，請檢查您的資料並重試。')
+      return null
+    } else {
+      // Success case - use the user object
+      console.log("User created:", user);
+      return user
     }
   }
 

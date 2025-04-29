@@ -1,5 +1,4 @@
-import { HStack } from "../components";
-import { supabase } from "../utils/supabase";
+import { supabase } from "../../../utils/supabase";
 import { DrawerSideBar } from "./DrawerSideBar";
 
 
@@ -49,13 +48,8 @@ export const Header: React.FC = () => {
     }
 
     return (
-        <div className="p-2 gap-2 justify-start">
-            <HStack className='items-center'>
-                <DrawerSideBar name={userName} avatar={userAvatar} />
-                <div className='flex flex-1 justify-center'>
-                    <span className='mr-10'>NCU App</span>
-                </div>
-            </HStack>
+        <div className="justify-start z-40">
+            <DrawerSideBar name={userName} avatar={userAvatar} />
         </div>
     );
 };

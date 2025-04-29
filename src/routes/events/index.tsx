@@ -1,7 +1,6 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { Clock, MapPinAlt, Plus, Search } from "flowbite-react-icons/outline";
 import { useState } from 'react';
-import { Header } from '../../components';
 import { DialogBox } from '../../components/Common/DialogBox';
 import { AuthGuard } from '../../utils/auth';
 import { supabase } from '../../utils/supabase';
@@ -64,7 +63,7 @@ function EventIndex() {
   return (
     <>
       <div className="container mx-auto">
-        <Header />
+
         <div className="search-bar pt-4 pb-2 pl-4 pr-4 relative">
           <input
             type="text"

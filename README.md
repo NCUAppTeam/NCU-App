@@ -73,12 +73,22 @@ Tailwind 的配置檔位於 `tailwind.config.js`。
 
 ### 環境配置
 
-要與 Supabase 資料庫互動，你需要設置 `.env.local` 檔案，並填入以下變數：
+要與 Supabase 資料庫互動，你需要設置 `.env` 檔案（模板可參考`.env.exmaple`)，並填入以下變數：
 
 ```
 VITE_SUPABASE_URL=your-supabase-url
 VITE_SUPABASE_ANON_KEY=your-supabase-key
 ```
+若您為中央大學學生，想在本地端測試、使用portal註冊功能，則需先於portal申請portal開發成員：
+申請時的Single Sign On Url填為：http://localhost:5173
+       Return To Address填為：http://localhost:5173/callback
+
+`.env`檔則填入申請後說得到的client-id和client-secret：
+```
+VITE_NCU_PORTAL_CLIENT_ID=
+VITE_NCU_PORTAL_CLIENT_SECRET=
+```
+
 
 ### Edge Functions
 

@@ -58,7 +58,6 @@ export type Database = {
           description: string | null
           end_time: string | null
           fee: number | null
-          hashtags: number[] | null
           id: number
           location: string | null
           name: string | null
@@ -71,7 +70,6 @@ export type Database = {
           description?: string | null
           end_time?: string | null
           fee?: number | null
-          hashtags?: number[] | null
           id?: number
           location?: string | null
           name?: string | null
@@ -84,7 +82,6 @@ export type Database = {
           description?: string | null
           end_time?: string | null
           fee?: number | null
-          hashtags?: number[] | null
           id?: number
           location?: string | null
           name?: string | null
@@ -170,6 +167,21 @@ export type Database = {
           },
         ]
       }
+      registrations: {
+        Row: {
+          event_id: number[] | null
+          uuid: string
+        }
+        Insert: {
+          event_id?: number[] | null
+          uuid: string
+        }
+        Update: {
+          event_id?: number[] | null
+          uuid?: string
+        }
+        Relationships: []
+      }
       restaurants: {
         Row: {
           address: string | null
@@ -218,6 +230,7 @@ export type Database = {
         Row: {
           created_at: string
           id: number
+          image: string | null
           price: number | null
           product: string | null
           user_id: string | null
@@ -225,6 +238,7 @@ export type Database = {
         Insert: {
           created_at?: string
           id?: number
+          image?: string | null
           price?: number | null
           product?: string | null
           user_id?: string | null
@@ -232,6 +246,7 @@ export type Database = {
         Update: {
           created_at?: string
           id?: number
+          image?: string | null
           price?: number | null
           product?: string | null
           user_id?: string | null

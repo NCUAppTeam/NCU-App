@@ -135,7 +135,8 @@ INSERT INTO "auth"."audit_log_entries" ("instance_id", "id", "payload", "created
 	('00000000-0000-0000-0000-000000000000', '180def5a-b700-4d82-bd27-7874b27d5045', '{"action":"token_refreshed","actor_id":"c7e80cb0-7d3d-411f-9983-5e3addf62980","actor_username":"ncuapp@test.com","actor_via_sso":false,"log_type":"token"}', '2025-04-27 16:52:39.805254+00', ''),
 	('00000000-0000-0000-0000-000000000000', '9d4507dc-815d-4d7b-a8f1-16c8a8fa86d8', '{"action":"token_revoked","actor_id":"c7e80cb0-7d3d-411f-9983-5e3addf62980","actor_username":"ncuapp@test.com","actor_via_sso":false,"log_type":"token"}', '2025-04-27 16:52:39.806477+00', ''),
 	('00000000-0000-0000-0000-000000000000', '43893078-06e8-4b0a-a0bf-795ae46275f4', '{"action":"token_refreshed","actor_id":"c7e80cb0-7d3d-411f-9983-5e3addf62980","actor_username":"ncuapp@test.com","actor_via_sso":false,"log_type":"token"}', '2025-04-27 17:50:58.80326+00', ''),
-	('00000000-0000-0000-0000-000000000000', 'ee427c41-8fc0-4257-b43f-9685e3d4fb56', '{"action":"token_revoked","actor_id":"c7e80cb0-7d3d-411f-9983-5e3addf62980","actor_username":"ncuapp@test.com","actor_via_sso":false,"log_type":"token"}', '2025-04-27 17:50:58.804516+00', '');
+	('00000000-0000-0000-0000-000000000000', 'ee427c41-8fc0-4257-b43f-9685e3d4fb56', '{"action":"token_revoked","actor_id":"c7e80cb0-7d3d-411f-9983-5e3addf62980","actor_username":"ncuapp@test.com","actor_via_sso":false,"log_type":"token"}', '2025-04-27 17:50:58.804516+00', ''),
+	('00000000-0000-0000-0000-000000000000', '0b4ef26b-8591-4b11-857f-1fbf409c9ea8', '{"action":"login","actor_id":"c7e80cb0-7d3d-411f-9983-5e3addf62980","actor_username":"ncuapp@test.com","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}', '2025-04-29 11:28:33.540327+00', '');
 
 
 --
@@ -149,7 +150,7 @@ INSERT INTO "auth"."audit_log_entries" ("instance_id", "id", "payload", "created
 --
 
 INSERT INTO "auth"."users" ("instance_id", "id", "aud", "role", "email", "encrypted_password", "email_confirmed_at", "invited_at", "confirmation_token", "confirmation_sent_at", "recovery_token", "recovery_sent_at", "email_change_token_new", "email_change", "email_change_sent_at", "last_sign_in_at", "raw_app_meta_data", "raw_user_meta_data", "is_super_admin", "created_at", "updated_at", "phone", "phone_confirmed_at", "phone_change", "phone_change_token", "phone_change_sent_at", "email_change_token_current", "email_change_confirm_status", "banned_until", "reauthentication_token", "reauthentication_sent_at", "is_sso_user", "deleted_at", "is_anonymous") VALUES
-	('00000000-0000-0000-0000-000000000000', 'c7e80cb0-7d3d-411f-9983-5e3addf62980', 'authenticated', 'authenticated', 'ncuapp@test.com', '$2a$10$Y3OTXkqoLAgYrjGpEeMKLOuMnrYWwvLTRdqXwgRO9npX50TD8Ku32', '2024-10-02 10:35:35.563744+00', NULL, '', NULL, '', NULL, '', '', NULL, '2025-04-24 13:31:01.19214+00', '{"provider": "email", "providers": ["email"]}', '{}', NULL, '2024-10-02 10:35:35.560964+00', '2025-04-27 17:50:58.806545+00', NULL, NULL, '', '', NULL, '', 0, NULL, '', NULL, false, NULL, false);
+	('00000000-0000-0000-0000-000000000000', 'c7e80cb0-7d3d-411f-9983-5e3addf62980', 'authenticated', 'authenticated', 'ncuapp@test.com', '$2a$10$Y3OTXkqoLAgYrjGpEeMKLOuMnrYWwvLTRdqXwgRO9npX50TD8Ku32', '2024-10-02 10:35:35.563744+00', NULL, '', NULL, '', NULL, '', '', NULL, '2025-04-29 11:28:33.540881+00', '{"provider": "email", "providers": ["email"]}', '{}', NULL, '2024-10-02 10:35:35.560964+00', '2025-04-29 11:28:33.54214+00', NULL, NULL, '', '', NULL, '', 0, NULL, '', NULL, false, NULL, false);
 
 
 --
@@ -171,7 +172,8 @@ INSERT INTO "auth"."identities" ("provider_id", "user_id", "identity_data", "pro
 --
 
 INSERT INTO "auth"."sessions" ("id", "user_id", "created_at", "updated_at", "factor_id", "aal", "not_after", "refreshed_at", "user_agent", "ip", "tag") VALUES
-	('648b8198-9a5d-419d-848a-d0a495eaa9ae', 'c7e80cb0-7d3d-411f-9983-5e3addf62980', '2025-04-24 13:31:01.192178+00', '2025-04-27 17:50:58.807523+00', NULL, 'aal1', NULL, '2025-04-27 17:50:58.807467', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36', '172.19.0.1', NULL);
+	('648b8198-9a5d-419d-848a-d0a495eaa9ae', 'c7e80cb0-7d3d-411f-9983-5e3addf62980', '2025-04-24 13:31:01.192178+00', '2025-04-27 17:50:58.807523+00', NULL, 'aal1', NULL, '2025-04-27 17:50:58.807467', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36', '172.19.0.1', NULL),
+	('4a2ed051-2ea3-4969-8e97-5445e55a4408', 'c7e80cb0-7d3d-411f-9983-5e3addf62980', '2025-04-29 11:28:33.540923+00', '2025-04-29 11:28:33.540923+00', NULL, 'aal1', NULL, NULL, 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36', '192.168.65.1', NULL);
 
 
 --
@@ -179,7 +181,8 @@ INSERT INTO "auth"."sessions" ("id", "user_id", "created_at", "updated_at", "fac
 --
 
 INSERT INTO "auth"."mfa_amr_claims" ("session_id", "created_at", "updated_at", "authentication_method", "id") VALUES
-	('648b8198-9a5d-419d-848a-d0a495eaa9ae', '2025-04-24 13:31:01.198009+00', '2025-04-24 13:31:01.198009+00', 'password', 'c8d4d8a3-132b-48b8-b8e8-67ba6e402671');
+	('648b8198-9a5d-419d-848a-d0a495eaa9ae', '2025-04-24 13:31:01.198009+00', '2025-04-24 13:31:01.198009+00', 'password', 'c8d4d8a3-132b-48b8-b8e8-67ba6e402671'),
+	('4a2ed051-2ea3-4969-8e97-5445e55a4408', '2025-04-29 11:28:33.542499+00', '2025-04-29 11:28:33.542499+00', 'password', 'e97e972a-9d61-45a3-89a7-6e3383c6ffcb');
 
 
 --
@@ -220,7 +223,8 @@ INSERT INTO "auth"."refresh_tokens" ("instance_id", "id", "token", "user_id", "r
 	('00000000-0000-0000-0000-000000000000', 54, 'Ev5mNdst8Tz7sAgjofppPA', 'c7e80cb0-7d3d-411f-9983-5e3addf62980', true, '2025-04-27 14:55:53.535868+00', '2025-04-27 15:54:00.085918+00', 'KK0wLfLbzc7RZ1DbWrKE9Q', '648b8198-9a5d-419d-848a-d0a495eaa9ae'),
 	('00000000-0000-0000-0000-000000000000', 55, 'l1lCtAZczILyBblncNFdcQ', 'c7e80cb0-7d3d-411f-9983-5e3addf62980', true, '2025-04-27 15:54:00.086194+00', '2025-04-27 16:52:39.807189+00', 'Ev5mNdst8Tz7sAgjofppPA', '648b8198-9a5d-419d-848a-d0a495eaa9ae'),
 	('00000000-0000-0000-0000-000000000000', 56, 'LDvDG-BDfEzWo2JlxLjq1A', 'c7e80cb0-7d3d-411f-9983-5e3addf62980', true, '2025-04-27 16:52:39.807574+00', '2025-04-27 17:50:58.805204+00', 'l1lCtAZczILyBblncNFdcQ', '648b8198-9a5d-419d-848a-d0a495eaa9ae'),
-	('00000000-0000-0000-0000-000000000000', 57, '3yod5j8jCZzM6HMEVPtjOw', 'c7e80cb0-7d3d-411f-9983-5e3addf62980', false, '2025-04-27 17:50:58.805632+00', '2025-04-27 17:50:58.805632+00', 'LDvDG-BDfEzWo2JlxLjq1A', '648b8198-9a5d-419d-848a-d0a495eaa9ae');
+	('00000000-0000-0000-0000-000000000000', 57, '3yod5j8jCZzM6HMEVPtjOw', 'c7e80cb0-7d3d-411f-9983-5e3addf62980', false, '2025-04-27 17:50:58.805632+00', '2025-04-27 17:50:58.805632+00', 'LDvDG-BDfEzWo2JlxLjq1A', '648b8198-9a5d-419d-848a-d0a495eaa9ae'),
+	('00000000-0000-0000-0000-000000000000', 58, 'PIkbHR1FsdizMcXEd2Zk2w', 'c7e80cb0-7d3d-411f-9983-5e3addf62980', false, '2025-04-29 11:28:33.54154+00', '2025-04-29 11:28:33.54154+00', NULL, '4a2ed051-2ea3-4969-8e97-5445e55a4408');
 
 
 --
@@ -318,6 +322,12 @@ INSERT INTO "public"."members" ("uuid", "created_at", "name", "fk_email", "fk_id
 
 
 --
+-- Data for Name: registrations; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+
+
+--
 -- Data for Name: restaurants; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -379,7 +389,7 @@ INSERT INTO "storage"."objects" ("id", "bucket_id", "name", "owner", "created_at
 -- Name: refresh_tokens_id_seq; Type: SEQUENCE SET; Schema: auth; Owner: supabase_auth_admin
 --
 
-SELECT pg_catalog.setval('"auth"."refresh_tokens_id_seq"', 57, true);
+SELECT pg_catalog.setval('"auth"."refresh_tokens_id_seq"', 58, true);
 
 
 --

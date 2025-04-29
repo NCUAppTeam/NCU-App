@@ -22,7 +22,7 @@ function LoginPage() {
 
   const CLIENT_ID = import.meta.env.VITE_NCU_PORTAL_CLIENT_ID;
 
-  const REDIRECT_URI = 'https://ncuappteam.github.io/callback';
+  const REDIRECT_URI = 'http://localhost:5173/callback';
   const supportedURL = 'https://github.com/NCUAppTeam/Legacy-website./blob/main/PRIVACY.md'
 
 

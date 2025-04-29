@@ -10,7 +10,7 @@ function RootComponent() {
 
   return (
     <div className='w-full lg:w-2/3 mx-auto flex flex-col lg:flex-row justify-center'>
-      {match({ to: '/login' }) ? null : <Header />}
+      {match({ to: LOGIN_ROUTE, exact: true }) ? null : <Header />}
       <Outlet />
     </div>
   );

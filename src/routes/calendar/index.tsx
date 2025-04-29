@@ -1,5 +1,4 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { Header } from '../../components'
 import { AuthGuard } from '../../utils/auth'
 
 export const Route = createFileRoute('/calendar/')({
@@ -10,7 +9,7 @@ export const Route = createFileRoute('/calendar/')({
 function CalendarIndex() {
   return (
     <>
-      <Header />
+      {/* <Header /> */}
       <div>Hello /calendar/!</div>
     </>
   )

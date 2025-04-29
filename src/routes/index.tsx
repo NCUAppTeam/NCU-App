@@ -1,5 +1,4 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
-import { Header } from '../components';
 import { AuthGuard } from '../utils/auth';
 import { supabase } from '../utils/supabase';
 
@@ -29,8 +28,6 @@ function HomeIndex() {
     const { user } = Route.useLoaderData()
     return (
         <>
-            <Header />
-
             <div className='grid justify-items-center w-full space-y-4'>
 
                 <div key={user[0].uuid} className='bg-blue-100 grid place-items-center'>

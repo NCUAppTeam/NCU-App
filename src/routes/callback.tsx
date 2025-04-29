@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export const Route = createFileRoute('/callback')({
   component: Callback,
@@ -7,6 +7,7 @@ export const Route = createFileRoute('/callback')({
 
 function Callback() {
   const navigate = useNavigate();
+  const [userInfo, setUserInfo] = useState(null);
 
   useEffect(() => {
     async function handleOAuthCallback() {
@@ -21,7 +22,7 @@ function Callback() {
 
       try {
         // 交換 access_token
-        const tokenResponse = await fetch('https://ncuapp.davidday.tw/oauth2/token', {
+        const tokenResponse = await fetch('http://localhost:3000/oauth2/token', {
           method: 'POST',
           headers: {
             'Accept': 'application/json',
@@ -31,19 +32,20 @@ function Callback() {
             code,
             client_id: import.meta.env.VITE_NCU_PORTAL_CLIENT_ID,
             client_secret: import.meta.env.VITE_NCU_PORTAL_CLIENT_SECRET,
-            redirect_uri: 'https://ncuappteam.github.io/callback',
+            redirect_uri: 'http://localhost:5173/callback',
             grant_type: 'authorization_code'
           })
         });
 
         const tokenData = await tokenResponse.json();
+
         if (!tokenData.access_token) {
           console.error('取得 access_token 失敗', tokenData);
           return;
         }
-
+        
         // 取得使用者資訊
-        const userResponse = await fetch('https://ncuapp.davidday.tw/oauth2/userinfo', {
+        const userResponse = await fetch('http://localhost:3000/oauth2/userinfo', {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${tokenData.access_token}`,
@@ -53,8 +55,9 @@ function Callback() {
 
         const userData = await userResponse.json();
         console.log('使用者資訊:', userData);
-        const stringifyData: string = JSON.stringify(userData);
-        navigate({ to: '/signup', state: { post: { userData: stringifyData } } }) // 導向註冊頁面，並傳遞使用者資訊
+        setUserInfo(userData);
+        
+        navigate({ to: '/signup', search: {userData: JSON.stringify(userData)}});
       } catch (error) {
         console.error('OAuth 登入失敗:', error);
         navigate({ to: '/' });
@@ -67,6 +70,12 @@ function Callback() {
   return (
     <div>
       <h2>正在處理登入...</h2>
+      {userInfo && (
+        <div>
+          <h3>使用者資訊：</h3>
+          <pre>{JSON.stringify(userInfo, null, 2)}</pre>
+        </div>
+      )}
     </div>
   );
 }

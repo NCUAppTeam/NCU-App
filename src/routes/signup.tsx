@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate, useRouterState } from '@tanstack/react-router';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import zxcvbn from 'zxcvbn'; //記得要先安裝zxcvbn，輸入 npm install zxcvbn
 export const Route = createFileRoute('/signup')({
   component: SignUpPage,
@@ -9,6 +9,7 @@ function SignUpPage() {
   const navigate = useNavigate();
   const state = useRouterState({ select: (s) => s.location.state })
   const [userData, setUserData] = useState<UserInfo>()
+
   useEffect(() => {
     if (!state.post?.userData) {
       navigate({ to: '/' })
@@ -44,6 +45,7 @@ function SignUpForm({ userInfo }: { userInfo: UserInfo }) {
     nickname: '',
     password: '',
   })
+  const passwordCRef = useRef<HTMLInputElement>(null);
 
   const [passwordStrength, setPasswordStrength] = useState(0)
 
@@ -91,6 +93,11 @@ function SignUpForm({ userInfo }: { userInfo: UserInfo }) {
     if (!/(?=.*[A-Za-z])(?=.*\d)/.test(formData.password)) {
       alert('密碼必須包含至少一個英文字母和一個數字')
       return
+    }
+
+    if (passwordCRef.current && passwordCRef.current.value !== formData.password) {
+      alert('兩次輸入的密碼不一致');
+      return;
     }
 
     console.log('Submitted Data:', {
@@ -222,7 +229,24 @@ function SignUpForm({ userInfo }: { userInfo: UserInfo }) {
                 placeholder="Enter your password"
               />
             </div>
-
+            
+            <div>
+              <label
+                htmlFor="passwordC"
+                className="block text-sm font-medium text-gray-900"
+              >
+                確認密碼
+              </label>
+              <input
+                type="password"
+                ref={passwordCRef}
+                id="passwordC"
+                required
+                className="mt-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-600 focus:ring-indigo-600 sm:text-sm"
+                placeholder="Enter your password again"
+              />
+            </div>
+            
             <div className="mt-2 w-full h-3 bg-gray-200 rounded-full">
               <div
                 className={`h-full rounded-full ${strengthColors[passwordStrength]}`}

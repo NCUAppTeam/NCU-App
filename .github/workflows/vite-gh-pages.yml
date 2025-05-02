@@ -37,14 +37,18 @@ jobs:
              echo "VITE_SUPABASE_ANON_KEY=${{ secrets.VITE_SUPABASE_ANON_KEY }}" >> .env
              echo "VITE_NCU_PORTAL_CLIENT_ID=${{ secrets.VITE_NCU_PORTAL_CLIENT_ID }}" >> .env
              echo "VITE_NCU_PORTAL_SECRET=${{ secrets.VITE_NCU_PORTAL_SECRET }}" >> .env
+             echo "VITE_ROOT_PATH=${{ secrets.VITE_ROOT_PATH }}" >> .env
+             echo "VITE_SERVER_PATH=${{ secrets.VITE_SERVER_PATH }}" >> .env
+
         env:
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
           VITE_NCU_PORTAL_CLIENT_ID: ${{ secrets.VITE_NCU_PORTAL_CLIENT_ID }}
           VITE_NCU_PORTAL_SECRET: ${{ secrets.VITE_NCU_PORTAL_SECRET }}
+          VITE_ROOT_PATH: ${{ secrets.VITE_ROOT_PATH }}
+          VITE_SERVER_PATH: $ {{ secrets.VITE_SERVER_PATH }}
           
           
-
       # Debug - Verify .env file creation
       - name: Debug - Verify .env file creation
         run: |

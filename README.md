@@ -89,6 +89,12 @@ VITE_NCU_PORTAL_CLIENT_ID=
 VITE_NCU_PORTAL_CLIENT_SECRET=
 ```
 
+複製`.env.example`的最後兩行至`.env`檔
+```
+VITE_ROOT_PATH=http://localhost:5173
+VITE_SERVER_PATH=http://localhost:3000
+```
+
 
 ### Edge Functions
 

@@ -5,6 +5,9 @@ export const Route = createFileRoute('/callback')({
   component: Callback,
 })
 
+const rootPath = import.meta.env.VITE_ROOT_PATH;
+const serverPath = import.meta.env.VITE_SERVER_PATH;
+
 function Callback() {
   const navigate = useNavigate();
 
@@ -21,7 +24,7 @@ function Callback() {
 
       try {
         // 交換 access_token
-        const tokenResponse = await fetch('http://localhost:3000/oauth2/token', {
+        const tokenResponse = await fetch(`${serverPath}/oauth2/token`, {
           method: 'POST',
           headers: {
             'Accept': 'application/json',
@@ -31,7 +34,7 @@ function Callback() {
             code,
             client_id: import.meta.env.VITE_NCU_PORTAL_CLIENT_ID,
             client_secret: import.meta.env.VITE_NCU_PORTAL_CLIENT_SECRET,
-            redirect_uri: 'http://localhost:5173/callback',
+            redirect_uri: `${rootPath}/callback`,
             grant_type: 'authorization_code'
           })
         });
@@ -44,7 +47,7 @@ function Callback() {
         }
 
         // 取得使用者資訊
-        const userResponse = await fetch('http://localhost:3000/oauth2/userinfo', {
+        const userResponse = await fetch(`${serverPath}/oauth2/userinfo`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${tokenData.access_token}`,

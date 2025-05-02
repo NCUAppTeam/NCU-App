@@ -7,7 +7,7 @@ dotenv.config();
 
 const app = express();
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: process.env.VITE_ROOT_PATH,
     credentials: true
 }));
 app.use(express.json());
@@ -15,7 +15,7 @@ app.use(express.urlencoded({ extended: true }));
 
 const CLIENT_ID = process.env.VITE_NCU_PORTAL_CLIENT_ID;
 const CLIENT_SECRET = process.env.VITE_NCU_PORTAL_CLIENT_SECRET;
-const REDIRECT_URI = "http://localhost:5173/callback";
+const REDIRECT_URI = `${process.env.VITE_ROOT_PATH}/callback`;
 
 app.post('/oauth2/token', async (req, res) => {
     // console.log("Received request body:", req.body); // Debugging log
@@ -90,5 +90,5 @@ app.get('/oauth2/userinfo', async (req, res) => {
 
 
 app.listen(3000, () => {
-    console.log("OAuth server running on http://localhost:3000");
+    console.log("OAuth server running...");
 });

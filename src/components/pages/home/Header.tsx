@@ -41,7 +41,7 @@ export const Header: React.FC = () => {
     }, []);
 
     if (!userName || !userAvatar) {
-        return <div>Loading...</div>;
+        return null;
     }
     if (error) {
         console.log('error', error);

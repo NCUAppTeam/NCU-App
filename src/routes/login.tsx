@@ -21,8 +21,9 @@ function LoginPage() {
   const { redirect: redirectUrl } = Route.useSearch()
 
   const CLIENT_ID = import.meta.env.VITE_NCU_PORTAL_CLIENT_ID;
+  const rootPath = import.meta.env.VITE_ROOT_PATH;
 
-  const REDIRECT_URI = 'http://localhost:5173/callback';
+  const REDIRECT_URI = `${rootPath}/callback`;
   const supportedURL = 'https://github.com/NCUAppTeam/Legacy-website./blob/main/PRIVACY.md'
 
 

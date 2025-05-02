@@ -27,3 +27,4 @@ dev-dist
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+/.github/workflows/vite-gh-pages.yml

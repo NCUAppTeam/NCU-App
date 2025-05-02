@@ -3,7 +3,7 @@ import { supabase } from "../../../utils/supabase";
 
 import User, { DBUser } from '../Entities/User';
 import UserService from '../Services/UserService';
-
+import UserSignupData from "../Entities/UserSignupData";
 
 const USER_TABLE_NAME = "members"
 
@@ -111,6 +111,87 @@ export default class UserController {
 
         return user
     }
+    
+    /**
+     * Create a new user 
+     * (it will create a new row in supabase users table and a new row in members table
+     * the supabse user table is used for authentication, and the members table is used for user information
+     * )
+     * 
+     * @usage userController.createUser(<PARAMS>).then(
+     *          (user: User) => { ... }
+     *        )
+     * 
+     * @param   {UserSignupData} userSignupData - The user data to create
+     * 
+     * @returns {User} - The created user entity
+     * 
+     * @author Boyiliu (@boyiliu1007)
+     */
 
+    public async createUser(userSignupData: UserSignupData): Promise<User | null> {
+        
+        // should signup in users table at auth schema
+        const { data, error } = await supabase.auth.signUp({
+            email: userSignupData.email,
+            password: userSignupData.password,
+        }) 
+        if (error) {
+            // handle auth error cannot use handleSupabaseError
+            console.log(error.name);
+            return null
+        }
+        if (!data)
+            return null
 
+        // get user id from users table at auth schema
+        const userID = data.user?.id
+
+        // insert into members table at public schema
+        const { error: insertMemberError } = await supabase
+            .from(USER_TABLE_NAME)
+            .insert(
+                {   
+                    uuid: userID,
+                    name: userSignupData.name,
+                    email: userSignupData.email,
+                    username: userSignupData.username,
+                    studentId: userSignupData.studentId,
+                    identity: 2,
+                    created_at: new Date().toISOString(),
+                }
+            )
+            .single();
+        if (insertMemberError) {
+            console.log("Error inserting member:", insertMemberError);
+            ErrorHandler.handleSupabaseError(insertMemberError);
+            return null;
+        }
+        
+        // get the inserted member data
+        // fetch the newly created user
+        const { data: memberData, error: getMemberError } = await supabase
+            .from(USER_TABLE_NAME)
+            .select("*")
+            .eq("uuid", userID)
+            .single();
+
+        if (getMemberError) {
+            console.error("Error retrieving member data:", getMemberError);
+            ErrorHandler.handleSupabaseError(getMemberError);
+            return null;
+        }
+
+        console.log("User created successfully:", memberData);
+
+        // NOTE: Signing out immediately after signup may be unexpected—
+        // please confirm if automatic sign-in is not desired.
+        const { error: signoutError } = await supabase.auth.signOut();
+        if (signoutError) {
+            console.error("Sign-out error:", signoutError);
+            // proceed even if sign-out fails
+        }
+
+        return UserService.parseUser(memberData);
+    }
 }

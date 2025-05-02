@@ -169,25 +169,29 @@ export default class UserController {
         }
         
         // get the inserted member data
-        const insertedMemberData = await supabase
+        // fetch the newly created user
+        const { data: memberData, error: getMemberError } = await supabase
             .from(USER_TABLE_NAME)
             .select("*")
-            .eq("uuid", userID as string)
-            .single()
+            .eq("uuid", userID)
+            .single();
 
-        if (!insertedMemberData) {
-            console.log("Error: Member data not found.");
+        if (getMemberError) {
+            console.error("Error retrieving member data:", getMemberError);
+            ErrorHandler.handleSupabaseError(getMemberError);
             return null;
         }
-        if (insertedMemberData.error) {
-            console.log("Error retrieving member data:", insertedMemberData.error);
-            return null;
-        }
-        console.log("User created successfully:", insertedMemberData.data);
-        const { error: signoutError } = await supabase.auth.signOut()
+
+        console.log("User created successfully:", memberData);
+
+        // NOTE: Signing out immediately after signup may be unexpected—
+        // please confirm if automatic sign-in is not desired.
+        const { error: signoutError } = await supabase.auth.signOut();
         if (signoutError) {
-            console.error("Sign out error:", signoutError);
+            console.error("Sign-out error:", signoutError);
+            // proceed even if sign-out fails
         }
-        return UserService.parseUser(insertedMemberData.data);
+
+        return UserService.parseUser(memberData);
     }
 }

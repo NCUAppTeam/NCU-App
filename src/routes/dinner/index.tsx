@@ -59,7 +59,6 @@ function DinnerIndex() {
 
     return (
         <div className="px-4 sm:px-6 lg:px-8">
-            {/* <Header /> */}
             <DinnerStory />
             <p
                 className="flex flex-row justify-center text-center font-serif text-xl text-green-500 p-6 rounded-lg shadow-md border-b-2 border-green-300"

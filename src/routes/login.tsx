@@ -1,7 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useState } from 'react';
 import logo from '../assets/logo.png';
-import IsRememberSection from '../components/pages/user/isRememberSection';
 import { supabase } from '../utils/supabase';
 
 export const Route = createFileRoute('/login')({
@@ -16,7 +15,7 @@ export const Route = createFileRoute('/login')({
 function LoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [isRemember, setIsRemember] = useState(false);
+  // const [isRemember, setIsRemember] = useState(false);
   const [isError, setIsError] = useState(false);
   const { redirect: redirectUrl } = Route.useSearch()
 
@@ -74,7 +73,7 @@ function LoginPage() {
             onChange={(e) => setPassword(e.target.value)}
           />
 
-          <IsRememberSection isRemember={isRemember} setIsRemember={setIsRemember} text={Labels.remember} />
+          {/* <IsRememberSection isRemember={isRemember} setIsRemember={setIsRemember} text={Labels.remember} /> */}
 
           {
             isError

@@ -20,7 +20,6 @@ import { Route as MapIndexImport } from './routes/map/index'
 import { Route as EventsIndexImport } from './routes/events/index'
 import { Route as DinnerIndexImport } from './routes/dinner/index'
 import { Route as CalendarIndexImport } from './routes/calendar/index'
-import { Route as HomeInfoCardImport } from './routes/home/infoCard'
 import { Route as EventsSelectImport } from './routes/events/select'
 import { Route as EventsCreateImport } from './routes/events/create'
 import { Route as EventsEventIdImport } from './routes/events/$eventId'
@@ -69,11 +68,6 @@ const DinnerIndexRoute = DinnerIndexImport.update({
 
 const CalendarIndexRoute = CalendarIndexImport.update({
   path: '/calendar/',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const HomeInfoCardRoute = HomeInfoCardImport.update({
-  path: '/home/infoCard',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -145,13 +139,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EventsSelectImport
       parentRoute: typeof rootRoute
     }
-    '/home/infoCard': {
-      id: '/home/infoCard'
-      path: '/home/infoCard'
-      fullPath: '/home/infoCard'
-      preLoaderRoute: typeof HomeInfoCardImport
-      parentRoute: typeof rootRoute
-    }
     '/calendar/': {
       id: '/calendar/'
       path: '/calendar'
@@ -200,7 +187,6 @@ export interface FileRoutesByFullPath {
   '/events/$eventId': typeof EventsEventIdRoute
   '/events/create': typeof EventsCreateRoute
   '/events/select': typeof EventsSelectRoute
-  '/home/infoCard': typeof HomeInfoCardRoute
   '/calendar': typeof CalendarIndexRoute
   '/dinner': typeof DinnerIndexRoute
   '/events': typeof EventsIndexRoute
@@ -216,7 +202,6 @@ export interface FileRoutesByTo {
   '/events/$eventId': typeof EventsEventIdRoute
   '/events/create': typeof EventsCreateRoute
   '/events/select': typeof EventsSelectRoute
-  '/home/infoCard': typeof HomeInfoCardRoute
   '/calendar': typeof CalendarIndexRoute
   '/dinner': typeof DinnerIndexRoute
   '/events': typeof EventsIndexRoute
@@ -233,7 +218,6 @@ export interface FileRoutesById {
   '/events/$eventId': typeof EventsEventIdRoute
   '/events/create': typeof EventsCreateRoute
   '/events/select': typeof EventsSelectRoute
-  '/home/infoCard': typeof HomeInfoCardRoute
   '/calendar/': typeof CalendarIndexRoute
   '/dinner/': typeof DinnerIndexRoute
   '/events/': typeof EventsIndexRoute
@@ -251,7 +235,6 @@ export interface FileRouteTypes {
     | '/events/$eventId'
     | '/events/create'
     | '/events/select'
-    | '/home/infoCard'
     | '/calendar'
     | '/dinner'
     | '/events'
@@ -266,7 +249,6 @@ export interface FileRouteTypes {
     | '/events/$eventId'
     | '/events/create'
     | '/events/select'
-    | '/home/infoCard'
     | '/calendar'
     | '/dinner'
     | '/events'
@@ -281,7 +263,6 @@ export interface FileRouteTypes {
     | '/events/$eventId'
     | '/events/create'
     | '/events/select'
-    | '/home/infoCard'
     | '/calendar/'
     | '/dinner/'
     | '/events/'
@@ -298,7 +279,6 @@ export interface RootRouteChildren {
   EventsEventIdRoute: typeof EventsEventIdRoute
   EventsCreateRoute: typeof EventsCreateRoute
   EventsSelectRoute: typeof EventsSelectRoute
-  HomeInfoCardRoute: typeof HomeInfoCardRoute
   CalendarIndexRoute: typeof CalendarIndexRoute
   DinnerIndexRoute: typeof DinnerIndexRoute
   EventsIndexRoute: typeof EventsIndexRoute
@@ -314,7 +294,6 @@ const rootRouteChildren: RootRouteChildren = {
   EventsEventIdRoute: EventsEventIdRoute,
   EventsCreateRoute: EventsCreateRoute,
   EventsSelectRoute: EventsSelectRoute,
-  HomeInfoCardRoute: HomeInfoCardRoute,
   CalendarIndexRoute: CalendarIndexRoute,
   DinnerIndexRoute: DinnerIndexRoute,
   EventsIndexRoute: EventsIndexRoute,
@@ -341,7 +320,6 @@ export const routeTree = rootRoute
         "/events/$eventId",
         "/events/create",
         "/events/select",
-        "/home/infoCard",
         "/calendar/",
         "/dinner/",
         "/events/",
@@ -369,9 +347,6 @@ export const routeTree = rootRoute
     },
     "/events/select": {
       "filePath": "events/select.tsx"
-    },
-    "/home/infoCard": {
-      "filePath": "home/infoCard.tsx"
     },
     "/calendar/": {
       "filePath": "calendar/index.tsx"

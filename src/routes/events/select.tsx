@@ -20,10 +20,9 @@ function SelectContent() {
     // Just move to the next step, the type will be passed via the Link in TypeContent
     handleNextStep()
   }
-  
+
   return (
     <div className="flex flex-col items-center h-screen">
-      {/* Header */}
       <div className="relative w-full py-4 flex justify-center items-center px-6 border-b-[1px]">
         <button className="absolute left-2 btn btn-ghost"><Link to='/events'>取消</Link></button>
         <h1 className="text-xl">新增</h1>

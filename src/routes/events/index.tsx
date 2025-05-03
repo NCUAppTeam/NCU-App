@@ -1,54 +1,42 @@
-import { createFileRoute, Link } from '@tanstack/react-router';
-import { Clock, MapPinAlt, Plus, Search } from "flowbite-react-icons/outline";
+import { createFileRoute } from '@tanstack/react-router';
+import { Plus } from "flowbite-react-icons/outline";
 import { useState } from 'react';
+import EventController from '../../backend/event/Controllers/EventController';
+import { DBEvent } from '../../backend/event/Entities/Event';
 import { DialogBox } from '../../components/Common/DialogBox';
+import EventCard from '../../components/pages/events/eventCard';
+import SearchBar from '../../components/pages/events/searchBar';
 import { AuthGuard } from '../../utils/auth';
-import { supabase } from '../../utils/supabase';
-
-interface Event {
-  created_at: string;
-  description: string | null;
-  end_time: string | null;
-  fee: number | null;
-  id: number;
-  name: string | null;
-  start_time: string | null;
-  type: number | null;
-  user_id: string;
-  location: string | null;
-}
 
 export const Route = createFileRoute('/events/')({
   beforeLoad: AuthGuard,
   loader: async () => {
-    const { data: events, error: eventsError } = await supabase.from('events').select('*');
-    if (eventsError) throw eventsError;
+    const eventController = new EventController();
 
-    // Only fetch event types where hashtag_relation contains 0 (main event types, not hashtags)
-    const { data: eventTypesData, error: eventTypesError } = await supabase
-      .from('event_type')
-      .select('*')
-      .contains('hashtag_relation', [0])  // Use contains for array comparison
-      .order('type_id', { ascending: true });
-    if (eventTypesError) throw eventTypesError;
-    console.log(eventTypesData);
-    return { events, eventTypes: eventTypesData };
+    // Fetch events using EventController
+    const events = await eventController.getEvents('*');
+    if (!events) throw new Error('Failed to fetch events');
+
+    // Fetch event types using EventController
+    const eventTypes = await eventController.getEventTypes();
+    if (!eventTypes) throw new Error('Failed to fetch event types');
+
+    return { events, eventTypes };
   },
   component: EventIndex,
 });
 
 function EventIndex() {
   const { events, eventTypes } = Route.useLoaderData() as {
-    events: Event[];
+    events: DBEvent[];
     eventTypes: { type_id: number; type_name: string }[];
   };
   const navigate = Route.useNavigate();
 
   const [searchTerm, setSearchTerm] = useState('');
-  const [isFocused, setIsFocused] = useState(false);
   const [selectedType, setSelectedType] = useState("All");
 
-  const filteredEvents = events.filter((event) => {
+  const filteredEvents = events.filter((event: DBEvent) => {
     const matchesSearch = event.name && event.name.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesType = selectedType === "All"
       ? true
@@ -62,35 +50,15 @@ function EventIndex() {
 
   return (
     <>
-      <div className="container mx-auto">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
 
-        <div className="search-bar pt-4 pb-2 pl-4 pr-4 relative">
-          <input
-            type="text"
-            placeholder={isFocused ? '請輸入關鍵字' : ''}
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            onFocus={() => setIsFocused(true)}
-            onBlur={() => setIsFocused(false)}
-            className="input input-bordered w-full pl-12 pr-12"
-          />
-          {!searchTerm && !isFocused && (
-            <div className="absolute left-4 top-1/2 transform -translate-y-1/2 flex items-center pointer-events-none">
-              <Search className="h-5 w-10 text-gray-400" />
-              <span className="ml-2 text-gray-400">搜尋</span>
-            </div>
-          )}
-          {searchTerm && (
-            <button
-              className="absolute right-6 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
-              onClick={() => setSearchTerm('')}
-            >
-              清除
-            </button>
-          )}
-        </div>
+        <SearchBar
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          placeholder="請輸入關鍵字"
+        />
 
-        <div className="px-2 py-2 overflow-x-auto whitespace-nowrap">
+        <div className="py-2 overflow-x-auto whitespace-nowrap">
           <div className="flex space-x-1">
             <button
               onClick={() => handleFilterSelect("All")}
@@ -121,16 +89,6 @@ function EventIndex() {
               ))}
             </div>
           </div>
-          {/* 
-          <h1 className="ml-4 text-xl text-white mt-8">最新活動</h1>
-          <div className="mt-2">
-            <div className="grid grid-cols-2 gap-4">
-              {filteredEvents.map((event) => (
-                <EventCard key={event.id} event={event} />
-              ))}
-            </div>
-          </div>
-          */}
         </div>
 
         <button
@@ -154,33 +112,3 @@ function EventIndex() {
   );
 }
 
-function EventCard({ event }: { event: Event }) {
-  const startTime = event.start_time
-    ? new Date(event.start_time)
-    : new Date();
-  return (
-    <Link
-      to="/events/$eventId"
-      params={{ eventId: String(event.id) }}
-      className="w-full rounded-lg overflow-hidden text-white cursor-pointer hover:shadow-lg transition-shadow duration-300"
-    >
-      <div className="h-32 bg-gray-500" />
-      <div className="p-2 bg-white">
-        <h3 className="text-lg mb-1 text-black">{event.name}</h3>
-        <p className="text-sm flex items-center text-black">
-          <Clock size={24} />
-          {startTime.toLocaleString('zh-TW', {
-            month: '2-digit',
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit',
-          })}
-        </p>
-        <p className="text-sm flex items-center text-black">
-          <MapPinAlt size={24} />
-          {event.location || '位置未提供'}
-        </p>
-      </div>
-    </Link>
-  );
-}

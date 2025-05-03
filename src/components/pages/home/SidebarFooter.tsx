@@ -16,7 +16,12 @@ export default function SidebarFooter() {
     return (
         <div className="w-full self-end">
             <div className="divider divider-neutral" />
-            <p className="my-2 rounded-md border border-gray-300 p-2 cursor-pointer text-left text-lg underline justify-start flex items-center">
+
+            <p className="my-2 rounded-md border border-gray-300 p-2 cursor-pointer text-left text-lg underline justify-start flex items-center"
+                onClick={() => {
+                    alert('此功能尚未開放，敬請期待！');
+                }}
+                title='Settings'>
                 <IoSettingsSharp className="inline-block mr-2" />
                 Settings
             </p>

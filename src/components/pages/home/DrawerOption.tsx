@@ -34,9 +34,9 @@ export const DrawerOption = () => {
                 <li
                     key={option.name}
                     onClick={() => window.location.href = option.pageNav}
-                    className="cursor-pointer p-2 rounded-md hover:bg-gray-200 lg:w-full lg:flex lg:items-center lg:justify-between lg:gap-4 lg:p-2 lg:border lg:border-gray-300 lg:shadow-sm"
+                    className="cursor-pointer p-2 rounded-md hover:bg-gray-200 xl:w-full xl:flex xl:items-center xl:justify-between xl:gap-4 xl:p-2 xl:border xl:border-gray-300 xl:shadow-sm"
                 >
-                    <HStack className="lg:gap-2">
+                    <HStack className="xl:gap-2">
                         <VStack className="justify-start">
                             <p className="font-medium lg:text-lg">{option.name}</p>
                             <p className="text-sm text-gray-500 lg:text-base">{option.engName}</p>

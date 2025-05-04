@@ -56,10 +56,10 @@ function Callback() {
           }
         });
 
-        const userData = await userResponse.json();
-        const stringifyData: string = JSON.stringify(userData);
+        const portalData = await userResponse.json();
+        const stringifyData: string = JSON.stringify(portalData);
 
-        navigate({ to: '/signup', state: { post: { userData: stringifyData } } }) // 導向註冊頁面，並傳遞使用者資訊
+        navigate({ to: '/signup', state: { post: { portalData: stringifyData } } }) // 導向註冊頁面，並傳遞使用者資訊
       } catch (error) {
         console.error('OAuth 登入失敗:', error);
         navigate({ to: '/' });

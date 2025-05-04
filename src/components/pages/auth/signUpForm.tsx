@@ -3,15 +3,10 @@ import { useRef, useState } from "react";
 
 import zxcvbn from "zxcvbn";
 import UserController from '../../../backend/user/Controllers/UserController';
+import UserFromPortal from '../../../backend/user/Entities/UserFromPortal';
 import UserSignupData from '../../../backend/user/Entities/UserSignupData';
 
-interface UserInfo {
-    chineseName: string
-    email: string
-    studentId: string
-}
-
-export default function SignUpForm({ userInfo, navigate }: { userInfo: UserInfo; navigate: ReturnType<typeof useNavigate> }) {
+export default function SignUpForm({ userFromPortal, navigate }: { userFromPortal: UserFromPortal; navigate: ReturnType<typeof useNavigate> }) {
     const [formData, setFormData] = useState({
         nickname: '',
         password: '',
@@ -74,11 +69,11 @@ export default function SignUpForm({ userInfo, navigate }: { userInfo: UserInfo;
         setIsLoading(true)
         try {
             const signupData: UserSignupData = {
-                name: userInfo.chineseName,
-                email: userInfo.email,
+                name: userFromPortal.chineseName,
+                email: userFromPortal.email,
                 password: formData.password,
                 username: trimmedNickname,
-                studentId: userInfo.studentId,
+                studentId: userFromPortal.studentId,
             }
             const user = await addUser(signupData)
             if (!user) {
@@ -100,7 +95,6 @@ export default function SignUpForm({ userInfo, navigate }: { userInfo: UserInfo;
 
     // send formData + userInfo to supabase
     async function addUser(userSignupData: UserSignupData) {
-
         const signupInstance = new UserSignupData(userSignupData)
         const userController = new UserController()
         const user = await userController.createUser(signupInstance);
@@ -125,64 +119,86 @@ export default function SignUpForm({ userInfo, navigate }: { userInfo: UserInfo;
         'bg-blue-500',
     ]
 
+    console.log('userInfo:', userFromPortal)
+
     return (
         <form onSubmit={handleSubmit} className="max-w-xl w-full bg-white mx-32 px-10 py-10 shadow-md rounded-lg">
             <div className="space-y-12">
                 <div className="border-b border-gray-900/10 pb-12">
                     <h1 className="mt-2 text-lg font-bold text-gray-900">
-                        歡迎，{userInfo.chineseName}
+                        歡迎，{userFromPortal.chineseName}
                     </h1>
                     <p className="mt-1 text-sm text-gray-600">
                         身分已經驗證，請填寫以下資訊以完成註冊
                     </p>
 
                     <div className="mt-6 space-y-4">
-                        <div>
-                            <label
-                                htmlFor="name"
-                                className="block text-sm font-medium text-gray-900"
-                            >
-                                姓名
-                            </label>
-                            <input
-                                type="text"
-                                id="name"
-                                value={userInfo.chineseName}
-                                readOnly
-                                className="mt-2 block w-full rounded-md bg-gray-100 text-gray-500 border border-gray-300 shadow-sm sm:text-sm cursor-not-allowed"
-                            />
+                        <div className="grid grid-cols-3 gap-4">
+                            <div className="col-span-1">
+                                <label
+                                    htmlFor="name"
+                                    className="block text-sm font-medium text-gray-900"
+                                >
+                                    姓名
+                                </label>
+                                <input
+                                    type="text"
+                                    id="name"
+                                    value={userFromPortal.chineseName}
+                                    readOnly
+                                    className="px-2 py-1 mt-2 block w-full rounded-md bg-gray-100 text-gray-500 border border-gray-300 shadow-sm sm:text-sm cursor-not-allowed"
+                                />
+                            </div>
+
+                            <div className="col-span-2">
+                                <label
+                                    htmlFor="email"
+                                    className="block text-sm font-medium text-gray-900"
+                                >
+                                    Email
+                                </label>
+                                <input
+                                    type="email"
+                                    id="email"
+                                    value={userFromPortal.email}
+                                    readOnly
+                                    className="px-2 py-1 mt-2 block w-full rounded-md bg-gray-100 text-gray-500 border border-gray-300 shadow-sm sm:text-sm cursor-not-allowed"
+                                />
+                            </div>
                         </div>
 
-                        <div>
-                            <label
-                                htmlFor="email"
-                                className="block text-sm font-medium text-gray-900"
-                            >
-                                Email
-                            </label>
-                            <input
-                                type="email"
-                                id="email"
-                                value={userInfo.email}
-                                readOnly
-                                className="mt-2 block w-full rounded-md bg-gray-100 text-gray-500 border border-gray-300 shadow-sm sm:text-sm cursor-not-allowed"
-                            />
-                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <label
+                                    htmlFor="studentId"
+                                    className="block text-sm font-medium text-gray-900"
+                                >
+                                    學號
+                                </label>
+                                <input
+                                    type="text"
+                                    id="studentId"
+                                    value={userFromPortal.studentId}
+                                    readOnly
+                                    className="px-2 py-1 mt-2 block w-full rounded-md bg-gray-100 text-gray-500 border border-gray-300 shadow-sm sm:text-sm cursor-not-allowed"
+                                />
+                            </div>
 
-                        <div>
-                            <label
-                                htmlFor="studentId"
-                                className="block text-sm font-medium text-gray-900"
-                            >
-                                學號
-                            </label>
-                            <input
-                                type="text"
-                                id="studentId"
-                                value={userInfo.studentId}
-                                readOnly
-                                className="mt-2 block w-full rounded-md bg-gray-100 text-gray-500 border border-gray-300 shadow-sm sm:text-sm cursor-not-allowed"
-                            />
+                            <div>
+                                <label
+                                    htmlFor="academyRecords_name_grad"
+                                    className="block text-sm font-medium text-gray-900"
+                                >
+                                    系級
+                                </label>
+                                <input
+                                    type="text"
+                                    id="academyRecords_name_grad"
+                                    value={`${userFromPortal.academyRecords.name} ${userFromPortal.academyRecords.grad} 年級`}
+                                    readOnly
+                                    className="px-2 py-1 mt-2 block w-full rounded-md bg-gray-100 text-gray-500 border border-gray-300 shadow-sm sm:text-sm cursor-not-allowed"
+                                />
+                            </div>
                         </div>
 
                         <div>
@@ -190,7 +206,7 @@ export default function SignUpForm({ userInfo, navigate }: { userInfo: UserInfo;
                                 htmlFor="nickname"
                                 className="block text-sm font-medium text-gray-900"
                             >
-                                暱稱（在應用程式中顯示的用戶名）
+                                暱稱<span className='text-red-400'>*</span>（在應用程式中顯示的用戶名）
                             </label>
                             <input
                                 type="text"
@@ -198,7 +214,7 @@ export default function SignUpForm({ userInfo, navigate }: { userInfo: UserInfo;
                                 id="nickname"
                                 value={formData.nickname}
                                 onChange={handleChange}
-                                className="mt-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-600 focus:ring-indigo-600 sm:text-sm"
+                                className="px-2 py-1 mt-2 block w-full rounded-md border-gray-300 border shadow-sm sm:text-sm bg-white"
                                 placeholder="Enter your nickname"
                             />
                         </div>
@@ -208,7 +224,7 @@ export default function SignUpForm({ userInfo, navigate }: { userInfo: UserInfo;
                                 htmlFor="password"
                                 className="block text-sm font-medium text-gray-900"
                             >
-                                密碼
+                                密碼<span className='text-red-400'>*</span>
                             </label>
                             <input
                                 type="password"
@@ -220,7 +236,7 @@ export default function SignUpForm({ userInfo, navigate }: { userInfo: UserInfo;
                                     handleChange(e)
                                     passwordCheck(e)
                                 }}
-                                className="mt-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-600 focus:ring-indigo-600 sm:text-sm"
+                                className="px-2 py-1 mt-2 block w-full rounded-md border-gray-300 border shadow-sm sm:text-sm bg-white"
                                 placeholder="Enter your password"
                             />
                         </div>
@@ -230,14 +246,14 @@ export default function SignUpForm({ userInfo, navigate }: { userInfo: UserInfo;
                                 htmlFor="passwordC"
                                 className="block text-sm font-medium text-gray-900"
                             >
-                                確認密碼
+                                確認密碼<span className='text-red-400'>*</span>
                             </label>
                             <input
                                 type="password"
                                 autoComplete="new-password2"
                                 ref={passwordCRef}
                                 id="passwordC"
-                                className="mt-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-600 focus:ring-indigo-600 sm:text-sm"
+                                className="px-2 py-1 mt-2 block w-full rounded-md border-gray-300 border shadow-sm sm:text-sm bg-white"
                                 placeholder="Enter your password again"
                             />
                         </div>

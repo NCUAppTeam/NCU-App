@@ -113,4 +113,27 @@ export default class EventController {
         return event
     }
 
+    /**
+     * Get event types
+     * 
+     * @returns {Array<{ type_id: number; type_name: string }>} - Array of event types
+     * 
+     * @throws {Error} - Throws an error if the query fails
+     */
+    public async getEventTypes(): Promise<Array<{ type_id: number; type_name: string }> | null> {
+        const { data, error } = await supabase
+            .from('event_type')
+            .select('*')
+            .contains('hashtag_relation', [0]) // Use contains for array comparison
+            .order('type_id', { ascending: true });
+    
+        // Error handling
+        if (error) {
+            ErrorHandler.handleSupabaseError(error);
+            return null;
+        }
+    
+        return data;
+    }
 }
+

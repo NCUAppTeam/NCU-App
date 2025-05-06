@@ -1,5 +1,6 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useEffect } from 'react';
+import AcornLoading from '../components/pages/home/AcornLoading';
 
 export const Route = createFileRoute('/callback')({
   component: Callback,
@@ -55,10 +56,10 @@ function Callback() {
           }
         });
 
-        const userData = await userResponse.json();
-        console.log('使用者資訊:', userData);
-        const stringifyData: string = JSON.stringify(userData);
-        navigate({ to: '/signup', state: { post: { userData: stringifyData } } }) // 導向註冊頁面，並傳遞使用者資訊
+        const portalData = await userResponse.json();
+        const stringifyData: string = JSON.stringify(portalData);
+
+        navigate({ to: '/signup', state: { post: { portalData: stringifyData } } }) // 導向註冊頁面，並傳遞使用者資訊
       } catch (error) {
         console.error('OAuth 登入失敗:', error);
         navigate({ to: '/' });
@@ -69,8 +70,8 @@ function Callback() {
   }, [navigate]);
 
   return (
-    <div>
-      <h2>正在處理登入...</h2>
+    <div className='w-full lg:w-2/3 mx-auto flex flex-col lg:flex-row justify-center'>
+      <AcornLoading />
     </div>
   );
 }

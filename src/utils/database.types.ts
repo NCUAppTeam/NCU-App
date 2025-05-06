@@ -114,58 +114,56 @@ export type Database = {
         }
         Relationships: []
       }
-      identities: {
-        Row: {
-          identity_name: string
-          identity_no: number
-        }
-        Insert: {
-          identity_name?: string
-          identity_no?: number
-        }
-        Update: {
-          identity_name?: string
-          identity_no?: number
-        }
-        Relationships: []
-      }
       members: {
         Row: {
-          avatar: string
+          avatar: string | null
+          bio: string | null
           created_at: string
-          fk_email: string
-          fk_identity: number
+          department: string | null
+          email: string
           grad_time: string | null
+          grade: number | null
+          identity: number
           name: string
+          phone: string | null
+          profileBackground: string | null
+          studentId: string | null
+          username: string | null
           uuid: string
         }
         Insert: {
-          avatar?: string
+          avatar?: string | null
+          bio?: string | null
           created_at?: string
-          fk_email?: string
-          fk_identity?: number
+          department?: string | null
+          email: string
           grad_time?: string | null
+          grade?: number | null
+          identity?: number
           name: string
+          phone?: string | null
+          profileBackground?: string | null
+          studentId?: string | null
+          username?: string | null
           uuid?: string
         }
         Update: {
-          avatar?: string
+          avatar?: string | null
+          bio?: string | null
           created_at?: string
-          fk_email?: string
-          fk_identity?: number
+          department?: string | null
+          email?: string
           grad_time?: string | null
+          grade?: number | null
+          identity?: number
           name?: string
+          phone?: string | null
+          profileBackground?: string | null
+          studentId?: string | null
+          username?: string | null
           uuid?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "members_fk_identity_fkey"
-            columns: ["fk_identity"]
-            isOneToOne: false
-            referencedRelation: "identities"
-            referencedColumns: ["identity_no"]
-          },
-        ]
+        Relationships: []
       }
       registrations: {
         Row: {
@@ -365,3 +363,4 @@ export type CompositeTypes<
   : PublicCompositeTypeNameOrOptions extends keyof PublicSchema["CompositeTypes"]
     ? PublicSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never
+

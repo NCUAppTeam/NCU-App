@@ -2,11 +2,10 @@ import ErrorHandler from "../../../utils/ErrorHandler";
 import { supabase } from "../../../utils/supabase";
 
 import User, { DBUser } from '../Entities/User';
+import UserFromPortal from "../Entities/UserFromPortal";
 import UserService from '../Services/UserService';
-import UserSignupData from "../Entities/UserSignupData";
 
 const USER_TABLE_NAME = "members"
-
 
 export default class UserController {
 
@@ -80,36 +79,29 @@ export default class UserController {
      *        )
      * 
      * @param   {string} userID     - Target user ID
-     * @param   {string} fields     - The columns to retrieve
      * 
      * @returns {User}              - The target user entity (null if not found)
      * 
      * @author Henry C. (@yeahlowflicker)
      */
-    public async findUserByID(userID: string, fields?: string) : Promise<User | null> {
+    public async findUserByID(userID: string): Promise<User | null> {
 
         const { data, error } = await supabase
             .from(USER_TABLE_NAME)
-            .select(fields)
+            .select("*")
             .eq("uuid", userID)
             .returns<DBUser>()
-            .limit(1)
-            .single()
-
+            .single();
 
         // Error handling
-        if (error) {
-            ErrorHandler.handleSupabaseError(error)
-            return null
+        if (error || !data) {
+            ErrorHandler.handleSupabaseError(error);
+            return null;
         }
 
-        if (!data)
-            return null
-        
-        // Type conversion: DBUser -> User
-        const user : User = UserService.parseUser(data)
+        const user = UserService.parseUser(data);
 
-        return user
+        return user;
     }
     
     /**
@@ -122,20 +114,27 @@ export default class UserController {
      *          (user: User) => { ... }
      *        )
      * 
-     * @param   {UserSignupData} userSignupData - The user data to create
+     * @param   {UserFromPortal} userPortal - The user data access from NCU Portal
      * 
      * @returns {User} - The created user entity
      * 
      * @author Boyiliu (@boyiliu1007)
+     * @author Susan Chen(@1989ONCE)(refactor)
      */
 
-    public async createUser(userSignupData: UserSignupData): Promise<User | null> {
+    public async createUser(userPortal: UserFromPortal, pwd: string, username: string): Promise<User | null> {
         
         // should signup in users table at auth schema
         const { data, error } = await supabase.auth.signUp({
-            email: userSignupData.email,
-            password: userSignupData.password,
+            email: userPortal.email,
+            password: pwd,
         }) 
+
+        if (pwd.length < 8) {
+            console.error("Password too short");
+            return null;
+        }
+
         if (error) {
             // handle auth error cannot use handleSupabaseError
             console.log(error.name);
@@ -147,20 +146,18 @@ export default class UserController {
         // get user id from users table at auth schema
         const userID = data.user?.id
 
+        if (!userID) {
+            console.error("User ID is undefined");
+            return null;
+        }
+        
+        //  convert user portal info to DBUser to fit memebers' schema
+        const dbData : DBUser = UserService.convertSignupToDB(userPortal, userID, username)
+
         // insert into members table at public schema
         const { error: insertMemberError } = await supabase
             .from(USER_TABLE_NAME)
-            .insert(
-                {   
-                    uuid: userID,
-                    name: userSignupData.name,
-                    email: userSignupData.email,
-                    username: userSignupData.username,
-                    studentId: userSignupData.studentId,
-                    identity: 2,
-                    created_at: new Date().toISOString(),
-                }
-            )
+            .insert(dbData)
             .single();
         if (insertMemberError) {
             console.log("Error inserting member:", insertMemberError);
@@ -183,6 +180,7 @@ export default class UserController {
         }
 
         console.log("User created successfully:", memberData);
+        alert("註冊成功！請使用剛剛註冊的信箱及密碼登入！")
 
         // NOTE: Signing out immediately after signup may be unexpected—
         // please confirm if automatic sign-in is not desired.
@@ -193,5 +191,69 @@ export default class UserController {
         }
 
         return UserService.parseUser(memberData);
+    }
+
+    /**
+     * Get the Current User, return the user information from members table by uuid
+     * 
+     * @usage userController.getCurrentUser().then(
+     *          (user: User) => { ... }
+     *        )
+     * 
+     * @returns {User} - The created user entity
+     * 
+     * @author Susan Chen(@1989ONCE)
+     */
+
+    public async getCurrentUser(): Promise<User | null> {
+        const { data: { user } } = await supabase.auth.getUser()
+
+        if (!user) {
+            return null
+        }
+        const userID = user.id
+        const { data, error } = await supabase
+            .from(USER_TABLE_NAME)
+            .select("*")
+            .eq("uuid", userID)
+            .single()
+        if (error) {
+            console.error("Error retrieving member data:", error);
+            ErrorHandler.handleSupabaseError(error);
+            return null;
+        }
+
+        if (!data) {
+            console.error("User data not found");
+            return null;
+        }
+        
+        const userData : User | null = await this.findUserByID(userID)
+        if (!userData) {
+            console.error("User not found");
+            return null;
+        }
+
+        return userData
+
+    }
+
+    public async updateUser(userID: string, userData: Partial<User>): Promise<User | null> {
+        const { data, error } = await supabase
+            .from(USER_TABLE_NAME)
+            .update(userData)
+            .eq("uuid", userID)
+            .returns<DBUser>()
+            .single()
+
+        if (error) {
+            ErrorHandler.handleSupabaseError(error)
+            return null
+        }
+
+        if (!data)
+            return null
+
+        return UserService.parseUser(data)
     }
 }

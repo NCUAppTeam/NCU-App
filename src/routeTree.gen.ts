@@ -20,7 +20,7 @@ import { Route as MapIndexImport } from './routes/map/index'
 import { Route as EventsIndexImport } from './routes/events/index'
 import { Route as DinnerIndexImport } from './routes/dinner/index'
 import { Route as CalendarIndexImport } from './routes/calendar/index'
-import { Route as HomeInfoCardImport } from './routes/home/infoCard'
+import { Route as HomeProfileImport } from './routes/home/profile'
 import { Route as EventsSelectImport } from './routes/events/select'
 import { Route as EventsCreateImport } from './routes/events/create'
 import { Route as EventsEventIdImport } from './routes/events/$eventId'
@@ -72,8 +72,8 @@ const CalendarIndexRoute = CalendarIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const HomeInfoCardRoute = HomeInfoCardImport.update({
-  path: '/home/infoCard',
+const HomeProfileRoute = HomeProfileImport.update({
+  path: '/home/profile',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -145,11 +145,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EventsSelectImport
       parentRoute: typeof rootRoute
     }
-    '/home/infoCard': {
-      id: '/home/infoCard'
-      path: '/home/infoCard'
-      fullPath: '/home/infoCard'
-      preLoaderRoute: typeof HomeInfoCardImport
+    '/home/profile': {
+      id: '/home/profile'
+      path: '/home/profile'
+      fullPath: '/home/profile'
+      preLoaderRoute: typeof HomeProfileImport
       parentRoute: typeof rootRoute
     }
     '/calendar/': {
@@ -200,7 +200,7 @@ export interface FileRoutesByFullPath {
   '/events/$eventId': typeof EventsEventIdRoute
   '/events/create': typeof EventsCreateRoute
   '/events/select': typeof EventsSelectRoute
-  '/home/infoCard': typeof HomeInfoCardRoute
+  '/home/profile': typeof HomeProfileRoute
   '/calendar': typeof CalendarIndexRoute
   '/dinner': typeof DinnerIndexRoute
   '/events': typeof EventsIndexRoute
@@ -216,7 +216,7 @@ export interface FileRoutesByTo {
   '/events/$eventId': typeof EventsEventIdRoute
   '/events/create': typeof EventsCreateRoute
   '/events/select': typeof EventsSelectRoute
-  '/home/infoCard': typeof HomeInfoCardRoute
+  '/home/profile': typeof HomeProfileRoute
   '/calendar': typeof CalendarIndexRoute
   '/dinner': typeof DinnerIndexRoute
   '/events': typeof EventsIndexRoute
@@ -233,7 +233,7 @@ export interface FileRoutesById {
   '/events/$eventId': typeof EventsEventIdRoute
   '/events/create': typeof EventsCreateRoute
   '/events/select': typeof EventsSelectRoute
-  '/home/infoCard': typeof HomeInfoCardRoute
+  '/home/profile': typeof HomeProfileRoute
   '/calendar/': typeof CalendarIndexRoute
   '/dinner/': typeof DinnerIndexRoute
   '/events/': typeof EventsIndexRoute
@@ -251,7 +251,7 @@ export interface FileRouteTypes {
     | '/events/$eventId'
     | '/events/create'
     | '/events/select'
-    | '/home/infoCard'
+    | '/home/profile'
     | '/calendar'
     | '/dinner'
     | '/events'
@@ -266,7 +266,7 @@ export interface FileRouteTypes {
     | '/events/$eventId'
     | '/events/create'
     | '/events/select'
-    | '/home/infoCard'
+    | '/home/profile'
     | '/calendar'
     | '/dinner'
     | '/events'
@@ -281,7 +281,7 @@ export interface FileRouteTypes {
     | '/events/$eventId'
     | '/events/create'
     | '/events/select'
-    | '/home/infoCard'
+    | '/home/profile'
     | '/calendar/'
     | '/dinner/'
     | '/events/'
@@ -298,7 +298,7 @@ export interface RootRouteChildren {
   EventsEventIdRoute: typeof EventsEventIdRoute
   EventsCreateRoute: typeof EventsCreateRoute
   EventsSelectRoute: typeof EventsSelectRoute
-  HomeInfoCardRoute: typeof HomeInfoCardRoute
+  HomeProfileRoute: typeof HomeProfileRoute
   CalendarIndexRoute: typeof CalendarIndexRoute
   DinnerIndexRoute: typeof DinnerIndexRoute
   EventsIndexRoute: typeof EventsIndexRoute
@@ -314,7 +314,7 @@ const rootRouteChildren: RootRouteChildren = {
   EventsEventIdRoute: EventsEventIdRoute,
   EventsCreateRoute: EventsCreateRoute,
   EventsSelectRoute: EventsSelectRoute,
-  HomeInfoCardRoute: HomeInfoCardRoute,
+  HomeProfileRoute: HomeProfileRoute,
   CalendarIndexRoute: CalendarIndexRoute,
   DinnerIndexRoute: DinnerIndexRoute,
   EventsIndexRoute: EventsIndexRoute,
@@ -341,7 +341,7 @@ export const routeTree = rootRoute
         "/events/$eventId",
         "/events/create",
         "/events/select",
-        "/home/infoCard",
+        "/home/profile",
         "/calendar/",
         "/dinner/",
         "/events/",
@@ -370,8 +370,8 @@ export const routeTree = rootRoute
     "/events/select": {
       "filePath": "events/select.tsx"
     },
-    "/home/infoCard": {
-      "filePath": "home/infoCard.tsx"
+    "/home/profile": {
+      "filePath": "home/profile.tsx"
     },
     "/calendar/": {
       "filePath": "calendar/index.tsx"

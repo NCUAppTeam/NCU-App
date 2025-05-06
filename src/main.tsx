@@ -19,7 +19,7 @@ declare module '@tanstack/react-router' {
     router: typeof router
   }
   interface HistoryState {
-    post?: { userData: string };
+    post?: { portalData: string };
   }
 }
 

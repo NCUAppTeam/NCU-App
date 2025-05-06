@@ -1,12 +1,12 @@
-import forestImage from "../../../assets/forest.jpg";
+import squirrelImage from "../../../assets/squirrel.jpg";
 
 export function DinnerStory() {
     return (
         <div className="card bg-base-100 image-full w-full max-w-4xl h-64 sm:h-80 md:h-96 lg:h-[28rem] shadow-sm mx-auto my-6 overflow-hidden">
             <figure className="w-full h-full">
                 <img
-                    src={forestImage}
-                    alt="Forest"
+                    src={squirrelImage}
+                    alt="squirrel"
                     className="object-cover w-full h-full"
                 />
             </figure>

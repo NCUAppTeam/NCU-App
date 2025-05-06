@@ -9,7 +9,6 @@ export const Route = createFileRoute('/calendar/')({
 function CalendarIndex() {
   return (
     <>
-      {/* <Header /> */}
       <div>Hello /calendar/!</div>
     </>
   )

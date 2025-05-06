@@ -20,19 +20,19 @@ export default class User {
     public avatar:              string  = ""
     public profileBackground:   string  = ""
     public joinedAt:            Date    = new Date()
-    public identity:            number  = 0
+    public identity:            number  = 2
     public department:          string  = ""
-    public grade:               string  = ""
+    public grade:               number  = 1
     public bio:                 string  = ""
+    public studentId:          string  = ""
+    public grad_time:           string  = ""
 
 
     public convertIdentity(): string {
         switch (this.identity) {
-            case 1: return "管理員"
-            case 2: return "學生"
-            case 3: return "校友"
-            case 4: return "教職員"
-            default: return "用戶"
+            case 1: return "開發團隊"
+            case 2: return "Verified"
+            default: return "未驗證"
         }
     }
 }

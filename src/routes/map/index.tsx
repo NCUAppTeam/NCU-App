@@ -9,7 +9,6 @@ export const Route = createFileRoute('/map/')({
 function MapIndex() {
     return (
         <>
-            {/* <Header /> */}
             <div>Hello /map/!</div>
         </>
     )

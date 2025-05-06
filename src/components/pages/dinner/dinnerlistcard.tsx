@@ -13,9 +13,9 @@ export function DinnerListCard({
     openDetail: (restaurant: Restaurant) => void;
 }) {
     return (
-        <div className="flex flex-row card card-side bg-white shadow-sm h-24 my-4 shadow-xl rounded-lg">
+        <div className="flex flex-row card card-side bg-white shadow-sm h-32 my-4 shadow-xl rounded-lg">
             {/* Image Section */}
-            <div className="flex-shrink-0 w-24 h-24">
+            <div className="flex-shrink-0 w-32 h-32">
                 <img
                     className="object-cover w-full h-full border-2 border-gray-200 rounded-l-lg"
                     src={restaurant.image}
@@ -31,10 +31,10 @@ export function DinnerListCard({
             </div>
 
             {/* Button Section */}
-            <div className="flex-shrink-0 w-1/3 bg-gray-200 flex flex-row justify-center items-center rounded-r-lg px-4">
-                <div className="card-actions flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-2">
+            <div className="flex-shrink-0 w-1/3 bg-gray-100 flex flex-row justify-center items-center rounded-r-lg px-4">
+                <div className="card-actions flex flex-col sm:flex-row items-center sm:justify-center space-y-2 sm:space-y-0">
                     <button
-                        className={`btn btn-sm sm:btn-md ${isSelected ? "bg-rose-100 hover:bg-rose-200 text-rose-700 hover:text-rose-800" : "bg-green-600 hover:bg-green-500 text-white"}`}
+                        className={`btn btn-md ${isSelected ? "bg-rose-100 hover:bg-rose-200 text-rose-700 hover:text-rose-800" : "bg-green-600 hover:bg-green-500 text-white"}`}
                         onClick={() => toggleSelect(restaurant)}
                     >
                         {isSelected ?
@@ -49,7 +49,7 @@ export function DinnerListCard({
                         }
                     </button>
                     <button
-                        className="btn btn-sm sm:btn-md bg-sky-200 hover:bg-sky-600 text-sky-700 hover:text-white"
+                        className="btn btn-md bg-sky-200 hover:bg-sky-600 text-sky-700 hover:text-white"
                         onClick={() => openDetail(restaurant)}
                     >
                         <div className="flex flex-row items-center">

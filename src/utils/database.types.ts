@@ -59,6 +59,7 @@ export type Database = {
           end_time: string | null
           fee: number | null
           id: number
+          img: string | null
           location: string | null
           name: string | null
           start_time: string | null
@@ -71,6 +72,7 @@ export type Database = {
           end_time?: string | null
           fee?: number | null
           id?: number
+          img?: string | null
           location?: string | null
           name?: string | null
           start_time?: string | null
@@ -83,6 +85,7 @@ export type Database = {
           end_time?: string | null
           fee?: number | null
           id?: number
+          img?: string | null
           location?: string | null
           name?: string | null
           start_time?: string | null
@@ -126,6 +129,7 @@ export type Database = {
           identity: number
           name: string
           phone: string | null
+          point: number | null
           profileBackground: string | null
           studentId: string | null
           username: string | null
@@ -142,6 +146,7 @@ export type Database = {
           identity?: number
           name: string
           phone?: string | null
+          point?: number | null
           profileBackground?: string | null
           studentId?: string | null
           username?: string | null
@@ -158,6 +163,7 @@ export type Database = {
           identity?: number
           name?: string
           phone?: string | null
+          point?: number | null
           profileBackground?: string | null
           studentId?: string | null
           username?: string | null

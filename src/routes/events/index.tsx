@@ -62,8 +62,8 @@ function EventIndex() {
           <div className="flex space-x-1">
             <button
               onClick={() => handleFilterSelect("All")}
-              className={`px-4 py-1 text-sm rounded text-gray-500 hover:bg-gray-600
-                ${selectedType === "All" ? 'text-white bg-gray-200 font-semibold' : 'bg-gray-200'}`}
+              className={`px-4 py-1 text-sm rounded hover:bg-[#74ACF0]
+                ${selectedType === "All" ? 'text-white bg-[#74ACF0] font-semibold' : 'text-[#4F4F4F] bg-[#DBEAFE]'}`}
             >
               All
             </button>
@@ -71,8 +71,8 @@ function EventIndex() {
               <button
                 key={type_id}
                 onClick={() => handleFilterSelect(String(type_id))}
-                className={`px-4 py-1 text-sm rounded text-gray-500 hover:bg-gray-600
-                  ${selectedType === String(type_id) ? 'text-white bg-gray-200 font-semibold' : 'bg-gray-200'}`}
+                className={`px-4 py-1 text-sm rounded hover:bg-[#74ACF0]
+                  ${selectedType === String(type_id) ? 'text-white bg-[#74ACF0] font-semibold' : 'text-[#4F4F4F] bg-[#DBEAFE]'}`}
               >
                 {type_name}
               </button>
@@ -81,7 +81,7 @@ function EventIndex() {
         </div>
 
         <div className="flex-1 bg-gray-800 p-4">
-          <h1 className="ml-4 text-xl text-white">最新揪人</h1>
+          <h1 className="ml-4 text-xl text-white">{selectedType === 'All' ? '所有揪人' : eventTypes.at(Number(selectedType) - 1)?.type_name}</h1>
           <div className="mt-2">
             <div className="grid grid-cols-2 gap-4">
               {filteredEvents.map((event) => (

@@ -22,6 +22,11 @@ SET row_security = off;
 -- Data for Name: audit_log_entries; Type: TABLE DATA; Schema: auth; Owner: supabase_auth_admin
 --
 
+INSERT INTO "auth"."audit_log_entries" ("instance_id", "id", "payload", "created_at", "ip_address") VALUES
+	('00000000-0000-0000-0000-000000000000', 'e5a4fb59-cf52-4c99-a050-a845953bf219', '{"action":"login","actor_id":"c7e80cb0-7d3d-411f-9983-5e3addf62980","actor_username":"ncuapp@test.com","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}', '2025-05-06 08:15:39.486378+00', ''),
+	('00000000-0000-0000-0000-000000000000', '4e7c8b69-0ea7-4e67-a0a8-697452b590ff', '{"action":"logout","actor_id":"c7e80cb0-7d3d-411f-9983-5e3addf62980","actor_username":"ncuapp@test.com","actor_via_sso":false,"log_type":"account"}', '2025-05-06 08:15:39.569334+00', ''),
+	('00000000-0000-0000-0000-000000000000', '4fc32859-47c2-4061-8b90-f67e3322329c', '{"action":"login","actor_id":"c7e80cb0-7d3d-411f-9983-5e3addf62980","actor_username":"ncuapp@test.com","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}', '2025-05-06 08:16:04.655976+00', ''),
+	('00000000-0000-0000-0000-000000000000', '3caaa1f5-f652-4834-9f66-0b9c406fcc4b', '{"action":"logout","actor_id":"c7e80cb0-7d3d-411f-9983-5e3addf62980","actor_username":"ncuapp@test.com","actor_via_sso":false,"log_type":"account"}', '2025-05-06 08:16:04.832161+00', '');
 
 
 --
@@ -35,7 +40,7 @@ SET row_security = off;
 --
 
 INSERT INTO "auth"."users" ("instance_id", "id", "aud", "role", "email", "encrypted_password", "email_confirmed_at", "invited_at", "confirmation_token", "confirmation_sent_at", "recovery_token", "recovery_sent_at", "email_change_token_new", "email_change", "email_change_sent_at", "last_sign_in_at", "raw_app_meta_data", "raw_user_meta_data", "is_super_admin", "created_at", "updated_at", "phone", "phone_confirmed_at", "phone_change", "phone_change_token", "phone_change_sent_at", "email_change_token_current", "email_change_confirm_status", "banned_until", "reauthentication_token", "reauthentication_sent_at", "is_sso_user", "deleted_at", "is_anonymous") VALUES
-	('00000000-0000-0000-0000-000000000000', 'c7e80cb0-7d3d-411f-9983-5e3addf62980', 'authenticated', 'authenticated', 'ncuapp@test.com', '$2a$10$Y3OTXkqoLAgYrjGpEeMKLOuMnrYWwvLTRdqXwgRO9npX50TD8Ku32', '2024-10-02 10:35:35.563744+00', NULL, '', NULL, '', NULL, '', '', NULL, '2025-05-03 13:11:17.942767+00', '{"provider": "email", "providers": ["email"]}', '{}', NULL, '2024-10-02 10:35:35.560964+00', '2025-05-04 09:27:55.540373+00', NULL, NULL, '', '', NULL, '', 0, NULL, '', NULL, false, NULL, false);
+	('00000000-0000-0000-0000-000000000000', 'c7e80cb0-7d3d-411f-9983-5e3addf62980', 'authenticated', 'authenticated', 'ncuapp@test.com', '$2a$10$Y3OTXkqoLAgYrjGpEeMKLOuMnrYWwvLTRdqXwgRO9npX50TD8Ku32', '2024-10-02 10:35:35.563744+00', NULL, '', NULL, '', NULL, '', '', NULL, '2025-05-06 08:16:04.656364+00', '{"provider": "email", "providers": ["email"]}', '{}', NULL, '2024-10-02 10:35:35.560964+00', '2025-05-06 08:16:04.657162+00', NULL, NULL, '', '', NULL, '', 0, NULL, '', NULL, false, NULL, false);
 
 
 --
@@ -166,8 +171,8 @@ INSERT INTO "public"."food_category" ("id", "food_category") VALUES
 -- Data for Name: members; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO "public"."members" ("uuid", "created_at", "name", "email", "identity", "grad_time", "avatar", "username", "phone", "profileBackground", "department", "grade", "bio", "studentId") VALUES
-	('c7e80cb0-7d3d-411f-9983-5e3addf62980', '2024-10-02 10:35:46+00', 'NCU APP', 'ncuapp@test.com', 1, NULL, 'http://127.0.0.1:54321/storage/v1/object/public/avatar/logo.png?t=2025-04-27T15%3A28%3A56.405Z', NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO "public"."members" ("uuid", "created_at", "name", "identity", "grad_time", "avatar", "bio", "department", "email", "grade", "phone", "profileBackground", "studentId", "username") VALUES
+	('c7e80cb0-7d3d-411f-9983-5e3addf62980', '2024-10-02 10:35:46+00', 'NCU APP', 1, NULL, 'http://127.0.0.1:54321/storage/v1/object/public/avatar/logo.png?t=2025-04-27T15%3A28%3A56.405Z', NULL, NULL, 'ncuapp@test.com', NULL, NULL, NULL, NULL, 'ncuapp-devteam');
 
 
 --
@@ -238,7 +243,7 @@ INSERT INTO "storage"."objects" ("id", "bucket_id", "name", "owner", "created_at
 -- Name: refresh_tokens_id_seq; Type: SEQUENCE SET; Schema: auth; Owner: supabase_auth_admin
 --
 
-SELECT pg_catalog.setval('"auth"."refresh_tokens_id_seq"', 79, true);
+SELECT pg_catalog.setval('"auth"."refresh_tokens_id_seq"', 81, true);
 
 
 --

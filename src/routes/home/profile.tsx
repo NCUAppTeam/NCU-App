@@ -34,12 +34,12 @@ function ProfilePage() {
         phone: '0912345678',
     });
 
-    const handleChange = (e) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleImageUpload = (name, file) => {
+    const handleImageUpload = (name: string, file: File | null) => {
         const reader = new FileReader();
         reader.onload = () => {
             setFormData((prev) => ({ ...prev, [name]: reader.result }));
@@ -55,7 +55,7 @@ function ProfilePage() {
                     src={formData.profileBackground}
                     alt="Profile Background"
                     className="object-cover w-full h-full rounded-xl cursor-pointer hover:opacity-80"
-                    onClick={() => document.getElementById('profileBackgroundInput').click()}
+                    onClick={() => document.getElementById('profileBackgroundInput')?.click()}
                 />
                 {isEditing && (
                     <div className="absolute top-2 right-2">
@@ -63,7 +63,7 @@ function ProfilePage() {
                             id="profileBackgroundInput"
                             type="file"
                             accept="image/*"
-                            onChange={(e) => handleImageUpload('profileBackground', e.target.files[0])}
+                            onChange={(e) => handleImageUpload('profileBackground', e.target.files?.[0] || null)}
                             className="hidden"
                         />
                     </div>
@@ -91,14 +91,14 @@ function ProfilePage() {
                         src={formData.avatar}
                         alt="Avatar"
                         className="w-24 h-24 rounded-full border-4 border-white object-cover cursor-pointer"
-                        onClick={() => document.getElementById('avatarInput').click()}
+                        onClick={() => document.getElementById('avatarInput')?.click()}
                     />
                     {isEditing && (
                         <input
                             id="avatarInput"
                             type="file"
                             accept="image/*"
-                            onChange={(e) => handleImageUpload('avatar', e.target.files[0])}
+                            onChange={(e) => handleImageUpload('avatar', e.target.files?.[0] || null)}
                             className="hidden"
                         />
                     )}
@@ -146,7 +146,21 @@ function ProfilePage() {
     );
 }
 
-function Field({ label, name, value, isEditing, handleChange, multiline = false }) {
+function Field({
+    label,
+    name,
+    value,
+    isEditing,
+    handleChange,
+    multiline = false,
+}: {
+    label: string;
+    name: string;
+    value: string;
+    isEditing: boolean;
+    handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+    multiline?: boolean;
+}) {
     return (
         <div>
             <label className="block font-semibold text-gray-700 mb-1">{label}</label>

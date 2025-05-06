@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import { Image, VStack } from "../..";
 import { DrawerOption } from "./DrawerOption";
 import SidebarFooter from "./SidebarFooter";
@@ -24,7 +25,7 @@ export const DrawerSideBar = ({ name, avatar }: { name: string, avatar: string }
                             <Image src={avatar} children={undefined} className="mb-2 w-10 rounded-full" />
                             <p className="font-bold">{name}</p>
                             <SmallTalk />
-                            <p className="text-xs">View Profile</p>
+                            <Link to="/home/profile" ><p className="text-xs">View Profile</p></Link>
                             <div className="divider divider-neutral" />
                             <DrawerOption />
                         </VStack>
@@ -39,7 +40,7 @@ export const DrawerSideBar = ({ name, avatar }: { name: string, avatar: string }
                     <Image src={avatar} children={undefined} className="mb-2 w-10 rounded-full" />
                     <p className="font-bold">{name}</p>
                     <SmallTalk />
-                    <p className="text-xs">View Profile</p>
+                    <Link to="/home/profile" ><p className="text-xs">View Profile</p></Link>
 
                     <div className="divider divider-neutral" />
 

@@ -4,11 +4,10 @@ import { useRef, useState } from "react";
 import zxcvbn from "zxcvbn";
 import UserController from '../../../backend/user/Controllers/UserController';
 import UserFromPortal from '../../../backend/user/Entities/UserFromPortal';
-import UserSignupData from '../../../backend/user/Entities/UserSignupData';
 
 export default function SignUpForm({ userFromPortal, navigate }: { userFromPortal: UserFromPortal; navigate: ReturnType<typeof useNavigate> }) {
     const [formData, setFormData] = useState({
-        nickname: '',
+        username: '',
         password: '',
     })
     const passwordCRef = useRef<HTMLInputElement>(null);
@@ -28,14 +27,14 @@ export default function SignUpForm({ userFromPortal, navigate }: { userFromPorta
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
-        const trimmedNickname = formData.nickname.trim()
+        const trimmedUserName = formData.username.trim()
 
-        if (!trimmedNickname) {
+        if (!trimmedUserName) {
             alert('暱稱不能為空，且不能只包含空白字符')
             return
         }
 
-        if (trimmedNickname.length > 10) {
+        if (trimmedUserName.length > 10) {
             alert('暱稱長度最多為 10 個字元')
             return
         }
@@ -52,12 +51,9 @@ export default function SignUpForm({ userFromPortal, navigate }: { userFromPorta
             alert('密碼長度最多為 20 個字元')
             return
         }
-        if (!/^[A-Za-z\d]+$/.test(formData.password)) {
-            alert('密碼只能包含英文字母和數字，不能有特殊符號')
-            return
-        }
+
         if (!/(?=.*[A-Za-z])(?=.*\d)/.test(formData.password)) {
-            alert('密碼必須包含至少一個英文字母和一個數字')
+            alert('密碼必須包含至少一個英文字母和一個數字，可包含特殊字符')
             return
         }
 
@@ -68,45 +64,23 @@ export default function SignUpForm({ userFromPortal, navigate }: { userFromPorta
 
         setIsLoading(true)
         try {
-            const signupData: UserSignupData = {
-                name: userFromPortal.chineseName,
-                email: userFromPortal.email,
-                password: formData.password,
-                username: trimmedNickname,
-                studentId: userFromPortal.studentId,
-            }
-            const user = await addUser(signupData)
+            const userController = new UserController()
+            // send formData + userInfo to supabase
+            const user = await userController.createUser(userFromPortal, formData.password, trimmedUserName);
+
             if (!user) {
                 alert('註冊失敗，請檢查您的資料並重試。')
                 return
             }
             console.log('User created successfully:')
-            console.log(window.location.href)
-
+            console.log(user.convertIdentity())
             navigate({ to: "/login", search: { redirect: "/" } })
         } catch (error) {
             console.log(error)
             console.error('註冊失敗:', error)
-            alert('註冊失敗，請檢查您的資料後再試')
+            alert('發生錯誤，請稍後再試。')
         } finally {
             setIsLoading(false)
-        }
-    }
-
-    // send formData + userInfo to supabase
-    async function addUser(userSignupData: UserSignupData) {
-        const signupInstance = new UserSignupData(userSignupData)
-        const userController = new UserController()
-        const user = await userController.createUser(signupInstance);
-        if (!user) {
-            // Handle error case
-            console.error("Failed to create user");
-            alert('註冊失敗，請檢查您的資料並重試。')
-            return null
-        } else {
-            // Success case - use the user object
-            console.log("User created:", user);
-            return user
         }
     }
 
@@ -167,8 +141,8 @@ export default function SignUpForm({ userFromPortal, navigate }: { userFromPorta
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-2 gap-4">
-                            <div>
+                        <div className="grid grid-cols-3 gap-4">
+                            <div className="col-span-1">
                                 <label
                                     htmlFor="studentId"
                                     className="block text-sm font-medium text-gray-900"
@@ -184,7 +158,7 @@ export default function SignUpForm({ userFromPortal, navigate }: { userFromPorta
                                 />
                             </div>
 
-                            <div>
+                            <div className="col-span-2">
                                 <label
                                     htmlFor="academyRecords_name_grad"
                                     className="block text-sm font-medium text-gray-900"
@@ -203,19 +177,19 @@ export default function SignUpForm({ userFromPortal, navigate }: { userFromPorta
 
                         <div>
                             <label
-                                htmlFor="nickname"
+                                htmlFor="username"
                                 className="block text-sm font-medium text-gray-900"
                             >
                                 暱稱<span className='text-red-400'>*</span>（在應用程式中顯示的用戶名）
                             </label>
                             <input
                                 type="text"
-                                name="nickname"
-                                id="nickname"
-                                value={formData.nickname}
+                                name="username"
+                                id="username"
+                                value={formData.username}
                                 onChange={handleChange}
                                 className="px-2 py-1 mt-2 block w-full rounded-md border-gray-300 border shadow-sm sm:text-sm bg-white"
-                                placeholder="Enter your nickname"
+                                placeholder="Enter your username"
                             />
                         </div>
 

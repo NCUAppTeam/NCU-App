@@ -19,7 +19,7 @@ create table "public"."members" (
     "created_at" timestamp with time zone not null default now(),
     "name" character varying not null,
     "fk_email" character varying not null default 'auth.users.email'::character varying,
-    "fk_identity" integer not null default 5,
+    "identity" integer not null default 5,
     "grad_time" date,
     "avatar" character varying not null default 'http://127.0.0.1:54321/storage/v1/object/public/avatar/defaultAvatar.webp?t=2024-10-02T15%3A40%3A27.045Z'::character varying
 );
@@ -44,10 +44,6 @@ alter table "public"."members" add constraint "members_pkey" PRIMARY KEY using i
 alter table "public"."events" add constraint "events_type_fkey" FOREIGN KEY (type) REFERENCES event_type(type_id) ON UPDATE CASCADE not valid;
 
 alter table "public"."events" validate constraint "events_type_fkey";
-
-alter table "public"."members" add constraint "members_fk_identity_fkey" FOREIGN KEY (fk_identity) REFERENCES identities(identity_no) ON UPDATE CASCADE not valid;
-
-alter table "public"."members" validate constraint "members_fk_identity_fkey";
 
 alter table "public"."members" add constraint "members_uuid_fkey" FOREIGN KEY (uuid) REFERENCES auth.users(id) ON UPDATE CASCADE not valid;
 

@@ -27,7 +27,7 @@ function LoginPage() {
 
 
   const handlePortalSignup = () => {
-    const oauthURL = `https://portal.ncu.edu.tw/oauth2/authorization?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&scope=chinese-name student-id email`;
+    const oauthURL = `https://portal.ncu.edu.tw/oauth2/authorization?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&scope=chinese-name student-id email academy-records`;
     window.location.href = oauthURL;
   };
 

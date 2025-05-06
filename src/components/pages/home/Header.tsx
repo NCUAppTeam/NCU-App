@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { supabase } from "../../../utils/supabase";
+import UserController from '../../../backend/user/Controllers/UserController';
 import { DrawerSideBar } from "./DrawerSideBar";
 
 export const Header: React.FC = () => {
@@ -11,18 +11,12 @@ export const Header: React.FC = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const userId = (await supabase.auth.getUser()).data?.user?.id;
-                if (!userId) {
-                    throw new Error('User ID is undefined');
-                }
-                const { data } = await supabase
-                    .from('members')
-                    .select(`*, identities ( identity_no, identity_name )`)
-                    .eq('uuid', userId);
+                const userController = new UserController();
+                const data = await userController.getCurrentUser();
 
-                if (data && data.length > 0) {
-                    setUserName(data[0].name);
-                    setUserAvatar(data[0].avatar);
+                if (data) {
+                    setUserName(data.name);
+                    setUserAvatar(data.avatar);
                 } else {
                     throw new Error('User data not found');
                 }

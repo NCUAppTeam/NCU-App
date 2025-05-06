@@ -24,6 +24,7 @@ function SignUpPage() {
         academyRecords: {
           name: parsedData.academyRecords.name,
           grad: parsedData.academyRecords.grad,
+          studySystemNo: parsedData.academyRecords.studySystemNo,
         },
       });
     }

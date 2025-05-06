@@ -26,14 +26,6 @@ export function SchoolCalendar() {
                 className='w-full h-[500px] rounded-lg'
                 src='https://calendar.google.com/calendar/embed?src=ncu.acad@gmail.com&ctz=Asia/Taipei'
             />
-            <div>
-                <button>
-                    <div
-                        className='flex justify-center items-center bg-[#FAFAFA] border border-[#E5EBF1] rounded-full'
-                    >
-                    </div>
-                </button>
-            </div>
         </div>
     )
 }

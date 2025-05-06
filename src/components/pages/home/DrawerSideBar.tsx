@@ -14,7 +14,7 @@ export const DrawerSideBar = ({ name, avatar }: { name: string, avatar: string }
                     <div>
                         <Image src={avatar} children={undefined} className="w-10 rounded-full" />
                     </div>
-                    <div className="text-sm font-bold text-gray-700">
+                    <div className="text-sm font-bold text-gray-700 dark:text-white">
                         {name}
                     </div>
                 </label>
@@ -25,7 +25,7 @@ export const DrawerSideBar = ({ name, avatar }: { name: string, avatar: string }
                             <Image src={avatar} children={undefined} className="mb-2 w-10 rounded-full" />
                             <p className="font-bold">{name}</p>
                             <SmallTalk />
-                            <Link to="/home/profile" ><p className="text-xs">View Profile</p></Link>
+                            <Link to="/home/profile" ><p className="py-1 text-xs">View Profile</p></Link>
                             <div className="divider divider-neutral" />
                             <DrawerOption />
                         </VStack>
@@ -38,9 +38,9 @@ export const DrawerSideBar = ({ name, avatar }: { name: string, avatar: string }
             <div className="hidden xl:flex flex-col bg-base-200 text-base-content h-screen w-80 p-4 overflow-y-auto" title='開啟側邊欄 Open sidebar'>
                 <VStack className="w-full h-full self-start">
                     <Image src={avatar} children={undefined} className="mb-2 w-10 rounded-full" />
-                    <p className="font-bold">{name}</p>
+                    <p className="font-bold text-gray-700 dark:text-white">{name}</p>
                     <SmallTalk />
-                    <Link to="/home/profile" ><p className="text-xs">View Profile</p></Link>
+                    <Link to="/home/profile" ><p className="py-1 text-xs">View Profile</p></Link>
 
                     <div className="divider divider-neutral" />
 

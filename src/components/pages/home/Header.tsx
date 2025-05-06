@@ -15,7 +15,7 @@ export const Header: React.FC = () => {
                 const data = await userController.getCurrentUser();
 
                 if (data) {
-                    setUserName(data.name);
+                    setUserName(data.username);
                     setUserAvatar(data.avatar);
                 } else {
                     throw new Error('User data not found');

@@ -26,6 +26,7 @@ export default class User {
     public bio:                 string  = ""
     public studentId:          string  = ""
     public grad_time:           string  = ""
+    public point:               number  = 0
 
 
     public convertIdentity(): string {

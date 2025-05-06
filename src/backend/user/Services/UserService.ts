@@ -35,7 +35,7 @@ const UserService = {
         user.studentId      = record.studentId || '使用者未提供'
         user.grad_time      = record.grad_time || new Date().toISOString()
         user.avatar         = record.avatar || 'https://cdn-icons-png.flaticon.com/512/6596/6596121.png'
-
+        user.point         = record.point || 0
         return user
     },
 
@@ -83,6 +83,7 @@ const UserService = {
             avatar: 'https://cdn-icons-png.flaticon.com/512/6596/6596121.png',
             studentId: record.studentId,
             grad_time: gradTime.toISOString(),
+            point: 0,
         };
 
         return user

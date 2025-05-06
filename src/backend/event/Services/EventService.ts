@@ -21,7 +21,7 @@ const EventService = {
         event.fee               = typeof record.fee === 'number' ? record.fee : 0
         event.userID            = record.user_id
         event.createdAt         = record.created_at ? new Date(record.created_at).toISOString() : ""
-
+        event.img               = record.img ?? ""
         return event
     }
     

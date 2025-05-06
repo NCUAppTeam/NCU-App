@@ -4,7 +4,7 @@ export function SmallTalk() {
     const [greetText, setGreetText] = useState('')
 
     useEffect(() => {
-        if (hr > 0 && hr <= 4) {
+        if (hr >= 0 && hr <= 4) {
             setGreetText('凌晨了, 還沒睡嗎? 記得休息哦，加油💪! ')
         } else if (hr > 4 && hr <= 10) {
             setGreetText('早安, 祝你有個美好的一天🔅')
@@ -22,7 +22,7 @@ export function SmallTalk() {
 
     return (
         <div className="">
-            <div className="text-sm font-bold text-gray-700">
+            <div className="text-sm font-bold text-gray-700 dark:text-white">
                 {greetText}
             </div>
         </div>

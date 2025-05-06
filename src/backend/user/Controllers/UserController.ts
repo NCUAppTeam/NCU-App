@@ -123,6 +123,10 @@ export default class UserController {
      */
 
     public async createUser(userPortal: UserFromPortal, pwd: string, username: string): Promise<User | null> {
+        if (pwd.length < 8) {
+            console.error("Password too short");
+            return null;
+        }
         
         // should signup in users table at auth schema
         const { data, error } = await supabase.auth.signUp({
@@ -130,10 +134,7 @@ export default class UserController {
             password: pwd,
         }) 
 
-        if (pwd.length < 8) {
-            console.error("Password too short");
-            return null;
-        }
+        
 
         if (error) {
             // handle auth error cannot use handleSupabaseError

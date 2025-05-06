@@ -18,5 +18,5 @@ export default class Event {
     public fee:                 number  = 0;
     public userID:              string  = "";
     public createdAt:           string  = "";
-
+    public img:                 string  = "";
 }

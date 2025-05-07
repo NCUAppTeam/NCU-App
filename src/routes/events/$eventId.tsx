@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { ArrowLeft } from "flowbite-react-icons/outline";
 import { useState } from 'react';
+import { UserController } from '../../controllers/user';
 import { supabase } from '../../utils/supabase';
 
 export const Route = createFileRoute('/events/$eventId')({
@@ -43,6 +44,28 @@ function EventDetails() {
   const { event } = Route.useLoaderData()
   const [join, setJoin] = useState(false)
   const [isFavorite, setIsFavorite] = useState(false)
+
+  // 新增活動報名
+  async function addRegistration() {
+    try {
+      const registrationInsertData = {
+        uuid: (await UserController.get()).id,
+        event_id: [event.id],
+      };
+      
+      // Insert the event
+      const { data: createdRegistration, error: registrationError } = await supabase
+        .from('registrations')
+        .insert(registrationInsertData)
+        .select('*')
+        .single();
+      console.log("createdRegistration", createdRegistration);
+    } catch (error) {
+      console.error('Error registering event:', error);
+      alert('報名活動時發生錯誤');
+    }
+  }
+
   return (
     <div className="container mx-auto">
       <div className="relative z-10">
@@ -149,6 +172,7 @@ function EventDetails() {
                 <div className="modal-action justify-between">
                   <button className="btn w-1/2"
                     onClick={() => {
+                      addRegistration();
                       setJoin(true);
                       if (document) {
                         (document.getElementById('joinSuccess_modal') as HTMLFormElement).showModal();
@@ -259,7 +283,8 @@ function EventDetails() {
                 <ol className="list-decimal pl-5">
                   <li>開放期限：{event.start_time}.to</li>
                   <li>人數限制： {event.fee}</li>
-                  <li>{event.user_id}</li>
+                  {/* <li>Current User ID: {userId || 'Loading...'}</li>
+                  <li>{event.user_id}</li> */}
                 </ol>
               </div>
             </div>

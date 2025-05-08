@@ -8,7 +8,7 @@ export const DrawerSideBar = ({ name, avatar }: { name: string, avatar: string }
     return (
         <div className="flex xl:sticky xl:top-0">
             {/* Drawer for smaller screens */}
-            <div className="px-3 py-4 w-fit xl:hidden drawer z-40" title='開啟側邊欄 Open sidebar'>
+            <div className="px-4 sm:px-6 lg:px-8 py-4 w-fit xl:hidden drawer z-40" title='開啟側邊欄 Open sidebar'>
                 <input id="my-drawer" type="checkbox" className="drawer-toggle" />
                 <label htmlFor="my-drawer" className="drawer-content flex flex-row items-center gap-3 drawer-button">
                     <div>
@@ -18,6 +18,7 @@ export const DrawerSideBar = ({ name, avatar }: { name: string, avatar: string }
                         {name}
                     </div>
                 </label>
+                {/* Drawer content */}
                 <div className="drawer-side grid content-between">
                     <label htmlFor="my-drawer" aria-label="close sidebar" className="drawer-overlay"></label>
                     <ul className="menu bg-base-200 text-base-content h-screen w-80 p-4 grid overflow-y-auto">

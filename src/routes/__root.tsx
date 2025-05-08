@@ -33,7 +33,7 @@ function RootComponent() {
   }, [isRoutePending]);
 
   return (
-    <div className='w-full lg:w-2/3 mx-auto flex flex-col lg:flex-row justify-center'>
+    <div className='w-full lg:w-2/3 mx-auto flex flex-col xl:flex-row justify-center px-4'>
       {showLoader ? (
         <>
           <AcornLoading />

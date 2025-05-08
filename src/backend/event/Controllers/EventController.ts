@@ -31,7 +31,7 @@ export default class EventController {
      * 
      * @author Henry C. (@yeahlowflicker)
      */
-    public async getEvents(
+    public async getActiveEvents(
         fields: string,
         orderBy?: string,
         orderDescending?: boolean,
@@ -42,6 +42,7 @@ export default class EventController {
         const query = supabase
             .from(EVENT_TABLE_NAME)
             .select(fields)
+            .gt('end_time', new Date().toISOString()) // Filter out past events
             .returns<Array<DBEvent>>()  
             
         if (orderBy)
@@ -49,7 +50,7 @@ export default class EventController {
         
         if (rangeStart !== undefined && rangeEnd !== undefined)
             query.range(rangeStart, rangeEnd)
-            
+                    
         const { data, error } = await query
         
         // Error handling

@@ -1,6 +1,7 @@
 import { Link } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
 import { supabase } from '../../../utils/supabase';
+import typeColor from '../events/colorForEvents.ts';
 
 interface EventType {
   type_id: number;
@@ -12,7 +13,7 @@ interface TypeContentProps {
   onNext: () => void;
 }
 
-export default function TypeContent({onNext}: TypeContentProps) {
+export default function TypeContent({ onNext }: TypeContentProps) {
   const [eventTypes, setEventTypes] = useState<EventType[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -42,18 +43,19 @@ export default function TypeContent({onNext}: TypeContentProps) {
   return (
     <>
       <div className="flex items-center justify-center">
-        <div className="flex w-full flex-col justify-center min-h-screen">
+        <div className="flex w-2/3 flex-col justify-center">
           {loading ? (
             <div className="text-center py-8">載入中...</div>
           ) : (
             eventTypes.map((type) => (
-              <Link 
+              <Link
                 key={type.type_id}
                 to="/events/create"
                 search={{ type: type.type_id.toString() }}
-                className="card bg-neutral-content rounded-box grid h-20 place-items-center text-gray-800 font-bold text-2xl mb-8 hover:scale-105 transition-transform"
+                className="flex flex-row card bg-neutral-content dark:bg-gray-100 rounded-box h-20 justify-center items-center text-gray-800 font-bold text-2xl mb-8 hover:scale-105 transition-transform"
                 onClick={onNext}
               >
+                <p className={`w-6 h-6 rounded-full m-2`} style={{ backgroundColor: typeColor[type.type_id - 1] }}></p>
                 {type.type_name}
               </Link>
             ))

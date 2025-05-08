@@ -1,12 +1,9 @@
-import { useMatchRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import acorn from "../../../assets/acorn.png";
 import LoadingBar from "./LoadingBar";
 
 export default function AcornLoading() {
     const [progress, setProgress] = useState(0); // 0 to 3
-    const match = useMatchRoute();
-    const isSignupRoute = match({ to: "/callback" }) ? "flex flex-col h-screen justify-center items-center" : "mt-64 flex flex-col items-center justify-center xl:mt-0 ";
     useEffect(() => {
         const interval = setInterval(() => {
             setProgress((prev) => {
@@ -19,7 +16,7 @@ export default function AcornLoading() {
     }, []);
 
     return (
-        <div className={`w-full ${isSignupRoute}`}>
+        <div className={`w-full flex flex-col h-screen justify-center items-center`}>
             <div className="relative w-full max-w-xl h-16 flex items-center justify-center">
                 {/* Acorn loading bar */}
                 <div className="flex gap-6">

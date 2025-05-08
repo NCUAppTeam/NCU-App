@@ -34,8 +34,16 @@ function RootComponent() {
 
   return (
     <div className='w-full lg:w-2/3 mx-auto flex flex-col lg:flex-row justify-center'>
-      <Header />
-      {showLoader ? <AcornLoading /> : <Outlet />}
+      {showLoader ? (
+        <>
+          <AcornLoading />
+        </>
+      ) : (
+        <>
+          <Header />
+          <Outlet />
+        </>
+      )}
     </div>
   );
 }

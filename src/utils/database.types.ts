@@ -54,39 +54,57 @@ export type Database = {
       }
       events: {
         Row: {
+          apply_due: string | null
           created_at: string
+          custom_hashtag: string[] | null
           description: string | null
+          destination: string | null
           end_time: string | null
+          externalLink: string | null
           fee: number | null
+          hashtag: number[] | null
           id: number
-          img: string | null
-          location: string | null
+          img: string[] | null
+          link: string | null
+          meeting_point: string | null
           name: string | null
           start_time: string | null
           type: number | null
           user_id: string
         }
         Insert: {
+          apply_due?: string | null
           created_at?: string
+          custom_hashtag?: string[] | null
           description?: string | null
+          destination?: string | null
           end_time?: string | null
+          externalLink?: string | null
           fee?: number | null
+          hashtag?: number[] | null
           id?: number
-          img?: string | null
-          location?: string | null
+          img?: string[] | null
+          link?: string | null
+          meeting_point?: string | null
           name?: string | null
           start_time?: string | null
           type?: number | null
           user_id: string
         }
         Update: {
+          apply_due?: string | null
           created_at?: string
+          custom_hashtag?: string[] | null
           description?: string | null
+          destination?: string | null
           end_time?: string | null
+          externalLink?: string | null
           fee?: number | null
+          hashtag?: number[] | null
           id?: number
-          img?: string | null
-          location?: string | null
+          img?: string[] | null
+          link?: string | null
+          meeting_point?: string | null
           name?: string | null
           start_time?: string | null
           type?: number | null
@@ -124,6 +142,7 @@ export type Database = {
           created_at: string
           department: string | null
           email: string
+          gender: number | null
           grad_time: string | null
           grade: number | null
           identity: number
@@ -141,6 +160,7 @@ export type Database = {
           created_at?: string
           department?: string | null
           email: string
+          gender?: number | null
           grad_time?: string | null
           grade?: number | null
           identity?: number
@@ -158,6 +178,7 @@ export type Database = {
           created_at?: string
           department?: string | null
           email?: string
+          gender?: number | null
           grad_time?: string | null
           grade?: number | null
           identity?: number

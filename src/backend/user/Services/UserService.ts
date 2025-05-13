@@ -22,7 +22,7 @@ const UserService = {
         const user          = new User()
 
         user.id             = record.uuid
-        user.username       = record.username || record.name || '未提供'
+        user.username       = record.username || '未提供'
         user.name           = record.name || '未提供'
         user.email          = record.email || '未提供'
         user.phone          = record.phone || '使用者未提供'

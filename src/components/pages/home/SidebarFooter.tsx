@@ -17,7 +17,7 @@ export default function SidebarFooter() {
         <div className="w-full self-end">
             <div className="divider divider-neutral" />
 
-            <p className="my-2 rounded-md border border-gray-300 p-2 cursor-pointer text-left text-lg underline justify-start flex items-center"
+            <p className="hover:bg-gray-50 hover:text-black my-2 rounded-md border border-gray-300 p-2 cursor-pointer text-left text-lg underline justify-start flex items-center"
                 onClick={() => {
                     alert('此功能尚未開放，敬請期待！');
                 }}
@@ -26,12 +26,12 @@ export default function SidebarFooter() {
                 Settings
             </p>
             <a href='https://www.facebook.com/NCUAppTeam/?locale=zh_TW' target="_blank" rel="noopener noreferrer">
-                <p className="my-2 rounded-md border border-gray-300 p-2 cursor-pointer text-left text-lg underline">
+                <p className="hover:bg-gray-50 hover:text-black my-2 rounded-md border border-gray-300 p-2 cursor-pointer text-left text-lg underline">
                     <IoLogoFacebook className="inline-block mr-2" />
                     About Us
                 </p>
             </a>
-            <p className="my-2 rounded-md border border-gray-300 p-2 cursor-pointer text-left text-lg underline" onClick={signOut} title='Sign Out'>
+            <p className="hover:bg-gray-50 hover:text-black my-2 rounded-md border border-gray-300 p-2 cursor-pointer text-left text-lg underline" onClick={signOut} title='Sign Out'>
                 <FaSignOutAlt className="inline-block mr-2" />
                 Sign Out
             </p>

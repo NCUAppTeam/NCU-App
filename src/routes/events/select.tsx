@@ -1,8 +1,4 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { useState } from 'react'
-
-import BelongContent from '../../components/pages/select/belong'
-import ScaleContent from '../../components/pages/select/scale'
 import TypeContent from '../../components/pages/select/type'
 
 export const Route = createFileRoute('/events/select')({
@@ -10,40 +6,35 @@ export const Route = createFileRoute('/events/select')({
 })
 
 function SelectContent() {
-  const [step, setStep] = useState(0)
-
-  const handleNextStep = () => {
-    setStep((prevStep) => Math.min(prevStep + 1, 3))
-  }
-
-  const handleTypeSelect = () => {
-    // Just move to the next step, the type will be passed via the Link in TypeContent
-    handleNextStep()
-  }
-
   return (
-    <div className="flex flex-col items-center h-screen">
-      <div className="relative w-full py-4 flex justify-center items-center px-6 border-b-[1px]">
-        <button className="absolute left-2 btn btn-ghost"><Link to='/events'>取消</Link></button>
-        <h1 className="text-xl">新增</h1>
-      </div>
+    <>
+      <div className="py-2 flex flex-col px-4 sm:px-6 lg:px-8 w-full h-full overflow-y-hidden">
+        <div className="relative flex flex-row justify-center items-center border-b my-2 pb-2">
+          <Link to='/events' className='absolute left-0'>
+            <button className="btn btn-ghost">
+              取消
+            </button>
+          </Link>
+          <h1 className="text-xl text-center ">新增</h1>
+        </div>
 
-      {/* Content */}
-      <div className="h-full w-96 flex flex-col justify-between py-6">
-        {/* Render Content Based on Step */}
-        {(() => {
-          switch (step) {
-            case 0:
-              return <ScaleContent onNext={handleNextStep} />;
-            case 1:
-              return <TypeContent onNext={handleTypeSelect} />;
-            case 2:
-              return <BelongContent onNext={handleNextStep} />;
-            default:
-              return null;
-          }
-        })()}
+        {/* Content */}
+        <div className="w-full flex flex-col justify-center grow">
+          <TypeContent />
+          {/* Render Content Based on Step */}
+          {/* {(() => {
+            switch (step) {
+              // ScaleContent is originally for step 0, for small hangouts and big events
+              // case 0:
+              //   return <ScaleContent onNext={handleNextStep} />;
+              case 0:
+                return <TypeContent />;
+              default:
+                return null;
+            }
+          })()} */}
+        </div>
       </div>
-    </div>
+    </>
   )
 }

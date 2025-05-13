@@ -52,14 +52,17 @@ function EventDetails() {
         uuid: (await UserController.get()).id,
         event_id: [event.id],
       };
-      
+
       // Insert the event
       const { data: createdRegistration, error: registrationError } = await supabase
         .from('registrations')
         .insert(registrationInsertData)
         .select('*')
         .single();
+
+      if (registrationError) throw registrationError;
       console.log("createdRegistration", createdRegistration);
+
     } catch (error) {
       console.error('Error registering event:', error);
       alert('報名活動時發生錯誤');
@@ -132,13 +135,13 @@ function EventDetails() {
               </svg>
               <p>{event.start_time}~{event.end_time}</p>
             </div>
-            {/* 活動地點 */}
+            {/* 活動目的地 */}
             <div className='flex p-2 items-center'>
               <svg style={styles.icon} className="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                 <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
                 <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.8 13.938h-.011a7 7 0 1 0-11.464.144h-.016l.14.171c.1.127.2.251.3.371L12 21l5.13-6.248c.194-.209.374-.429.54-.659l.13-.155Z" />
               </svg>
-              <p>{event.location}</p>
+              <p>{event.meeting_point}</p>
             </div>
             {/* 活動價格 */}
             <div className='flex p-2 items-center justify-between'>
@@ -292,7 +295,10 @@ function EventDetails() {
             <p className='divider'></p>
 
             <h1 className='text-xl font-bold'>活動說明</h1>
-            <p>{event.description}</p>
+            {/* 活動說明(裡面有很多種類) */}
+            {typeof event.description === 'string' && event.description.split('\n').map((line, index) => (
+              <p key={index} className='text-sm text-gray-500'>{line}</p>
+            ))}
           </div>
 
         </div>

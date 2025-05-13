@@ -239,10 +239,11 @@ export default class UserController {
 
     }
 
-    public async updateUser(userID: string, userData: Partial<User>): Promise<User | null> {
+    public async updateUser(userID: string, userData: User): Promise<User | null> {
+
         const { data, error } = await supabase
             .from(USER_TABLE_NAME)
-            .update(userData)
+            .update(UserService.convertUserToDB(userData))
             .eq("uuid", userID)
             .returns<DBUser>()
             .single()

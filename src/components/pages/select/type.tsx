@@ -1,34 +1,24 @@
 import { Link } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
-import { supabase } from '../../../utils/supabase';
+import EventController from '../../../backend/event/Controllers/EventController.ts';
+import { EventType } from '../../../backend/event/Entities/EventType.ts';
+import typeColor from '../events/constants/colorForEvents.ts';
 
-interface EventType {
-  type_id: number;
-  type_name: string;
-  hashtag_relation: number[];
-}
+export default function TypeContent() {
 
-interface TypeContentProps {
-  onNext: () => void;
-}
-
-export default function TypeContent({onNext}: TypeContentProps) {
   const [eventTypes, setEventTypes] = useState<EventType[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const eventController = new EventController();
     async function fetchEventTypes() {
       try {
         setLoading(true);
         // Fetch only the big types (where hashtag_relation contains 0)
-        const { data, error } = await supabase
-          .from('event_type')
-          .select('*')
-          .contains('hashtag_relation', [0])
-          .order('type_id', { ascending: true });
+        const eventTypes = await eventController.getEventTypes();
 
-        if (error) throw error;
-        setEventTypes(data || []);
+        if (!eventTypes) throw new Error('Failed to fetch event types');
+        setEventTypes(eventTypes || []);
       } catch (error) {
         console.error('Error fetching event types:', error);
       } finally {
@@ -41,19 +31,21 @@ export default function TypeContent({onNext}: TypeContentProps) {
 
   return (
     <>
-      <div className="flex items-center justify-center">
-        <div className="flex w-full flex-col justify-center min-h-screen">
+      <div className="flex flex-col items-center justify-center w-full">
+        <h2 className="mb-4 text-2xl text-center text-gray-700 font-bold dark:text-white" >選擇種類</h2 >
+
+        <div className="flex w-2/3 flex-col justify-center">
           {loading ? (
             <div className="text-center py-8">載入中...</div>
           ) : (
             eventTypes.map((type) => (
-              <Link 
+              <Link
                 key={type.type_id}
                 to="/events/create"
                 search={{ type: type.type_id.toString() }}
-                className="card bg-neutral-content rounded-box grid h-20 place-items-center text-gray-800 font-bold text-2xl mb-8 hover:scale-105 transition-transform"
-                onClick={onNext}
+                className="flex flex-row card bg-neutral-content dark:bg-gray-100 rounded-box h-16 justify-center items-center text-gray-800 font-bold text-2xl mb-8 hover:scale-105 transition-transform"
               >
+                <p className={`w-6 h-6 rounded-full m-2`} style={{ backgroundColor: typeColor[type.type_id - 1] }}></p>
                 {type.type_name}
               </Link>
             ))

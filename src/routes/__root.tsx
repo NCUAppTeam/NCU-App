@@ -33,9 +33,19 @@ function RootComponent() {
   }, [isRoutePending]);
 
   return (
-    <div className='w-full lg:w-2/3 mx-auto flex flex-col lg:flex-row justify-center'>
-      <Header />
-      {showLoader ? <AcornLoading /> : <Outlet />}
+    <div className='w-full lg:w-2/3 mx-auto flex flex-col xl:flex-row justify-center px-4 h-screen overflow-y-hidden'>
+      {showLoader ? (
+        <>
+          <AcornLoading />
+        </>
+      ) : (
+        <>
+          <Header />
+          <div className='w-full h-screen overflow-y-auto'>
+            <Outlet />
+          </div>
+        </>
+      )}
     </div>
   );
 }

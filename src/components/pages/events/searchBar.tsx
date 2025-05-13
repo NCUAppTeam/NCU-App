@@ -11,7 +11,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ searchTerm, setSearchTerm, placeh
     const [isFocused, setIsFocused] = React.useState(false);
 
     return (
-        <div className="search-bar mt-4 mb-2 relative">
+        <div className="search-bar mb-2 relative xl:mt-4">
             <div className="relative">
                 <input
                     type="text"

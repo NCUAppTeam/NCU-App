@@ -2,11 +2,10 @@ import ErrorHandler from "../../../utils/ErrorHandler";
 import { supabase } from "../../../utils/supabase";
 
 import Event, { DBEvent } from '../Entities/Event';
+import { EventType } from "../Entities/EventType";
 import EventService from "../Services/EventService";
 
-
 const EVENT_TABLE_NAME = "events"
-
 
 export default class EventController {
 
@@ -42,7 +41,7 @@ export default class EventController {
         const query = supabase
             .from(EVENT_TABLE_NAME)
             .select(fields)
-            .gt('end_time', new Date().toISOString()) // Filter out past events
+            .gt('apply_due', new Date().toISOString()) // Filter out past events
             .returns<Array<DBEvent>>()  
             
         if (orderBy)
@@ -120,8 +119,10 @@ export default class EventController {
      * @returns {Array<{ type_id: number; type_name: string }>} - Array of event types
      * 
      * @throws {Error} - Throws an error if the query fails
+     * 
+     * @author Susan Chen(@1989ONCE)
      */
-    public async getEventTypes(): Promise<Array<{ type_id: number; type_name: string }> | null> {
+    public async getEventTypes(): Promise<Array<EventType> | null> {
         const { data, error } = await supabase
             .from('event_type')
             .select('*')
@@ -136,5 +137,60 @@ export default class EventController {
     
         return data;
     }
-}
 
+    /**
+     * Get event types name by ID
+     * 
+     * @param   {number}  type_id     selected event type ID
+     * 
+     * @returns {string}              event type name
+     * 
+     * @throws {Error}                Throws an error if the query fails
+     * 
+     * @author Susan Chen(@1989ONCE)
+     */
+    public async returnEventTypesById({ type_id }: { type_id: number }) : Promise<EventType | null>  {
+        
+        const { data, error } = await supabase
+            .from('event_type')
+            .select('*')
+            .eq('type_id', type_id)
+            .single();
+    
+        // Error handling
+        if (!data && error) {
+            ErrorHandler.handleSupabaseError(error);
+            return null;
+        }
+    
+        return data;
+    }
+
+    /**
+     * Get All Hashtags of an event Type by type_id
+     * 
+     * @param   {number}  type_id     selected event type ID
+     * 
+     * @returns {Array<{ hashtag_id: number; hashtag_name: string }>} - Array of hashtags
+     * 
+     * @throws {Error} - Throws an error if the query fails
+     * 
+     * @author Susan Chen(@1989ONCE)
+     * 
+     */
+    public async getAllHashtagsByTypeId({ type_id }: { type_id: number }): Promise<Array<EventType> | null>  {
+        // Fetch hashtag names based on IDs
+        const { data: hashtags, error: hashtagError } = await supabase
+            .from('event_type')
+            .select('*')
+            .contains('hashtag_relation', [type_id])
+            .order('type_id', { ascending: true });
+
+        if (hashtagError) {
+            ErrorHandler.handleSupabaseError(hashtagError);
+            return null;
+        }
+    
+        return hashtags;
+    }
+}

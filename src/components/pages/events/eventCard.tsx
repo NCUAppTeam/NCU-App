@@ -5,7 +5,7 @@ import { DBEvent } from '../../../backend/event/Entities/Event'; // Adjust the i
 
 export default function EventCard({ event }: { event: DBEvent }) {
     let cardColor = 'bg-gray-700'; // Default color
-    if (!event.img) {
+    if (event.img?.length == 0) {
         switch (event.type) {
             case 1:
                 cardColor = 'bg-[#BE9A4D]'; // 揪人共乘
@@ -19,6 +19,9 @@ export default function EventCard({ event }: { event: DBEvent }) {
             case 4:
                 cardColor = 'bg-[#BC76A8]'; // 揪人讀書
                 break;
+            case 5:
+                cardColor = 'bg-[#A65E9A]'; // 其他
+                break;
         }
     }
 
@@ -28,9 +31,9 @@ export default function EventCard({ event }: { event: DBEvent }) {
             params={{ eventId: String(event.id) }}
             className="flex flex-col w-full h-64 xl:h-80 bg-white dark:bg-gray-50 rounded-lg overflow-hidden text-white cursor-pointer hover:shadow-lg transition-shadow duration-300 border border-gray-300"
         >
-            {event.img ? (
+            {event.img && event.img.length > 0 ? (
                 <img
-                    src={event.img}
+                    src={event.img[0]}
                     alt={event.name ? '圖片' + event.name : '名稱未提供'}
                     className="w-full grow object-cover"
                 />
@@ -45,7 +48,7 @@ export default function EventCard({ event }: { event: DBEvent }) {
                 </p>
                 <p className="text-sm flex items-center text-black truncate">
                     <MapPinAlt size={24} className='mr-2' />
-                    {event.location || '位置未提供'}
+                    {event.meeting_point || '未提供集合點'}
                 </p>
             </div>
         </Link>

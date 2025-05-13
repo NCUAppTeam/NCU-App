@@ -4,10 +4,10 @@ import { useState } from 'react';
 import EventController from '../../backend/event/Controllers/EventController';
 import { DBEvent } from '../../backend/event/Entities/Event';
 import { DialogBox } from '../../components/Common/DialogBox';
-import typeColor from '../../components/pages/events/colorForEvents.ts';
+import typeColor from '../../components/pages/events/constants/colorForEvents.ts';
+import textForEvents from '../../components/pages/events/constants/textForEvents.ts';
 import EventCard from '../../components/pages/events/eventCard';
 import SearchBar from '../../components/pages/events/searchBar';
-import textForEvents from '../../components/pages/events/textForEvents.ts';
 import { AuthGuard } from '../../utils/auth';
 
 export const Route = createFileRoute('/events/')({
@@ -60,7 +60,7 @@ function EventIndex() {
 
   return (
     <>
-      <div className="px-4 sm:px-6 lg:px-8 h-screen pb-4 w-full">
+      <div className="px-4 sm:px-6 lg:px-8 pb-4 w-full h-5/6">
 
         <SearchBar
           searchTerm={searchTerm}
@@ -92,7 +92,7 @@ function EventIndex() {
 
 
 
-        <div className="relative flex-1 bg-gray-50 shadow dark:bg-gray-700 px-4 rounded-lg h-5/6">
+        <div className="relative flex-1 bg-gray-50 shadow dark:bg-gray-700 px-4 rounded-lg h-full">
           <h1 className={`py-2 text-xl text-black dark:text-white underline underline-offset-8`} style={{ textDecorationColor: typeColor[Number(selectedType) - 1] }}>
             {selectedType === 'All' ? '所有揪人' : eventTypes.at(Number(selectedType) - 1)?.type_name}
           </h1>
@@ -101,7 +101,7 @@ function EventIndex() {
               {filteredEvents.length >= 0 && filteredEvents.length < 5 && (
                 <div className="col-span-2 text-center text-white">
                   <p className="px-2 break-all text-center text-gray-500 py-2 bg-yellow-50 rounded shadow">
-                    {selectedType === 'All'
+                    {selectedType === 'All' || selectedType === '5'
                       ? '快來加入或發起更多揪人吧！'
                       : getFewEventsText(Number(selectedType))}
                   </p>

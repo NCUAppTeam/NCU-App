@@ -21,6 +21,7 @@ function SignUpPage() {
         chineseName: parsedData.chineseName,
         email: parsedData.email,
         studentId: parsedData.studentId,
+        gender: parsedData.gender,
         academyRecords: {
           name: parsedData.academyRecords.name,
           grad: parsedData.academyRecords.grad,

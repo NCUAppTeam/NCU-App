@@ -17,6 +17,7 @@ export default class User {
     public name:                string  = ""
     public email:               string  = ""
     public phone:               string  = ""
+    public gender:              string  = ""
     public avatar:              string  = ""
     public profileBackground:   string  = ""
     public joinedAt:            Date    = new Date()

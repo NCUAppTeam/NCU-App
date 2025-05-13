@@ -30,6 +30,7 @@ const UserService = {
         user.identity       = record.identity || 0
         user.department     = record.department || '使用者未提供'
         user.grade          = record.grade || 1
+        user.gender        = record.gender == 0 ? '男' : '女'
         user.bio            = record.bio || '使用者未提供'
         user.profileBackground = record.profileBackground || 'https://cdn-icons-png.flaticon.com/512/6596/6596121.png'
         user.studentId      = record.studentId || '使用者未提供'
@@ -73,6 +74,7 @@ const UserService = {
             username: username,
             name: record.chineseName,
             email: record.email,
+            gender: record.gender,
             phone: null,
             created_at: new Date().toISOString(),
             profileBackground: null,
@@ -87,6 +89,31 @@ const UserService = {
         };
 
         return user
+    },
+    convertUserToDB(record: User) : DBUser {
+        if (!record || typeof record !== 'object')
+            throw new Error('Invalid record provided')
+
+        const user: DBUser = {
+            uuid: record.id,
+            username: record.username,
+            name: record.name,
+            email: record.email,
+            avatar: record.avatar,
+            bio: record.bio,
+            created_at: record.joinedAt.toISOString(),
+            department: record.department,
+            gender: record.gender == '男' ? 0 : 1,
+            grad_time: record.grad_time,
+            grade: record.grade,
+            identity: record.identity,
+            phone: record.phone,
+            point: record.point,
+            profileBackground: record.profileBackground,
+            studentId: record.studentId,
+        }
+
+        return user;
     }
 }
 

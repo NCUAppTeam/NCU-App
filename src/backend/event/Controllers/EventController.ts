@@ -72,6 +72,43 @@ export default class EventController {
         return events
     }
 
+    // Get all events created by the current user
+    public async getUserCreatedEvents(
+        uuid: string
+    ) : Promise<Array<Event> | null> {
+        
+        const query = supabase
+            .from(EVENT_TABLE_NAME)
+            .select('*')
+            .eq('user_id', uuid)
+            .returns<Array<DBEvent>>()  
+            
+        // Latest created event first
+        query.order('start_time', { ascending: true })
+        
+                    
+        const { data, error } = await query
+        
+        // Error handling
+        if (error) {
+            ErrorHandler.handleSupabaseError(error)
+            return null
+        }
+
+        // Initialize result array
+        const events : Array<Event> = []
+        
+        
+        // For each found DBEvent, convert to Event and append to result array
+        data.forEach((record: DBEvent) => {
+            events.push(
+                EventService.parseEvent(record)
+            )
+        })
+
+        return events
+    }
+
 
 
     /**

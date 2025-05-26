@@ -9,4 +9,5 @@ export interface EventInput {
     description: string;
     type: 1 | 2 | 3 | 4 | 5;
     link: string;
+    img: Array<string>;
 }

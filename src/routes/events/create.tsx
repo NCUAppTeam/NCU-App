@@ -111,15 +111,12 @@ function CreateEventScreen() {
     setStep((prevStep) => Math.max(prevStep - 1, 0));
   };
 
-  // Main function to add the event (final submission)
-  // Made 'e' optional as it won't be passed when called from LastStage
+
   async function addEvent(e?: FormEvent, newImageUrlsFromLastStage?: string[]) {
     if (e) {
       e.preventDefault(); // Prevent default form submission if called by form
     }
 
-    // Ensure currentUserId is available before proceeding
-    // It's fetched in useEffect, but good to double check or disable submission until it's loaded
     let userIdToSubmit = currentUserId;
     if (!userIdToSubmit) {
         try {
@@ -190,9 +187,6 @@ function CreateEventScreen() {
   }
 
   return (
-    // The form onSubmit will call addEvent if there's a submit button *within this form*
-    // or if the form is submitted programmatically.
-    // For the multi-stage setup, addEvent is called explicitly by LastStage.
     <form className="flex flex-col px-4 sm:px-6 lg:px-8 w-full py-2 overflow-y-auto" onSubmit={addEvent}>
       <div className="relative flex flex-row justify-center items-center border-b my-2 pb-2">
         <Link to='/events' className='absolute left-0'>

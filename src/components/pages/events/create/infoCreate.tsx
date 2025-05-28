@@ -1,4 +1,4 @@
-import React, { SetStateAction, useState } from 'react';
+import React, { SetStateAction, useState, useEffect } from 'react';
 import locationForEvents from '../constants/locationForEvents';
 
 export default function InfoCreate({
@@ -12,6 +12,16 @@ export default function InfoCreate({
 }) {
     const [customLocation1, setCustomLocation1] = useState(false); // Track if "其他" is selected
     const [customLocation2, setCustomLocation2] = useState(false);
+
+    useEffect(() => {
+        const defaultEventLocations = locationForEvents[type_id][0];
+        console.log('Default event locations:', defaultEventLocations);
+        setInputs({
+            ...inputs,
+            meeting_point:  defaultEventLocations,
+            destination: defaultEventLocations,
+        });
+    }, [type_id]);
 
     const handleMeetPointChange = (value: string) => {
         if (value === '其他') {

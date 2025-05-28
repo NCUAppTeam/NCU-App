@@ -7,9 +7,6 @@ const RegistrationService = {
         if (record.event_id ) {
             registration.event_id = record.event_id;
         }
-        if (record.likes_event_id) {
-            registration.likes_event_id = record.likes_event_id;
-        }
         
         return registration;
     }

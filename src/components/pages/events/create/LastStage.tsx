@@ -97,9 +97,10 @@ export default function LastStage({ inputs, setInputs, currentUserId, handlePrev
                 } else {
                     throw new Error(`Could not retrieve public URL for ${file.name}.`);
                 }
-            } catch (err: any) {
+            } catch (err: unknown) {
                 console.error(`Upload failed for ${file.name}:`, err);
-                uploadErrors.push({ fileName: file.name, message: err.message });
+                const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+                uploadErrors.push({ fileName: file.name, message: errorMessage });
             }
         }
 

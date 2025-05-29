@@ -178,10 +178,9 @@ function CreateEventScreen() {
           eventId: createdEvent.id.toString(),
         },
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error creating event in addEvent function:', error);
-      // Provide more specific error messages if possible
-      const supabaseError = error?.message?.includes('supabase') ? error.message : '';
+      const supabaseError = error instanceof Error && error.message.includes('supabase') ? error.message : '';
       alert(`建立活動時發生錯誤: ${supabaseError || '請檢查網絡連接或稍後再試。'}`);
     }
   }

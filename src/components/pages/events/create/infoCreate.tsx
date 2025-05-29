@@ -21,7 +21,7 @@ export default function InfoCreate({
             meeting_point:  defaultEventLocations,
             destination: defaultEventLocations,
         });
-    }, [type_id]);
+    }, [type_id, setInputs]);
 
     const handleMeetPointChange = (value: string) => {
         if (value === '其他') {

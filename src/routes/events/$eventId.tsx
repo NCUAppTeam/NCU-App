@@ -1,7 +1,8 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { ArrowLeft } from "flowbite-react-icons/outline";
-import { useState } from 'react';
-import { UserController } from '../../controllers/user';
+import { useState, useEffect, useMemo } from 'react';
+import UserController from '../../backend/user/Controllers/UserController'; 
+import FavoriteController from '../../backend/favorite/Controllers/FavoriteControllers';
 import { supabase } from '../../utils/supabase';
 
 export const Route = createFileRoute('/events/$eventId')({
@@ -10,7 +11,7 @@ export const Route = createFileRoute('/events/$eventId')({
       .from('events')
       .select('*')
       .eq('id', eventId)
-      .single()
+      .single();
 
     if (error !== null) {
       throw error;
@@ -19,10 +20,10 @@ export const Route = createFileRoute('/events/$eventId')({
       data.img = [];
     }
 
-    return { event: data }
+    return { event: data };
   },
   component: EventDetails
-})
+});
 
 const styles = {
   body: {
@@ -41,26 +42,90 @@ const styles = {
   icon: {
     margin: "0.5rem"
   },
-}
+};
 
 function EventDetails() {
   const { event } = Route.useLoaderData();
   const [join, setJoin] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
+  const [isLoadingFavorite, setIsLoadingFavorite] = useState(false);
+
+  const userController = useMemo(() => new UserController(), []);
+  const favoriteController = useMemo(() => new FavoriteController(), []);
 
   const noImages = !event.img || event.img.length === 0;
+
+  // Fetch initial favorite status
+  useEffect(() => {
+    const checkFavoriteStatus = async () => {
+      if (!event?.id) return;
+
+      setIsLoadingFavorite(true);
+      try {
+        const currentUser = await userController.getCurrentUser();
+        if (!currentUser || !currentUser.id) {
+          setIsFavorite(false);
+          return;
+        }
+        
+        const userFavoritesList = await favoriteController.getFavorites("uuid, event_id");
+        if (userFavoritesList && userFavoritesList.length > 0) {
+          const userFavoriteEntry = userFavoritesList.find(fav => fav.id === currentUser.id);
+
+          if (userFavoriteEntry && userFavoriteEntry.event_id && userFavoriteEntry.event_id.includes(event.id)) {
+            setIsFavorite(true);
+          } else {
+            setIsFavorite(false);
+          }
+        } else {
+          // Not yet exists in favorites
+          setIsFavorite(false);
+        }
+      } catch (err) {
+        console.error('Error in checkFavoriteStatus:', err);
+        setIsFavorite(false);
+      } finally {
+        setIsLoadingFavorite(false);
+      }
+    };
+
+    checkFavoriteStatus();
+  }, [event.id, userController, favoriteController]);
 
   // 新增活動報名
   async function addRegistration() {
     try {
-      const userData = await UserController.get();
-      if (!userData) {
+      const userData = await userController.getCurrentUser();
+      if (!userData || !userData.id) {
         alert('無法獲取使用者資訊，請先登入');
         return;
       }
+      const { data: currentReg, error: fetchError } = await supabase
+        .from('registrations')
+        .select('event_id')
+        .eq('uuid', userData.id)
+        .single();
+      
+      if (fetchError && fetchError.code !== 'PGRST116') {
+        throw fetchError;
+      }
+
+      let newRegIds = [];
+      if (currentReg && currentReg.event_id) {
+        if (currentReg.event_id.includes(event.id)) {
+          console.log("Event already registered.");
+          setJoin(true);
+          return;
+        }
+        newRegIds = [...currentReg.event_id, event.id];
+      } else {
+        newRegIds = [event.id];
+      }
+
+
       const registrationInsertData = {
         uuid: userData.id,
-        event_id: [event.id],
+        event_id: newRegIds,
       };
 
       const { data: createdRegistration, error: registrationError } = await supabase
@@ -77,12 +142,126 @@ function EventDetails() {
       joinSuccessModal?.showModal();
       joinModal?.close();
 
-
     } catch (error) {
       console.error('Error registering event:', error);
       alert('報名活動時發生錯誤');
     }
   }
+
+  //新增收藏
+  async function addFavorite() {
+    if (isLoadingFavorite) return;
+    setIsLoadingFavorite(true);
+    try {
+      const userData = await userController.getCurrentUser();
+      if (!userData || !userData.id) {
+        alert('無法獲取使用者資訊，請先登入');
+        return;
+      }
+
+      const { data: currentFavorite, error: fetchError } = await supabase
+        .from('favorites')
+        .select('event_id')
+        .eq('uuid', userData.id)
+        .single();
+
+      if (fetchError && fetchError.code !== 'PGRST116') {
+        throw fetchError;
+      }
+
+      let newEventIds = [];
+      if (currentFavorite && currentFavorite.event_id) {
+        if (currentFavorite.event_id.includes(event.id)) {
+          console.log("Event already in favorites.");
+          setIsFavorite(true);
+          return;
+        }
+        newEventIds = [...currentFavorite.event_id, event.id];
+      } else {
+        newEventIds = [event.id];
+      }
+
+      const { data: upsertedFavorite, error: upsertError } = await supabase
+        .from('favorites')
+        .upsert({ uuid: userData.id, event_id: newEventIds }, { onConflict: 'uuid' })
+        .select('*')
+        .single();
+
+      if (upsertError) throw upsertError;
+      console.log("upsertedFavorite (added)", upsertedFavorite);
+      setIsFavorite(true);
+
+    } catch (error) {
+      console.error('Error adding favorite:', error);
+      alert('新增收藏時發生錯誤');
+    } finally {
+      setIsLoadingFavorite(false);
+    }
+  }
+
+  // 取消收藏
+  async function removeFavorite() {
+    if (isLoadingFavorite) return;
+    setIsLoadingFavorite(true);
+    try {
+      const userData = await userController.getCurrentUser();
+      if (!userData || !userData.id) {
+        alert('無法獲取使用者資訊，請先登入');
+        return;
+      }
+
+      const { data: currentFavorite, error: fetchError } = await supabase
+        .from('favorites')
+        .select('event_id')
+        .eq('uuid', userData.id) 
+        .single();
+
+      if (fetchError) {
+        if (fetchError.code === 'PGRST116') {
+          console.warn("No favorite entry found to remove from.");
+          setIsFavorite(false);
+        } else {
+          throw fetchError;
+        }
+        return;
+      }
+
+      if (!currentFavorite || !currentFavorite.event_id || !currentFavorite.event_id.includes(event.id)) {
+        console.warn("Event not found in user's favorites or favorites list is empty.");
+        setIsFavorite(false);
+        return;
+      }
+
+      const updatedEventIds = currentFavorite.event_id.filter(id => id !== event.id);
+
+      const { data: updatedFavorite, error: updateError } = await supabase
+        .from('favorites')
+        .update({ event_id: updatedEventIds })
+        .eq('uuid', userData.id)
+        .select('*')
+        .single();
+
+      if (updateError) throw updateError;
+      console.log("updatedFavorite (after removal)", updatedFavorite);
+      setIsFavorite(false);
+
+    } catch (error) {
+      console.error('Error removing favorite:', error);
+      alert('取消收藏時發生錯誤');
+    } finally {
+      setIsLoadingFavorite(false);
+    }
+  }
+
+  const handleFavoriteClick = () => {
+    if (isLoadingFavorite) return;
+
+    if (isFavorite) {
+      removeFavorite();
+    } else {
+      addFavorite();
+    }
+  };
 
   return (
     <div className="container mx-auto">
@@ -95,11 +274,7 @@ function EventDetails() {
           <ArrowLeft className="w-5 h-5" />
         </Link>
       </div>
-      {/* Apply conditional padding here */}
       <div className={`bg-gray-800 ${noImages ? 'pt-16' : ''}`}>
-
-        {/* 圖片 */}
-        {/* Only render the image section if there are images, to prevent empty div height issues */}
         {!noImages && (
           <div className='relative'>
             <div className="carousel w-full">
@@ -109,7 +284,6 @@ function EventDetails() {
                 </div>
               ))}
             </div>
-
             {event.img && event.img.length > 1 && (
               <div className="bottom-12 flex w-full justify-center gap-2 absolute">
                 {event.img.map((_, index) => (
@@ -127,16 +301,16 @@ function EventDetails() {
           </div>
         )}
 
-        {/* If no images, the card section should not have negative margin, or have a different margin */}
-        <div className={noImages ? 'pt-4' : '-translate-y-12'}> {/* Adjust class if no images */}
-
-          {/* 活動資訊 */}
+        <div className={noImages ? 'pt-4' : '-translate-y-12'}>
           <div className='' style={styles.card}>
-            {/* 活動名稱 */}
             <div className='flex items-center justify-between'>
               <h1 className='text-2xl m-1 font-bold'>{event.name}</h1>
-              {/* 收藏 */}
-              <div onClick={() => setIsFavorite(!isFavorite)} className="cursor-pointer">
+              <button
+                onClick={handleFavoriteClick}
+                disabled={isLoadingFavorite}
+                className="cursor-pointer p-2 rounded-full hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
+              >
                 {isFavorite ? (
                   <svg style={styles.icon} className="w-8 h-8 text-red-500 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
                     <path d="m12.75 20.66 6.184-7.098c2.677-2.884 2.559-6.506.754-8.705-.898-1.095-2.206-1.816-3.72-1.855-1.293-.034-2.652.43-3.963 1.442-1.315-1.012-2.678-1.476-3.973-1.442-1.515.04-2.825.76-3.724 1.855-1.806 2.201-1.915 5.823.772 8.706l6.183 7.097c.19.216.46.34.743.34a.985.985 0 0 0 .743-.34Z" />
@@ -146,16 +320,15 @@ function EventDetails() {
                     <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12.01 6.001C6.5 1 1 8 5.782 13.001L12.011 20l6.23-7C23 8 17.5 1 12.01 6.002Z" />
                   </svg>
                 )}
-              </div>
+              </button>
             </div>
-            {/* 時間 */}
+            {/* ... (rest of your time, meeting point, fee, modals, etc.) ... */}
             <div className='flex p-2 items-center'>
-              <svg style={styles.icon} className="w-6 h-6 text-gray-800 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-              </svg>
-              <p>{event.start_time ? `${new Date(event.start_time).toLocaleDateString([], { month: 'numeric', day: 'numeric' })} ${new Date(event.start_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'UTC' })} ~ ${event.end_time ? `${new Date(event.end_time).toLocaleDateString([], { month: 'numeric', day: 'numeric' })} ${new Date(event.end_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'UTC' })}` : '時間未提供'}` : '時間未提供'}</p>
+               <svg style={styles.icon} className="w-6 h-6 text-gray-800 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                 <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+               </svg>
+               <p>{event.start_time ? `${new Date(event.start_time).toLocaleDateString([], { month: 'numeric', day: 'numeric' })} ${new Date(event.start_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'UTC' })} ~ ${event.end_time ? `${new Date(event.end_time).toLocaleDateString([], { month: 'numeric', day: 'numeric' })} ${new Date(event.end_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'UTC' })}` : '時間未提供'}` : '時間未提供'}</p>
             </div>
-            {/* 活動目的地 */}
             <div className='flex p-2 items-center'>
               <svg style={styles.icon} className="w-6 h-6 text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                 <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
@@ -163,7 +336,6 @@ function EventDetails() {
               </svg>
               <p>{event.meeting_point}</p>
             </div>
-            {/* 活動價格 */}
             <div className='flex p-2 items-center justify-between'>
               <div className='flex items-center'>
                 <svg style={styles.icon} className="w-6 h-6 text-gray-800 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -172,7 +344,7 @@ function EventDetails() {
                 <p>{event.fee ? `${event.fee} 元` : '費用未提供'}</p>
               </div>
 
-              <button className="btn bottom-1 right-1" // Make sure DaisyUI classes work as expected
+              <button className="btn bottom-1 right-1"
                 onClick={() => {
                   const joinModal = document.getElementById("join_modal") as HTMLDialogElement | null;
                   const cancelModal = document.getElementById("cancel_modal") as HTMLDialogElement | null;
@@ -186,6 +358,7 @@ function EventDetails() {
               </button>
             </div>
 
+            {/* --- Modals for Join/Cancel Registration --- */}
             <dialog id="join_modal" className="modal">
               <div className="modal-box w-11/12 max-w-5xl">
                 <h3 className="text-xl flex items-center justify-center">
@@ -232,7 +405,7 @@ function EventDetails() {
                   <button
                     className="btn w-1/2"
                     onClick={() => {
-                      setJoin(false);
+                      setJoin(false); 
                       const cancelModal = document.getElementById("cancel_modal") as HTMLDialogElement | null;
                       const cancelSuccessModal = document.getElementById("cancelSuccess_modal") as HTMLDialogElement | null;
                       cancelModal?.close();
@@ -263,58 +436,14 @@ function EventDetails() {
                 </div>
               </div>
             </dialog>
-
           </div>
 
-          {/* 關於活動 */}
           <div className='grid gap-y-2' style={styles.card}>
-            {/*
-              <h1 className='text-xl m-1 font-bold'>關於活動</h1>
-
-              // 辦理單位
-              <div className='flex items-center'>
-                <svg style={styles.icon} className="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 22 22">
-                  <path stroke="currentColor" strokeWidth="2" d="M7 17v1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1a3 3 0 0 0-3-3h-4a3 3 0 0 0-3 3Zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                </svg>
-                <div className='p-2 items-center'>
-                  <p>辦理單位</p>
-                  <p>{event.organizer || '主辦單位未提供'}</p>
-                </div>
-              </div>
-
-              // 學生學習護照
-              <div className='flex items-center'>
-                <svg style={styles.icon} className="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <path stroke="currentColor" strokeWidth="2" d="M11.083 5.104c.35-.8 1.485-.8 1.834 0l1.752 4.022a1 1 0 0 0 .84.597l4.463.342c.9.069 1.255 1.2.556 1.771l-3.33 2.723a1 1 0 0 0-.337 1.016l1.03 4.119c.214.858-.71 1.552-1.474 1.106l-3.913-2.281a1 1 0 0 0-1.008 0L7.583 20.8c-.764.446-1.688-.248-1.474-1.106l1.03-4.119A1 1 0 0 0 6.8 14.56l-3.33-2.723c-.698-.571-.342-1.702.557-1.771l4.462-.342a1 1 0 0 0 .84-.597l1.753-4.022Z" />
-                </svg>
-                <div className='p-2 items-center'>
-                  <p>學生學習護照</p>
-                  <p>{event.passport_hours ? `時數類型 ${event.passport_hours} 小時` : '護照時數未提供'}</p>
-                </div>
-              </div>
-
-              // 條件限制
-              <div className='flex items-center'>
-                <svg style={styles.icon} className="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                  <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 11.917 9.724 16.5 19 7.5" />
-                </svg>
-                <div className='p-2 items-center'>
-                  <p>條件限制</p>
-                  <ol className="list-decimal pl-5">
-                    <li>開放期限：{event.apply_due ? new Date(event.apply_due).toLocaleDateString() : '未指定'}</li>
-                    <li>人數限制： {event.max_participants !== undefined ? event.max_participants : '無限制'}</li>
-                  </ol>
-                </div>
-              </div>
-
-              <p className='divider'></p>
-            */}
-
             <h1 className='text-xl font-bold'>活動說明</h1>
             {
               (!event.description || event.description.trim() === '')
-              ? <p className='text-sm text-gray-500'>無</p>
-              : event.description.split('\n').map((line, index) => (
+                ? <p className='text-sm text-gray-500'>無</p>
+                : event.description.split('\n').map((line, index) => (
                   <p key={index} className='text-sm text-gray-500'>
                     {line}
                   </p>
@@ -324,5 +453,5 @@ function EventDetails() {
         </div>
       </div>
     </div>
-  )
+  );
 }

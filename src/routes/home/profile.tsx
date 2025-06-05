@@ -2,6 +2,7 @@ import { createFileRoute, redirect } from '@tanstack/react-router';
 import { useState } from 'react';
 import defaultAvatar from '../../assets/logo.png';
 import defaultBackground from '../../assets/squirrel.jpg';
+import { GlobalFunction } from '../../backend/global/globalFunction';
 import UserController from '../../backend/user/Controllers/UserController';
 import { AuthGuard } from '../../utils/auth';
 
@@ -18,20 +19,22 @@ export const Route = createFileRoute('/home/profile')({
     component: ProfilePage,
 })
 
+
 function ProfilePage() {
+    const profile = Route.useLoaderData().user
     const [isEditing, setIsEditing] = useState(false);
     const [formData, setFormData] = useState({
-        avatar: defaultAvatar,
+        avatar: profile.avatar || defaultAvatar,
         profileBackground: defaultBackground,
-        name: '李小明',
-        username: 'xiaoming',
-        bio: '喜歡松鼠、熱愛開發的資訊系學生。',
-        department: '資訊工程學系',
-        email: 'xiaoming@example.com',
-        grade: '大三',
-        identity: '學生',
-        joinedAt: '2022-09-01',
-        phone: '0912345678',
+        name: profile.name,
+        username: profile.username,
+        bio: profile.bio,
+        department: profile.department,
+        email: profile.email,
+        grade: profile.grade,
+        identity: profile.identity,
+        joinedAt: GlobalFunction.formatDate(profile.joinedAt),
+        phone: profile.phone,
     });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -47,6 +50,22 @@ function ProfilePage() {
         if (file) reader.readAsDataURL(file);
     };
 
+    const handleSave = async () => {
+        const userController = new UserController();
+        profile.avatar = formData.avatar;
+        profile.profileBackground = formData.profileBackground;
+        profile.name = formData.name;
+        profile.username = formData.username;
+        profile.bio = formData.bio;
+        profile.department = formData.department;
+        profile.email = formData.email;
+        profile.grade = Number(formData.grade);
+        profile.identity = Number(formData.identity);
+        profile.phone = formData.phone;
+        
+        await userController.updateUser(profile.id, profile);
+        setIsEditing(false);
+    }
     return (
         <div className="w-full max-w-4xl mx-auto bg-red-100 shadow-xl/30 rounded-2xl p-4 sm:p-6 lg:p-8">
             {/* Profile Background */}
@@ -86,11 +105,11 @@ function ProfilePage() {
                         </svg>
                     </div>
                 )}
-                <div className="absolute -bottom-12 left-6">
+                <div className="absolute -bottom-12 right-6">
                     <img
                         src={formData.avatar}
                         alt="Avatar"
-                        className="w-24 h-24 rounded-full border-4 border-white object-cover cursor-pointer"
+                        className="w-24 h-24 rounded-full border-4 border-red-100 object-cover cursor-pointer bg-red-100"
                         onClick={() => document.getElementById('avatarInput')?.click()}
                     />
                     {isEditing && (
@@ -108,7 +127,7 @@ function ProfilePage() {
             {/* Info Section */}
             <div className="pt-16 px-6 pb-6">
                 <div className="flex justify-between items-center">
-                    <h2 className="text-2xl font-bold">
+                    <h2 className="text-2xl font-bold text-black">
                         {isEditing ? (
                             <input
                                 type="text"
@@ -122,7 +141,12 @@ function ProfilePage() {
                         )}
                     </h2>
                     <button
-                        onClick={() => setIsEditing(!isEditing)}
+                        onClick={() => {
+                            setIsEditing(!isEditing)
+                            if (isEditing) {
+                                handleSave()
+                            }
+                        }}
                         className="text-blue-600 hover:underline"
                     >
                         {isEditing ? '完成' : '編輯個人檔案'}
@@ -130,12 +154,12 @@ function ProfilePage() {
                 </div>
                 <p className="text-gray-500">@{formData.username}</p>
 
-                <div className="mt-4 space-y-2">
+                <div className="mt-4 space-y-2 bg-red-50 shadow-md rounded-lg p-4">
                     <Field label="自我介紹" name="bio" value={formData.bio} isEditing={isEditing} handleChange={handleChange} multiline />
                     <Field label="系所" name="department" value={formData.department} isEditing={isEditing} handleChange={handleChange} />
-                    <Field label="年級" name="grade" value={formData.grade} isEditing={isEditing} handleChange={handleChange} />
-                    <Field label="身分" name="identity" value={formData.identity} isEditing={isEditing} handleChange={handleChange} />
-                    <Field label="電子信箱" name="email" value={formData.email} isEditing={isEditing} handleChange={handleChange} />
+                    <Field label="年級" name="grade" value={String(formData.grade)} isEditing={isEditing} handleChange={handleChange} />
+                    <Field label="身分" name="identity" value={String(formData.identity)} isEditing={isEditing} handleChange={handleChange} />
+                    <Field label="電子信箱" name="email" value={String(formData.email)} isEditing={isEditing} handleChange={handleChange} />
                     <Field label="電話" name="phone" value={formData.phone} isEditing={isEditing} handleChange={handleChange} />
                     <div className="text-gray-600 text-sm">
                         加入時間：{formData.joinedAt}

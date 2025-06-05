@@ -70,7 +70,7 @@ function CreateEventScreen() {
             console.error('Failed to fetch event type information for type_id:', selectedType);
           }
         } catch (error) {
-            console.error('Error in fetchTypeInfo for type_id:', selectedType, error);
+          console.error('Error in fetchTypeInfo for type_id:', selectedType, error);
         }
       } else {
         console.log('selectedType is not valid for fetching type info:', selectedType);
@@ -119,21 +119,21 @@ function CreateEventScreen() {
 
     let userIdToSubmit = currentUserId;
     if (!userIdToSubmit) {
-        try {
-            const user = await UserController.get();
-            if (user && user.id) {
-                userIdToSubmit = user.id;
-                setCurrentUserId(user.id); // Update state if fetched here
-            } else {
-                alert('無法獲取用戶資訊，請稍後再試或重新登入。');
-                console.error('User ID is null, cannot create event.');
-                return;
-            }
-        } catch (error) {
-            alert('獲取用戶資訊時發生錯誤。');
-            console.error('Error fetching user ID in addEvent:', error);
-            return;
+      try {
+        const user = await UserController.get();
+        if (user && user.id) {
+          userIdToSubmit = user.id;
+          setCurrentUserId(user.id); // Update state if fetched here
+        } else {
+          alert('無法獲取用戶資訊，請稍後再試或重新登入。');
+          console.error('User ID is null, cannot create event.');
+          return;
         }
+      } catch (error) {
+        alert('獲取用戶資訊時發生錯誤。');
+        console.error('Error fetching user ID in addEvent:', error);
+        return;
+      }
     }
 
 
@@ -141,13 +141,13 @@ function CreateEventScreen() {
       inputs.img = newImageUrlsFromLastStage || [];
       const eventInsertData = {
         ...inputs,
-        user_id: userIdToSubmit, 
-        type: selectedType,    
+        owner_id: userIdToSubmit,
+        type: selectedType,
         hashtag: selectedHashtags,
       };
-      
+
       // Validate essential fields before insertion
-      if (!eventInsertData.user_id || isNaN(eventInsertData.type)) {
+      if (!eventInsertData.owner_id || isNaN(eventInsertData.type)) {
         alert('活動資料不完整，無法建立活動。');
         console.error('Missing user_id or type for event insertion:', eventInsertData);
         return;

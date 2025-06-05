@@ -1,8 +1,8 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { ArrowLeft } from "flowbite-react-icons/outline";
-import { useState, useEffect, useMemo } from 'react';
-import UserController from '../../backend/user/Controllers/UserController'; 
+import { useEffect, useMemo, useState } from 'react';
 import FavoriteController from '../../backend/favorite/Controllers/FavoriteControllers';
+import UserController from '../../backend/user/Controllers/UserController';
 import { supabase } from '../../utils/supabase';
 
 export const Route = createFileRoute('/events/$eventId')({
@@ -67,7 +67,7 @@ function EventDetails() {
           setIsFavorite(false);
           return;
         }
-        
+
         const userFavoritesList = await favoriteController.getFavorites("uuid, event_id");
         if (userFavoritesList && userFavoritesList.length > 0) {
           const userFavoriteEntry = userFavoritesList.find(fav => fav.id === currentUser.id);
@@ -105,7 +105,7 @@ function EventDetails() {
         .select('event_id')
         .eq('uuid', userData.id)
         .single();
-      
+
       if (fetchError && fetchError.code !== 'PGRST116') {
         throw fetchError;
       }
@@ -213,7 +213,7 @@ function EventDetails() {
       const { data: currentFavorite, error: fetchError } = await supabase
         .from('favorites')
         .select('event_id')
-        .eq('uuid', userData.id) 
+        .eq('uuid', userData.id)
         .single();
 
       if (fetchError) {
@@ -232,7 +232,7 @@ function EventDetails() {
         return;
       }
 
-      const updatedEventIds = currentFavorite.event_id.filter(id => id !== event.id);
+      const updatedEventIds = currentFavorite.event_id.filter((id: number) => id !== event.id);
 
       const { data: updatedFavorite, error: updateError } = await supabase
         .from('favorites')
@@ -324,10 +324,10 @@ function EventDetails() {
             </div>
             {/* ... (rest of your time, meeting point, fee, modals, etc.) ... */}
             <div className='flex p-2 items-center'>
-               <svg style={styles.icon} className="w-6 h-6 text-gray-800 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                 <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-               </svg>
-               <p>{event.start_time ? `${new Date(event.start_time).toLocaleDateString([], { month: 'numeric', day: 'numeric' })} ${new Date(event.start_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'UTC' })} ~ ${event.end_time ? `${new Date(event.end_time).toLocaleDateString([], { month: 'numeric', day: 'numeric' })} ${new Date(event.end_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'UTC' })}` : '時間未提供'}` : '時間未提供'}</p>
+              <svg style={styles.icon} className="w-6 h-6 text-gray-800 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+              </svg>
+              <p>{event.start_time ? `${new Date(event.start_time).toLocaleDateString([], { month: 'numeric', day: 'numeric' })} ${new Date(event.start_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'UTC' })} ~ ${event.end_time ? `${new Date(event.end_time).toLocaleDateString([], { month: 'numeric', day: 'numeric' })} ${new Date(event.end_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'UTC' })}` : '時間未提供'}` : '時間未提供'}</p>
             </div>
             <div className='flex p-2 items-center'>
               <svg style={styles.icon} className="w-6 h-6 text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -405,7 +405,7 @@ function EventDetails() {
                   <button
                     className="btn w-1/2"
                     onClick={() => {
-                      setJoin(false); 
+                      setJoin(false);
                       const cancelModal = document.getElementById("cancel_modal") as HTMLDialogElement | null;
                       const cancelSuccessModal = document.getElementById("cancelSuccess_modal") as HTMLDialogElement | null;
                       cancelModal?.close();

@@ -5,21 +5,21 @@ import { Database } from "../../../utils/database.types";
  */
 export type DBEvent = Database['public']['Tables']['events']['Row'];
 
-
 export default class Event {
-
-    public id:                  number  = 0;
-    public name:                string  = "";
-    public type:                number  = 0;
-    public description:         string = "";
-    public startTime:           string  = "";
-    public endTime:             string  = "";
-    public apply_due:            string  = "";
-    public meeting_point:       string  = "";
-    public destination:         string  = "";
-    public fee:                 number  = 0;
-    public userID:              string  = "";
-    public createdAt:           string  = "";
-    public img:                 Array<string> = [];
-    public hashtag:             Array<string> = [];    
+    public id: number = 0;
+    public name: string = "";
+    public type: number = 0;
+    public description: string = "";
+    public startTime: string = "";
+    public endTime: string = "";
+    public apply_due: string = "";
+    public meeting_point: string = "";
+    public destination: string = "";
+    public fee: number = 0;
+    public owner_id: string = "";
+    public createdAt: string = "";
+    public img: string[] = [];
+    public hashtag: number[] = [];
+    public custom_hashtag: string[] = [];
+    public externalLink: string = "";
 }

@@ -267,6 +267,21 @@ export type Database = {
           },
         ]
       }
+      favorites: {
+        Row: {
+          event_id: number[] | null
+          uuid: string
+        }
+        Insert: {
+          event_id?: number[] | null
+          uuid?: string
+        }
+        Update: {
+          event_id?: number[] | null
+          uuid?: string
+        }
+        Relationships: []
+      }
       food_category: {
         Row: {
           food_category: string

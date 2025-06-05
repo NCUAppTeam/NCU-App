@@ -174,8 +174,8 @@ INSERT INTO "public"."event_type" ("type_id", "type_name", "hashtag_relation") V
 -- Data for Name: events; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO "public"."events" ("id", "name", "description", "start_time", "end_time", "fee", "created_at", "user_id", "type", "img", "apply_due", "custom_hashtag", "destination", "externalLink", "hashtag", "link", "meeting_point") VALUES
-	(1, 'NCU APP 程式開發組招募', NULL, '2025-05-09 09:03:32+00', NULL, 0, '2024-10-02 10:38:22+00', 'c7e80cb0-7d3d-411f-9983-5e3addf62980', 5, NULL, '2025-05-15 06:31:19+00', NULL, NULL, NULL, NULL, NULL, '工程五館A205教室');
+INSERT INTO "public"."events" ("id", "name", "description", "start_time", "end_time", "fee", "created_at", "owner_id", "type", "img", "apply_due", "custom_hashtag", "destination", "externalLink", "hashtag", "meeting_point") VALUES
+	(1, 'NCU APP 程式開發組招募', NULL, '2025-05-09 09:03:32+00', NULL, 0, '2024-10-02 10:38:22+00', 'c7e80cb0-7d3d-411f-9983-5e3addf62980', 5, NULL, '2025-05-15 06:31:19+00', NULL, NULL, NULL, NULL, '工程五館A205教室');
 
 
 --

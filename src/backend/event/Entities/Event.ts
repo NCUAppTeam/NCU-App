@@ -10,14 +10,14 @@ export default class Event {
     public name: string = "";
     public type: number = 0;
     public description: string = "";
-    public start_time: string = "";
-    public end_time: string = "";
+    public startTime: string = "";
+    public endTime: string = "";
     public apply_due: string = "";
     public meeting_point: string = "";
     public destination: string = "";
     public fee: number = 0;
     public owner_id: string = "";
-    public created_at: string = "";
+    public createdAt: string = "";
     public img: string[] = [];
     public hashtag: number[] = [];
     public custom_hashtag: string[] = [];

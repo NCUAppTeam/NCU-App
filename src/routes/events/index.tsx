@@ -2,7 +2,7 @@ import { createFileRoute } from '@tanstack/react-router';
 import { Plus } from "flowbite-react-icons/outline";
 import { useState } from 'react';
 import EventController from '../../backend/event/Controllers/EventController';
-import { DBEvent } from '../../backend/event/Entities/Event';
+import  Event  from '../../backend/event/Entities/Event';
 import { DialogBox } from '../../components/Common/DialogBox';
 import typeColor from '../../components/pages/events/constants/colorForEvents.ts';
 import textForEvents from '../../components/pages/events/constants/textForEvents.ts';
@@ -38,7 +38,7 @@ function EventIndex() {
 
 
   const { events, eventTypes } = Route.useLoaderData() as {
-    events: DBEvent[];
+    events: Event[];
     eventTypes: { type_id: number; type_name: string }[];
   };
   const navigate = Route.useNavigate();
@@ -46,7 +46,7 @@ function EventIndex() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedType, setSelectedType] = useState("All");
 
-  const filteredEvents = events.filter((event: DBEvent) => {
+  const filteredEvents = events.filter((event: Event) => {
     const matchesSearch = event.name && event.name.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesType = selectedType === "All"
       ? true

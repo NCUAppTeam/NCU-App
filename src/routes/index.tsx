@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 import EventController from '../backend/event/Controllers/EventController';
-import { DBEvent } from '../backend/event/Entities/Event';
+import Event from '../backend/event/Entities/Event';
 import EventCard from '../components/pages/events/eventCard';
 import { SchoolCalendar } from '../components/pages/home/schoolCalendar';
 import { UserController } from '../controllers/user';
@@ -18,12 +18,12 @@ export const Route = createFileRoute('/')({
 })
 
 function HomeIndex() {
-    const { events } = Route.useLoaderData() as { events: DBEvent[] };
-    
+    const { events } = Route.useLoaderData() as { events: Event[] };
+
     return (
         <>
             <div className='grid justify-items-center w-full space-y-4'>
-                {events && events.map((event: DBEvent) => (
+                {events && events.map((event: Event) => (
                     <EventCard key={event.id} event={event} />
                 ))}
                 <SchoolCalendar />

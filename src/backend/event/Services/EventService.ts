@@ -21,7 +21,7 @@ const EventService = {
         event.apply_due         = record.apply_due ? new Date(record.apply_due).toISOString() : ""
         event.meeting_point     = record.meeting_point ?? ""
         event.fee               = typeof record.fee === 'number' ? record.fee : 0
-        event.userID            = record.user_id
+        event.userID            = record.owner_id ?? ""
         event.createdAt         = record.created_at ? new Date(record.created_at).toISOString() : ""
         event.img               = record.img ?? []
         event.hashtag           = record.custom_hashtag ?? []

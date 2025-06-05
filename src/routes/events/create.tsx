@@ -88,7 +88,7 @@ function CreateEventScreen() {
     try {
       const eventInsertData = {
         ...inputs,
-        user_id: (await UserController.get()).id,
+        owner_id: (await UserController.get()).id,
         type: selectedType,
         hashtags: selectedHashtags,
       };

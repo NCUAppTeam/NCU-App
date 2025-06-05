@@ -8,5 +8,5 @@ export interface EventInput {
     fee: number | null;
     description: string;
     type: 1 | 2 | 3 | 4 | 5;
-    link: string;
+    externalLink: string;
 }

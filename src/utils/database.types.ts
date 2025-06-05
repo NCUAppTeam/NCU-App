@@ -34,6 +34,156 @@ export type Database = {
   }
   public: {
     Tables: {
+      chatroom_members: {
+        Row: {
+          id: number
+          joinedAt: string | null
+          room_id: number
+          user_id: string | null
+        }
+        Insert: {
+          id?: number
+          joinedAt?: string | null
+          room_id: number
+          user_id?: string | null
+        }
+        Update: {
+          id?: number
+          joinedAt?: string | null
+          room_id?: number
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chatroom_members_room_id_fkey"
+            columns: ["room_id"]
+            isOneToOne: false
+            referencedRelation: "chatrooms"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "chatroom_members_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "members"
+            referencedColumns: ["uuid"]
+          },
+        ]
+      }
+      chatrooms: {
+        Row: {
+          created_at: string | null
+          created_by: string | null
+          event_id: number | null
+          id: number
+          name: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          created_by?: string | null
+          event_id?: number | null
+          id?: number
+          name?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string | null
+          event_id?: number | null
+          id?: number
+          name?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chatrooms_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "members"
+            referencedColumns: ["uuid"]
+          },
+          {
+            foreignKeyName: "chatrooms_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      comments: {
+        Row: {
+          content: string | null
+          created_at: string | null
+          event_id: number
+          id: number
+          user_id: string | null
+        }
+        Insert: {
+          content?: string | null
+          created_at?: string | null
+          event_id: number
+          id?: number
+          user_id?: string | null
+        }
+        Update: {
+          content?: string | null
+          created_at?: string | null
+          event_id?: number
+          id?: number
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "comments_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "comments_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "members"
+            referencedColumns: ["uuid"]
+          },
+        ]
+      }
+      event_participants: {
+        Row: {
+          event_id: number | null
+          id: number
+          joined_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          event_id?: number | null
+          id?: number
+          joined_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          event_id?: number | null
+          id?: number
+          joined_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_participants_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_participants_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "members"
+            referencedColumns: ["uuid"]
+          },
+        ]
+      }
       event_type: {
         Row: {
           hashtag_relation: number[]
@@ -65,12 +215,11 @@ export type Database = {
           hashtag: number[] | null
           id: number
           img: string[] | null
-          link: string | null
           meeting_point: string | null
           name: string | null
+          owner_id: string
           start_time: string | null
           type: number | null
-          user_id: string
         }
         Insert: {
           apply_due?: string | null
@@ -84,12 +233,11 @@ export type Database = {
           hashtag?: number[] | null
           id?: number
           img?: string[] | null
-          link?: string | null
           meeting_point?: string | null
           name?: string | null
+          owner_id: string
           start_time?: string | null
           type?: number | null
-          user_id: string
         }
         Update: {
           apply_due?: string | null
@@ -103,12 +251,11 @@ export type Database = {
           hashtag?: number[] | null
           id?: number
           img?: string[] | null
-          link?: string | null
           meeting_point?: string | null
           name?: string | null
+          owner_id?: string
           start_time?: string | null
           type?: number | null
-          user_id?: string
         }
         Relationships: [
           {
@@ -191,6 +338,48 @@ export type Database = {
           uuid?: string
         }
         Relationships: []
+      }
+      messages: {
+        Row: {
+          content: string | null
+          created_at: string
+          id: number
+          room_id: number | null
+          sendAt: string | null
+          sender_id: string | null
+        }
+        Insert: {
+          content?: string | null
+          created_at?: string
+          id?: number
+          room_id?: number | null
+          sendAt?: string | null
+          sender_id?: string | null
+        }
+        Update: {
+          content?: string | null
+          created_at?: string
+          id?: number
+          room_id?: number | null
+          sendAt?: string | null
+          sender_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_room_id_fkey"
+            columns: ["room_id"]
+            isOneToOne: false
+            referencedRelation: "chatrooms"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "messages_sender_id_fkey"
+            columns: ["sender_id"]
+            isOneToOne: false
+            referencedRelation: "members"
+            referencedColumns: ["uuid"]
+          },
+        ]
       }
       registrations: {
         Row: {

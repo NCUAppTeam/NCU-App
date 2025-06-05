@@ -1,16 +1,15 @@
 import Event, { DBEvent } from "../Entities/Event";
 
 const EventService = {
-    
-    parseEvent(record: DBEvent) : Event {
+    parseEvent(record: DBEvent): Event {
         if (!record || typeof record !== 'object')
-            throw new Error('Invalid record provided')
-        
+            throw new Error('Invalid record provided');
         if (!record.id)
-            throw new Error('id is a required field')
+            throw new Error('id is a required field');
 
-        const event             = new Event()
-            
+
+        const event = new Event();
+    
         event.id                = record.id
         event.name              = record.name ?? ""
         event.type              = typeof record.type === 'number' ? record.type : 0
@@ -28,8 +27,6 @@ const EventService = {
         return event
     }
 
-
-    
 }
 
-export default EventService
+export default EventService;

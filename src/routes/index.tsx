@@ -23,7 +23,7 @@ function HomeIndex() {
     return (
         <>
             <div className='grid justify-items-center w-full space-y-4'>
-                {events.map((event: DBEvent) => (
+                {events && events.map((event: DBEvent) => (
                     <EventCard key={event.id} event={event} />
                 ))}
                 <SchoolCalendar />

@@ -90,12 +90,12 @@ function EventDetails() {
   const noImages = !event.img || event.img.length === 0;
   let cardColor = 'bg-gray-700';
   if (noImages) {
-    switch (event.type) {
+    switch (event.type + 1) {
       case 1: cardColor = 'bg-[#BE9A4D]'; break;
       case 2: cardColor = 'bg-[#5E9AB5]'; break;
       case 3: cardColor = 'bg-[#5E9A6B]'; break;
       case 4: cardColor = 'bg-[#BC76A8]'; break;
-      case 5: cardColor = 'bg-[#A65E9A]'; break;
+      case 5: cardColor = 'bg-[#BEBAB7]'; break;
     }
   }
 

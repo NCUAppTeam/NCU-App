@@ -10,7 +10,7 @@ export default function EventCard({ event }: { event: Event }) {
             case 2: cardColor = 'bg-[#5E9AB5]'; break;
             case 3: cardColor = 'bg-[#5E9A6B]'; break;
             case 4: cardColor = 'bg-[#BC76A8]'; break;
-            case 5: cardColor = 'bg-[#A65E9A]'; break;
+            case 5: cardColor = 'bg-[#BEBAB7]'; break;
         }
     }
 

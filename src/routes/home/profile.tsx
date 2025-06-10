@@ -191,14 +191,11 @@ function ProfilePage() {
             if (!publicUrlData || !publicUrlData.publicUrl) {
                 throw new Error('無法取得背景照公開網址');
             }
-            else{
-              console.log(publicUrlData.publicUrl);
-            }
           
             const userController = new UserController();
             await userController.updateUser(profile.id, { profileBackground: publicUrlData.publicUrl });
             setShowBgModal(false);
-            // window.location.reload();
+            window.location.reload();
         } catch (err) {
             alert('背景照上傳失敗');
         }

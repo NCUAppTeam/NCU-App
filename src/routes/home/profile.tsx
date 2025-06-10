@@ -144,7 +144,7 @@ function ProfilePage() {
             const fileExt = croppedFile.name.split('.').pop();
             const filePath = `${profile.id}/avatar_${Date.now()}_${Math.random().toString(36).slice(2, 8)}.${fileExt}`;
 
-            const { error: uploadError } = await supabase.storage
+            const { data, error: uploadError } = await supabase.storage
                 .from('avatar')
                 .upload(filePath, croppedFile, { upsert: true });
 
@@ -152,7 +152,7 @@ function ProfilePage() {
 
             const { data: publicUrlData } = supabase.storage
                 .from('avatar')
-                .getPublicUrl(filePath);
+                .getPublicUrl(data.path);
 
             if (!publicUrlData || !publicUrlData.publicUrl) {
                 throw new Error('無法取得頭像公開網址');
@@ -178,7 +178,7 @@ function ProfilePage() {
             const fileExt = croppedFile.name.split('.').pop();
             const filePath = `${profile.id}/bg_${Date.now()}_${Math.random().toString(36).slice(2, 8)}.${fileExt}`;
 
-            const { error: uploadError } = await supabase.storage
+            const { data, error: uploadError } = await supabase.storage
                 .from('avatar')
                 .upload(filePath, croppedFile, { upsert: true });
 
@@ -186,7 +186,7 @@ function ProfilePage() {
 
             const { data: publicUrlData } = supabase.storage
                 .from('avatar')
-                .getPublicUrl(filePath);
+                .getPublicUrl(data.path);
 
             if (!publicUrlData || !publicUrlData.publicUrl) {
                 throw new Error('無法取得背景照公開網址');

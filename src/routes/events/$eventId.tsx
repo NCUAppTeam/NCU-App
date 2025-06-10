@@ -1,59 +1,91 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
-import { ArrowLeft } from "flowbite-react-icons/outline";
+import { ArrowLeft, Bell, Clock, Dollar, Heart, MapPin } from "flowbite-react-icons/outline";
+import { Heart as SolidHeart, MapPin as SolidMapPin } from 'flowbite-react-icons/solid';
 import { useEffect, useMemo, useState } from 'react';
+import EventController from '../../backend/event/Controllers/EventController';
+import { EventType } from '../../backend/event/Entities/EventType';
 import FavoriteController from '../../backend/favorite/Controllers/FavoriteControllers';
 import UserController from '../../backend/user/Controllers/UserController';
+import Announcement from '../../components/pages/events/announcement';
+import CommenSection from '../../components/pages/events/commentSection';
+import EditDeleteSection from '../../components/pages/events/EditDeleteSection';
+import ParticipantsSection from '../../components/pages/events/participantsSection';
 import { supabase } from '../../utils/supabase';
 
 export const Route = createFileRoute('/events/$eventId')({
   loader: async ({ params: { eventId } }) => {
-    const { data, error } = await supabase
-      .from('events')
-      .select('*')
-      .eq('id', eventId)
-      .single();
-
-    if (error !== null) {
-      throw error;
+    const eventController = new EventController();
+    const event = await eventController.findEventByID(eventId);
+    if (!event) {
+      throw new Error('Event not found');
     }
-    if (data && data.img === null) {
-      data.img = [];
-    }
-
-    return { event: data };
+    return event;
   },
   component: EventDetails
 });
 
-const styles = {
-  body: {
-    backgroundColor: '#3E3E3E'
-  },
-  container: {
-    flex: 1,
-    backgroundColor: '#FFFFFF'
-  },
-  card: {
-    borderRadius: "15px",
-    backgroundColor: '#FFFFFF',
-    margin: "1rem 1.5rem",
-    padding: "1rem"
-  },
-  icon: {
-    margin: "0.5rem"
-  },
-};
-
 function EventDetails() {
-  const { event } = Route.useLoaderData();
+
+  const event = Route.useLoaderData();
   const [join, setJoin] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
   const [isLoadingFavorite, setIsLoadingFavorite] = useState(false);
+  const [typeName, setTypeName] = useState('');
+  const [hashtagString, setHashtagString] = useState<Array<string>>([]);
 
   const userController = useMemo(() => new UserController(), []);
   const favoriteController = useMemo(() => new FavoriteController(), []);
 
   const noImages = !event.img || event.img.length === 0;
+  let cardColor = 'bg-gray-700';
+  if (!event.img || event.img.length === 0) {
+    switch (event.type) {
+      case 1: cardColor = 'bg-[#BE9A4D]'; break;
+      case 2: cardColor = 'bg-[#5E9AB5]'; break;
+      case 3: cardColor = 'bg-[#5E9A6B]'; break;
+      case 4: cardColor = 'bg-[#BC76A8]'; break;
+      case 5: cardColor = 'bg-[#A65E9A]'; break;
+    }
+  }
+  // get the type name from supabase
+  useEffect(() => {
+    const fetchTypeName = async () => {
+      if (!event.type) return;
+      try {
+        const eventController = new EventController();
+        const data = await eventController.returnEventTypesById({ type_id: event.type as number });
+        setTypeName(data?.type_name || '未知類型');
+      } catch (err) {
+        console.error('Error in fetchTypeName:', err);
+      }
+    };
+    fetchTypeName();
+  });
+
+  // turn event hashtag id into string according to supabase event_type table using getAllHashtagsByTypeId function
+  useEffect(() => {
+    const fetchHashtags = async () => {
+      if (!event.type) return;
+      try {
+        const eventController = new EventController();
+        // Get all hashtags for this event type
+        const hashtags = await eventController.getAllHashtagsByTypeId({ type_id: event.type as number });
+        // Only keep hashtags whose id is in event.hashtag (array of ids)
+        if (Array.isArray(event.hashtag) && Array.isArray(hashtags)) {
+          const filtered = hashtags
+            .filter((h: EventType) => event.hashtag.includes(h.type_id))
+            .map((h: EventType) => h.type_name);
+          setHashtagString(filtered);
+        } else {
+          setHashtagString([]);
+        }
+      } catch (err) {
+        console.error('Error in fetchHashtags:', err);
+        setHashtagString([]);
+      }
+    };
+    fetchHashtags();
+  });
 
   // Fetch initial favorite status
   useEffect(() => {
@@ -90,7 +122,44 @@ function EventDetails() {
     };
 
     checkFavoriteStatus();
-  }, [event.id, userController, favoriteController]);
+  });
+
+  useEffect(() => {
+    const checkRegistrationStatus = async () => {
+      if (!event?.id) return;
+      try {
+        const currentUser = await userController.getCurrentUser();
+        if (!currentUser || !currentUser.id) {
+          setJoin(false);
+          return;
+        }
+
+        // if currentUser is the host, skip registration check
+        if (currentUser.id === event.owner_id) {
+          setJoin(true);
+          return;
+        }
+
+        const { data: registration, error } = await supabase
+          .from('event_participants')
+          .select('id')
+          .eq('user_id', currentUser.id)
+          .eq('event_id', event.id)
+          .single();
+        if (error && error.code !== 'PGRST116') {
+          console.error('Error checking registration status:', error);
+          setJoin(false);
+          return;
+        }
+        setJoin(!!registration);
+      } catch (err) {
+        console.error('Error in checkRegistrationStatus:', err);
+        setJoin(false);
+      }
+    };
+    checkRegistrationStatus();
+  });
+
 
   // 新增活動報名
   async function addRegistration() {
@@ -100,43 +169,39 @@ function EventDetails() {
         alert('無法獲取使用者資訊，請先登入');
         return;
       }
-      const { data: currentReg, error: fetchError } = await supabase
-        .from('registrations')
-        .select('event_id')
-        .eq('uuid', userData.id)
+
+      // Check if already registered
+      const { data: existing, error: fetchError } = await supabase
+        .from('event_participants')
+        .select('id')
+        .eq('user_id', userData.id)
+        .eq('event_id', event.id)
         .single();
 
       if (fetchError && fetchError.code !== 'PGRST116') {
         throw fetchError;
       }
 
-      let newRegIds = [];
-      if (currentReg && currentReg.event_id) {
-        if (currentReg.event_id.includes(event.id)) {
-          console.log("Event already registered.");
-          setJoin(true);
-          return;
-        }
-        newRegIds = [...currentReg.event_id, event.id];
-      } else {
-        newRegIds = [event.id];
+      if (existing) {
+        alert("你已經報名過此活動。Event already registered.");
+        setJoin(true);
+        return;
       }
 
-
-      const registrationInsertData = {
-        uuid: userData.id,
-        event_id: newRegIds,
-      };
-
-      const { data: createdRegistration, error: registrationError } = await supabase
-        .from('registrations')
-        .insert(registrationInsertData)
+      // Insert new registration
+      const { error: insertError } = await supabase
+        .from('event_participants')
+        .insert({
+          user_id: userData.id,
+          event_id: event.id,
+          joined_at: new Date().toISOString(),
+        })
         .select('*')
         .single();
 
-      if (registrationError) throw registrationError;
-      console.log("createdRegistration", createdRegistration);
+      if (insertError) throw insertError;
       setJoin(true);
+
       const joinSuccessModal = document.getElementById("joinSuccess_modal") as HTMLDialogElement | null;
       const joinModal = document.getElementById("join_modal") as HTMLDialogElement | null;
       joinSuccessModal?.showModal();
@@ -145,6 +210,54 @@ function EventDetails() {
     } catch (error) {
       console.error('Error registering event:', error);
       alert('報名活動時發生錯誤');
+    }
+  }
+
+  // 取消報名
+  async function cancelRegistration() {
+    try {
+      const userData = await userController.getCurrentUser();
+      if (!userData || !userData.id) {
+        alert('無法獲取使用者資訊，請先登入');
+        return;
+      }
+
+      // Check if already registered
+      const { data: existing, error: fetchError } = await supabase
+        .from('event_participants')
+        .select('id')
+        .eq('user_id', userData.id)
+        .eq('event_id', event.id)
+        .single();
+
+      if (fetchError && fetchError.code !== 'PGRST116') {
+        throw fetchError;
+      }
+
+      if (!existing) {
+        alert("你尚未報名此活動。Event not registered.");
+        setJoin(false);
+        return;
+      }
+
+      // Delete registration
+      const { error: deleteError } = await supabase
+        .from('event_participants')
+        .delete()
+        .eq('user_id', userData.id)
+        .eq('event_id', event.id);
+
+      if (deleteError) throw deleteError;
+      setJoin(false);
+
+      const cancelSuccessModal = document.getElementById("cancelSuccess_modal") as HTMLDialogElement | null;
+      const cancelModal = document.getElementById("cancel_modal") as HTMLDialogElement | null;
+      cancelSuccessModal?.showModal();
+      cancelModal?.close();
+
+    } catch (error) {
+      console.error('Error cancelling registration:', error);
+      alert('取消報名活動時發生錯誤');
     }
   }
 
@@ -263,8 +376,71 @@ function EventDetails() {
     }
   };
 
+  function Countdown({ applyDue }: { applyDue: string }) {
+    const [timeLeft, setTimeLeft] = useState(() => {
+      const now = new Date();
+      const due = new Date(applyDue);
+      const diff = due.getTime() - now.getTime();
+      return diff > 0 ? diff : 0;
+    });
+
+    useEffect(() => {
+      if (timeLeft <= 0) return;
+      const timer = setInterval(() => {
+        setTimeLeft(prev => {
+          const next = prev - 1000;
+          return next > 0 ? next : 0;
+        });
+      }, 1000);
+      return () => clearInterval(timer);
+    }, [timeLeft]);
+
+    if (timeLeft <= 0) {
+      return (
+        <p className='flex text-sm text-gray-500 mt-2 justify-end'>
+          剩餘報名時間：已截止
+        </p>
+      );
+    }
+
+    const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((timeLeft / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((timeLeft / (1000 * 60)) % 60);
+    const seconds = Math.floor((timeLeft / 1000) % 60);
+
+    const result = [];
+    if (days > 0) result.push(`${days}天`);
+    if (hours > 0) result.push(`${hours}小時`);
+    if (minutes > 0) result.push(`${minutes}分鐘`);
+    if (seconds > 0 || result.length === 0) result.push(`${seconds}秒`);
+
+    return (
+      <p className='flex text-sm text-gray-500 mt-2 justify-end'>
+        剩餘報名時間：{result.join(' ')}
+      </p>
+    );
+  }
+
+  const [isHost, setIsHost] = useState(false);
+
+  useEffect(() => {
+    const checkIsHost = async () => {
+      try {
+        const currentUser = await userController.getCurrentUser();
+        if (currentUser && currentUser.id && event.owner_id) {
+          setIsHost(currentUser.id === event.owner_id);
+        } else {
+          setIsHost(false);
+        }
+      } catch (err) {
+        setIsHost(false);
+      }
+    };
+    checkIsHost();
+  }, [event.owner_id, userController]);
+
   return (
-    <div className="container mx-auto">
+    <div className="mx-auto">
       <div className="relative z-10">
         <Link
           to="/events"
@@ -274,10 +450,10 @@ function EventDetails() {
           <ArrowLeft className="w-5 h-5" />
         </Link>
       </div>
-      <div className={`bg-gray-800 ${noImages ? 'pt-16' : ''}`}>
-        {!noImages && (
-          <div className='relative'>
-            <div className="carousel w-full">
+      <div className={`y-full overflow-y-auto bg-gray-800`}>
+        {!noImages ? (
+          <div className='relative '>
+            <div className="carousel w-full ">
               {event.img && event.img.map((imageUrl, index) => (
                 <div key={`item${index + 1}`} id={`item${index + 1}`} className="carousel-item w-full">
                   <img src={imageUrl} className="w-full" alt={`Event image ${index + 1}`} />
@@ -299,12 +475,41 @@ function EventDetails() {
               </div>
             )}
           </div>
-        )}
+        ) :
+          <div className='relative'>
+            <div className={`carousel w-full`}>
+              <p className={`relative carousel-item w-full ${cardColor} h-96`} />
+            </div>
+          </div>
+        }
 
-        <div className={noImages ? 'pt-4' : '-translate-y-12'}>
-          <div className='' style={styles.card}>
+        <div className={'-translate-y-16 px-4'}>
+          <div className='bg-white p-4 m-4 rounded-lg'>
+
+            {/* Event Type and Hashtags */}
+            <div className={`${cardColor} text-sm font-semibold p-2 rounded-lg mb-2 text-white w-fit`}>
+              {typeName}
+            </div>
+            <div>
+              {hashtagString.length > 0 && (
+                <div className='flex flex-wrap gap-2 mb-2'>
+                  {hashtagString.map((tag, index) => (
+                    <span key={index} className='bg-gray-200 text-gray-800 px-2 py-1 rounded-full text-xs'>
+                      #{tag}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+
+
             <div className='flex items-center justify-between'>
               <h1 className='text-2xl m-1 font-bold'>{event.name}</h1>
+              {/* Event Type and Hashtags */}
+              <div>
+
+              </div>
+
               <button
                 onClick={handleFavoriteClick}
                 disabled={isLoadingFavorite}
@@ -312,39 +517,94 @@ function EventDetails() {
                 aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
               >
                 {isFavorite ? (
-                  <svg style={styles.icon} className="w-8 h-8 text-red-500 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="m12.75 20.66 6.184-7.098c2.677-2.884 2.559-6.506.754-8.705-.898-1.095-2.206-1.816-3.72-1.855-1.293-.034-2.652.43-3.963 1.442-1.315-1.012-2.678-1.476-3.973-1.442-1.515.04-2.825.76-3.724 1.855-1.806 2.201-1.915 5.823.772 8.706l6.183 7.097c.19.216.46.34.743.34a.985.985 0 0 0 .743-.34Z" />
-                  </svg>
+                  <SolidHeart className='m-4 w-8 h-8 text-red-500' />
                 ) : (
-                  <svg style={styles.icon} className="w-8 h-8 text-gray-800 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12.01 6.001C6.5 1 1 8 5.782 13.001L12.011 20l6.23-7C23 8 17.5 1 12.01 6.002Z" />
-                  </svg>
+                  <Heart className='m-4 w-8 h-8 text-gray-500' />
                 )}
               </button>
             </div>
-            {/* ... (rest of your time, meeting point, fee, modals, etc.) ... */}
+
             <div className='flex p-2 items-center'>
-              <svg style={styles.icon} className="w-6 h-6 text-gray-800 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-              </svg>
-              <p>{event.start_time ? `${new Date(event.start_time).toLocaleDateString([], { month: 'numeric', day: 'numeric' })} ${new Date(event.start_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'UTC' })} ~ ${event.end_time ? `${new Date(event.end_time).toLocaleDateString([], { month: 'numeric', day: 'numeric' })} ${new Date(event.end_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'UTC' })}` : '時間未提供'}` : '時間未提供'}</p>
+              <Clock className="m-1 w-6 h-6 text-gray-800 " />
+              <p>
+                {
+                  event.startTime ?
+                    `${new Date(event.startTime).toLocaleDateString('zh-TW', { year: 'numeric', month: '2-digit', day: '2-digit', timeZone: 'UTC' })} ${new Date(event.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'UTC' })} 
+                ~ 
+                ${event.endTime
+                      ? `${new Date(event.endTime).toLocaleDateString([], { month: '2-digit', day: '2-digit', timeZone: 'UTC' })} ${new Date(event.endTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'UTC' })}`
+                      : '時間未提供'
+                    }`
+
+                    : '時間未提供'}
+              </p>
             </div>
-            <div className='flex p-2 items-center'>
-              <svg style={styles.icon} className="w-6 h-6 text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
-                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.8 13.938h-.011a7 7 0 1 0-11.464.144h-.016l.14.171c.1.127.2.251.3.371L12 21l5.13-6.248c.194-.209.374-.429.54-.659l.13-.155Z" />
-              </svg>
-              <p>{event.meeting_point}</p>
-            </div>
+            {event.meeting_point === event.destination ? (
+              <div className='flex p-2 items-center'>
+                <SolidMapPin className="m-1 w-6 h-6 text-gray-800 " />
+                <p
+                  className="max-w-[150px] truncate cursor-pointer overflow-x-auto"
+                  title={event.meeting_point}
+                  onClick={e => {
+                    const target = e.currentTarget;
+                    if (target.classList.contains('truncate')) {
+                      target.classList.remove('truncate');
+                    } else {
+                      target.classList.add('truncate');
+                    }
+                  }}
+                >
+                  {event.meeting_point}
+                  <br />
+                  (集合地/目的地)
+                </p>
+              </div>
+            ) : (
+              <div className='flex p-2 items-center'>
+                <MapPin className="m-1 w-6 h-6 text-gray-800 " />
+                <p
+                  className="max-w-[150px] truncate cursor-pointer overflow-x-auto"
+                  title={event.meeting_point}
+                  onClick={e => {
+                    const target = e.currentTarget;
+                    if (target.classList.contains('truncate')) {
+                      target.classList.remove('truncate');
+                    } else {
+                      target.classList.add('truncate');
+                    }
+                  }}
+                >
+                  {event.meeting_point}
+                  <br />
+                  (集合地)
+                </p>
+                <SolidMapPin className="m-1 w-6 h-6 text-gray-800 " />
+                <p
+                  className="max-w-[150px] truncate cursor-pointer overflow-x-auto"
+                  title={event.destination}
+                  onClick={e => {
+                    const target = e.currentTarget;
+                    if (target.classList.contains('truncate')) {
+                      target.classList.remove('truncate');
+                    } else {
+                      target.classList.add('truncate');
+                    }
+                  }}
+                >
+                  {event.destination}
+                  <br />
+                  (目的地)
+                </p>
+              </div>
+            )}
             <div className='flex p-2 items-center justify-between'>
               <div className='flex items-center'>
-                <svg style={styles.icon} className="w-6 h-6 text-gray-800 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 17.345a4.76 4.76 0 0 0 2.558 1.618c2.274.589 4.512-.446 4.999-2.31.487-1.866-1.273-3.9-3.546-4.49-2.273-.59-4.034-2.623-3.547-4.488.486-1.865 2.724-2.899 4.998-2.31.982.236 1.87.793 2.538 1.592m-3.879 12.171V21m0-18v2.2" />
-                </svg>
-                <p>{event.fee ? `${event.fee} 元` : '費用未提供'}</p>
+                <Dollar className="m-1 w-6 h-6 text-gray-800 " />
+                <p>{event.fee ? `新台幣 ${event.fee} 元` : '費用未提供'}</p>
               </div>
 
-              <button className="btn bottom-1 right-1"
+              {!isHost && <button
+                className={`btn bottom-1 right-1 ${join ? '' : 'bg-sky-200 hover:bg-sky-100'} ${new Date(event.apply_due) < new Date() ? 'cursor-not-allowed opacity-100' : ''}`}
                 onClick={() => {
                   const joinModal = document.getElementById("join_modal") as HTMLDialogElement | null;
                   const cancelModal = document.getElementById("cancel_modal") as HTMLDialogElement | null;
@@ -353,18 +613,26 @@ function EventDetails() {
                   } else {
                     joinModal?.showModal();
                   }
-                }}>
-                {join ? "已報名" : "報名活動"}
-              </button>
+                }}
+                disabled={new Date(event.apply_due) < new Date()}
+              >
+                {new Date(event.apply_due) < new Date() ? (
+                  "報名已截止"
+                ) : (join ? "已報名" : "報名活動")}
+              </button>}
+
+
+
             </div>
+            <Countdown applyDue={event.apply_due} />
+
+
 
             {/* --- Modals for Join/Cancel Registration --- */}
             <dialog id="join_modal" className="modal">
               <div className="modal-box w-11/12 max-w-5xl">
                 <h3 className="text-xl flex items-center justify-center">
-                  <svg className="w-6 h-6 text-gray-800 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 5.365V3m0 2.365a5.338 5.338 0 0 1 5.133 5.368v1.8c0 2.386 1.867 2.982 1.867 4.175 0 .593 0 1.292-.538 1.292H5.538C5 18 5 17.301 5 16.708c0-1.193 1.867-1.789 1.867-4.175v-1.8A5.338 5.338 0 0 1 12 5.365ZM8.733 18c.094.852.306 1.54.944 2.112a3.48 3.48 0 0 0 4.646 0c.638-.572 1.236-1.26 1.33-2.112h-6.92Z" />
-                  </svg>
+                  <Bell className="w-6 h-6 text-gray-800 mr-2" />
                 </h3>
                 <p className="py-4 text-xl flex items-center justify-center">確定要報名此活動嗎？</p>
                 <div className="modal-action justify-between">
@@ -404,13 +672,7 @@ function EventDetails() {
                 <div className="modal-action justify-between">
                   <button
                     className="btn w-1/2"
-                    onClick={() => {
-                      setJoin(false);
-                      const cancelModal = document.getElementById("cancel_modal") as HTMLDialogElement | null;
-                      const cancelSuccessModal = document.getElementById("cancelSuccess_modal") as HTMLDialogElement | null;
-                      cancelModal?.close();
-                      cancelSuccessModal?.showModal();
-                    }}
+                    onClick={cancelRegistration}
                   >
                     好
                   </button>
@@ -438,7 +700,7 @@ function EventDetails() {
             </dialog>
           </div>
 
-          <div className='grid gap-y-2' style={styles.card}>
+          <div className='grid gap-y-2 bg-white p-4 m-4 rounded-lg'>
             <h1 className='text-xl font-bold'>活動說明</h1>
             {
               (!event.description || event.description.trim() === '')
@@ -450,8 +712,12 @@ function EventDetails() {
                 ))
             }
           </div>
+          <ParticipantsSection eventId={event.id} isHost={isHost} />
+          <CommenSection eventId={event.id} />
+          <Announcement eventId={event.id} ownerId={event.owner_id} isHost={isHost} />
+          <EditDeleteSection event={event} isHost={isHost} />
         </div>
       </div>
-    </div>
+    </div >
   );
 }

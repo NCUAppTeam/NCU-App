@@ -2,8 +2,7 @@ import { createFileRoute } from '@tanstack/react-router';
 import { Plus } from "flowbite-react-icons/outline";
 import { useState } from 'react';
 import EventController from '../../backend/event/Controllers/EventController';
-import  Event  from '../../backend/event/Entities/Event';
-import { DialogBox } from '../../components/Common/DialogBox';
+import Event from '../../backend/event/Entities/Event';
 import typeColor from '../../components/pages/events/constants/colorForEvents.ts';
 import textForEvents from '../../components/pages/events/constants/textForEvents.ts';
 import EventCard from '../../components/pages/events/eventCard';
@@ -60,7 +59,7 @@ function EventIndex() {
 
   return (
     <>
-      <div className="px-4 sm:px-6 lg:px-8 pb-4 w-full h-5/6">
+      <div className="px-4 sm:px-6 lg:px-8 w-full h-5/6">
 
         <SearchBar
           searchTerm={searchTerm}
@@ -92,7 +91,7 @@ function EventIndex() {
 
 
 
-        <div className="relative flex-1 bg-gray-50 shadow dark:bg-gray-700 px-4 rounded-lg h-full">
+        <div className="relative flex-1 bg-gray-50 shadow dark:bg-gray-700 px-4 pb-4 rounded-lg h-full overflow-y-auto">
           <h1 className={`py-2 text-xl text-black dark:text-white underline underline-offset-8`} style={{ textDecorationColor: typeColor[Number(selectedType) - 1] }}>
             {selectedType === 'All' ? '所有揪人' : eventTypes.at(Number(selectedType) - 1)?.type_name}
           </h1>
@@ -112,30 +111,32 @@ function EventIndex() {
               ))}
             </div>
 
-            {/* Add Events Button */}
-            <div className="absolute bottom-2 right-3">
-              <button
-                className="btn btn-circle bg-gray-50 hover:bg-gray-400 border-1 border-gray-300 text-gray-700 hover:text-white shadow-lg transition duration-300 ease-in-out"
-                aria-label="Create new event"
-                onClick={() => {
-                  navigate({ to: '/events/select' });
-                }}
-              >
-                <Plus className='m-auto' />
-              </button>
-            </div>
 
-            <DialogBox
-              message="確定要新增嗎？"
-              navigateTo="/events/select"
-              type="inquiry"
-            />
           </div>
         </div>
 
+        {/* Add Events Button */}
+        <div className="absolute bottom-6 right-6 z-10">
+          <button
+            className="btn btn-circle bg-gray-50 hover:bg-gray-400 border-1 border-gray-300 text-gray-700 hover:text-white shadow-lg transition duration-300 ease-in-out"
+            aria-label="Create new event"
+            onClick={() => {
+              navigate({ to: '/events/select' });
+            }}
+          >
+            <Plus className='m-auto' />
+          </button>
+        </div>
 
+        {/* <DialogBox
+          message="確定要新增嗎？"
+          navigateTo="/events/select"
+          type="inquiry"
+        /> */}
 
       </div>
+
+
     </>
   );
 }

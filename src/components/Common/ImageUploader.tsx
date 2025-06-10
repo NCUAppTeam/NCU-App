@@ -19,6 +19,7 @@ export default function ImageUploader({ onFilesSelected, disabled }: ImageUpload
 
     return (
         <input
+            id="image-uploader"
             type="file"
             multiple // Allow multiple file selection
             accept="image/*" // Accept only image files

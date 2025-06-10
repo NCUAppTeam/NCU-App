@@ -1,7 +1,7 @@
-import { useState, FormEvent } from 'react';
+import { FormEvent, useState } from 'react';
 import { EventInput } from "../../../../backend/event/Entities/EventInput"; // Adjust path as needed
-import ImageUploader from "../../../Common/ImageUploader"; // Adjust path as needed
 import { supabase } from '../../../../utils/supabase'; // Make sure supabase is configured and imported
+import ImageUploader from "../../../Common/ImageUploader"; // Adjust path as needed
 
 interface StagedFile {
     file: File;
@@ -81,7 +81,7 @@ export default function LastStage({ inputs, setInputs, currentUserId, handlePrev
 
             try {
                 const { error: uploadError } = await supabase.storage
-                    .from("events") 
+                    .from("events")
                     .upload(filePath, file, { upsert: false });
 
                 if (uploadError) {
@@ -191,7 +191,7 @@ export default function LastStage({ inputs, setInputs, currentUserId, handlePrev
                         </div>
                     </div>
                 )}
-                
+
                 <ImageUploader
                     onFilesSelected={handleNewFilesSelected}
                     disabled={isUploading}

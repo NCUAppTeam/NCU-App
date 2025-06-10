@@ -1,8 +1,11 @@
 import { Link } from '@tanstack/react-router';
 import { Check } from 'flowbite-react-icons/outline';
+import { useEffect } from 'react';
+import { EventInput } from '../../../../backend/event/Entities/EventInput.ts';
 import typeColor from '../constants/colorForEvents.ts';
 
 interface FirstStageProps {
+    setInputs: React.Dispatch<React.SetStateAction<EventInput>>;
     eventTypeInfo: { type_id: number; type_name: string } | null;
     eventTags: { type_id: number; type_name: string }[];
     selectedHashtags: number[];
@@ -12,6 +15,7 @@ interface FirstStageProps {
 }
 
 export default function FirstStage({
+    setInputs,
     eventTypeInfo,
     eventTags,
     selectedHashtags,
@@ -19,6 +23,16 @@ export default function FirstStage({
     loading,
     handleNextStep,
 }: FirstStageProps) {
+
+    useEffect(() => {
+        setInputs((prev: EventInput) => ({
+            ...prev,
+            hashtag: selectedHashtags, // Ensure hashtags are also set
+        }));
+        console.log('Selected hashtags updated:', selectedHashtags);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [selectedHashtags]);
+
     return (
         <div className="max-w-lg mx-auto flex flex-col justify-center">
             <h2 className="my-10 text-2xl text-center text-gray-700 font-bold dark:text-white" >揪人細項設定：選擇標籤</h2 >

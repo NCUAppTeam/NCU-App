@@ -80,7 +80,7 @@ export default class EventController {
         const query = supabase
             .from(EVENT_TABLE_NAME)
             .select('*')
-            .eq('user_id', uuid)
+            .eq('owner_id', uuid)
             .returns<Array<DBEvent>>()  
             
         // Latest created event first

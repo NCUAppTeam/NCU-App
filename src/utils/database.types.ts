@@ -34,72 +34,29 @@ export type Database = {
   }
   public: {
     Tables: {
-      chatroom_members: {
-        Row: {
-          id: number
-          joinedAt: string | null
-          room_id: number
-          user_id: string | null
-        }
-        Insert: {
-          id?: number
-          joinedAt?: string | null
-          room_id: number
-          user_id?: string | null
-        }
-        Update: {
-          id?: number
-          joinedAt?: string | null
-          room_id?: number
-          user_id?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "chatroom_members_room_id_fkey"
-            columns: ["room_id"]
-            isOneToOne: false
-            referencedRelation: "chatrooms"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "chatroom_members_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "members"
-            referencedColumns: ["uuid"]
-          },
-        ]
-      }
       chatrooms: {
         Row: {
-          created_at: string | null
-          created_by: string | null
+          chat: string | null
+          chat_created: string | null
           event_id: number | null
           id: number
-          name: string | null
+          user_id: string
         }
         Insert: {
-          created_at?: string | null
-          created_by?: string | null
+          chat?: string | null
+          chat_created?: string | null
           event_id?: number | null
           id?: number
-          name?: string | null
+          user_id: string
         }
         Update: {
-          created_at?: string | null
-          created_by?: string | null
+          chat?: string | null
+          chat_created?: string | null
           event_id?: number | null
           id?: number
-          name?: string | null
+          user_id?: string
         }
         Relationships: [
-          {
-            foreignKeyName: "chatrooms_created_by_fkey"
-            columns: ["created_by"]
-            isOneToOne: false
-            referencedRelation: "members"
-            referencedColumns: ["uuid"]
-          },
           {
             foreignKeyName: "chatrooms_event_id_fkey"
             columns: ["event_id"]
@@ -107,26 +64,33 @@ export type Database = {
             referencedRelation: "events"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "chatrooms_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "members"
+            referencedColumns: ["uuid"]
+          },
         ]
       }
       comments: {
         Row: {
+          commented_at: string | null
           content: string | null
-          created_at: string | null
           event_id: number
           id: number
           user_id: string | null
         }
         Insert: {
+          commented_at?: string | null
           content?: string | null
-          created_at?: string | null
           event_id: number
           id?: number
           user_id?: string | null
         }
         Update: {
+          commented_at?: string | null
           content?: string | null
-          created_at?: string | null
           event_id?: number
           id?: number
           user_id?: string | null
@@ -153,18 +117,21 @@ export type Database = {
           event_id: number | null
           id: number
           joined_at: string | null
+          status: boolean
           user_id: string | null
         }
         Insert: {
           event_id?: number | null
           id?: number
           joined_at?: string | null
+          status?: boolean
           user_id?: string | null
         }
         Update: {
           event_id?: number | null
           id?: number
           joined_at?: string | null
+          status?: boolean
           user_id?: string | null
         }
         Relationships: [
@@ -395,21 +362,6 @@ export type Database = {
             referencedColumns: ["uuid"]
           },
         ]
-      }
-      registrations: {
-        Row: {
-          event_id: number[] | null
-          uuid: string
-        }
-        Insert: {
-          event_id?: number[] | null
-          uuid: string
-        }
-        Update: {
-          event_id?: number[] | null
-          uuid?: string
-        }
-        Relationships: []
       }
       restaurants: {
         Row: {

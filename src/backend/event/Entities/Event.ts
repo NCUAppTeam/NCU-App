@@ -8,7 +8,7 @@ export type DBEvent = Database['public']['Tables']['events']['Row'];
 export default class Event {
     public id: number = 0;
     public name: string = "";
-    public type: number = 0;
+    public type: number = 1 | 2 | 3 | 4 | 5;
     public description: string = "";
     public startTime: string = "";
     public endTime: string = "";

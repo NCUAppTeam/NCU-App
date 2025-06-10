@@ -12,7 +12,7 @@ import { HStack, VStack } from "../..";
 const options = [
     { name: "首頁", engName: "Home", pageNav: "/" },
     { name: "揪人", engName: "Gather 'Round", pageNav: "/events" },
-    { name: "綠洲拾橡", engName: "Acorn Trails in the Oasis", pageNav: "/dinner" },
+    // { name: "綠洲拾橡", engName: "Acorn Trails in the Oasis", pageNav: "/dinner" },
 ];
 
 export const DrawerOption = () => {

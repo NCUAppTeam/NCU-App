@@ -13,7 +13,7 @@ export default function EventCard({ event }: { event: Event }) {
             case 5: cardColor = 'bg-[#A65E9A]'; break;
         }
     }
-    
+
 
     return (
         <Link
@@ -42,7 +42,7 @@ export default function EventCard({ event }: { event: Event }) {
                 </h3>
                 <p className="text-s flex items-center text-gray-600 dark:text-gray-300 truncate">
                     <Clock size={14} className='mr-1 sm:mr-1.5 flex-shrink-0' /> {/* Adjusted icon size and margin */}
-                    {event.startTime ? `${new Date(event.startTime).toLocaleDateString([], { month: 'numeric', day: 'numeric'})} ${new Date(event.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false,  timeZone: 'UTC' })}` : '時間未提供'}
+                    {event.startTime ? `${new Date(event.startTime).toLocaleDateString([], { month: '2-digit', day: '2-digit', timeZone: 'UTC' })} ${new Date(event.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'UTC' })}` : '時間未提供'}
                 </p>
                 <p className="text-s flex items-center text-gray-600 dark:text-gray-300 truncate">
                     <MapPinAlt size={14} className='mr-1 sm:mr-1.5 flex-shrink-0' /> {/* Adjusted icon size and margin */}

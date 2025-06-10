@@ -28,7 +28,22 @@ function CreateEventScreen() {
   const selectedType = parseInt(typeString);
 
   const [step, setStep] = useState(0); // Track the current step
-  const [inputs, setInputs] = useState<EventInput>({} as EventInput);
+  const [inputs, setInputs] = useState<EventInput>({
+    name: '',
+    start_time: '',
+    end_time: '',
+    apply_due: '',
+    meeting_point: '',
+    destination: '',
+    fee: null,
+    description: '',
+    type: 1,
+    externalLink: '',
+    img: [],
+    hashtag: [],
+    owner_id: '',
+    created_at: ''
+  });
   const [eventTypeInfo, setEventTypeInfo] = useState<EventType | null>(null);
   const [eventTags, setEventTags] = useState<EventType[]>([]); // Assuming EventType is also used for tags
   const [loading, setLoading] = useState(true);
@@ -43,6 +58,8 @@ function CreateEventScreen() {
         const user = await UserController.get();
         if (user && user.id) {
           setCurrentUserId(user.id);
+          console.log('Current user ID fetched:', user.id);
+          setInputs((prevInputs) => ({ ...prevInputs, owner_id: user.id })); // Set owner_id in inputs
         } else {
           console.error('Failed to get user ID or user object is not as expected. User:', user);
           // Potentially navigate away or show an error if user ID is critical here
@@ -58,6 +75,7 @@ function CreateEventScreen() {
   useEffect(() => {
     const eventController = new EventController();
 
+    // Typeinfo 會用在first stage，type_name用在名稱顯示，type_id用在顏色區分
     async function fetchTypeInfo() {
       if (selectedType && !isNaN(selectedType)) {
         try {
@@ -139,11 +157,14 @@ function CreateEventScreen() {
 
     try {
       inputs.img = newImageUrlsFromLastStage || [];
-      const eventInsertData = {
+      const eventInsertData: EventInput = {
         ...inputs,
-        owner_id: userIdToSubmit,
-        type: selectedType,
+        type: selectedType as 1 | 2 | 3 | 4 | 5, // Ensure type is set correctly
         hashtag: selectedHashtags,
+        start_time: new Date(inputs.start_time).toISOString(),
+        end_time: new Date(inputs.end_time).toISOString(),
+        apply_due: new Date(inputs.apply_due).toISOString(),
+        created_at: new Date().toISOString(),
       };
 
       // Validate essential fields before insertion
@@ -151,6 +172,10 @@ function CreateEventScreen() {
         alert('活動資料不完整，無法建立活動。');
         console.error('Missing user_id or type for event insertion:', eventInsertData);
         return;
+      }
+
+      if (inputs.name == '') {
+        eventInsertData.name = eventTypeInfo?.type_name || '名字消失了';
       }
 
       const { data: createdEvent, error: eventError } = await supabase
@@ -203,6 +228,7 @@ function CreateEventScreen() {
             case 0:
               return (
                 <FirstStage
+                  setInputs={setInputs}
                   eventTypeInfo={eventTypeInfo}
                   eventTags={eventTags}
                   selectedHashtags={selectedHashtags}

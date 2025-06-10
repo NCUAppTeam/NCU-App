@@ -1,270 +1,231 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
-import { ArrowLeft } from "flowbite-react-icons/outline";
-import { useEffect, useMemo, useState } from 'react';
+import { ArrowLeft, Bell, Clock, Dollar, Heart, MapPin } from "flowbite-react-icons/outline";
+import { Heart as SolidHeart, MapPin as SolidMapPin } from 'flowbite-react-icons/solid';
+import { useEffect, useState } from 'react';
+import EventController from '../../backend/event/Controllers/EventController';
 import FavoriteController from '../../backend/favorite/Controllers/FavoriteControllers';
 import UserController from '../../backend/user/Controllers/UserController';
-import { supabase } from '../../utils/supabase';
+import Announcement from '../../components/pages/events/announcement';
+import CommenSection from '../../components/pages/events/commentSection';
+import EditDeleteSection from '../../components/pages/events/EditDeleteSection';
+import ParticipantsSection from '../../components/pages/events/participantsSection';
 
 export const Route = createFileRoute('/events/$eventId')({
   loader: async ({ params: { eventId } }) => {
-    const { data, error } = await supabase
-      .from('events')
-      .select('*')
-      .eq('id', eventId)
-      .single();
+    const eventController = new EventController();
+    const favoriteController = new FavoriteController();
+    const userController = new UserController();
 
-    if (error !== null) {
-      throw error;
-    }
-    if (data && data.img === null) {
-      data.img = [];
+    // Get event
+    const event = await eventController.findEventByID(eventId);
+    if (!event) throw new Error('Event not found');
+
+    // Get current user
+    const currentUser = await userController.getCurrentUser();
+
+    // Get type name
+    let typeName = '';
+    if (event.type) {
+      const type = await eventController.returnEventTypesById({ type_id: event.type as number });
+      typeName = type?.type_name || '未知類型';
     }
 
-    return { event: data };
+    // Get hashtags
+    let hashtagString: string[] = [];
+    if (event.type) {
+      const hashtags = await eventController.getAllHashtagsByTypeId({ type_id: event.type as number });
+      if (Array.isArray(event.hashtag) && Array.isArray(hashtags)) {
+        hashtagString = hashtags
+          .filter((h) => event.hashtag.includes(h.type_id))
+          .map((h) => h.type_name);
+      }
+    }
+
+    // Is host
+    const isHost = !!currentUser && currentUser.id === event.owner_id;
+
+    // Registration status
+    let join = false;
+    if (currentUser && currentUser.id && event.id) {
+      join = isHost
+        ? true
+        : await eventController.checkUserRegistration(event.id, currentUser.id);
+    }
+
+    // Favorite status
+    let isFavorite = false;
+    if (currentUser && currentUser.id && event.id) {
+      isFavorite = await favoriteController.isEventFavorite(currentUser.id, event.id);
+    }
+
+    return {
+      event,
+      typeName,
+      hashtagString,
+      isHost,
+      join,
+      isFavorite,
+      currentUser,
+    };
   },
-  component: EventDetails
+  component: EventDetails,
 });
 
-const styles = {
-  body: {
-    backgroundColor: '#3E3E3E'
-  },
-  container: {
-    flex: 1,
-    backgroundColor: '#FFFFFF'
-  },
-  card: {
-    borderRadius: "15px",
-    backgroundColor: '#FFFFFF',
-    margin: "1rem 1.5rem",
-    padding: "1rem"
-  },
-  icon: {
-    margin: "0.5rem"
-  },
-};
-
 function EventDetails() {
-  const { event } = Route.useLoaderData();
-  const [join, setJoin] = useState(false);
-  const [isFavorite, setIsFavorite] = useState(false);
-  const [isLoadingFavorite, setIsLoadingFavorite] = useState(false);
+  const {
+    event,
+    typeName,
+    hashtagString,
+    isHost,
+    join: initialJoin,
+    isFavorite: initialFavorite,
+    currentUser,
+  } = Route.useLoaderData();
 
-  const userController = useMemo(() => new UserController(), []);
-  const favoriteController = useMemo(() => new FavoriteController(), []);
+  // Only UI state
+  const [join, setJoin] = useState(initialJoin);
+  const [isFavorite, setIsFavorite] = useState(initialFavorite);
 
+  // Card color
   const noImages = !event.img || event.img.length === 0;
+  let cardColor = 'bg-gray-700';
+  if (noImages) {
+    switch (event.type) {
+      case 1: cardColor = 'bg-[#BE9A4D]'; break;
+      case 2: cardColor = 'bg-[#5E9AB5]'; break;
+      case 3: cardColor = 'bg-[#5E9A6B]'; break;
+      case 4: cardColor = 'bg-[#BC76A8]'; break;
+      case 5: cardColor = 'bg-[#A65E9A]'; break;
+    }
+  }
 
-  // Fetch initial favorite status
-  useEffect(() => {
-    const checkFavoriteStatus = async () => {
-      if (!event?.id) return;
-
-      setIsLoadingFavorite(true);
-      try {
-        const currentUser = await userController.getCurrentUser();
-        if (!currentUser || !currentUser.id) {
-          setIsFavorite(false);
-          return;
-        }
-
-        const userFavoritesList = await favoriteController.getFavorites("uuid, event_id");
-        if (userFavoritesList && userFavoritesList.length > 0) {
-          const userFavoriteEntry = userFavoritesList.find(fav => fav.id === currentUser.id);
-
-          if (userFavoriteEntry && userFavoriteEntry.event_id && userFavoriteEntry.event_id.includes(event.id)) {
-            setIsFavorite(true);
-          } else {
-            setIsFavorite(false);
-          }
-        } else {
-          // Not yet exists in favorites
-          setIsFavorite(false);
-        }
-      } catch (err) {
-        console.error('Error in checkFavoriteStatus:', err);
-        setIsFavorite(false);
-      } finally {
-        setIsLoadingFavorite(false);
-      }
-    };
-
-    checkFavoriteStatus();
-  }, [event.id, userController, favoriteController]);
-
-  // 新增活動報名
+  // Registration
   async function addRegistration() {
     try {
-      const userData = await userController.getCurrentUser();
-      if (!userData || !userData.id) {
+      if (!currentUser || !currentUser.id) {
         alert('無法獲取使用者資訊，請先登入');
         return;
       }
-      const { data: currentReg, error: fetchError } = await supabase
-        .from('registrations')
-        .select('event_id')
-        .eq('uuid', userData.id)
-        .single();
+      const eventController = new EventController();
+      const result = await eventController.registerUserToEvent(event.id, currentUser.id);
+      if (result.success) {
+        setJoin(true);
 
-      if (fetchError && fetchError.code !== 'PGRST116') {
-        throw fetchError;
-      }
-
-      let newRegIds = [];
-      if (currentReg && currentReg.event_id) {
-        if (currentReg.event_id.includes(event.id)) {
-          console.log("Event already registered.");
-          setJoin(true);
-          return;
-        }
-        newRegIds = [...currentReg.event_id, event.id];
       } else {
-        newRegIds = [event.id];
+        alert(result.message || '報名活動時發生錯誤');
       }
-
-
-      const registrationInsertData = {
-        uuid: userData.id,
-        event_id: newRegIds,
-      };
-
-      const { data: createdRegistration, error: registrationError } = await supabase
-        .from('registrations')
-        .insert(registrationInsertData)
-        .select('*')
-        .single();
-
-      if (registrationError) throw registrationError;
-      console.log("createdRegistration", createdRegistration);
-      setJoin(true);
-      const joinSuccessModal = document.getElementById("joinSuccess_modal") as HTMLDialogElement | null;
-      const joinModal = document.getElementById("join_modal") as HTMLDialogElement | null;
-      joinSuccessModal?.showModal();
-      joinModal?.close();
-
     } catch (error) {
-      console.error('Error registering event:', error);
       alert('報名活動時發生錯誤');
     }
   }
 
-  //新增收藏
-  async function addFavorite() {
-    if (isLoadingFavorite) return;
-    setIsLoadingFavorite(true);
+  async function cancelRegistration() {
     try {
-      const userData = await userController.getCurrentUser();
-      if (!userData || !userData.id) {
+      if (!currentUser || !currentUser.id) {
         alert('無法獲取使用者資訊，請先登入');
         return;
       }
-
-      const { data: currentFavorite, error: fetchError } = await supabase
-        .from('favorites')
-        .select('event_id')
-        .eq('uuid', userData.id)
-        .single();
-
-      if (fetchError && fetchError.code !== 'PGRST116') {
-        throw fetchError;
-      }
-
-      let newEventIds = [];
-      if (currentFavorite && currentFavorite.event_id) {
-        if (currentFavorite.event_id.includes(event.id)) {
-          console.log("Event already in favorites.");
-          setIsFavorite(true);
-          return;
-        }
-        newEventIds = [...currentFavorite.event_id, event.id];
+      const eventController = new EventController();
+      const result = await eventController.cancelUserRegistration(event.id, currentUser.id);
+      if (result.success) {
+        setJoin(false);
       } else {
-        newEventIds = [event.id];
+        alert(result.message || '取消報名活動時發生錯誤');
       }
-
-      const { data: upsertedFavorite, error: upsertError } = await supabase
-        .from('favorites')
-        .upsert({ uuid: userData.id, event_id: newEventIds }, { onConflict: 'uuid' })
-        .select('*')
-        .single();
-
-      if (upsertError) throw upsertError;
-      console.log("upsertedFavorite (added)", upsertedFavorite);
-      setIsFavorite(true);
-
     } catch (error) {
-      console.error('Error adding favorite:', error);
-      alert('新增收藏時發生錯誤');
-    } finally {
-      setIsLoadingFavorite(false);
+      alert('取消報名活動時發生錯誤');
     }
   }
 
-  // 取消收藏
-  async function removeFavorite() {
-    if (isLoadingFavorite) return;
-    setIsLoadingFavorite(true);
+  async function addFavorite() {
     try {
-      const userData = await userController.getCurrentUser();
-      if (!userData || !userData.id) {
+      if (!currentUser || !currentUser.id) {
         alert('無法獲取使用者資訊，請先登入');
         return;
       }
-
-      const { data: currentFavorite, error: fetchError } = await supabase
-        .from('favorites')
-        .select('event_id')
-        .eq('uuid', userData.id)
-        .single();
-
-      if (fetchError) {
-        if (fetchError.code === 'PGRST116') {
-          console.warn("No favorite entry found to remove from.");
-          setIsFavorite(false);
-        } else {
-          throw fetchError;
-        }
-        return;
+      const favoriteController = new FavoriteController();
+      const result = await favoriteController.addEventToFavorites(currentUser.id, event.id);
+      if (result.success) {
+        setIsFavorite(true);
+      } else {
+        alert(result.message || '新增收藏時發生錯誤');
       }
-
-      if (!currentFavorite || !currentFavorite.event_id || !currentFavorite.event_id.includes(event.id)) {
-        console.warn("Event not found in user's favorites or favorites list is empty.");
-        setIsFavorite(false);
-        return;
-      }
-
-      const updatedEventIds = currentFavorite.event_id.filter((id: number) => id !== event.id);
-
-      const { data: updatedFavorite, error: updateError } = await supabase
-        .from('favorites')
-        .update({ event_id: updatedEventIds })
-        .eq('uuid', userData.id)
-        .select('*')
-        .single();
-
-      if (updateError) throw updateError;
-      console.log("updatedFavorite (after removal)", updatedFavorite);
-      setIsFavorite(false);
-
     } catch (error) {
-      console.error('Error removing favorite:', error);
+      alert('新增收藏時發生錯誤');
+    }
+  }
+
+  async function removeFavorite() {
+    try {
+      if (!currentUser || !currentUser.id) {
+        alert('無法獲取使用者資訊，請先登入');
+        return;
+      }
+      const favoriteController = new FavoriteController();
+      const result = await favoriteController.removeEventFromFavorites(currentUser.id, event.id);
+      if (result.success) {
+        setIsFavorite(false);
+      } else {
+        alert(result.message || '取消收藏時發生錯誤');
+      }
+    } catch (error) {
       alert('取消收藏時發生錯誤');
-    } finally {
-      setIsLoadingFavorite(false);
     }
   }
 
   const handleFavoriteClick = () => {
-    if (isLoadingFavorite) return;
-
-    if (isFavorite) {
-      removeFavorite();
-    } else {
-      addFavorite();
-    }
+    if (isFavorite) removeFavorite();
+    else addFavorite();
   };
 
+  function Countdown({ applyDue }: { applyDue: string }) {
+    const [timeLeft, setTimeLeft] = useState(() => {
+      const now = new Date();
+      const due = new Date(applyDue);
+      const diff = due.getTime() - now.getTime();
+      return diff > 0 ? diff : 0;
+    });
+
+    // Only UI timer, not data fetching
+    useEffect(() => {
+      if (timeLeft <= 0) return;
+      const timer = setInterval(() => {
+        setTimeLeft(prev => {
+          const next = prev - 1000;
+          return next > 0 ? next : 0;
+        });
+      }, 1000);
+      return () => clearInterval(timer);
+    }, [timeLeft]);
+
+    if (timeLeft <= 0) {
+      return (
+        <p className='flex text-sm text-gray-500 mt-2 justify-end'>
+          剩餘報名時間：已截止
+        </p>
+      );
+    }
+
+    const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((timeLeft / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((timeLeft / (1000 * 60)) % 60);
+    const seconds = Math.floor((timeLeft / 1000) % 60);
+
+    const result = [];
+    if (days > 0) result.push(`${days}天`);
+    if (hours > 0) result.push(`${hours}小時`);
+    if (minutes > 0) result.push(`${minutes}分鐘`);
+    if (seconds > 0 || result.length === 0) result.push(`${seconds}秒`);
+
+    return (
+      <p className='flex text-sm text-gray-500 mt-2 justify-end'>
+        剩餘報名時間：{result.join(' ')}
+      </p>
+    );
+  }
+
   return (
-    <div className="container mx-auto">
+    <div className="mx-auto">
       <div className="relative z-10">
         <Link
           to="/events"
@@ -274,10 +235,10 @@ function EventDetails() {
           <ArrowLeft className="w-5 h-5" />
         </Link>
       </div>
-      <div className={`bg-gray-800 ${noImages ? 'pt-16' : ''}`}>
-        {!noImages && (
-          <div className='relative'>
-            <div className="carousel w-full">
+      <div className={`y-full overflow-y-auto bg-gray-800`}>
+        {!noImages ? (
+          <div className='relative '>
+            <div className="carousel w-full ">
               {event.img && event.img.map((imageUrl, index) => (
                 <div key={`item${index + 1}`} id={`item${index + 1}`} className="carousel-item w-full">
                   <img src={imageUrl} className="w-full" alt={`Event image ${index + 1}`} />
@@ -299,52 +260,135 @@ function EventDetails() {
               </div>
             )}
           </div>
-        )}
+        ) :
+          <div className='relative'>
+            <div className={`carousel w-full`}>
+              <p className={`relative carousel-item w-full ${cardColor} h-96`} />
+            </div>
+          </div>
+        }
 
-        <div className={noImages ? 'pt-4' : '-translate-y-12'}>
-          <div className='' style={styles.card}>
+        <div className={'-translate-y-16 px-4'}>
+          <div className='bg-white p-4 m-4 rounded-lg'>
+
+            {/* Event Type and Hashtags */}
+            <div className={`${cardColor} text-sm font-semibold p-2 rounded-lg mb-2 text-white w-fit`}>
+              {typeName}
+            </div>
+            <div>
+              {hashtagString.length > 0 && (
+                <div className='flex flex-wrap gap-2 mb-2'>
+                  {hashtagString.map((tag, index) => (
+                    <span key={index} className='bg-gray-200 text-gray-800 px-2 py-1 rounded-full text-xs'>
+                      #{tag}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+
+
             <div className='flex items-center justify-between'>
               <h1 className='text-2xl m-1 font-bold'>{event.name}</h1>
+              {/* Event Type and Hashtags */}
+              <div>
+
+              </div>
+
               <button
                 onClick={handleFavoriteClick}
-                disabled={isLoadingFavorite}
-                className="cursor-pointer p-2 rounded-full hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="cursor-pointer p-2 rounded-full hover:bg-gray-200"
                 aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
               >
                 {isFavorite ? (
-                  <svg style={styles.icon} className="w-8 h-8 text-red-500 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="m12.75 20.66 6.184-7.098c2.677-2.884 2.559-6.506.754-8.705-.898-1.095-2.206-1.816-3.72-1.855-1.293-.034-2.652.43-3.963 1.442-1.315-1.012-2.678-1.476-3.973-1.442-1.515.04-2.825.76-3.724 1.855-1.806 2.201-1.915 5.823.772 8.706l6.183 7.097c.19.216.46.34.743.34a.985.985 0 0 0 .743-.34Z" />
-                  </svg>
+                  <SolidHeart className='m-4 w-8 h-8 text-red-500' />
                 ) : (
-                  <svg style={styles.icon} className="w-8 h-8 text-gray-800 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12.01 6.001C6.5 1 1 8 5.782 13.001L12.011 20l6.23-7C23 8 17.5 1 12.01 6.002Z" />
-                  </svg>
+                  <Heart className='m-4 w-8 h-8 text-gray-500' />
                 )}
               </button>
             </div>
-            {/* ... (rest of your time, meeting point, fee, modals, etc.) ... */}
+
             <div className='flex p-2 items-center'>
-              <svg style={styles.icon} className="w-6 h-6 text-gray-800 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-              </svg>
-              <p>{event.start_time ? `${new Date(event.start_time).toLocaleDateString([], { month: 'numeric', day: 'numeric' })} ${new Date(event.start_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'UTC' })} ~ ${event.end_time ? `${new Date(event.end_time).toLocaleDateString([], { month: 'numeric', day: 'numeric' })} ${new Date(event.end_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'UTC' })}` : '時間未提供'}` : '時間未提供'}</p>
+              <Clock className="m-1 w-6 h-6 text-gray-800 " />
+              <p>
+                {
+                  event.startTime ?
+                    `${new Date(event.startTime).toLocaleDateString('zh-TW', { year: 'numeric', month: '2-digit', day: '2-digit', timeZone: 'UTC' })} ${new Date(event.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'UTC' })} 
+                ~ 
+                ${event.endTime
+                      ? `${new Date(event.endTime).toLocaleDateString([], { month: '2-digit', day: '2-digit', timeZone: 'UTC' })} ${new Date(event.endTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'UTC' })}`
+                      : '時間未提供'
+                    }`
+
+                    : '時間未提供'}
+              </p>
             </div>
-            <div className='flex p-2 items-center'>
-              <svg style={styles.icon} className="w-6 h-6 text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
-                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.8 13.938h-.011a7 7 0 1 0-11.464.144h-.016l.14.171c.1.127.2.251.3.371L12 21l5.13-6.248c.194-.209.374-.429.54-.659l.13-.155Z" />
-              </svg>
-              <p>{event.meeting_point}</p>
-            </div>
+            {event.meeting_point === event.destination ? (
+              <div className='flex p-2 items-center'>
+                <SolidMapPin className="m-1 w-6 h-6 text-gray-800 " />
+                <p
+                  className="max-w-[150px] truncate cursor-pointer overflow-x-auto"
+                  title={event.meeting_point}
+                  onClick={e => {
+                    const target = e.currentTarget;
+                    if (target.classList.contains('truncate')) {
+                      target.classList.remove('truncate');
+                    } else {
+                      target.classList.add('truncate');
+                    }
+                  }}
+                >
+                  {event.meeting_point}
+                  <br />
+                  (集合地/目的地)
+                </p>
+              </div>
+            ) : (
+              <div className='flex p-2 items-center'>
+                <MapPin className="m-1 w-6 h-6 text-gray-800 " />
+                <p
+                  className="max-w-[150px] truncate cursor-pointer overflow-x-auto"
+                  title={event.meeting_point}
+                  onClick={e => {
+                    const target = e.currentTarget;
+                    if (target.classList.contains('truncate')) {
+                      target.classList.remove('truncate');
+                    } else {
+                      target.classList.add('truncate');
+                    }
+                  }}
+                >
+                  {event.meeting_point}
+                  <br />
+                  (集合地)
+                </p>
+                <SolidMapPin className="m-1 w-6 h-6 text-gray-800 " />
+                <p
+                  className="max-w-[150px] truncate cursor-pointer overflow-x-auto"
+                  title={event.destination}
+                  onClick={e => {
+                    const target = e.currentTarget;
+                    if (target.classList.contains('truncate')) {
+                      target.classList.remove('truncate');
+                    } else {
+                      target.classList.add('truncate');
+                    }
+                  }}
+                >
+                  {event.destination}
+                  <br />
+                  (目的地)
+                </p>
+              </div>
+            )}
             <div className='flex p-2 items-center justify-between'>
               <div className='flex items-center'>
-                <svg style={styles.icon} className="w-6 h-6 text-gray-800 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 17.345a4.76 4.76 0 0 0 2.558 1.618c2.274.589 4.512-.446 4.999-2.31.487-1.866-1.273-3.9-3.546-4.49-2.273-.59-4.034-2.623-3.547-4.488.486-1.865 2.724-2.899 4.998-2.31.982.236 1.87.793 2.538 1.592m-3.879 12.171V21m0-18v2.2" />
-                </svg>
-                <p>{event.fee ? `${event.fee} 元` : '費用未提供'}</p>
+                <Dollar className="m-1 w-6 h-6 text-gray-800 " />
+                <p>{event.fee ? `新台幣 ${event.fee} 元` : '費用未提供'}</p>
               </div>
 
-              <button className="btn bottom-1 right-1"
+              {!isHost && <button
+                className={`btn bottom-1 right-1 ${join ? '' : 'bg-sky-200 hover:bg-sky-100'} ${new Date(event.apply_due) < new Date() ? 'cursor-not-allowed opacity-100' : ''}`}
                 onClick={() => {
                   const joinModal = document.getElementById("join_modal") as HTMLDialogElement | null;
                   const cancelModal = document.getElementById("cancel_modal") as HTMLDialogElement | null;
@@ -353,24 +397,41 @@ function EventDetails() {
                   } else {
                     joinModal?.showModal();
                   }
-                }}>
-                {join ? "已報名" : "報名活動"}
-              </button>
+                }}
+                disabled={new Date(event.apply_due) < new Date()}
+              >
+                {new Date(event.apply_due) < new Date() ? (
+                  "報名已截止"
+                ) : (join ? "已報名" : "報名活動")}
+              </button>}
+
+
+
             </div>
+            <Countdown applyDue={event.apply_due} />
+
+
 
             {/* --- Modals for Join/Cancel Registration --- */}
             <dialog id="join_modal" className="modal">
               <div className="modal-box w-11/12 max-w-5xl">
                 <h3 className="text-xl flex items-center justify-center">
-                  <svg className="w-6 h-6 text-gray-800 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 5.365V3m0 2.365a5.338 5.338 0 0 1 5.133 5.368v1.8c0 2.386 1.867 2.982 1.867 4.175 0 .593 0 1.292-.538 1.292H5.538C5 18 5 17.301 5 16.708c0-1.193 1.867-1.789 1.867-4.175v-1.8A5.338 5.338 0 0 1 12 5.365ZM8.733 18c.094.852.306 1.54.944 2.112a3.48 3.48 0 0 0 4.646 0c.638-.572 1.236-1.26 1.33-2.112h-6.92Z" />
-                  </svg>
+                  <Bell className="w-6 h-6 text-gray-800 mr-2" />
                 </h3>
                 <p className="py-4 text-xl flex items-center justify-center">確定要報名此活動嗎？</p>
                 <div className="modal-action justify-between">
-                  <button className="btn w-1/2"
-                    onClick={addRegistration}
-                  >好</button>
+                  <button
+                    className="btn w-1/2"
+                    onClick={async () => {
+                      await addRegistration();
+                      const joinModal = document.getElementById("join_modal") as HTMLDialogElement | null;
+                      joinModal?.close();
+                      const joinSuccessModal = document.getElementById("joinSuccess_modal") as HTMLDialogElement | null;
+                      joinSuccessModal?.showModal();
+                    }}
+                  >
+                    好
+                  </button>
                   <dialog id="joinSuccess_modal" className="modal">
                     <div className="modal-box w-11/12 max-w-5xl">
                       <div className='flex item-center justify-center'>
@@ -382,13 +443,29 @@ function EventDetails() {
                       <p className="py-4 flex item-center justify-center">活動報名成功！</p>
                       <div className="modal-action">
                         <form method="dialog" className='w-full'>
-                          <button className="btn w-full">好</button>
+                          <button
+                            className="btn w-full"
+                            onClick={() => {
+                              const modal = document.getElementById("joinSuccess_modal") as HTMLDialogElement | null;
+                              modal?.close();
+                            }}
+                          >
+                            好
+                          </button>
                         </form>
                       </div>
                     </div>
                   </dialog>
                   <form method="dialog" className='w-1/2'>
-                    <button className="btn w-full">取消</button>
+                    <button
+                      className="btn w-full"
+                      onClick={() => {
+                        const modal = document.getElementById("joinSuccess_modal") as HTMLDialogElement | null;
+                        modal?.close();
+                      }}
+                    >
+                      取消
+                    </button>
                   </form>
                 </div>
               </div>
@@ -404,11 +481,11 @@ function EventDetails() {
                 <div className="modal-action justify-between">
                   <button
                     className="btn w-1/2"
-                    onClick={() => {
-                      setJoin(false);
+                    onClick={async () => {
+                      await cancelRegistration();
                       const cancelModal = document.getElementById("cancel_modal") as HTMLDialogElement | null;
-                      const cancelSuccessModal = document.getElementById("cancelSuccess_modal") as HTMLDialogElement | null;
                       cancelModal?.close();
+                      const cancelSuccessModal = document.getElementById("cancelSuccess_modal") as HTMLDialogElement | null;
                       cancelSuccessModal?.showModal();
                     }}
                   >
@@ -438,7 +515,7 @@ function EventDetails() {
             </dialog>
           </div>
 
-          <div className='grid gap-y-2' style={styles.card}>
+          <div className='grid gap-y-2 bg-white p-4 m-4 rounded-lg'>
             <h1 className='text-xl font-bold'>活動說明</h1>
             {
               (!event.description || event.description.trim() === '')
@@ -450,8 +527,12 @@ function EventDetails() {
                 ))
             }
           </div>
+          <ParticipantsSection eventId={event.id} isHost={isHost} />
+          <CommenSection eventId={event.id} />
+          <Announcement eventId={event.id} ownerId={event.owner_id} isHost={isHost} />
+          <EditDeleteSection event={event} isHost={isHost} />
         </div>
       </div>
-    </div>
+    </div >
   );
 }

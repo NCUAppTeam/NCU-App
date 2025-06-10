@@ -25,8 +25,8 @@ export default class User {
     public department:          string  = ""
     public grade:               number  = 1
     public bio:                 string  = ""
-    public studentId:          string  = ""
-    public grad_time:           string  = ""
+    public studentId:           string  = ""
+    public grad_time:           string | null  = ""
     public point:               number  = 0
 
 

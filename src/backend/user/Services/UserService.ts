@@ -34,7 +34,7 @@ const UserService = {
         user.bio            = record.bio || '使用者未提供'
         user.profileBackground = record.profileBackground || 'https://cdn-icons-png.flaticon.com/512/6596/6596121.png'
         user.studentId      = record.studentId || '使用者未提供'
-        user.grad_time      = record.grad_time || new Date().toISOString()
+        user.grad_time      = record.grad_time !== undefined ? record.grad_time : null
         user.avatar         = record.avatar || 'https://cdn-icons-png.flaticon.com/512/6596/6596121.png'
         user.point         = record.point || 0
         return user

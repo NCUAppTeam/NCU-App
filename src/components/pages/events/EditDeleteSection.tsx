@@ -123,7 +123,7 @@ export default function EditDeleteSection({ event, isHost }: EditDeleteSectionPr
                             rows={4}
                         />
                         <div className="text-gray-400 text-sm mt-2">
-                            <div>※ 圖片、活動類型、Hashtag暫不開放編輯，如需更動請聯絡管理員。</div>
+                            <div>※ 圖片、活動類型、Hashtag暫不開放編輯，如需更動請聯絡NCU APP開發團隊。</div>
                         </div>
                         <div className="modal-action flex justify-between">
                             <button type="submit" className="btn bg-yellow-500 hover:bg-yellow-600 text-white w-1/2">

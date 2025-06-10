@@ -40,6 +40,7 @@ function EventIndex() {
     events: Event[];
     eventTypes: { type_id: number; type_name: string }[];
   };
+
   const navigate = Route.useNavigate();
 
   const [searchTerm, setSearchTerm] = useState('');
@@ -56,6 +57,10 @@ function EventIndex() {
   const handleFilterSelect = (type: string) => {
     setSelectedType(type);
   };
+
+  if (!events || !eventTypes) {
+    return <div className="text-center py-10">載入中...</div>;
+  }
 
   return (
     <>
@@ -96,9 +101,9 @@ function EventIndex() {
             {selectedType === 'All' ? '所有揪人' : eventTypes.at(Number(selectedType) - 1)?.type_name}
           </h1>
           <div className="mt-2">
-            <div className="grid grid-cols-2 gap-4 overflow-y-auto">
+            <div className="grid grid-cols-2 gap-4 overflow-y-auto justify-items-center">
               {filteredEvents.length >= 0 && filteredEvents.length < 5 && (
-                <div className="col-span-2 text-center text-white">
+                <div className="col-span-2 text-center text-white w-full">
                   <p className="px-2 break-all text-center text-gray-500 py-2 bg-yellow-50 rounded shadow">
                     {selectedType === 'All' || selectedType === '5'
                       ? '快來加入或發起更多揪人吧！'

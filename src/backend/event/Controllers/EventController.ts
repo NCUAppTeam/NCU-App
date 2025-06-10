@@ -230,4 +230,187 @@ export default class EventController {
     
         return hashtags;
     }
+
+    public async getFavoriteEvents(
+        userId: string,
+        fields: string = '*',
+        orderBy?: string,
+        orderDescending?: boolean,
+        rangeStart?: number,
+        rangeEnd?: number
+    ) : Promise<Array<Event> | null> {
+        // First, get the list of favorite event IDs for the user
+        const { data: favoriteIdsData, error: favoriteIdsError } = await supabase
+            .from('favorites')
+            .select('event_id')
+            .eq('uuid', userId);
+
+        if (favoriteIdsError) {
+            ErrorHandler.handleSupabaseError(favoriteIdsError);
+            return null;
+        }
+
+        const favoriteEventIds = (favoriteIdsData ?? []).flatMap((fav: { event_id: number[] | null }) =>
+            Array.isArray(fav.event_id) ? fav.event_id.map(String) : []
+        );
+
+        if (favoriteEventIds.length === 0) {
+            return [];
+        }
+
+        // Now, get all events with IDs in the favoriteEventIds list
+        const query = supabase
+            .from(EVENT_TABLE_NAME)
+            .select(fields)
+            .in('id', favoriteEventIds)
+            .returns<Array<DBEvent>>();
+        if (orderBy)
+            query.order(orderBy, { ascending: !orderDescending })
+        
+        if (rangeStart !== undefined && rangeEnd !== undefined)
+            query.range(rangeStart, rangeEnd)
+
+        const { data, error } = await query
+        
+        // Error handling
+        if (error) {
+            ErrorHandler.handleSupabaseError(error)
+            return null
+        }
+
+        // Initialize result array
+        const events : Array<Event> = []
+        
+        // For each found DBEvent, convert to Event and append to result array
+        data.forEach((record: DBEvent) => {
+            events.push(
+                EventService.parseEvent(record)
+            )
+        })
+
+        return events
+    }
+
+    // Get user accepted events according to staus in event_participants table
+    public async getUserAcceptedEvents(
+        userId: string,
+        fields: string = '*',
+        orderBy?: string,
+        orderDescending?: boolean,
+    ) : Promise<Array<Event> | null> {
+        // First, get the list of accepted event IDs for the user
+        const { data: acceptedIdsData, error: acceptedIdsError } = await supabase
+            .from('event_participants')
+            .select('event_id')
+            .eq('user_id', userId)
+            .eq('status', true);
+
+        if (acceptedIdsError) {
+            ErrorHandler.handleSupabaseError(acceptedIdsError);
+            return null;
+        }
+
+        const acceptedEventIds = (acceptedIdsData ?? []).map((acc: { event_id: number | null }) =>
+            acc.event_id !== null ? String(acc.event_id) : null
+        ).filter((id): id is string => id !== null);
+
+        if (acceptedEventIds.length === 0) {
+            return [];
+        }
+
+        // Now, get all events with IDs in the acceptedEventIds list
+        const query = supabase
+            .from(EVENT_TABLE_NAME)
+            .select(fields)
+            .in('id', acceptedEventIds)
+            .returns<Array<DBEvent>>();
+        
+        if (orderBy)
+            query.order(orderBy, { ascending: !orderDescending })
+
+        const { data, error } = await query
+        
+        // Error handling
+        if (error) {
+            ErrorHandler.handleSupabaseError(error)
+            return null
+        }
+
+        // Initialize result array
+        const events : Array<Event> = []
+        
+        // For each found DBEvent, convert to Event and append to result array
+        data.forEach((record: DBEvent) => {
+            events.push(
+                EventService.parseEvent(record)
+            )
+        })
+
+        return events
+    }    
+    
+    public async checkUserRegistration(eventId: number, userId: string): Promise<boolean> {
+            const { data, error } = await supabase
+                .from('event_participants')
+                .select('*')
+                .eq('user_id', userId)
+                .eq('event_id', eventId)
+                .single();
+            if (error && error.code !== 'PGRST116') return false;
+            return !!data;
+        }
+    
+        public async registerUserToEvent(eventId: number, userId: string): Promise<{ success: boolean; message?: string }> {
+            const { data: existing, error: fetchError } = await supabase
+                .from('event_participants')
+                .select('*')
+                .eq('user_id', userId)
+                .eq('event_id', eventId)
+                .single();
+            if (fetchError && fetchError.code !== 'PGRST116') {
+                return { success: false, message: fetchError.message };
+            }
+            if (existing) {
+                return { success: false, message: "你已經報名過此活動。" };
+            }
+            const { error: insertError } = await supabase
+                .from('event_participants')
+                .insert({
+                    user_id: userId,
+                    event_id: Number(eventId),
+                    joined_at: new Date().toISOString(),
+                    status: false,
+                })
+                .select('*')
+                .single();
+            if (insertError) {
+                return { success: false, message: insertError.message };
+            }
+            return { success: true };
+        }
+    
+        public async cancelUserRegistration(eventId: number, userId: string): Promise<{ success: boolean; message?: string }> {
+            const { data: existing, error: fetchError } = await supabase
+                .from('event_participants')
+                .select('*')
+                .eq('user_id', userId)
+                .eq('event_id', eventId)
+                .single();
+            if (fetchError && fetchError.code !== 'PGRST116') {
+                return { success: false, message: fetchError.message };
+            }
+            if (!existing) {
+                return { success: false, message: "你尚未報名此活動。" };
+            }
+            const { error: deleteError } = await supabase
+                .from('event_participants')
+                .delete()
+                .eq('user_id', userId)
+                .eq('event_id', eventId);
+            if (deleteError) {
+                return { success: false, message: deleteError.message };
+            }
+            return { success: true };
+        }
+    
 }

@@ -1,44 +1,95 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { ArrowLeft, Bell, Clock, Dollar, Heart, MapPin } from "flowbite-react-icons/outline";
 import { Heart as SolidHeart, MapPin as SolidMapPin } from 'flowbite-react-icons/solid';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import EventController from '../../backend/event/Controllers/EventController';
-import { EventType } from '../../backend/event/Entities/EventType';
 import FavoriteController from '../../backend/favorite/Controllers/FavoriteControllers';
 import UserController from '../../backend/user/Controllers/UserController';
 import Announcement from '../../components/pages/events/announcement';
 import CommenSection from '../../components/pages/events/commentSection';
 import EditDeleteSection from '../../components/pages/events/EditDeleteSection';
 import ParticipantsSection from '../../components/pages/events/participantsSection';
-import { supabase } from '../../utils/supabase';
 
 export const Route = createFileRoute('/events/$eventId')({
   loader: async ({ params: { eventId } }) => {
     const eventController = new EventController();
+    const favoriteController = new FavoriteController();
+    const userController = new UserController();
+
+    // Get event
     const event = await eventController.findEventByID(eventId);
-    if (!event) {
-      throw new Error('Event not found');
+    if (!event) throw new Error('Event not found');
+
+    // Get current user
+    const currentUser = await userController.getCurrentUser();
+
+    // Get type name
+    let typeName = '';
+    if (event.type) {
+      const type = await eventController.returnEventTypesById({ type_id: event.type as number });
+      typeName = type?.type_name || '未知類型';
     }
-    return event;
+
+    // Get hashtags
+    let hashtagString: string[] = [];
+    if (event.type) {
+      const hashtags = await eventController.getAllHashtagsByTypeId({ type_id: event.type as number });
+      if (Array.isArray(event.hashtag) && Array.isArray(hashtags)) {
+        hashtagString = hashtags
+          .filter((h) => event.hashtag.includes(h.type_id))
+          .map((h) => h.type_name);
+      }
+    }
+
+    // Is host
+    const isHost = !!currentUser && currentUser.id === event.owner_id;
+
+    // Registration status
+    let join = false;
+    if (currentUser && currentUser.id && event.id) {
+      join = isHost
+        ? true
+        : await eventController.checkUserRegistration(event.id, currentUser.id);
+    }
+
+    // Favorite status
+    let isFavorite = false;
+    if (currentUser && currentUser.id && event.id) {
+      isFavorite = await favoriteController.isEventFavorite(currentUser.id, event.id);
+    }
+
+    return {
+      event,
+      typeName,
+      hashtagString,
+      isHost,
+      join,
+      isFavorite,
+      currentUser,
+    };
   },
-  component: EventDetails
+  component: EventDetails,
 });
 
 function EventDetails() {
+  const {
+    event,
+    typeName,
+    hashtagString,
+    isHost,
+    join: initialJoin,
+    isFavorite: initialFavorite,
+    currentUser,
+  } = Route.useLoaderData();
 
-  const event = Route.useLoaderData();
-  const [join, setJoin] = useState(false);
-  const [isFavorite, setIsFavorite] = useState(false);
-  const [isLoadingFavorite, setIsLoadingFavorite] = useState(false);
-  const [typeName, setTypeName] = useState('');
-  const [hashtagString, setHashtagString] = useState<Array<string>>([]);
+  // Only UI state
+  const [join, setJoin] = useState(initialJoin);
+  const [isFavorite, setIsFavorite] = useState(initialFavorite);
 
-  const userController = useMemo(() => new UserController(), []);
-  const favoriteController = useMemo(() => new FavoriteController(), []);
-
+  // Card color
   const noImages = !event.img || event.img.length === 0;
   let cardColor = 'bg-gray-700';
-  if (!event.img || event.img.length === 0) {
+  if (noImages) {
     switch (event.type) {
       case 1: cardColor = 'bg-[#BE9A4D]'; break;
       case 2: cardColor = 'bg-[#5E9AB5]'; break;
@@ -47,333 +98,84 @@ function EventDetails() {
       case 5: cardColor = 'bg-[#A65E9A]'; break;
     }
   }
-  // get the type name from supabase
-  useEffect(() => {
-    const fetchTypeName = async () => {
-      if (!event.type) return;
-      try {
-        const eventController = new EventController();
-        const data = await eventController.returnEventTypesById({ type_id: event.type as number });
-        setTypeName(data?.type_name || '未知類型');
-      } catch (err) {
-        console.error('Error in fetchTypeName:', err);
-      }
-    };
-    fetchTypeName();
-  });
 
-  // turn event hashtag id into string according to supabase event_type table using getAllHashtagsByTypeId function
-  useEffect(() => {
-    const fetchHashtags = async () => {
-      if (!event.type) return;
-      try {
-        const eventController = new EventController();
-        // Get all hashtags for this event type
-        const hashtags = await eventController.getAllHashtagsByTypeId({ type_id: event.type as number });
-        // Only keep hashtags whose id is in event.hashtag (array of ids)
-        if (Array.isArray(event.hashtag) && Array.isArray(hashtags)) {
-          const filtered = hashtags
-            .filter((h: EventType) => event.hashtag.includes(h.type_id))
-            .map((h: EventType) => h.type_name);
-          setHashtagString(filtered);
-        } else {
-          setHashtagString([]);
-        }
-      } catch (err) {
-        console.error('Error in fetchHashtags:', err);
-        setHashtagString([]);
-      }
-    };
-    fetchHashtags();
-  });
-
-  // Fetch initial favorite status
-  useEffect(() => {
-    const checkFavoriteStatus = async () => {
-      if (!event?.id) return;
-
-      setIsLoadingFavorite(true);
-      try {
-        const currentUser = await userController.getCurrentUser();
-        if (!currentUser || !currentUser.id) {
-          setIsFavorite(false);
-          return;
-        }
-
-        const userFavoritesList = await favoriteController.getFavorites("uuid, event_id");
-        if (userFavoritesList && userFavoritesList.length > 0) {
-          const userFavoriteEntry = userFavoritesList.find(fav => fav.id === currentUser.id);
-
-          if (userFavoriteEntry && userFavoriteEntry.event_id && userFavoriteEntry.event_id.includes(event.id)) {
-            setIsFavorite(true);
-          } else {
-            setIsFavorite(false);
-          }
-        } else {
-          // Not yet exists in favorites
-          setIsFavorite(false);
-        }
-      } catch (err) {
-        console.error('Error in checkFavoriteStatus:', err);
-        setIsFavorite(false);
-      } finally {
-        setIsLoadingFavorite(false);
-      }
-    };
-
-    checkFavoriteStatus();
-  });
-
-  useEffect(() => {
-    const checkRegistrationStatus = async () => {
-      if (!event?.id) return;
-      try {
-        const currentUser = await userController.getCurrentUser();
-        if (!currentUser || !currentUser.id) {
-          setJoin(false);
-          return;
-        }
-
-        // if currentUser is the host, skip registration check
-        if (currentUser.id === event.owner_id) {
-          setJoin(true);
-          return;
-        }
-
-        const { data: registration, error } = await supabase
-          .from('event_participants')
-          .select('id')
-          .eq('user_id', currentUser.id)
-          .eq('event_id', event.id)
-          .single();
-        if (error && error.code !== 'PGRST116') {
-          console.error('Error checking registration status:', error);
-          setJoin(false);
-          return;
-        }
-        setJoin(!!registration);
-      } catch (err) {
-        console.error('Error in checkRegistrationStatus:', err);
-        setJoin(false);
-      }
-    };
-    checkRegistrationStatus();
-  });
-
-
-  // 新增活動報名
+  // Registration
   async function addRegistration() {
     try {
-      const userData = await userController.getCurrentUser();
-      if (!userData || !userData.id) {
+      if (!currentUser || !currentUser.id) {
         alert('無法獲取使用者資訊，請先登入');
         return;
       }
-
-      // Check if already registered
-      const { data: existing, error: fetchError } = await supabase
-        .from('event_participants')
-        .select('id')
-        .eq('user_id', userData.id)
-        .eq('event_id', event.id)
-        .single();
-
-      if (fetchError && fetchError.code !== 'PGRST116') {
-        throw fetchError;
-      }
-
-      if (existing) {
-        alert("你已經報名過此活動。Event already registered.");
+      const eventController = new EventController();
+      const result = await eventController.registerUserToEvent(event.id, currentUser.id);
+      if (result.success) {
         setJoin(true);
-        return;
+
+      } else {
+        alert(result.message || '報名活動時發生錯誤');
       }
-
-      // Insert new registration
-      const { error: insertError } = await supabase
-        .from('event_participants')
-        .insert({
-          user_id: userData.id,
-          event_id: event.id,
-          joined_at: new Date().toISOString(),
-        })
-        .select('*')
-        .single();
-
-      if (insertError) throw insertError;
-      setJoin(true);
-
-      const joinSuccessModal = document.getElementById("joinSuccess_modal") as HTMLDialogElement | null;
-      const joinModal = document.getElementById("join_modal") as HTMLDialogElement | null;
-      joinSuccessModal?.showModal();
-      joinModal?.close();
-
     } catch (error) {
-      console.error('Error registering event:', error);
       alert('報名活動時發生錯誤');
     }
   }
 
-  // 取消報名
   async function cancelRegistration() {
     try {
-      const userData = await userController.getCurrentUser();
-      if (!userData || !userData.id) {
+      if (!currentUser || !currentUser.id) {
         alert('無法獲取使用者資訊，請先登入');
         return;
       }
-
-      // Check if already registered
-      const { data: existing, error: fetchError } = await supabase
-        .from('event_participants')
-        .select('id')
-        .eq('user_id', userData.id)
-        .eq('event_id', event.id)
-        .single();
-
-      if (fetchError && fetchError.code !== 'PGRST116') {
-        throw fetchError;
-      }
-
-      if (!existing) {
-        alert("你尚未報名此活動。Event not registered.");
+      const eventController = new EventController();
+      const result = await eventController.cancelUserRegistration(event.id, currentUser.id);
+      if (result.success) {
         setJoin(false);
-        return;
+      } else {
+        alert(result.message || '取消報名活動時發生錯誤');
       }
-
-      // Delete registration
-      const { error: deleteError } = await supabase
-        .from('event_participants')
-        .delete()
-        .eq('user_id', userData.id)
-        .eq('event_id', event.id);
-
-      if (deleteError) throw deleteError;
-      setJoin(false);
-
-      const cancelSuccessModal = document.getElementById("cancelSuccess_modal") as HTMLDialogElement | null;
-      const cancelModal = document.getElementById("cancel_modal") as HTMLDialogElement | null;
-      cancelSuccessModal?.showModal();
-      cancelModal?.close();
-
     } catch (error) {
-      console.error('Error cancelling registration:', error);
       alert('取消報名活動時發生錯誤');
     }
   }
 
-  //新增收藏
   async function addFavorite() {
-    if (isLoadingFavorite) return;
-    setIsLoadingFavorite(true);
     try {
-      const userData = await userController.getCurrentUser();
-      if (!userData || !userData.id) {
+      if (!currentUser || !currentUser.id) {
         alert('無法獲取使用者資訊，請先登入');
         return;
       }
-
-      const { data: currentFavorite, error: fetchError } = await supabase
-        .from('favorites')
-        .select('event_id')
-        .eq('uuid', userData.id)
-        .single();
-
-      if (fetchError && fetchError.code !== 'PGRST116') {
-        throw fetchError;
-      }
-
-      let newEventIds = [];
-      if (currentFavorite && currentFavorite.event_id) {
-        if (currentFavorite.event_id.includes(event.id)) {
-          console.log("Event already in favorites.");
-          setIsFavorite(true);
-          return;
-        }
-        newEventIds = [...currentFavorite.event_id, event.id];
+      const favoriteController = new FavoriteController();
+      const result = await favoriteController.addEventToFavorites(currentUser.id, event.id);
+      if (result.success) {
+        setIsFavorite(true);
       } else {
-        newEventIds = [event.id];
+        alert(result.message || '新增收藏時發生錯誤');
       }
-
-      const { data: upsertedFavorite, error: upsertError } = await supabase
-        .from('favorites')
-        .upsert({ uuid: userData.id, event_id: newEventIds }, { onConflict: 'uuid' })
-        .select('*')
-        .single();
-
-      if (upsertError) throw upsertError;
-      console.log("upsertedFavorite (added)", upsertedFavorite);
-      setIsFavorite(true);
-
     } catch (error) {
-      console.error('Error adding favorite:', error);
       alert('新增收藏時發生錯誤');
-    } finally {
-      setIsLoadingFavorite(false);
     }
   }
 
-  // 取消收藏
   async function removeFavorite() {
-    if (isLoadingFavorite) return;
-    setIsLoadingFavorite(true);
     try {
-      const userData = await userController.getCurrentUser();
-      if (!userData || !userData.id) {
+      if (!currentUser || !currentUser.id) {
         alert('無法獲取使用者資訊，請先登入');
         return;
       }
-
-      const { data: currentFavorite, error: fetchError } = await supabase
-        .from('favorites')
-        .select('event_id')
-        .eq('uuid', userData.id)
-        .single();
-
-      if (fetchError) {
-        if (fetchError.code === 'PGRST116') {
-          console.warn("No favorite entry found to remove from.");
-          setIsFavorite(false);
-        } else {
-          throw fetchError;
-        }
-        return;
-      }
-
-      if (!currentFavorite || !currentFavorite.event_id || !currentFavorite.event_id.includes(event.id)) {
-        console.warn("Event not found in user's favorites or favorites list is empty.");
+      const favoriteController = new FavoriteController();
+      const result = await favoriteController.removeEventFromFavorites(currentUser.id, event.id);
+      if (result.success) {
         setIsFavorite(false);
-        return;
+      } else {
+        alert(result.message || '取消收藏時發生錯誤');
       }
-
-      const updatedEventIds = currentFavorite.event_id.filter((id: number) => id !== event.id);
-
-      const { data: updatedFavorite, error: updateError } = await supabase
-        .from('favorites')
-        .update({ event_id: updatedEventIds })
-        .eq('uuid', userData.id)
-        .select('*')
-        .single();
-
-      if (updateError) throw updateError;
-      console.log("updatedFavorite (after removal)", updatedFavorite);
-      setIsFavorite(false);
-
     } catch (error) {
-      console.error('Error removing favorite:', error);
       alert('取消收藏時發生錯誤');
-    } finally {
-      setIsLoadingFavorite(false);
     }
   }
 
   const handleFavoriteClick = () => {
-    if (isLoadingFavorite) return;
-
-    if (isFavorite) {
-      removeFavorite();
-    } else {
-      addFavorite();
-    }
+    if (isFavorite) removeFavorite();
+    else addFavorite();
   };
 
   function Countdown({ applyDue }: { applyDue: string }) {
@@ -384,6 +186,7 @@ function EventDetails() {
       return diff > 0 ? diff : 0;
     });
 
+    // Only UI timer, not data fetching
     useEffect(() => {
       if (timeLeft <= 0) return;
       const timer = setInterval(() => {
@@ -420,24 +223,6 @@ function EventDetails() {
       </p>
     );
   }
-
-  const [isHost, setIsHost] = useState(false);
-
-  useEffect(() => {
-    const checkIsHost = async () => {
-      try {
-        const currentUser = await userController.getCurrentUser();
-        if (currentUser && currentUser.id && event.owner_id) {
-          setIsHost(currentUser.id === event.owner_id);
-        } else {
-          setIsHost(false);
-        }
-      } catch (err) {
-        setIsHost(false);
-      }
-    };
-    checkIsHost();
-  }, [event.owner_id, userController]);
 
   return (
     <div className="mx-auto">
@@ -512,8 +297,7 @@ function EventDetails() {
 
               <button
                 onClick={handleFavoriteClick}
-                disabled={isLoadingFavorite}
-                className="cursor-pointer p-2 rounded-full hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="cursor-pointer p-2 rounded-full hover:bg-gray-200"
                 aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
               >
                 {isFavorite ? (
@@ -636,9 +420,18 @@ function EventDetails() {
                 </h3>
                 <p className="py-4 text-xl flex items-center justify-center">確定要報名此活動嗎？</p>
                 <div className="modal-action justify-between">
-                  <button className="btn w-1/2"
-                    onClick={addRegistration}
-                  >好</button>
+                  <button
+                    className="btn w-1/2"
+                    onClick={async () => {
+                      await addRegistration();
+                      const joinModal = document.getElementById("join_modal") as HTMLDialogElement | null;
+                      joinModal?.close();
+                      const joinSuccessModal = document.getElementById("joinSuccess_modal") as HTMLDialogElement | null;
+                      joinSuccessModal?.showModal();
+                    }}
+                  >
+                    好
+                  </button>
                   <dialog id="joinSuccess_modal" className="modal">
                     <div className="modal-box w-11/12 max-w-5xl">
                       <div className='flex item-center justify-center'>
@@ -650,13 +443,29 @@ function EventDetails() {
                       <p className="py-4 flex item-center justify-center">活動報名成功！</p>
                       <div className="modal-action">
                         <form method="dialog" className='w-full'>
-                          <button className="btn w-full">好</button>
+                          <button
+                            className="btn w-full"
+                            onClick={() => {
+                              const modal = document.getElementById("joinSuccess_modal") as HTMLDialogElement | null;
+                              modal?.close();
+                            }}
+                          >
+                            好
+                          </button>
                         </form>
                       </div>
                     </div>
                   </dialog>
                   <form method="dialog" className='w-1/2'>
-                    <button className="btn w-full">取消</button>
+                    <button
+                      className="btn w-full"
+                      onClick={() => {
+                        const modal = document.getElementById("joinSuccess_modal") as HTMLDialogElement | null;
+                        modal?.close();
+                      }}
+                    >
+                      取消
+                    </button>
                   </form>
                 </div>
               </div>
@@ -672,7 +481,13 @@ function EventDetails() {
                 <div className="modal-action justify-between">
                   <button
                     className="btn w-1/2"
-                    onClick={cancelRegistration}
+                    onClick={async () => {
+                      await cancelRegistration();
+                      const cancelModal = document.getElementById("cancel_modal") as HTMLDialogElement | null;
+                      cancelModal?.close();
+                      const cancelSuccessModal = document.getElementById("cancelSuccess_modal") as HTMLDialogElement | null;
+                      cancelSuccessModal?.showModal();
+                    }}
                   >
                     好
                   </button>

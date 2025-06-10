@@ -216,7 +216,7 @@ function ProfilePage() {
                     <img
                         src={avatarPreview}
                         alt="Avatar"
-                        className="w-24 h-24 rounded-full border-4 border-white object-cover cursor-pointer bg-red-100"
+                        className="w-24 h-24 rounded-full border-4 border-white object-cover cursor-pointer bg-white"
                         onClick={() => setShowAvatarModal(true)}
                     />
                 </div>
@@ -278,7 +278,7 @@ function ProfilePage() {
                     {userFields.map((f, i) => (
                         <div key={i} className='space-x-2'>
                             <span className="font-semibold text-gray-700">{f.label}</span>
-                            <span className="text-gray-800 break-all">{f.value ?? "無"}</span>
+                            <span className="text-sm text-gray-800 break-all">{f.value ?? "無"}</span>
                         </div>
                     ))}
                 </div>

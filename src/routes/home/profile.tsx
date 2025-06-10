@@ -198,7 +198,7 @@ function ProfilePage() {
             const userController = new UserController();
             await userController.updateUser(profile.id, { profileBackground: publicUrlData.publicUrl });
             setShowBgModal(false);
-            window.location.reload();
+            // window.location.reload();
         } catch (err) {
             alert('背景照上傳失敗');
         }

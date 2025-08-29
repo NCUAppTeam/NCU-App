@@ -24,7 +24,7 @@ function LoginPage() {
 
   const REDIRECT_URI = `${rootPath}/callback`;
   const supportedURL = 'https://github.com/NCUAppTeam/Legacy-website./blob/main/PRIVACY.md'
-
+  const linkTreeURL = 'https://linktr.ee/ncuapp'
 
   const handlePortalSignup = () => {
     const oauthURL = `https://portal.ncu.edu.tw/oauth2/authorization?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&scope=chinese-name student-id email academy-records gender`;
@@ -101,7 +101,8 @@ function LoginPage() {
 
         </form>
 
-        <a className='underline underline-offset-2 text-base lg:text-lg text-center mt-8' href={supportedURL}>隱私權政策</a>
+        <a className='underline underline-offset-2 text-base lg:text-lg text-center mt-8 hover:text-[#1784B2]' href={linkTreeURL}>linktr.ee</a>
+        <a className='underline underline-offset-2 text-base lg:text-lg text-center mt-1 hover:text-[#1784B2]' href={supportedURL}>隱私權政策</a>
 
       </div>
     </div>

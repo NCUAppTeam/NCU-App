@@ -197,7 +197,7 @@ export default function MapComponent() {
                         return undefined;
                     }}
                     onIdle={() => {
-                        console.log("地圖已閒置，標記應該已渲染");
+                        // Removed console.log for production
                     }}
                 >
                     {/* Building Markers */}

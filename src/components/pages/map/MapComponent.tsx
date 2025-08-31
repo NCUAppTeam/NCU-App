@@ -142,13 +142,11 @@ export default function MapComponent() {
     // 在類別變化時確保標記顯示
     useEffect(() => {
         if (isMapLoaded && mapRef.current) {
-            console.log(`類別已變更為: ${markerShowType || '全部'}`);
 
             // 獲取過濾後的建築物數量進行調試
             const filteredCount = BuildingsInfo.filter(
                 obj => markerShowType === '' || obj.type === markerShowType
             ).length;
-            console.log(`過濾後的建築物數量: ${filteredCount}`);
 
             // 延遲觸發一次重新渲染，確保標記更新顯示
             setTimeout(() => {

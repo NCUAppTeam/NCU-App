@@ -72,7 +72,6 @@ export default function MapComponent() {
     // 監聽地圖載入狀態，在地圖載入完成後確保標記顯示
     useEffect(() => {
         if (isMapLoaded && mapRef.current) {
-            // console.log("地圖載入完成，準備渲染標記");
 
             // 立即觸發一次重新渲染
             google.maps.event.trigger(mapRef.current, 'resize');
@@ -80,7 +79,6 @@ export default function MapComponent() {
             // 延遲再觸發一次，確保標記顯示
             setTimeout(() => {
                 if (mapRef.current) {
-                    // console.log("延遲觸發地圖重新渲染");
                     google.maps.event.trigger(mapRef.current, 'resize');
                 }
             }, 500);
@@ -123,8 +121,7 @@ export default function MapComponent() {
             };
         }
     }, []);
-
-    // 地圖容器樣式
+  
     const mapContainerStyle = {
         width: '100%',
         height: '100%'
@@ -143,15 +140,9 @@ export default function MapComponent() {
     useEffect(() => {
         if (isMapLoaded && mapRef.current) {
 
-            // 獲取過濾後的建築物數量進行調試
-            const filteredCount = BuildingsInfo.filter(
-                obj => markerShowType === '' || obj.type === markerShowType
-            ).length;
-
             // 延遲觸發一次重新渲染，確保標記更新顯示
             setTimeout(() => {
                 if (mapRef.current) {
-                    // console.log("類別變更後觸發地圖重新渲染");
                     google.maps.event.trigger(mapRef.current, 'resize');
                 }
             }, 300);
@@ -190,7 +181,6 @@ export default function MapComponent() {
 
                         // 簡化設置地圖已載入狀態的邏輯，適當延遲確保 DOM 準備好
                         setTimeout(() => {
-                            // console.log("設置地圖載入狀態");
                             setIsMapLoaded(true);
                         }, 200);
 

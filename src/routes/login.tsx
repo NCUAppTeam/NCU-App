@@ -24,7 +24,8 @@ function LoginPage() {
 
   const REDIRECT_URI = `${rootPath}/callback`;
   const supportedURL = 'https://github.com/NCUAppTeam/Legacy-website./blob/main/PRIVACY.md'
-
+  const linkTreeURL = 'https://linktr.ee/ncuapp'
+  const mapURL = `${rootPath}/map`
 
   const handlePortalSignup = () => {
     const oauthURL = `https://portal.ncu.edu.tw/oauth2/authorization?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&scope=chinese-name student-id email academy-records gender`;
@@ -53,7 +54,6 @@ function LoginPage() {
           src={logo}
           alt={'NCU-APP LOGO'} />
         <h3 className='font-bold text-center my-4 text-sm sm:text-base md:text-lg lg:text-2xl'>歡迎來到 <span className='text-[#1784B2] font-bold'>NCU App</span></h3>
-
         <form
           className='flex flex-col h-fit items-center justify-center px-5'
           onSubmit={login}
@@ -98,10 +98,21 @@ function LoginPage() {
           >
             {Labels.signUp}
           </button>
+          <a
+            href={mapURL}
+            className="mt-4 w-full h-12 rounded-md bg-[#effad4] hover:bg-[#d2e6ba] text-[#57614b] font-bold border-0 flex items-center justify-center"
+            style={{ textDecoration: 'none' }}
+          >
+            <div className='flex flex-col text-center'>
+              {Labels.exploreCampus}
+              <span className='text-xs text-[#79826d]'>無需註冊 可直接使用</span>
+            </div>
+          </a>
 
         </form>
 
-        <a className='underline underline-offset-2 text-base lg:text-lg text-center mt-8' href={supportedURL}>隱私權政策</a>
+        <a className='underline underline-offset-2 text-base lg:text-lg text-center mt-8 hover:text-[#1784B2]' href={linkTreeURL}>linktr.ee</a>
+        <a className='underline underline-offset-2 text-base lg:text-lg text-center mt-1 hover:text-[#1784B2]' href={supportedURL}>隱私權政策</a>
 
       </div>
     </div>
@@ -116,5 +127,6 @@ class Labels {
   static readonly remember = '保持我的登入狀態';
   static readonly login = '登入';
   static readonly signUp = 'NCU Portal 快速註冊';
+  static readonly exploreCampus = '校園導航';
   static readonly wrongAccountOrPassword = '帳號或密碼錯誤，請確認後再登入';
 }

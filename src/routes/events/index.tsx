@@ -94,7 +94,9 @@ function EventIndex() {
           </div>
         </div>
 
-
+        <div className='text-center'>
+          <span className="text-gray-500">(列表僅會顯示報名尚未截止的揪人)</span>
+        </div>
 
         <div className="relative flex-1 bg-gray-50 shadow dark:bg-gray-700 px-4 pb-4 rounded-lg h-full overflow-y-auto">
           <h1 className={`py-2 text-xl text-black dark:text-white underline underline-offset-8`} style={{ textDecorationColor: typeColor[Number(selectedType) - 1] }}>
@@ -139,7 +141,7 @@ function EventIndex() {
           type="inquiry"
         /> */}
 
-      </div>
+      </div >
 
 
     </>

@@ -32,9 +32,6 @@ function HomeIndex() {
     return (
         <>
 
-            <div className='grid justify-items-center w-full space-y-4'>
-                <SchoolCalendar />
-            </div>
             <div className='flex flex-col justify-center items-center w-full px-4 sm:px-6 lg:px-8 mb-4 mt-4'>
                 <h1 className='text-2xl font-bold'>歡迎來到 NCU App</h1>
                 <p className='text-lg'>這裡是你的個人揪人管理頁面</p>
@@ -42,7 +39,7 @@ function HomeIndex() {
             <div className='flex flex-col justify-center items-center w-full px-4 sm:px-6 lg:px-8 mb-4 mt-4'>
                 <div className="flex items-center w-full justify-between max-w-2xl">
                     <div>
-                        <h2 className='text-xl font-semibold'>你創建的揪人</h2>
+                        <h2 className='text-xl font-semibold'>你創建的揪人({hostedEvents.length})</h2>
                     </div>
                     <button
                         className="text-gray-500 hover:text-gray-700 px-2 py-1 rounded transition"
@@ -71,7 +68,7 @@ function HomeIndex() {
             <div className='flex flex-col justify-center items-center w-full px-4 sm:px-6 lg:px-8 mb-4 mt-4'>
                 <div className="flex items-center w-full justify-between max-w-2xl">
                     <div>
-                        <h2 className='text-xl font-semibold'>你收藏的揪人</h2>
+                        <h2 className='text-xl font-semibold'>你收藏的揪人({favoriteEvents.length})</h2>
                     </div>
                     <button
                         className="text-gray-500 hover:text-gray-700 px-2 py-1 rounded transition"
@@ -100,7 +97,7 @@ function HomeIndex() {
             <div className='flex flex-col justify-center items-center w-full px-4 sm:px-6 lg:px-8 mb-4 mt-4'>
                 <div className="flex items-center w-full justify-between max-w-2xl">
                     <div>
-                        <h2 className='text-xl font-semibold'>你正取的揪人</h2>
+                        <h2 className='text-xl font-semibold'>你正取的揪人({acceptedEvents.length})</h2>
                     </div>
                     <button
                         className="text-gray-500 hover:text-gray-700 px-2 py-1 rounded transition"
@@ -126,6 +123,10 @@ function HomeIndex() {
                     </div>
                 </div>
             )}
+
+            <div className='grid justify-items-center w-full space-y-4'>
+                <SchoolCalendar />
+            </div>
         </>
     )
 }

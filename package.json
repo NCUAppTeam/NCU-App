@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@heroicons/react": "^2.1.5",
+    "@react-google-maps/api": "^2.20.7",
     "@supabase/supabase-js": "^2.45.3",
     "@tanstack/react-router": "^1.56.2",
     "@types/express": "^5.0.0",

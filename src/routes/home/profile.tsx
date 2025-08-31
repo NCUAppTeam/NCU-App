@@ -57,7 +57,7 @@ function ProfilePage() {
         username: profile.username ?? "",
         phone: profile.phone ?? "",
         bio: profile.bio ?? "",
-        grade: profile.grade ?? 1,
+        grade: String(profile.grade ?? 1),
     });
 
     // 預覽用
@@ -120,7 +120,9 @@ function ProfilePage() {
         if (editData.username !== profile.username) updateObj.username = editData.username;
         if (editData.phone !== profile.phone) updateObj.phone = editData.phone;
         if (editData.bio !== profile.bio) updateObj.bio = editData.bio;
-        if (editData.grade !== profile.grade) updateObj.grade = editData.grade;
+
+        const gradeNum = editData.grade === '' ? 1 : Number(editData.grade);
+        if (gradeNum !== profile.grade) updateObj.grade = gradeNum;
 
         if (Object.keys(updateObj).length === 0) {
             setShowEditModal(false);
@@ -187,11 +189,11 @@ function ProfilePage() {
             const { data: publicUrlData } = supabase.storage
                 .from('avatar')
                 .getPublicUrl(data.path);
-            
+
             if (!publicUrlData || !publicUrlData.publicUrl) {
                 throw new Error('無法取得背景照公開網址');
             }
-          
+
             const userController = new UserController();
             await userController.updateUser(profile.id, { profileBackground: publicUrlData.publicUrl });
             setShowBgModal(false);
@@ -212,11 +214,11 @@ function ProfilePage() {
                     className="object-cover w-full h-full rounded-xl cursor-pointer hover:opacity-80"
                     onClick={() => setShowBgModal(true)}
                 />
-                <div className="absolute -bottom-12 right-6">
+                <div className="absolute -bottom-12 right-6 bg-white rounded-full">
                     <img
                         src={avatarPreview}
                         alt="Avatar"
-                        className="w-24 h-24 rounded-full border-4 border-white object-cover cursor-pointer bg-white"
+                        className="w-24 h-24 rounded-full border-4 border-white object-cover cursor-pointer hover:opacity-80"
                         onClick={() => setShowAvatarModal(true)}
                     />
                 </div>
@@ -294,6 +296,7 @@ function ProfilePage() {
 
                 <div className="text-gray-400 text-sm mt-2">
                     <div className='text-xs'>※ 信箱、性別、系所不開放編輯，如需更動請聯絡NCU APP開發團隊。</div>
+                    <div className='text-xs'>※ 如想刪除帳號，也請聯絡NCU APP開發團隊，謝謝。</div>
                     <div className='justify-self-end'>加入時間 {profile.joinedAt.toLocaleDateString('zh-TW', { year: 'numeric', month: '2-digit', day: '2-digit' })}</div>
                 </div>
             </div>
@@ -329,8 +332,15 @@ function ProfilePage() {
                                 type="number"
                                 min={1}
                                 value={editData.grade}
-                                onChange={e => setEditData(d => ({ ...d, grade: Number(e.target.value) }))}
+                                onChange={e => {
+                                    const value = e.target.value;
+                                    setEditData(d => ({
+                                        ...d,
+                                        grade: value
+                                    }))
+                                }}
                                 className="input input-bordered w-full"
+                                placeholder='留空會自動設為 1'
                             />
                             <label className="font-bold">自我介紹</label>
                             <textarea

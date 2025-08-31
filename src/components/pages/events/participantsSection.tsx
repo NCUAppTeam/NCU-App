@@ -77,12 +77,17 @@ export default function ParticipantsSection(props: { eventId: number, isHost: bo
                                 <p className='font-bold'>{p.members?.username ?? p.user_id}</p>
                                 <p className='text-xs text-gray-500'>報名時間：{p.joined_at ? new Date(p.joined_at).toLocaleString('zh-TW', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }) : '無時間資料'}</p>
                             </div>
-                            <button
-                                className={`px-4 py-1 rounded ${p.status ? 'bg-green-500 text-white' : 'bg-gray-300 text-gray-700'} font-bold`}
-                                onClick={() => handleStatusChange(p.id, !p.status)}
-                            >
-                                {p.status ? '正取' : '備取'}
-                            </button>
+                            <div className="flex items-center gap-2">
+                                <span className={`text-sm ${p.status ? 'text-green-600' : 'text-gray-500'}`}>
+                                    {p.status ? '正取' : '備取'}
+                                </span>
+                                <input
+                                    type="checkbox"
+                                    className="toggle toggle-success toggle-sm"
+                                    checked={p.status}
+                                    onChange={() => handleStatusChange(p.id, !p.status)}
+                                />
+                            </div>
                         </div>
                     ))}
                 </div>

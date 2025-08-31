@@ -120,7 +120,9 @@ function ProfilePage() {
         if (editData.username !== profile.username) updateObj.username = editData.username;
         if (editData.phone !== profile.phone) updateObj.phone = editData.phone;
         if (editData.bio !== profile.bio) updateObj.bio = editData.bio;
-        if (editData.grade !== profile.grade) updateObj.grade = editData.grade;
+
+        const gradeNum = editData.grade === '' ? 1 : Number(editData.grade);
+        if (gradeNum !== profile.grade) updateObj.grade = gradeNum;
 
         if (Object.keys(updateObj).length === 0) {
             setShowEditModal(false);

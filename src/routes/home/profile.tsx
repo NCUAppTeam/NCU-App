@@ -57,7 +57,7 @@ function ProfilePage() {
         username: profile.username ?? "",
         phone: profile.phone ?? "",
         bio: profile.bio ?? "",
-        grade: profile.grade ?? 1,
+        grade: String(profile.grade ?? 1),
     });
 
     // 預覽用
@@ -120,9 +120,7 @@ function ProfilePage() {
         if (editData.username !== profile.username) updateObj.username = editData.username;
         if (editData.phone !== profile.phone) updateObj.phone = editData.phone;
         if (editData.bio !== profile.bio) updateObj.bio = editData.bio;
-
-        const gradeNum = editData.grade === '' ? 1 : Number(editData.grade);
-        if (gradeNum !== profile.grade) updateObj.grade = gradeNum;
+        if (editData.grade !== profile.grade) updateObj.grade = editData.grade;
 
         if (Object.keys(updateObj).length === 0) {
             setShowEditModal(false);

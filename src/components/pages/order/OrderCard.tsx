@@ -73,7 +73,7 @@ export const OrderCard: React.FC<OrderCardProps> = ({
 
     return (
         <div className={`bg-white rounded-lg shadow-md overflow-hidden ${className}`}>
-            <div className="flex item-center bg-[#8ed3e6] justify-center">
+            <div className="flex bg-[#8ed3e6] justify-center">
                 <h3 className="bg-red w-2/3 text-white text-sm md:text-xl font-medium p-2 text-center self-center">
                     挖愛呷
                 </h3>

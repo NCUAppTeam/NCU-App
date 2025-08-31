@@ -186,7 +186,6 @@ export default function MapComponent() {
                     zoom={16}
                     options={mapOptions}
                     onLoad={map => {
-                        console.log("Google Maps API 已載入");
                         mapRef.current = map;
 
                         // 簡化設置地圖已載入狀態的邏輯，適當延遲確保 DOM 準備好

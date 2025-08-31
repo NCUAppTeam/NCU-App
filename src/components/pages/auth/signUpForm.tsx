@@ -247,6 +247,7 @@ export default function SignUpForm({ userFromPortal, navigate }: { userFromPorta
                     type="button"
                     className="text-sm font-semibold text-gray-900"
                     disabled={isLoading}
+                    onClick={() => navigate({ to: '/' })}
                 >
                     取消
                 </button>

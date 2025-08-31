@@ -249,21 +249,6 @@ export type Database = {
         }
         Relationships: []
       }
-      food_category: {
-        Row: {
-          food_category: string
-          id: number
-        }
-        Insert: {
-          food_category: string
-          id?: number
-        }
-        Update: {
-          food_category?: string
-          id?: number
-        }
-        Relationships: []
-      }
       members: {
         Row: {
           avatar: string | null
@@ -363,47 +348,41 @@ export type Database = {
           },
         ]
       }
-      restaurants: {
+      order: {
         Row: {
-          address: string | null
-          fk_category: number
-          id: number
-          image: string | null
-          location: number | null
-          menu: string | null
-          openday: number[] | null
-          openhr: string
+          add: string[]
+          created_at: string
+          due: string | null
+          main: string | null
+          order_id: number
+          order_link: string | null
           restaurant: string | null
         }
         Insert: {
-          address?: string | null
-          fk_category: number
-          id?: number
-          image?: string | null
-          location?: number | null
-          menu?: string | null
-          openday?: number[] | null
-          openhr: string
+          add: string[]
+          created_at?: string
+          due?: string | null
+          main?: string | null
+          order_id?: number
+          order_link?: string | null
           restaurant?: string | null
         }
         Update: {
-          address?: string | null
-          fk_category?: number
-          id?: number
-          image?: string | null
-          location?: number | null
-          menu?: string | null
-          openday?: number[] | null
-          openhr?: string
+          add?: string[]
+          created_at?: string
+          due?: string | null
+          main?: string | null
+          order_id?: number
+          order_link?: string | null
           restaurant?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "restaurants_fk_category_fkey"
-            columns: ["fk_category"]
+            foreignKeyName: "order_main_fkey"
+            columns: ["main"]
             isOneToOne: false
-            referencedRelation: "food_category"
-            referencedColumns: ["id"]
+            referencedRelation: "members"
+            referencedColumns: ["uuid"]
           },
         ]
       }

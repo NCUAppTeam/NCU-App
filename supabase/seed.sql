@@ -156,7 +156,6 @@ INSERT INTO "public"."event_type" ("type_id", "type_name", "hashtag_relation") V
 	(35, '湊數省錢', '{1,2,3}'),
 	(39, '探店', '{5}'),
 	(40, '吃飯', '{5}'),
-	(41, '湊外送', '{5}'),
 	(36, 'English Café', '{5}'),
 	(42, '社團活動', '{5}'),
 	(43, '面試互助', '{4}'),
@@ -177,67 +176,12 @@ INSERT INTO "public"."event_type" ("type_id", "type_name", "hashtag_relation") V
 INSERT INTO "public"."events" ("id", "name", "description", "start_time", "end_time", "fee", "created_at", "owner_id", "type", "img", "apply_due", "custom_hashtag", "destination", "externalLink", "hashtag", "meeting_point") VALUES
 	(1, 'NCU APP 程式開發組招募', NULL, '2025-05-09 09:03:32+00', NULL, 0, '2024-10-02 10:38:22+00', 'c7e80cb0-7d3d-411f-9983-5e3addf62980', 5, NULL, '2025-05-15 06:31:19+00', NULL, NULL, NULL, NULL, '工程五館A205教室');
 
-
---
--- Data for Name: food_category; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-INSERT INTO "public"."food_category" ("id", "food_category") VALUES
-	(1, '超商'),
-	(2, '中式'),
-	(3, '日式'),
-	(4, '韓式'),
-	(5, '飲料'),
-	(6, '炸物'),
-	(7, '火鍋'),
-	(8, '素食'),
-	(9, '小吃'),
-	(10, '自助餐'),
-	(11, '牛排館'),
-	(12, '美式'),
-	(13, '滷味'),
-	(14, '早午餐'),
-	(15, '輕食'),
-	(16, '義式');
-
-
 --
 -- Data for Name: members; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 INSERT INTO "public"."members" ("uuid", "created_at", "name", "identity", "grad_time", "avatar", "bio", "department", "email", "grade", "phone", "profileBackground", "studentId", "username", "point", "gender") VALUES
 	('c7e80cb0-7d3d-411f-9983-5e3addf62980', '2024-10-02 10:35:46+00', 'NCU APP', 1, NULL, 'http://127.0.0.1:54321/storage/v1/object/public/avatar/logo.png?t=2025-04-27T15%3A28%3A56.405Z', NULL, NULL, 'ncuapp@test.com', NULL, NULL, NULL, NULL, 'ncuapp-devteam', 0, NULL);
-
-
---
--- Data for Name: registrations; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-
-
---
--- Data for Name: restaurants; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-INSERT INTO "public"."restaurants" ("id", "openhr", "address", "location", "openday", "restaurant", "image", "menu", "fk_category") VALUES
-	(2, '無營業時間資訊，以店家公布為主', NULL, 1, NULL, '迷路意麵坊', 'https://scontent.ftpe8-1.fna.fbcdn.net/v/t39.30808-6/298917548_591601485994155_1383823356721606577_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=oIB1O3gxrLUQ7kNvwF_HFu5&_nc_oc=AdnmEIeds29eiW1RgvE_iqoGt58MbuV0o9DBeCHd5U6YEiEU17Xt73-AA1sVr7NyMsY&_nc_zt=23&_nc_ht=scontent.ftpe8-1.fna&_nc_gid=zOZjOB6cEYpykq-cc1AF_g&oh=00_AfF1Tft46bj2RluMmFCHjZCLo3E3SF9xkCcsLKFXuMncXw&oe=68140A1A', NULL, 2),
-	(1, '00:00 - 24:00', '桃園市平鎮區中央路187號', 1, '{1,2,3,4,5,6,7}', '7-Eleven─學央門市', 'https://1000marcas.net/wp-content/uploads/2020/12/7-Eleven-Logo.png', NULL, 1);
-
-
---
--- Data for Name: sales; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-
-
---
--- Data for Name: buckets; Type: TABLE DATA; Schema: storage; Owner: supabase_storage_admin
---
-
-INSERT INTO "storage"."buckets" ("id", "name", "owner", "created_at", "updated_at", "public", "avif_autodetection", "file_size_limit", "allowed_mime_types", "owner_id") VALUES
-	('avatar', 'avatar', NULL, '2024-10-02 15:39:08.478744+00', '2024-10-02 15:39:08.478744+00', true, false, NULL, NULL, NULL),
-	('restaurant', 'restaurant', NULL, '2025-04-27 15:06:43.408888+00', '2025-04-27 15:06:43.408888+00', true, false, NULL, NULL, NULL);
-
 
 --
 -- Data for Name: objects; Type: TABLE DATA; Schema: storage; Owner: supabase_storage_admin
@@ -298,20 +242,6 @@ SELECT pg_catalog.setval('"public"."event_type_type_id_seq"', 1, true);
 --
 
 SELECT pg_catalog.setval('"public"."events_id_seq"', 1, false);
-
-
---
--- Name: food_category_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('"public"."food_category_id_seq"', 13, true);
-
-
---
--- Name: restaurants_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('"public"."restaurants_id_seq"', 1, false);
 
 
 --

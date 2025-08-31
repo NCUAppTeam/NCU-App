@@ -57,7 +57,7 @@ function ProfilePage() {
         username: profile.username ?? "",
         phone: profile.phone ?? "",
         bio: profile.bio ?? "",
-        grade: String(profile.grade ?? 1),
+        grade: profile.grade ?? 1,
     });
 
     // 預覽用

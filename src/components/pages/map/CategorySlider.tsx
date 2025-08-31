@@ -15,7 +15,6 @@ export default function CategorySlider({ setMarkerShowType }: CategorySliderProp
         setSelectedBtn(newType);
         setMarkerShowType(newType);
         setShowAllBtn(newType !== '');
-        console.log(`選擇的類別: ${newType}`); // Debug
     };
 
     const handleShowAllClick = () => {

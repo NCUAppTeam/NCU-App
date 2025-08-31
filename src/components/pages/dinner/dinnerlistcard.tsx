@@ -1,5 +1,5 @@
 import { DocumentTextIcon, PlusCircleIcon, XCircleIcon } from "@heroicons/react/20/solid";
-import Restaurant from "../../../backend/dinner/Entities/Restaurant";
+import Restaurant from "../../../backend/order/Entities/Order";
 
 export function DinnerListCard({
     restaurant,

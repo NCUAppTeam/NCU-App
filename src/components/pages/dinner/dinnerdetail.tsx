@@ -1,4 +1,4 @@
-import Restaurant from "../../../backend/dinner/Entities/Restaurant";
+import Restaurant from "../../../backend/order/Entities/Order";
 
 export function DinnerDetail({
     restaurant,

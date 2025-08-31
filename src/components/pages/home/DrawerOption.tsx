@@ -13,6 +13,7 @@ const options = [
     { name: "首頁", engName: "Home", pageNav: "/" },
     { name: "揪人", engName: "Gather 'Round", pageNav: "/events" },
     { name: "導航", engName: "Navigation", pageNav: "/map" },
+    { name: "挖愛呷-外送", engName: "Joint Order: Food Delivery", pageNav: "/order" },
     // { name: "綠洲拾橡", engName: "Acorn Trails in the Oasis", pageNav: "/dinner" },
 ];
 

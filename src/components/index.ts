@@ -6,3 +6,7 @@ export { Image } from './Common/Image';
 export { VStack } from './Common/VStack';
 export { Header } from './pages/home/Header';
 
+// Order Components
+export { OrderCard } from './pages/order/OrderCard';
+export { OrderNavBar } from './pages/order/OrderNavBar';
+

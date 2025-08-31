@@ -356,6 +356,9 @@ export type Database = {
           main: string | null
           order_id: number
           order_link: string | null
+          payment: boolean
+          pickup: string
+          ps: string | null
           restaurant: string | null
         }
         Insert: {
@@ -365,6 +368,9 @@ export type Database = {
           main?: string | null
           order_id?: number
           order_link?: string | null
+          payment?: boolean
+          pickup?: string
+          ps?: string | null
           restaurant?: string | null
         }
         Update: {
@@ -374,6 +380,9 @@ export type Database = {
           main?: string | null
           order_id?: number
           order_link?: string | null
+          payment?: boolean
+          pickup?: string
+          ps?: string | null
           restaurant?: string | null
         }
         Relationships: [
